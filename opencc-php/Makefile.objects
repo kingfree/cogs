@@ -1,8 +1,0 @@
-opencc.lo: /home/ruvtex/www/cogs/opencc-php/opencc.c
-	$(LIBTOOL) --mode=compile $(CC)  -I. -I/home/ruvtex/www/cogs/opencc-php $(COMMON_FLAGS) $(CFLAGS_CLEAN) $(EXTRA_CFLAGS)  -c /home/ruvtex/www/cogs/opencc-php/opencc.c -o opencc.lo 
-$(phplibdir)/opencc.la: ./opencc.la
-	$(LIBTOOL) --mode=install cp ./opencc.la $(phplibdir)
-
-./opencc.la: $(shared_objects_opencc) $(OPENCC_SHARED_DEPENDENCIES)
-	$(LIBTOOL) --mode=link $(CC) $(COMMON_FLAGS) $(CFLAGS_CLEAN) $(EXTRA_CFLAGS) $(LDFLAGS) -o $@ -export-dynamic -avoid-version -prefer-pic -module -rpath $(phplibdir) $(EXTRA_LDFLAGS) $(shared_objects_opencc) $(OPENCC_SHARED_LIBADD)
-
