@@ -1,0 +1,1 @@
+document.write('<script src="base64.js" language="javascript"></script>');

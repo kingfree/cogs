@@ -1,0 +1,6 @@
+CREATE TABLE groups_apply (
+`gaid` INT NOT NULL AUTO_INCREMENT PRIMARY KEY ,
+`uid` INT NOT NULL ,
+`gid` INT NOT NULL ,
+`reason` TEXT NOT NULL
+)

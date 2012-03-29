@@ -1,0 +1,163 @@
+#globalbar {
+    background-color:#7DC8FE;
+}
+#pulicbar {
+}
+
+
+body {/*背景和默认*/
+    color: #000000;
+    font-size: 13px;
+    font-family: 文泉驿微米黑, 微软雅黑, 黑体, 华文细黑, 文泉驿正黑, 宋体;
+    background-color:#7DC8FE;
+}
+table {
+    BORDER-COLLAPSE:collapse;
+    border: 0;
+    background-color:#DFEFFC;
+    font-size: 13px;
+    color: #000000;
+}
+th {
+    background-color:#FEA47D;
+}
+tr:nth-child(odd) {
+    background-color:#AAEBFF;
+}
+tr:nth-child(even) {
+    background-color:#D5FFAA;
+}
+a:link {
+    text-decoration: none;
+    color: #065FB9;
+}
+a:visited {
+    text-decoration: none;
+    color: #036803;
+}
+a:hover {
+    color: #000000;
+    text-decoration: underline;
+    background-color: #8EC2F5;
+}
+a:active {
+    text-decoration: underline;
+    background-color: #33FF99;
+}
+.Title {/*标题*/
+    font-size: 40px;
+    font-family:Times New Roman, Arial, Helvetica, sans-serif;
+    color:#000099;
+    text-align: center;
+}
+.Tail {/*结尾*/
+    color: #999999;
+    font-size: 12px;
+}
+.Head {
+    background-color:#D6E9FC;
+}
+.MainText {/*主要文字*/
+    background-color: #E7F2FD;
+    border: 0;
+    font-size: 14px;
+    padding: 10px 10px 10px 10px;
+}
+.LeftBar {
+	background-color:#9EFE7D;
+    border: 0;
+	font-size: 14px;
+	padding: 10px 10px 10px 10px;
+}
+.tops {
+    background-color: #FE7F7D;
+    border: 0;
+    font-size: 14px;
+    padding: 10px 10px 10px 10px;
+    width: 15em;
+    vertical-align: top;
+    height: 600px;
+}
+.Comments {/*评论文字外框*/
+    background-color: #FFFFFF;
+    border: solid #000000; 
+    border-width: 1px 1px 1px; 
+}
+.CommentsK {/*评论文字*/
+    background-color:#FFCCFF;
+    border: solid #000000; 
+    border-width: 1px 1px 1px; 
+    font-size: 14px;
+    padding: 10px 10px 10px 10px;
+}
+.CommentsCode {/*评论代码*/
+    background-color: #FFFFCC;
+    border: solid #000000; 
+    border-width: 1px 1px 1px;
+    padding: 10px 10px 10px 10px; 
+}
+.stdPanel {/*评论代码*/
+    background-color: #FFFFCC;
+    border: solid #000000; 
+    border-width: 1px 1px 1px;
+    padding: 10px 10px 10px 10px; 
+}
+.CommentsS {/*评论发表文字*/
+    background-color:#CCCFFF;
+    border: solid #000000; 
+    border-width: 1px 1px 1px; 
+    font-size: 14px;
+    text-align:center;
+}
+.InputBox {/*输入框*/
+    border: 0;
+    background-color:#FFFFFF;
+}
+.TextArea {/*文本域*/
+    border:0;
+    background:#66FFCC;
+    font-size:12px;
+    padding:2px 5px 2px 5px;
+}
+.Spliter {/*分割线*/
+    border:#000000 1px;
+    border-style: dotted;
+}
+.LinkButton {/*按钮*/
+    padding: 1px 5px 1px 5px;
+    border: 0;
+    background-color:#FFCC50;
+}
+.FloatDialog{
+    position: absolute;
+    left:50%;
+    top:40%;
+    margin-left:-280px;
+    margin-top:-100px;
+    float:left;
+    background:#FFFFFF;
+    border:solid #000000 1px;
+    padding:10px;
+}
+.inputtext {
+    background-color: #FFFFF0;
+}
+#nag tr {
+    background-color: #AAC0FF;
+}
+#nag a {
+    padding: 5px 2px 5px 2px;
+    border: 0;
+    font-size: 14px;
+    text-decoration: none;
+}
+#nag a:link {
+    color: #000000;
+}
+#nag a:hover {
+    color: #000000;
+    background-color: #FAFE7D;
+}
+#indexinfo {
+    background-color: #FAFE7D;
+}
