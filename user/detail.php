@@ -57,11 +57,11 @@ if ($cnt)
     <td><?php echo nl2br(sp2n(htmlspecialchars($d['memo']))) ?></td>
   </tr>
   <?php if ($_SESSION['admin']>0 || $_SESSION['ID']==$d['uid']){ ?>
-  <tr bgcolor="#99FFCC">
+  <tr style=admin>
     <td>真实姓名</td>
     <td><?php echo $d['realname'] ?></td>
   </tr>
-  <tr bgcolor="#99FFCC">
+  <tr style=admin>
     <td>登录IP</td>
     <td><a href="../addons/ipquery/?ip=<?php echo $d['lastip'] ?>" target="_blank"><?php echo $d['lastip'] ?></a></td>
   </tr>

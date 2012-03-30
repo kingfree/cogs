@@ -46,7 +46,7 @@ echo '<script>document.location="../error.php?id=11"</script>';
 }
 ?>
 
-<div id='problem' style="background-color:rgba(255, 255, 255, 0.4)">
+<div id='problem' style="background-color:rgba(255, 255, 255, 0.3)">
 <table class="pdetail" width=100% border=0><tr>
 <td width=250px valign=top>
 <table width="100%" style="margin: 2px 0;">
@@ -131,7 +131,7 @@ echo " <a href='problist.php?caid={$e[caid]}'>{$e[cname]}</a> ";
 </tr>
 <tr>
 <form action="../compile/" method="post" enctype="multipart/form-data" name="sub">
-<td colspan=2>
+<td colspan=2 align=right>
 <input type="file" name="file" class="Button"/>
 </br>
 <input type="radio" name="lang" id="pas" value="pas" /><label for="pas">Pascal</label>

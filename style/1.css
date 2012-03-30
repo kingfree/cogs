@@ -1,6 +1,6 @@
 table {
 	BORDER-COLLAPSE:collapse;
-	/*background-color: #FFFFFF;*/
+	background-color: rgba(255, 255, 255, 0.2);
 }
 body {/*背景和默认*/
 	color: #000000;
@@ -14,19 +14,23 @@ td, th{
 }
 a:link {
 text-decoration: none;
-	color: #0000FF;
+	color: #551A8C;
 }
 a:visited {
-text-decoration: none;
-	color: #990099;
+    text-decoration: none;
+	color: #500A80;
 }
 a:hover {
 text-decoration: underline;
+	color: #505050;
 background-color: #FFFFFF;
 }
 a:active {
 text-decoration: underline;
 background-color: #33FF99;
+}
+.admin {
+	background-color: #99FFCC;
 }
 .Title {/*标题*/
 	font-size: 40px;
@@ -40,26 +44,15 @@ background-color: #33FF99;
 	font-size: 12px;
 }
 .MainText {/*主要文字*/
-	background-color:#CCFFFF;
-	border: solid #000000; 
-	border-width: 1px 1px 1px; 
-	font-size: 14px;
+	background-color:#CFFFFF;
 	padding: 10px 10px 10px 10px;
 }
 .LeftBar {
-	background-color:#CCFFFF;
-	border: solid #000000; 
-	border-width: 1px 1px 1px; 
-	font-size: 14px;
+	background-color:#C0F0F0;
 	width: 10em;
-	padding: 10px 10px 10px 10px;
 }
 .tops {
-	background-color:#CFFFFF;
-	border: solid #000000; 
-	border-width: 1px 1px 1px; 
-	font-size: 14px;
-	padding: 10px 10px 10px 10px;
+	background-color:#C0F0F0;
 	width: 15em;
 	vertical-align: top;
 }

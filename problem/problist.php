@@ -90,7 +90,8 @@ for ($i=1;$i<=10;$i++)
 <?php if ($_SESSION['ID']){ ?>
 <th scope="col">个人状态</th>
 <?php } ?>
-<th scope="col">题目名</th>
+<th scope="col">题目名称</th>
+<th scope="col">文件名称</th>
 <th scope="col">时间限制</th>
 <th scope="col">空间限制</th>
 <th scope="col">难度</th>
@@ -99,7 +100,8 @@ for ($i=1;$i<=10;$i++)
 <th scope="col">通过率</th>
 <th scope="col">上次通过</th>
 <?php if ($_SESSION['admin']>0){ ?>
-<th scope="col" bgcolor="#99FFCC">标识</th>
+<th scope="col" style=admin>标识</th>
+<th scope="col" style=admin>权限</th>
 <?php } ?>
 </tr>
 <?php
@@ -134,6 +136,7 @@ else {?> <img src='../images/sign/error.gif' border="0" />未解决 <?php }
 else { ?><img src='../images/sign/todo.gif' />未提交 <? }
 ?></td><?php } ?>
 <td><a href="pdetail.php?pid=<?php echo $d['pid'] ?>"><?php echo $d['probname'] ?></a></td>
+<td><?php echo $d['filename']; ?></td>
 <td align=center><?php echo $d['timelimit']/1000 . " s"; ?></td>
 <td align=center><?php echo $d['memorylimit'] . " MiB"; ?></td>
 <td><?php echo difficulty($d['difficulty']); ?></td>
@@ -143,7 +146,12 @@ else { ?><img src='../images/sign/todo.gif' />未提交 <? }
 <td><?php if ($d['uid']==1){ echo "无"; } else { ?>
 <a href="../user/detail.php?uid=<?php echo $d['uid'] ?>" target="_blank"><?php echo $d['name'];} ?></a></td>
 <?php if ($_SESSION['admin']>0){ ?>
-    <td bgcolor="#99FFCC"><?php if ($d['submitable']) echo "可提交"; else echo "不可提交"; ?></td><?php } ?>
+    <td style=admin>
+        <?php if ($d['submitable']) echo "可提交"; else echo "不可提交"; ?>
+    </td>
+    <td style=admin><?=$d['readforce']?>
+    </td>
+    <?php } ?>
     </tr>
     <?php
 }

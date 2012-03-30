@@ -53,7 +53,7 @@ $d['submitable']=1;
 $d['datacnt']=10;
 $d['timelimit']=1000;
 $d['memorylimit']=128;
-$d['difficulty']=0;
+$d['difficulty']=2;
 $d['readforce']=0;
 $d['plugin']=1;
 $d['group']=0;
@@ -63,7 +63,7 @@ else echo '<script>document.location="../../error.php?id=12"</script>';
 }
 ?>
 <form action="doeditprob.php" method="post">
-<table width="100%" border="1"  bordercolor=#000000  cellspacing=0 cellpadding=4>
+<table width="100%" border="1"  bordercolor=#000000 cellspacing=0 cellpadding=4>
 <tr>
 <td width="10%" valign="top" scope="col">PID</td>
 <td width="90%" scope="col"><?php echo $d[pid] ?>
@@ -79,7 +79,7 @@ else echo '<script>document.location="../../error.php?id=12"</script>';
 </tr>
 <tr>
 <td valign="top">阅读权限</td>
-<td><input name="readforce" type="text" id="readforce" value="<?php echo $d['readforce'] ?>" class="InputBox" /></td>
+<td><input name="readforce" type="number" id="readforce" value="<?php echo $d['readforce'] ?>" class="InputBox" /></td>
 </tr>
 <tr>
 <td valign="top">可提交</td>
@@ -87,24 +87,24 @@ else echo '<script>document.location="../../error.php?id=12"</script>';
 </tr>
 <tr>
 <td valign="top">测点数目</td>
-<td><input name="datacnt" type="text" id="datacnt" value="<?php echo $d[datacnt] ?>" class="InputBox" />
+<td><input name="datacnt" type="number" id="datacnt" value="<?php echo $d[datacnt] ?>" class="InputBox" />
 <!--【暂不可用】测试数据打包zip(文件包含一个以该题目命名的文件夹，其中为in和ans数据)：
 <input type="file" name="file" id="file" class="Button"/>
--->
 <input type="hidden" name="MAX_FILE_SIZE" value="102400">
+-->
 </td>
 </tr>
 <tr>
-<td valign="top">时限(ms)</td>
-<td><input name="timelimit" type="text" id="timelimit" value="<?php echo $d[timelimit] ?>" class="InputBox" /></td>
+<td valign="top">时间限制</td>
+<td><input name="timelimit" type="number" id="timelimit" value="<?php echo $d[timelimit] ?>" class="InputBox" /> 毫秒(ms)</td>
 </tr>
 <tr>
-<td valign="top">内存限制(MB)</td>
-<td><input name="memorylimit" type="text" id="memorylimit" value="<?php echo $d['memorylimit'] ?>" class="InputBox" /></td>
+<td valign="top">内存限制</td>
+<td><input name="memorylimit" type="number" id="memorylimit" value="<?php echo $d['memorylimit'] ?>" class="InputBox" /> 兆字节(MiB, 1024进制)</td>
 </tr>
 <tr>
 <td valign="top">难度等级</td>
-<td><input name="difficulty" type="text" id="difficulty" value="<?php echo $d['difficulty'] ?>" class="InputBox" /></td>
+<td><input name="difficulty" type="number" id="difficulty" value="<?php echo $d['difficulty'] ?>" class="InputBox" /></td>
 </tr>
 <tr>
 <td valign="top">开放分组</td>

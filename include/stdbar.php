@@ -24,7 +24,6 @@ $rank=$SETTINGS['base']."information/rank.php";
 $verfy=$SETTINGS['base']."user/verfy.php";
 $editbulletin=$SETTINGS['base']."admin/settings/editkey.php?sname=global_bulletin&method=text";
 ?>
-<center>
 <table width=100% border="0" id="nag">
 <tr text-align="center">
 <td><a href="<?=pathconvert($SETTINGS['cur'],$index);?>"><span class="icon-home"></span>首页</a></td>
@@ -59,5 +58,4 @@ if($_SESSION['ID']) {
 <td style="text-align:right;font-size:10pt;"><a href="#" onclick="document.getElementById('trad').innerHTML='正';document.getElementById('alltext').innerHTML = TradSimp.getTrad(document.getElementById('alltext').innerHTML);" id="trad">繁</a>/<a href="#" onclick="document.getElementById('trad').innerHTML='繁';document.getElementById('alltext').innerHTML = TradSimp.getSimp(document.getElementById('alltext').innerHTML);" id="simp">简</a></td>
 </tr>
 </table>
-</center>
 </div>

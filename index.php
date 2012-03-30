@@ -8,31 +8,34 @@ $q=new DataAccess();
 <table width="100%">
 <tr>
 <td valign="top" class="LeftBar">
-<center>
+<table width=100% border="0">
+<tr><td align=center>
 题目快捷方式
-</center>
-<hr />
-<center>
+</td></tr>
+<tr><td align=center>
 <form id="form1" name="form1" method="get" action="problem/problist.php">
 <input name="key" type="text" id="key" class="InputBox" size="10"/>
 <input class="icon-search LinkButton" name="sc" type="submit" id="sc" value=""/>
 </form>
-<br />
+</td></tr>
+<tr><td align=center>
 <form action="problem/pdetail.php" method="get" name="gotoprob" target="_blank" id="gotoprob">
 <input name="pid" type="text" class="InputBox" id="pid" size="6" />
 <input class="LinkButton" type="submit" name="Submit" value="进入" class="Button" />
 </form>
-<br />
+</td></tr>
+<tr><td align=center>
 <a class="LinkButton" href="problem/random.php" title="随机选择一道你没有通过的题目" target="_blank">随机题目<span class="icon-random"></span></a>
-<hr />
-</center>
+</td></tr>
+</table>
+<br />
 <table width=100% border="1">
 <tr>
 <th style="width:15%;">PID</th>
 <th style="width:80%;">题目</th>
 </tr>
 <?php 
-$sql="select * from problem where submitable=1 order by pid desc limit 12";
+$sql="select * from problem where submitable=1 order by pid desc limit 16";
 $cnt=$p->dosql($sql);
 for ($i=0;$i<$cnt;$i++)
 {

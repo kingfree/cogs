@@ -70,8 +70,8 @@ if($cnt) {
   </tr>
   <?php if ($_SESSION['admin']>0){ ?>
   <tr>
-    <th bgcolor="#99FFCC" scope="col">IP</th>
-    <td bgcolor="#99FFCC" scope="col"><?php echo $d['IP'] ?></td>
+    <th style=admin scope="col">IP</th>
+    <td style=admin scope="col"><?php echo $d['IP'] ?></td>
   </tr>
   <?php } ?>
   <tr>

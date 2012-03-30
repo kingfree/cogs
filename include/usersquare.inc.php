@@ -8,6 +8,7 @@ function showuser($uid,$user_access)
 	$udetail=$SETTINGS['base']."user/detail.php?uid={$uid}";
 	$userlist=$SETTINGS['base']."information/userlist.php";
 	$login=$SETTINGS['base']."user/login.php";
+	$lost=$SETTINGS['base']."user/lost.php";
 	$register=$SETTINGS['base']."user/register.php";
 	
 	if ((int)$uid)
@@ -35,7 +36,8 @@ function showuser($uid,$user_access)
 <th><a class=LinkButton style="font-size: 18px;" href="<?=pathconvert($SETTINGS['cur'],$login)."?from=".$SETTINGS['URI'];?>">登录</a></th>
   </tr>
   <tr>
-<td align="center"><a href="lost.php">忘记密码</a></td>
+<td align="center">
+<a href="<?=pathconvert($SETTINGS['cur'],$lost)?>">忘记密码</a></td>
   </tr>
   <tr>
 <th><a href="<?=pathconvert($SETTINGS['cur'],$register)."?from=".$SETTINGS['URI'];?>">注册</a></th>

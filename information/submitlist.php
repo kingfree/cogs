@@ -65,8 +65,8 @@ if (!isset($_GET[page])) {
 <th scope="col">时间</th>
 <th scope="col">内存</th>
 <?php if ($_SESSION['admin']>0){ ?>
-<th bgcolor="#99FFCC" scope="col">IP</th>
-<th bgcolor="#99FFCC" scope="col">姓名</th>
+<th style=admin scope="col">IP</th>
+<th style=admin scope="col">姓名</th>
 <?php } ?>
 </tr>
 <?php if (!$err)
@@ -100,8 +100,8 @@ echo "<a href='?pid={$d['pid']}'>{$d['probname']}</a>";
 <td><?php printf("%.3f",$d['runtime']/1000.0) ?> s </td>
 <td><?php printf("%.2f",$d['memory']/1024) ?> MiB </td>
 <?php if ($_SESSION['admin']>0){ ?>
-<td bgcolor="#99FFCC"><a href="../addons/ipquery/?ip=<?php echo $d['IP'] ?>" target="_blank"><?php echo $d['IP'] ?></a></td>
-<td bgcolor="#99FFCC"><?php echo $d['realname'] ?></td>
+<td style=admin><?php echo $d['IP'] ?></td>
+<td style=admin><?php echo $d['realname'] ?></td>
 <?php } ?>
 </tr>
 <?php
