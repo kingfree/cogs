@@ -16,10 +16,12 @@ gethead(1,"sess","成绩公布");
 	if (!$d[showscore] && !$_SESSION[admin])
 	{
 		echo "成绩还未公布";
+	include_once("../include/stdtail.php");
 		exit;
 	}
-if(time() < $d['starttime']) {
-    echo "比赛尚未开始，不能查看关于题目的任何信息！";
+if(time() < $d['starttime'] && !$_SESSION[admin]) {
+    echo "<h1>比赛尚未开始，不能查看关于题目的任何信息！</h1>";
+	include_once("../include/stdtail.php");
     exit;
 }
 	

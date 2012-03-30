@@ -5,9 +5,9 @@ $p=new DataAccess();
 $q=new DataAccess();
 ?>
 
-<table width="100%">
+<table width="100%" class="MainText">
 <tr>
-<td valign="top" class="LeftBar">
+<td valign="top" width="160px">
 <table width=100% border="0">
 <tr><td align=center>
 题目快捷方式
@@ -61,10 +61,10 @@ $d=$p->rtnrlt($i);
 <?php } ?>
 </table>
 </td>
-<td valign="top" class="MainText" id="indexinfo">
+<td valign="top" >
 <?php echo output_text($SETTINGS['global_index']); ?>
 </td>
-<td class="tops">
+<td width="220px">
 <center>
 等级Top <?php echo $SETTINGS['style_ranksize']; ?>
 <table width=100% border="1">
@@ -95,7 +95,8 @@ $d=$p->rtnrlt($i);
 </table>
 </center>
 </td>
-<td class="tops"><center>
+<td width="220px">
+<center>
 等级Top <?php echo $SETTINGS['style_ranksize']*2; ?>
 <table width=100% border="1">
 <tr>

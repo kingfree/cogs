@@ -23,24 +23,20 @@ if ($cnt)
 	<div class="Comments" >
 <table width="100%" border="1">
   <tr>
-    <td width="15%">比赛名</td>
-    <td width="85%"><?php echo $d[cname] ?></td>
-  </tr>
-  <tr>
-    <td>开始时间</td>
-    <td><?php echo date('Y-m-d H:i:s', $d[starttime]) ?></td>
-  </tr>
-  <tr>
-    <td>结束时间</td>
-    <td><?php echo date('Y-m-d H:i:s', $d[endtime]) ?></td>
-  </tr>
-  <tr>
-    <td>比赛状态</td>
+    <td width=80px>比赛名</td>
+    <td><b><?php echo $d[cname] ?></b></td>
+    <td width=80px>比赛状态</td>
     <td><?php
 	 if (time()>$d[endtime]) echo "已结束"; else
 	 if (time()<$d[endtime] && time()>$d[starttime]) echo "正在进行"; else
 	 echo "还未开始"; 
 	 ?></td>
+  </tr>
+  <tr>
+    <td>开始时间</td>
+    <td><?php echo date('Y-m-d H:i:s', $d[starttime]) ?></td>
+    <td>结束时间</td>
+    <td><?php echo date('Y-m-d H:i:s', $d[endtime]) ?></td>
   </tr>
 
   <tr>
@@ -52,18 +48,14 @@ if ($d[showscore] || $_SESSION[admin])
 if (!$d[showscore])
 	echo "未公布";
 ?></td>
-  </tr>
-  <tr>
     <td>开放分组</td>
     <td><a href="../information/userlist.php?gid=<?php echo $d['gid'] ?>" target="_blank"><?php echo $d['gname'] ?></a></td>
   </tr>
   <tr>
+    <td>参加比赛</td>
+    <td><b><a href='comp.php?ctid=<?php echo $d[ctid] ?>&uid=<?php echo $_SESSION['ID'] ?>'>进入比赛</a></b></td>
     <td>场次介绍</td>
     <td><?php echo nl2br(sp2n(htmlspecialchars($d[intro]))) ?></td>
-  </tr>
-  <tr>
-    <td>参加比赛</td>
-    <td><a href='comp.php?ctid=<?php echo $d[ctid] ?>&uid=<?php echo $_SESSION['ID'] ?>'>进入比赛</a></td>
   </tr>
 </table>
 	</div>

@@ -46,7 +46,7 @@ echo '<script>document.location="../error.php?id=11"</script>';
 }
 ?>
 
-<div id='problem' style="background-color:rgba(255, 255, 255, 0.3)">
+<div id='problem'>
 <table class="pdetail" width=100% border=0><tr>
 <td width=250px valign=top>
 <table width="100%" style="margin: 2px 0;">
@@ -121,7 +121,7 @@ echo " <a href='problist.php?caid={$e[caid]}'>{$e[cname]}</a> ";
 </tr>
 <tr>
 <?php if ($_SESSION['admin']>0){ ?>
-<td><a href="../admin/problem/editprob.php?action=edit&pid=<?php echo  $d[pid]; ?>">修改该题</a></td>
+<td border=1><a href="../admin/problem/editprob.php?action=edit&pid=<?php echo  $d[pid]; ?>" class="LinkButton">修改该题</a></td>
 <?php } else { ?>
 <td></td>
 <? } ?>
@@ -133,7 +133,6 @@ echo " <a href='problist.php?caid={$e[caid]}'>{$e[cname]}</a> ";
 <form action="../compile/" method="post" enctype="multipart/form-data" name="sub">
 <td colspan=2 align=right>
 <input type="file" name="file" class="Button"/>
-</br>
 <input type="radio" name="lang" id="pas" value="pas" /><label for="pas">Pascal</label>
 <input type="radio" name="lang" id="c" value="c" /><label for="c">C</label>
 <input type="radio" name="lang" id="cpp" value="cpp" checked=1/><label for="cpp">C++</label>
@@ -141,7 +140,6 @@ echo " <a href='problist.php?caid={$e[caid]}'>{$e[cname]}</a> ";
 <input name="testmode" type="checkbox" id="testmode" value="1" /> 
 <label for="testmode">测试模式</label>
 <?php } ?>
-</br>
 <input class="LinkButton" type="submit" name="Submit" style="font-size: 24px;" value="提交代码"/>
 <input name="pid" type="hidden" id="pid" value="<?=$d['pid']; ?>" />
 <input type="hidden" name="MAX_FILE_SIZE" value="102400">

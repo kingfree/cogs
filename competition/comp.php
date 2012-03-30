@@ -80,9 +80,10 @@ if ($_GET['uid']!=$_SESSION['ID'])
 if (time()<$d['starttime'] && !($_SESSION['admin']>0))
 {
 ?>
-比赛还未开始，题目暂不公布。
-<? } else {?>
-  <p><table border="1" bordercolor=#000000  cellspacing=0 cellpadding=4>
+<h1>比赛还未开始，题目暂不公布。</h1>
+<? } else {
+    ?>
+  <p><table border="1" bordercolor=#000000 cellspacing=0 cellpadding=4>
   <tr>
 <?php if ($self) { ?>
     <td scope="col">进入提交</td>
@@ -101,6 +102,8 @@ if (time()<$d['starttime'] && !($_SESSION['admin']>0))
 		$p->dosql($sql);
 		$d=$p->rtnrlt(0);
 		$pname=$d[probname];
+		echo '<script>document.location="cdetail.php?pid='.$v.'&ctid='.$_GET[ctid].'&uid='.$_GET['uid'].'"</script>';
+        exit;
 		
 		$sql="select * from compscore where uid='{$_GET['uid']}' and compscore.pid={$v} and compscore.ctid={$_GET[ctid]}";
 		$cnt=$p->dosql($sql);
