@@ -15,7 +15,7 @@ $q = new DataAccess();
 <th>发件箱</th>
 </tr>
 <tr>
-<td>
+<td valign=top>
 <form id="form" name="form" method="post" action="send.php">
 <input name="fromid" type="hidden" value=<?=$uid?> />
 <table>
@@ -38,7 +38,7 @@ $q = new DataAccess();
 </table>
 </form>
 </td>
-<td width=30%>
+<td width=30% valign=top>
 <table width=100% border=1>
 <tr>
 <th>ID</th>
@@ -68,7 +68,7 @@ for($i=0; $i<$cnt; $i++) {
 ?>
 </table>
 </td>
-<td width=30%>
+<td width=30% valign=top>
 <table width=100% border=1>
 <tr>
 <th>ID</th>
