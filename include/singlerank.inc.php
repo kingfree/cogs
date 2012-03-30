@@ -1,9 +1,4 @@
 <table border="0" width="100%">
-        <tr>
-          <th scope="col" width="33%">用户</th>
-          <th scope="col" width="33%">运行时间</th>
-          <th scope="col" width="34%">详细记录</th>
-        </tr>
 <?php
 $sql="select * from submit,userinfo where submit.pid={$pid} and submit.uid=userinfo.uid and submit.accepted>0 and lang={$lang} order by runtime asc,subtime asc";
 $cnt=$p->dosql($sql);
