@@ -29,7 +29,14 @@ $editbulletin=$SETTINGS['base']."admin/settings/editkey.php?sname=global_bulleti
 <td><a href="<?=pathconvert($SETTINGS['cur'],$index);?>"><span class="icon-home"></span>首页</a></td>
 <td><a href="<?=pathconvert($SETTINGS['cur'],$problist);?>"><span class="icon-list"></span>题目</a></td>
 <td><a href="<?=pathconvert($SETTINGS['cur'],$cate);?>"><span class="icon-th"></span>分类</a></td>
-<td><a href="<?=pathconvert($SETTINGS['cur'],$competition);?>"><span class="icon-list-alt"></span>比赛</a></td>
+<td><a href="<?=pathconvert($SETTINGS['cur'],$competition);?>"><span class="icon-list-alt"></span>比赛<?$now = time();
+$sql = "select ctid from comptime where starttime > $now and endtime > $now";
+$cnt1 = $p->dosql($sql);
+if($cnt1 > 0) echo "<span style='color: blue'>($cnt1)</span>";
+$sql = "select ctid from comptime where starttime < $now and endtime > $now";
+$cnt2 = $p->dosql($sql);
+if($cnt2 > 0) echo "<span style='color: red'>($cnt2)</span>";
+?></a></td>
 <td><a href="<?=pathconvert($SETTINGS['cur'],$submitlist);?>"><span class="icon-film"></span>记录</a></td>
 <td><a href="<?=pathconvert($SETTINGS['cur'],$userlist);?>"><span class="icon-user"></span>用户</a></td>
 <td><a href="<?=pathconvert($SETTINGS['cur'],$grouplist);?>"><span class="icon-th-large"></span>分组</a></td>
@@ -50,8 +57,7 @@ if($_SESSION['ID']) {
 <th><a href="<?=pathconvert($SETTINGS['cur'],$register);?>"><span class="icon-shopping-cart"></span>注册</a></th>
 <? } ?>
 <?php if ($_SESSION['admin']>0)	{ ?>
-<!--<td><a href="<?=pathconvert($SETTINGS['cur'],$grader);?>"><span class="icon-lock"></span>终端</a></td>-->
-<td><a style="color: red;" href="<?=pathconvert($SETTINGS['cur'],$admin)?>"><span class="icon-asterisk"></span>后台</a></td>
+<td><a style="color: darkred;" href="<?=pathconvert($SETTINGS['cur'],$admin)?>"><span class="icon-asterisk"></span>后台</a></td>
 <? } ?>
 <td><a href="<?=pathconvert($SETTINGS['cur'],$help);?>"><span class="icon-question-sign"></span>帮助</a></td>
 <td><a href="<?=pathconvert($SETTINGS['cur'],$about);?>"><span class="icon-info-sign"></span>关于</a></td>

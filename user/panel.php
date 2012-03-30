@@ -4,6 +4,7 @@ gethead(1,"sess","个人中心");
 ?>
 
 <p><a href="../information/submitlist.php?uid=<?php echo $_SESSION['ID'] ?>">查看我的提交记录</a></p>
+<p><a href="editpwd.php" class="LinkButton">修改密码</a></p>
 
 <?php
 $p=new DataAccess();
@@ -32,7 +33,7 @@ $d=$p->rtnrlt(0);
   </tr>
   <tr>
     <td>E-mail</td>
-    <td><input class="InputBox" name="email" value=<?=$d[email]?> /> 这个电子邮箱现在用于显示用户头像，请一律小写</td>
+    <td><input class="InputBox" name="email" type="email" value=<?=$d[email]?> /> 这个电子邮箱现在用于显示用户头像，请一律小写</td>
   </tr>
   <tr>
     <td>阅读权限</td>
@@ -67,7 +68,7 @@ $d=$p->rtnrlt(0);
   <input type="submit" name="Submit" value="修改"  class="Button"/>
   <input name="action" type="hidden" id="action" value="edit" />
   <input name="uid" type="hidden" id="uid" value="<?=$d['uid']?>" />
-</p><p><a href="editpwd.php">修改密码</a></p>
+</p>
 </form>
 
 <?php

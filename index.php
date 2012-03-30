@@ -63,6 +63,13 @@ $d=$p->rtnrlt($i);
 </td>
 <td valign="top" >
 <?php echo output_text($SETTINGS['global_index']); ?>
+<!--<div class="Tags">
+<?$sql="select * from category order by cname";
+$cnt=$p->dosql($sql);
+for ($i=$st;$i<$cnt;$i++) {
+    $d=$p->rtnrlt($i);
+?> <a href="../problem/problist.php?caid=<?=$d['caid']?>" title="<?=sp2n(htmlspecialchars($d['memo']))?>"><?=$d['cname']?></a> <? } ?>
+</div>-->
 </td>
 <td width="220px">
 <center>

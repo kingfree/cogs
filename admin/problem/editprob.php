@@ -134,26 +134,24 @@ $e=$q->rtnrlt($j);
 <td><!--<div id="bctip">点击左边链接显示</div>-->
 <?php
 if ($_GET[pid]) {
-$sql="select caid from tag where pid={$_GET[pid]}";
-$cnt=$p->dosql($sql);
-for ($i=0;$i<=$cnt-1;$i++) {
-$d=$p->rtnrlt($i);
-$hash[$d[caid]]=true;
+    $sql="select caid from tag where pid={$_GET[pid]}";
+    $cnt=$p->dosql($sql);
+    for ($i=0;$i<=$cnt-1;$i++) {
+        $d=$p->rtnrlt($i);
+        $hash[$d[caid]]=true;
+    }
 }
-}
-
-
 $sql="select * from category order by cname";
 $cnt=$p->dosql($sql);
 if ($cnt)
 {
-$table_width=9;
+    $table_width=8;
 ?>
 
-<table border="1" id="bc">
-<tr>
-<?php
-$last=0;
+    <table border="1" id="bc">
+    <tr>
+    <?php
+    $last=0;
 $linecnt=0;
 $line=1;
 for ($i=0;$i<$cnt;$i++)

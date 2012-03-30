@@ -23,9 +23,10 @@ echo '<script>document.location="../../error.php?id=8"</script>';
 else
 {
 	$p=new DataAccess();
-	if ($_POST['reset']!="reset") $sql="update userinfo set nickname='{$_POST[nickname]}' ,readforce={$_POST[readforce]} , admin={$_POST[admin]},grade={$_POST[grade]},memo='{$_POST[memo]}', portrait={$_POST[portrait]},realname='{$_POST[realname]}',gbelong={$_POST[gbelong]} where uid={$_GET[uid]}";
+	if ($_POST['reset'] != "reset")
+        $sql="update userinfo set nickname='{$_POST[nickname]}' ,readforce={$_POST[readforce]} ,email='{$_POST[email]}', admin={$_POST[admin]},grade={$_POST[grade]},memo='{$_POST[memo]}',realname='{$_POST[realname]}',gbelong={$_POST[gbelong]} where uid={$_GET[uid]}";
 	else
-	$sql="update userinfo set nickname='{$_POST[nickname]}' ,readforce={$_POST[readforce]} , admin={$_POST[admin]},grade={$_POST[grade]},memo='{$_POST[memo]}',portrait={$_POST[portrait]},pwdhash='".encode("")."',realname='{$_POST[realname]}',gbelong={$_POST[gbelong]} where uid={$_GET[uid]}";
+        $sql="update userinfo set nickname='{$_POST[nickname]}' ,readforce={$_POST[readforce]} ,email='{$_POST[email]}', admin={$_POST[admin]},grade={$_POST[grade]},memo='{$_POST[memo]}',pwdhash='".encode("")."',realname='{$_POST[realname]}',gbelong={$_POST[gbelong]} where uid={$_GET[uid]}";
 	$p->dosql($sql);
 	echo '<script>document.location="../../refresh.php?id=5"</script>';
 }

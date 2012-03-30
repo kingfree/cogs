@@ -177,15 +177,15 @@ $cnt=$r->dosql($sql);
 $f=$r->rtnrlt(0);
 ?>
 <tr>
-<td><b><?php echo $f['realname']; ?></b></td>
+<td width=60px><b><?php echo $f['realname']; ?></b></td>
 <td><a href="../user/detail.php?uid=<?=$uid?>"><?php echo $f['nickname']; ?></a></td>
 </tr>
 <tr>
-<td width=60px>提交时间</td>
+<td>提交时间</td>
 <td><?php if($f[subtime]) echo date('Y-m-d H:i:s',$f['subtime']); else echo "未提交"; ?></td>
 </tr>
 <tr>
-<td>我的得分</td>
+<td>得分</td>
 <td><?php echo $f['score']; ?></td>
 </tr>
 <tr>

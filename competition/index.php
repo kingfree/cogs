@@ -3,6 +3,7 @@ require_once("../include/stdhead.php");
 gethead(1,"","比赛");
 ?>
 
+<center>
 现在时间：
 <?php
 if ($_GET['showold']==1)
@@ -20,16 +21,16 @@ if ($cnt)
 		$d=$p->rtnrlt($i);
 		if (!$showold && time()-$d[endtime] >= 2592000) continue;
 ?>
-	<div class="Comments" >
-<table width="100%" border="1">
+<br />
+<table width="60%" border="1">
   <tr>
     <td width=80px>比赛名</td>
     <td><b><?php echo $d[cname] ?></b></td>
     <td width=80px>比赛状态</td>
     <td><?php
 	 if (time()>$d[endtime]) echo "已结束"; else
-	 if (time()<$d[endtime] && time()>$d[starttime]) echo "正在进行"; else
-	 echo "还未开始"; 
+	 if (time()<$d[endtime] && time()>$d[starttime]) echo "<span style='color: red'>正在进行</span>"; else
+	 echo "<span style='color: blue'>还未开始</span>"; 
 	 ?></td>
   </tr>
   <tr>
@@ -58,19 +59,18 @@ if (!$d[showscore])
     <td><?php echo nl2br(sp2n(htmlspecialchars($d[intro]))) ?></td>
   </tr>
 </table>
-	</div>
 
 
 <?php
-	echo "<hr class='Spliter'/>";
 	}
 }
 else
 {
-	echo "还没有比赛！";
+	echo "<h1>还没有比赛！</h1>";
 }
 ?>
 <p><a href="?showold=1">查看过去的比赛</a></p>
+</center>
 <?php
 	include_once("../include/stdtail.php");
 ?>

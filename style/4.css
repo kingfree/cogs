@@ -36,21 +36,8 @@ text-align : right;
 color : #999999;
 font-size : 12px;
 }
-.Tags {
-//background-color : #fffaaf;
-}
-.Tags td {
-text-align: left;
-padding : 2px;
-}
-.Tags a:link, .Tags a:visited {
-background-color : #d9ff86;
-}
-.Tags a:hover {
-background-color : #86a9ff;
-}
 .MainText {
-background-color : #cfffff;
+background-color : #c0eec5;
 padding : 10px 10px 10px 10px;
 }
 .LeftBar {
@@ -110,7 +97,7 @@ border-style : dotted;
 .LinkButton {
 padding : 1px 5px 1px 5px;
 border : 0;
-background-color : #6efe78;
+background-color : #ffcc50;
 }
 .FloatDialog {
 position : absolute;

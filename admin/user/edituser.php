@@ -3,7 +3,6 @@ require_once("../../include/stdhead.php");
 gethead(1,"admin","修改用户");
 ?>
 
-<a href="../settings.php?settings=userlist"><?php echo $STR[admin][user]; ?></a>
 <?php
 $p=new DataAccess();
 $sql="select * from userinfo where uid={$_GET[uid]}";
@@ -20,8 +19,8 @@ if ($cnt)
 <form id="form1" name="form1" method="post" action="doedituser.php?action=edit&uid=<?php echo $_GET[uid]; ?>">
 <table width="100%" border="1"  bordercolor=#000000  cellspacing=0 cellpadding=4>
   <tr>
-    <th scope="col">修改用户</th>
-    <th scope="col"><?php echo $d[usr] ?></th>
+    <td scope="col">修改用户</td>
+    <td scope="col"><b><?php echo $d[usr] ?></b></td>
   </tr>
   <tr>
     <td>昵称</td>
@@ -31,6 +30,10 @@ if ($cnt)
   <tr>
     <td>真实姓名</td>
     <td><input name="realname" type="text" value="<?php echo $d[realname] ?>" class="InputBox" /></td>
+  </tr>
+  <tr>
+    <td>E-mail</td>
+    <td><input class="InputBox" name="email" type="email" value=<?=$d[email]?> /></td>
   </tr>
   <tr>
     <td>阅读权限</td>
@@ -72,10 +75,6 @@ for ($i=0;$i<=$cnt2-1;$i++)
   <tr>
     <td>个人介绍</td>
     <td><textarea name="memo" cols="80" rows="10" class="TextArea"><?php echo $d[memo] ?></textarea></td>
-  </tr>
-  <tr>
-    <td>头像</td>
-    <td><input name="portrait" type="text" value="<?php echo $d[portrait] ?>" class="InputBox" /></td>
   </tr>
   <tr>
     <td>重置密码(空)</td>

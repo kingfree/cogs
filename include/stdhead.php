@@ -31,7 +31,7 @@ function gethead($head,$check,$title)
 	}
 	if ($head==1)
 	{
-        //if($_SESSION['ID']==524) $SETTINGS['style_profile'] = "kf.css";
+        //if($_SESSION['ID']==524) $SETTINGS['style_profile'] = "4.css";
 		$style=$SETTINGS['base']."style/".$SETTINGS['style_profile'];
 		$stylepath=pathconvert($SETTINGS['cur'],$style);
 		$nagbar=$SETTINGS['base']."include/stdbar.php";

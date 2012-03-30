@@ -28,24 +28,7 @@ gethead(1,"","分组列表");
 <?php
 	$sql="select groups.*,userinfo.uid,userinfo.nickname from groups,userinfo where groups.adminuid=userinfo.uid order by gname";
 	$cnt=$p->dosql($sql);
-	$totalpage=(int)(($cnt-1)/$SETTINGS['style_pagesize'])+1;
-	if (!isset($_GET[page])) 
-	{
-		$_GET[page]=1;
-		$st=0;
-	}
-	else 
-	{
-		if ($_GET[page]<1 || $_GET[page]>$totalpage)
-		{
-			echo "页错误！";
-			$err=1;
-		}
-		else
-		$st=(($_GET[page]-1)*$SETTINGS['style_pagesize']);
-	}
-	if (!$err)
-	for ($i=$st;$i<$cnt && $i<$st+$SETTINGS['style_pagesize'] ;$i++)
+	for ($i=$st;$i<$cnt;$i++)
 	{
 		$d=$p->rtnrlt($i);
 		if ($d['uid']==$_SESSION['ID'])
@@ -79,49 +62,6 @@ if ($d['parent']!=-1)
 <?php if ($_SESSION['admin']>0){ ?>
 <p><a href="../admin/group/editgroup.php?action=add">添加新组</a></p>
 <?php } ?>
-<p>当前第<?php echo $_GET[page]?>页 共<?php echo $cnt?>条记录 共<?php echo $totalpage?>页 每页最多显示<?php echo $SETTINGS['style_pagesize'] ?>条记录</p>
-<form id="form1" name="form1" method="get" action="">
-  <p>
-
-    <?php 
-if (!$err)
-{
-	if ($_GET[page]>1)
-	{
-		$lp=$_GET[page]-1;
-		
-		$url="?";
-		foreach($_GET as $k=>$v)
-		{
-			if ($k!='page')
-				$url.="{$k}={$v}&";
-		}
-		$url.="page=$lp";
-		
-		echo "<a href='$url'>上一页</a>";
-	}
-	if ($_GET[page]!=$totalpage)
-	{
-		$lp=$_GET[page]+1;
-		
-		$url="?";
-		foreach($_GET as $k=>$v)
-		{
-			if ($k!='page')
-				$url.="{$k}={$v}&";
-		}
-		$url.="page=$lp";
-		
-		echo " <a href='$url'>下一页</a>";	
-	}
-}
-?>
-    去第
-    <input name="page" type="text" id="page" size="4"  class="InputBox" />
-    页 
-  <input name="fastgo" type="submit" id="fastgo" value="go" class="Button" />
-  <input name="settings" type="hidden" id="settings" value="grouplist">
-</form>
 <div id="join" style="width:562px; height:262px; display:none;" class="FloatDialog" align="center">
 	<form action="joingroup.php" method="post" name="joingroup">
 		<p><a href="#" onclick="switchhide('join');">关闭</a></p>

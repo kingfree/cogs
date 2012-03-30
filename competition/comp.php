@@ -10,8 +10,10 @@ $cnt=$p->dosql($sql);
 if ($cnt)
 {
 	$d=$p->rtnrlt(0);
-	if (time()<$d['endtime'] && !($_SESSION['admin']>0) && $_GET['uid']!=$_SESSION['ID'])
+	if (time()<$d['endtime'] && !($_SESSION['admin']>0) && $_GET['uid']!=$_SESSION['ID']) {
+	echo '<script>document.location="index.php"</script>';
 		exit;
+    }
 	$subgroup=$LIB->getsubgroup($p,$d['gid']);
 	$subgroup[0]=$d['gid'];
 	$promise=false;

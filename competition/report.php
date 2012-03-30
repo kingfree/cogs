@@ -30,13 +30,13 @@ if(time() < $d['starttime'] && !$_SESSION[admin]) {
 ?>
 
 <p><a href=".">返回比赛列表</a></p>
-<table width="100%" border="1">
+<table border="1" align=center>
   <tr>
-    <th width="6%" scope="col"><a href="javascript:qsort('rank')">名次</a></th>
-    <th width="8%" scope="col"><a href="javascript:qsort('uid')">UID</a></th>
-    <th width="10%" scope="col">用户昵称</th>
+    <th width="30px" scope="col"><a href="javascript:qsort('rank')">名次</a></th>
+    <th width="40px" scope="col"><a href="javascript:qsort('uid')">UID</a></th>
+    <th width="120px" scope="col">用户昵称</th>
 	<?php if ($_SESSION['admin']>0) { ?>
-    <th width="10%" scope="col">真实姓名</th>
+    <th width="60px" scope="col">姓名</th>
 	<?php } ?>
 <?php
 	$cnt_prob=0;
@@ -49,12 +49,12 @@ if(time() < $d['starttime'] && !$_SESSION[admin]) {
 		$d=$p->rtnrlt(0);
 		$cnt_prob++;
 ?>
-    <th width="10%" scope="col"><?php echo $d[probname] ?></th>
-    <th width="8%" scope="col"><a href="javascript:qsort('score<?php echo $v ?>_')">得分</a></th>
+    <th width="150px" scope="col"><?php echo $d[probname] ?></th>
+    <th width="50px" scope="col"><a href="javascript:qsort('score<?php echo $v ?>_')">得分</a></th>
 <?php
 	}
 ?>
-    <th width="8%" scope="col"><a href="javascript:qsort('sum')">总分</a></th>
+    <th width="55px" scope="col"><a href="javascript:qsort('sum')">总分</a></th>
   </tr>
 <?php 
 	$sql="select userinfo.uid,userinfo.nickname,userinfo.realname,userinfo.email from userinfo,compscore where compscore.uid=userinfo.uid and compscore.ctid=$_GET[ctid] order by uid";
@@ -91,9 +91,11 @@ if(time() < $d['starttime'] && !$_SESSION[admin]) {
 		foreach($pbs as $k=>$v)
 		{
 ?>
-    <td id="result<?php echo $v ?>_<?php echo $rowcnt ?>"><pre style='margin:0;'><?php if ($rank[$v][result] =="") echo "未评测"; else {
+    <td id="result<?=$v?>_<?=$rowcnt?>">
+    <a href="cdetail.php?pid=<?=$v?>&ctid=<?=$_GET['ctid']?>&uid=<?=$d['uid']?>"><pre style='margin:0;'><?php
+    if ($rank[$v][result] =="") echo "未评测"; else {
         echo judgeresult($rank[$v][result]); 
-    }?></pre></td>
+    }?></pre></a></td>
     <td id="score<?php echo $v ?>_<?php echo $rowcnt ?>"><?php echo $rank[$v][score]; ?></td>
 <?php
 		}
