@@ -20,7 +20,7 @@ if ($cnt)
 <tr>
 <td>用户名</td>
 <td><?php echo $d['usr'] ?></td>
-<th rowspan=9>
+<th rowspan=9 valign=top>
 <?=gravatar::showImage($d['email'], 200);?>
 </th>
 </tr>
@@ -76,10 +76,9 @@ else
 }
 ?>
 <p><a href="../information/submitlist.php?uid=<?php echo $_GET['uid']?>" target="_blank">查看全部提交记录</a></p>
-<p>通过的题</p>
 <?php
 $accnt=0;
-$sql="select problem.pid,problem.probname,submit.accepted,submit.sid from submit,problem where submit.uid={$_GET['uid']} and submit.pid=problem.pid order by problem.pid";
+$sql="select problem.pid,problem.probname,submit.accepted,submit.sid from submit,problem where submit.uid={$_GET['uid']} and submit.pid=problem.pid order by problem.pid asc, submit.accepted desc ";
 $cnt=$p->dosql($sql);
 if ($cnt)
 {
@@ -92,15 +91,18 @@ if ($cnt)
 	$last=0;
 	$linecnt=0;
 	$line=1;
+    $ppp=array();
 	for ($i=0;$i<$cnt;$i++)
 	{
 		$d=$p->rtnrlt($i);
-		if ($last==$d['pid'] || $d['accepted']==0) continue;
-		$accnt++;
+		if($last==$d['pid']) continue;
+		if($d['accepted']) $accnt++;
 		$last=$d['pid'];
+        if($ppp[$d['pid']]) continue;
+        $ppp[$d['pid']] = true;
 		$linecnt++;
 ?>
-		<td><a href="../problem/submitdetail.php?id=<?php echo $d['sid'] ?>" target="_blank"><?php echo $d['probname'] ?></a></td>
+<td><a href="../problem/submitdetail.php?id=<?php echo $d['sid'] ?>" target="_blank"><img src='../images/sign/<?=$d['accepted']?"right":"error"?>.gif' border=0 /></a><a href="../problem/pdetail.php?pid=<?php echo $d['pid'] ?>" target="_blank"><?php echo $d['probname'] ?></a></td>
 <?php
 		if ($linecnt==$table_width)
 		{
