@@ -156,6 +156,7 @@ else
   </tr>
   <tr>
   <td colspan=2 align=right>
+  <? if((time() < $e['endtime'] && time() > $e['starttime']) || $_SESSION['admin']) { ?>
 <form action="submit.php" method="post" enctype="multipart/form-data" name="sub">
 <input type="file" name="file" class="Button"/>
 <input type="radio" name="lang" id="pas" value="pas" /><label for="pas">Pascal</label>
@@ -167,6 +168,7 @@ else
 <input name="ctid" type="hidden" id="pid" value="<?=$_GET[ctid]; ?>" />
 <input type="hidden" name="MAX_FILE_SIZE" value="102400">
 </form>
+<? } ?>
   </td>
   </tr>
 </table>

@@ -130,7 +130,6 @@ if ($linecnt>0 && $line>1)
 }
 ?>
 <p>通过了<strong><?php echo $accnt ?></strong>道题，一共提交了<strong><?php echo $cnt ?></strong>次，通过率为<strong><?php printf("%.2lf",$cnt==0?0:$accnt / $cnt * 100) ?>%</strong>。</p>
-<p>参加过的比赛</p>
 <?php
 $sql="select compbase.cbid,compbase.cname,compscore.subtime,comptime.ctid from compscore,comptime,compbase where compscore.uid={$_GET['uid']} and comptime.ctid=compscore.ctid and comptime.cbid=compbase.cbid order by comptime.endtime desc";
 $cnt=$p->dosql($sql);
@@ -142,21 +141,25 @@ if ($cnt)
   <tr>
     <th scope="col">比赛名</th>
     <th scope="col">参加时间</th>
-    <th scope="col">详细信息</th>
+    <th scope="col">比赛名</th>
+    <th scope="col">参加时间</th>
+    <th scope="col">比赛名</th>
+    <th scope="col">参加时间</th>
+    <th scope="col">比赛名</th>
+    <th scope="col">参加时间</th>
   </tr>
 <?php
-	$last=0;
+	$last = $j =0;
 	for ($i=0;$i<$cnt;$i++)
 	{
 		$d=$p->rtnrlt($i);
 		if ($last==$d['cbid']) continue;
 		$last=$d['cbid'];
+        if($j % 4 == 0) echo "<tr>";
+        $j++;
 ?>
-  <tr>
-    <td><?php echo $d['cname'] ?></td>
-    <td><?php echo date("Y-m-d",$d['subtime']) ?></td>
-    <td><a href="../competition/comp.php?ctid=<?php echo $d['ctid'] ?>&uid=<?php echo $_GET['uid'] ?>" target="_blank">查看</a></td>
-  </tr>
+    <td><b><?=$d['cname']?></b></td>
+    <td><a href="../competition/comp.php?ctid=<?=$d['ctid']?>&uid=<?=$_GET['uid']?>" target="_blank"><?echo date("Y-m-d",$d['subtime'])?></a></td>
 <?php
 	}
 ?>

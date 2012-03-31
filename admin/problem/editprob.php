@@ -1,18 +1,16 @@
 <?php
 require_once("../../include/stdhead.php");
 gethead(1,"admin","修改题目");
-include("../../include/fckeditor/fckeditor.php") ;
 ?>
 
-<script type="text/javascript">
-function FCKeditor_OnComplete( editorInstance )
-{
-var oCombo = document.getElementById( 'cmbToolbars' ) ;
-oCombo.value = editorInstance.ToolbarSet.Name ;
-oCombo.style.visibility = '' ;
-}
+<script charset="utf-8" src="../../include/kindeditor/kindeditor.js"></script>
+<script charset="utf-8" src="../../include/kindeditor/lang/zh_CN.js"></script>
+<script>
+        var editor;
+        KindEditor.ready(function(K) {
+                editor = K.create('#editor_id');
+        });
 </script>
-
 <script type = "text/javascript">
 function checkprobname(){
 var probname = $("#probname").val();
@@ -185,7 +183,7 @@ for ($i=$linecnt;$i<$table_width;$i++)
 }
 ?>
 </tr>
-</table><script language="javascript">switchhide('bc')</script>
+</table>
 <?php
 }
 ?>
@@ -193,16 +191,9 @@ for ($i=$linecnt;$i<$table_width;$i++)
 </tr>
 <tr>
 <td valign="top">题目内容</td>
-<td><?php
-$oFCKeditor = new FCKeditor('detail') ;
-$oFCKeditor->BasePath = "../../include/fckeditor/" ;
-
-if ( isset($_GET['Toolbar']) )
-$oFCKeditor->ToolbarSet = htmlspecialchars($_GET['Toolbar']);
-
-$oFCKeditor->Value =$ddetail;
-$oFCKeditor->Create() ;
-?></td>
+<td>
+<textarea id="editor_id" name="detail" style="width:100%; height:500px;"><?=$ddetail?></textarea>
+</td>
 </tr>
 </table>
 <br>
