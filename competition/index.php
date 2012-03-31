@@ -3,6 +3,9 @@ require_once("../include/stdhead.php");
 gethead(1,"","比赛");
 ?>
 
+<?php if ($_SESSION['admin']>0){ ?>
+<a class="adminButton" href="../admin/comp/editcompbase.php?action=add">添加新比赛</a>
+<?php } ?>
 <center>
 现在时间：
 <?php
@@ -12,7 +15,7 @@ else
 	$showold=false;
 echo date('Y-m-d H:i:s', time());
 $p=new DataAccess();
-$sql="select comptime.*,compbase.cname,compbase.contains,compbase.ouid,userinfo.nickname,groups.* from comptime,compbase,userinfo,groups where comptime.cbid=compbase.cbid and userinfo.uid=compbase.ouid and comptime.group=groups.gid order by starttime desc";
+$sql="select comptime.*,compbase.*,userinfo.nickname,groups.* from comptime,compbase,userinfo,groups where comptime.cbid=compbase.cbid and userinfo.uid=compbase.ouid and comptime.group=groups.gid order by starttime desc";
 $cnt=$p->dosql($sql);
 if ($cnt)
 {
@@ -22,7 +25,10 @@ if ($cnt)
 		if (!$showold && time()-$d[endtime] >= 2592000) continue;
 ?>
 <br />
-<table width="60%" border="1">
+<table border=0>
+<tr>
+<td>
+<table border="1">
   <tr>
     <td width=80px>比赛名</td>
     <td><b><?php echo $d[cname] ?></b></td>
@@ -59,7 +65,23 @@ if (!$d[showscore])
     <td><?php echo nl2br(sp2n(htmlspecialchars($d[intro]))) ?></td>
   </tr>
 </table>
-
+</td>
+<td>
+<? if($_SESSION['admin']) { ?>
+<table class=admin border=1>
+<tr><td width=80px>组织者</td>
+<td width=120px><a href='../user/detail.php?uid=<?=$d['ouid']?>' target='_blank'><?=$d['nickname']?></a></td></tr>
+<tr><td>阅读权限</td>
+<td><?=$d['readforce']?></td></tr>
+<tr><td>cbid</td>
+<td><a href="../admin/comp/editcompbase.php?action=edit&cbid=<?=$d['cbid']?>">修改比赛<?=$d['cbid']?></a></td></tr>
+<tr><td>ctid</td>
+<td><a href="../admin/comp/editcomptime.php?action=edit&ctid=<?=$d['ctid']?>">编辑场次<?=$d['ctid']?></a></td></tr>
+</table>
+<? } ?>
+</td>
+</tr>
+</table>
 
 <?php
 	}

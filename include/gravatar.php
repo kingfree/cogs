@@ -1,7 +1,7 @@
 <?php
 class gravatar
 {
-	private static $size = 16;
+	private static $size = 14;
 	private static $default = "mm";
 	   //mm, identicon, monsterid, wavatar, retro
 	/**
@@ -52,7 +52,7 @@ class gravatar
 			$default = self::$default;
 		$filename = md5($email)."?s={$size}&d={$default}";
 		$filenama = md5($email)."s{$size}";
-		if (file_exists($path.$filenama))
+		if (file_exists($path.$filenama) && filesize($path.$filenama) > 0)
 			$url = $path.$filenama;
 		else {
 			$web = "http://www.gravatar.com/avatar/".$filename;

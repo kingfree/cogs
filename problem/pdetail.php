@@ -125,7 +125,7 @@ echo " <a href='problist.php?caid={$e[caid]}'>{$e[cname]}</a> ";
 <?php } else { ?>
 <td></td>
 <? } ?>
-<td>
+<td align=right>
 <a href="comments.php?pid=<?=$pid?>"><b>发表看法</b></a>
 </td>
 </tr>

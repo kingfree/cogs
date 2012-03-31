@@ -1,4 +1,4 @@
-<table width="100%" border="1"  bordercolor=#000000  cellspacing=0 cellpadding=4>
+<table width="100%" border="1"  bordercolor=#000000>
   <tr>
     <th scope="col">参数</th>
     <th scope="col">值</th>

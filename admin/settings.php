@@ -48,7 +48,10 @@ switch ($_REQUEST['settings'])
 }
 ?>
 
-<p><a href="./"><?php echo $STR[admin][backindex]; ?></a></p><?php
+<div align=center style="background : #9fd7ff;">
+<a href="./"><?php echo $STR[admin][backindex]; ?></a>
+</div>
+<?php
 switch ($_REQUEST['settings'])
 {
 	case "phpinfo":

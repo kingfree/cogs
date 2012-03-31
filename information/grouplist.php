@@ -5,9 +5,9 @@ $p=new DataAccess();
 $q=new DataAccess();
 ?>
 <?php if ($_SESSION['admin']>0){ ?>
-<a href="../admin/group/editgroup.php?action=add" class="LinkButton">添加新组</a>
+<a href="../admin/group/editgroup.php?action=add" class="adminButton">添加新分组</a>
 <?php } ?>
-
+<p />
 <table width="100%" border="1">
   <tr>
     <th scope="col">分组名</th>

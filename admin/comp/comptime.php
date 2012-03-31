@@ -12,7 +12,7 @@ if ($cnt)
 {
 	$d=$p->rtnrlt(0);
 ?>
-<table width="100%" border="1"  bordercolor=#000000  cellspacing=0 cellpadding=4>
+<table width="100%" border="1">
   <tr>
     <td width="15%" scope="col">CTID</td>
     <td width="35%" scope="col"><?php echo $d[ctid] ?></td>
@@ -38,20 +38,20 @@ if ($cnt)
 	 if (time()<$d[endtime] && time()>$d[starttime]) echo "正在进行"; else
 	 echo "还未开始"; 
 	 ?></td>
-    <td>场次介绍</td>
-    <td><?php echo nl2br(sp2n(htmlspecialchars($d[intro]))) ?></td>
-  </tr>
-  <tr>
     <td>阅读权限</td>
     <td><?php echo $d[readforce] ?></td>
+  </tr>
+  <tr>
+    <td>场次介绍</td>
+    <td><?php echo nl2br(sp2n(htmlspecialchars($d[intro]))) ?></td>
     <td>修改场次信息</td>
-    <td><a href="editcomptime.php?action=edit&ctid=<?php echo $d[ctid] ?>">修改</a></td>
+    <td><a class="adminButton" href="editcomptime.php?action=edit&ctid=<?php echo $d[ctid] ?>">修改</a></td>
   </tr>
   <tr>
     <td>查看成绩</td>
     <td><a href="../../competition/report.php?ctid=<?php echo $d['ctid'] ?>" target="_blank">查看</a></td>
     <td>发布成绩</td>
-    <td><a href="release.php?ctid=<?php echo $d['ctid'] ?>">发布</a>(请在比赛结束后及时发布评测成绩)</td>
+    <td><a href="release.php?ctid=<?php echo $d['ctid'] ?>">发布</a></td>
   </tr>
 </table>
     <?php
@@ -62,7 +62,6 @@ else
 	exit;
 }
 ?>
-<p>提交信息</p>
 <?php
 $sql="select compscore.uid,userinfo.realname,userinfo.nickname from compscore,userinfo where userinfo.uid=compscore.uid and compscore.ctid={$_GET[ctid]} order by uid asc";
 $cnt=$p->dosql($sql);

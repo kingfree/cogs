@@ -5,14 +5,14 @@ gethead(1,"","提交记录");
 $p=new DataAccess();
 $q=new DataAccess();
 ?>
-<p><form action="" method="get" >
+<form action="" method="get" >
 检索 用户UID
 <input name="uid" type="text" id="uid" class="InputBox" value="<?php echo $_GET['uid'] ?>" />
 题目PID
 <input name="pid" type="text" id="pid" class="InputBox" value="<?php echo $_GET['pid'] ?>" />
 <input class="LinkButton" name="sc" type="submit" id="sc" value="检索" class="Button" />
-</form></p>
-<p>您现在正在查看<strong><?php
+</form>
+您现在正在查看<strong><?php
 if ((int)$_GET['uid']==0) {
 ?>所有人<?
 } else {
@@ -54,7 +54,7 @@ if (!isset($_GET[page])) {
 }?>
 <? page_slice($cnt, $_GET['page'], '?pid='.$_GET['pid'].'&uid='.$_GET['uid'].'&display='.$_GET['display'].'&'); ?>
 
-<table width="100%" border="1"  bordercolor=#000000  cellspacing=0 cellpadding=4>
+<table width="100%" border="1">
 <tr>
 <th scope="col">SID</th>
 <th scope="col">(我)题目</th>
@@ -92,7 +92,7 @@ echo "<a href='?pid={$d['pid']}'>{$d['probname']}</a>";
 ?></td>
 <td>
 <a href='../user/detail.php?uid=<?=$d['uid']?>' target='_blank'>
-<?=gravatar::showImage($d['email'], 14);?></a>
+<?=gravatar::showImage($d['email']);?></a>
 <?php echo "<a href='?uid={$d[uid]}'>{$d['nickname']}</a>"; ?></td>
 <td><?php echo "<a href='../problem/submitdetail.php?id={$d['sid']}'>" ?><pre style='margin:0;'><?=judgeresult($d['result'])?></pre></a></td>
 <td align=center><span style="color: <?=$d['accepted']?'blue':'red'?>"><?php echo $d['score'] ?></span></td>

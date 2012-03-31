@@ -25,6 +25,12 @@ background-color : #33ff99;
 .admin {
 background-color : #99ffcc;
 }
+.adminButton {
+background-color : #99ffcc;
+padding : 1px 5px 1px 5px;
+border : 0;
+font-size : 20px;
+}
 .Title {
 font-size : 40px;
 font-family : Times New Roman;
@@ -81,7 +87,7 @@ border-width : 1px 1px 1px;
 padding : 10px 10px 10px 10px;
 }
 .stdPanel {
-background-color : #b5f1ff;
+background-color : #c0c0ff;
 padding : 2px;
 }
 .CommentsS {

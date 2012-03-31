@@ -15,15 +15,15 @@ gethead(1,"admin","修改题目");
 function checkprobname(){
 var probname = $("#probname").val();
 $.get("checkprobname.php",{name: probname},function(txt){
-if(txt == 0){$("#msg1").html(probname+" - 名称未查询到重复");}
-else {$("#msg1").html(probname+" - <span style='color:red;'>名称已被使用，请换一个！</span>");}
+if(txt == 0){$("#msg1").html("<span style='color:blue;'>OK</span>");}
+else {$("#msg1").html("<b><span style='color:red;'>NO</span></b>");}
 });
 }
 function checkfilename(){
 var filename = $("#filename").val();
 $.get("checkfilename.php",{name: filename},function(txt){
-if(txt == 0){$("#msg2").html(filename+" - 名称未查询到重复");}
-else {$("#msg2").html(filename+" - <span style='color:red;'>名称已被使用，请换一个！</span>");}
+if(txt == 0){$("#msg2").html("<span style='color:blue;'>OK</span>");}
+else {$("#msg2").html("<b><span style='color:red;'>NO</span></b>");}
 });
 }
 </script>
@@ -66,14 +66,60 @@ else echo '<script>document.location="../../error.php?id=12"</script>';
 <td width="60px" valign="top" scope="col">PID</td>
 <td scope="col"><?php echo $d[pid] ?>
 <input name="pid" type="hidden" id="pid" value="<?php echo $d['pid'] ?>" /></td>
+<th valign="top" scope="col">题目分类</th>
 </tr>
 <tr>
 <td valign="top">题目名称</td>
-<td><input name="probname" type="text" id="probname" onchange="checkprobname()" value="<?php echo $d[probname] ?>" class="InputBox" /><div id="msg1"></div></td>
+<td><input name="probname" type="text" id="probname" onchange="checkprobname()" value="<?php echo $d[probname] ?>" class="InputBox" /><span id="msg1"></span></td>
+<td rowspan=9 valign="top">
+<?php
+if ($_GET[pid]) {
+    $sql="select caid from tag where pid={$_GET[pid]}";
+    $cnt=$p->dosql($sql);
+    for ($i=0;$i<=$cnt-1;$i++) {
+        $f=$p->rtnrlt($i);
+        $hash[$f[caid]]=true;
+    }
+}
+$sql="select * from category order by cname";
+$cnt=$p->dosql($sql);
+if ($cnt) {
+    $table_width=5;
+?>
+    <table border="1" id="bc">
+    <tr>
+    <?php
+    $last=0;
+$linecnt=0;
+$line=1;
+for ($i=0;$i<$cnt;$i++) {
+$f=$p->rtnrlt($i);
+$last=$f['pid'];
+$linecnt++;
+?>
+<td><input name="cate[<?php echo $f[caid] ?>]" type="hidden" value="0" />
+<input name="cate[<?php echo $f[caid] ?>]" type="checkbox" id="cate[<?=$f[caid]?>]" value="1" 
+<?php if ($hash[$f[caid]]) echo 'checked="checked"';?>  /><label for="cate[<?=$f[caid]?>]"> <?php echo $f['cname'] ?></label></td>
+<?php
+if ($linecnt==$table_width) {
+    $linecnt=0;
+    $line++;
+    echo "</tr></tr>";
+}
+}
+if ($linecnt>0 && $line>1)
+    for ($i=$linecnt;$i<$table_width;$i++)
+    echo "<td>&nbsp;</td>";
+?>
 </tr>
+</table>
+<?php
+}
+?>
+</td></tr>
 <tr>
 <td valign="top">文件名称</td>
-<td><input name="filename" type="text" id="filename" onchange="checkfilename()" value="<?php echo $d[filename] ?>" class="InputBox" /><div id="msg2"></div></td>
+<td><input name="filename" type="text" id="filename" onchange="checkfilename()" value="<?php echo $d[filename] ?>" class="InputBox" /><span id="msg2"></span></td>
 </tr>
 <tr>
 <td valign="top">阅读权限</td>
@@ -94,11 +140,11 @@ else echo '<script>document.location="../../error.php?id=12"</script>';
 </tr>
 <tr>
 <td valign="top">时间限制</td>
-<td><input name="timelimit" type="number" id="timelimit" value="<?php echo $d[timelimit] ?>" class="InputBox" /> 毫秒(ms)</td>
+<td><input name="timelimit" type="number" id="timelimit" value="<?php echo $d[timelimit] ?>" class="InputBox" /> ms</td>
 </tr>
 <tr>
 <td valign="top">内存限制</td>
-<td><input name="memorylimit" type="number" id="memorylimit" value="<?php echo $d['memorylimit'] ?>" class="InputBox" /> 兆字节(MiB, 1024进制)</td>
+<td><input name="memorylimit" type="number" id="memorylimit" value="<?php echo $d['memorylimit'] ?>" class="InputBox" /> MiB</td>
 </tr>
 <tr>
 <td valign="top">难度等级</td>
@@ -126,79 +172,18 @@ $e=$q->rtnrlt($j);
 <option value="2"<?php if ($d['plugin']==2){ ?> selected="selected"<?php } ?>>逐字节对比</option>
 <option value="0"<?php if ($d['plugin']==0){ ?> selected="selected"<?php } ?>>评测插件</option>
 </select>                </td>
+<td>提交修改：
+<input type="submit" value="单击此处提交对该题目的修改">
+<input name="action" type="hidden" id="action" value="<?php echo $_GET[action] ?>" />
+</td>
 </tr>
 <tr>
 <td valign="top">题目内容</td>
-<td>
+<td colspan=2>
 <textarea id="editor_id" name="detail" style="width:100%; height:500px;"><?=$ddetail?></textarea>
 </td>
 </tr>
-<tr>
-<td valign="top"><!--<a href="javascript:{switchhide('bc');switchhide('bctip')}">-->所属分类<!--</a>--></td>
-<td><!--<div id="bctip">点击左边链接显示</div>-->
-<?php
-if ($_GET[pid]) {
-    $sql="select caid from tag where pid={$_GET[pid]}";
-    $cnt=$p->dosql($sql);
-    for ($i=0;$i<=$cnt-1;$i++) {
-        $d=$p->rtnrlt($i);
-        $hash[$d[caid]]=true;
-    }
-}
-$sql="select * from category order by cname";
-$cnt=$p->dosql($sql);
-if ($cnt)
-{
-    $table_width=8;
-?>
-
-    <table border="1" id="bc">
-    <tr>
-    <?php
-    $last=0;
-$linecnt=0;
-$line=1;
-for ($i=0;$i<$cnt;$i++)
-{
-$d=$p->rtnrlt($i);
-$last=$d['pid'];
-$linecnt++;
-?>
-<td><input name="cate[<?php echo $d[caid] ?>]" type="hidden" value="0" />
-<input name="cate[<?php echo $d[caid] ?>]" type="checkbox" id="cate[<?=$d[caid]?>]" value="1" 
-<?php if ($hash[$d[caid]]) echo 'checked="checked"';?>  /><label for="cate[<?=$d[caid]?>]"> <?php echo $d['cname'] ?></label></td>
-<?php
-if ($linecnt==$table_width)
-{
-    $linecnt=0;
-    $line++;
-    ?>
-        </tr>
-        <tr>
-        <?php
-}
-}
-if ($linecnt>0 && $line>1)
-{
-for ($i=$linecnt;$i<$table_width;$i++)
-{
-?>
-    <td>&nbsp;</td>
-    <?php
-}
-}
-?>
-</tr>
 </table>
-<?php
-}
-?>
-</td>
-</tr>
-</table>
-<br>
-<input type="submit" value="提交" class="Button">
-<input name="action" type="hidden" id="action" value="<?php echo $_GET[action] ?>" />
 </form>
 
 <?php

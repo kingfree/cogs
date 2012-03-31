@@ -149,7 +149,7 @@ return false;
   <tr>
     <td><?php echo $d['uid'] ?></td>
     <td>
-<?=gravatar::showImage($d['email'], 14);?>
+<?=gravatar::showImage($d['email']);?>
 <a href="../user/detail.php?uid=<?php echo $d['uid'] ?>" target="_blank"><?php echo $d['nickname'] ?></a></td>
     <td><?php echo $i+1; ?></td>
     <td><?php echo $d['accepted'] ?></td>

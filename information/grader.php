@@ -3,7 +3,12 @@ require_once("../include/stdhead.php");
 gethead(1,"","评测机状态");
 ?>
 
-<table width="100%" border="1"  bordercolor=#000000  cellspacing=0 cellpadding=4>
+<?php if ($_SESSION['admin']>0){ ?>
+<a class="adminButton" href="../admin/grader/editgrader.php?action=add">添加新评测机</a>
+<?php } ?>
+<p />
+<center>
+<table width="100%" border="1">
   <tr>
     <th scope="col">GRID</th>
     <th scope="col">名称</th>
@@ -23,24 +28,7 @@ gethead(1,"","评测机状态");
 	$p=new DataAccess();
 	$sql="select * from grader";
 	$cnt=$p->dosql($sql);
-	$totalpage=(int)(($cnt-1)/$SETTINGS['style_pagesize'])+1;
-	if (!isset($_GET[page])) 
-	{
-		$_GET[page]=1;
-		$st=0;
-	}
-	else 
-	{
-		if ($_GET[page]<1 || $_GET[page]>$totalpage)
-		{
-			echo "页错误！";
-			$err=1;
-		}
-		else
-		$st=(($_GET[page]-1)*$SETTINGS['style_pagesize']);
-	}
-	if (!$err)
-	for ($i=$st;$i<$cnt && $i<$st+$SETTINGS['style_pagesize'] ;$i++)
+	for ($i=$st;$i<$cnt ;$i++)
 	{
 		$d=$p->rtnrlt($i);
 		$s['action']="state";
@@ -73,8 +61,7 @@ gethead(1,"","评测机状态");
 	}
 ?>
 </table>
-<?php if ($_SESSION['admin']>0){ ?><p><a href="../admin/grader/editgrader.php?action=add">添加新评测机</a></p>
-<?php } ?>
+</center>
 
 <?php
 	include_once("../include/stdtail.php");

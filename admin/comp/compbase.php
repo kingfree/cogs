@@ -5,7 +5,7 @@ function MM_jumpMenu(targ,selObj,restore){ //v3.0
 }
 </script>
 
-<a href="comp/editcompbase.php?action=add">添加新比赛</a>
+<a href="comp/editcompbase.php?action=add" class="adminButton">添加新比赛</a>
 <?php
 	$p=new DataAccess();
 	$q=new DataAccess();

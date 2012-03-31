@@ -3,6 +3,9 @@ require_once("../include/stdhead.php");
 gethead(1,"","分类列表");
 	$p=new DataAccess();
 ?>
+<?php if ($_SESSION['admin']>0){ ?>
+<a class="adminButton" href="../admin/category/editcate.php?action=add">添加新分类</a>
+<?php } ?>
 <div class="Tags" align=center>
 <table>
 <?$sql="select * from category order by cname";
@@ -13,9 +16,6 @@ for ($i=$st;$i<$cnt;$i++) {
 ?> <td><a href="../problem/problist.php?caid=<?=$d['caid']?>" title="<?=sp2n(htmlspecialchars($d['memo']))?>" target="_blank"><?=$d['cname']?></a></td> <? } ?>
 </table>
 </div>
-<?php if ($_SESSION['admin']>0){ ?>
-<center><span style="text-align:center; background-color:#99FFCC; font-size:20px;"><a href="../admin/category/editcate.php?action=add">添加新分类</a></span></center>
-<?php } ?>
 <?
 	$sql="select * from category order by cname";
 	$cnt=$p->dosql($sql);

@@ -1,10 +1,10 @@
 <?php
 require_once("../include/stdhead.php");
-gethead(1,"sess","个人中心");
+gethead(1,"sess","控制面板");
 ?>
 
-<p><a href="../information/submitlist.php?uid=<?php echo $_SESSION['ID'] ?>">查看我的提交记录</a></p>
-<p><a href="editpwd.php" class="LinkButton">修改密码</a></p>
+<a href="editpwd.php" class="LinkButton">修改密码</a>
+<p />
 
 <?php
 $p=new DataAccess();

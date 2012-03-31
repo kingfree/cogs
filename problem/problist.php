@@ -18,7 +18,6 @@ if (restore) selObj.selectedIndex=0;
 //-->
 </script>
 
-<p>
 <?php if ($_GET['caid']!=""){ 
 $sql="select * from category where caid={$_GET['caid']}";
 $cnt=$p->dosql($sql);
@@ -26,7 +25,9 @@ $d=$p->rtnrlt(0);
 ?>
 当前分类：<span style="font-size:20px;"><?php echo $d['cname'] ?></span>（<?php echo nl2br(sp2n(htmlspecialchars($d['memo']))) ?>）
 <?php } ?>
-<?php if ($_SESSION['admin']>0){ ?> <span style="text-align:right;background-color:#99FFCC; font-size:20px;"><a href="../admin/problem/editprob.php?action=add">添加新题目</a></span><?php } ?>
+<?php if ($_SESSION['admin']>0){ ?>
+<a class="adminButton" href="../admin/problem/editprob.php?action=add">添加新题目</a>
+<?php } ?>
 
 <?php
 $sql="update problem set lastacid=1 where lastacid=0";

@@ -15,9 +15,12 @@ if ($_GET[action]=='edit')
 }
 else
 {
-	$d[starttime]=$d[endtime]=time();
+    $now = time();
+	$d[starttime]=mktime(19, 0, 0, date('m',$now), date('d',$now), date('Y',$now));
+    $d[endtime]=mktime(22, 0, 0, date('m',$now), date('d',$now), date('Y',$now));
 	$d[cbid]=$_GET[cbid];
 	$d['group']=0;
+    $d[showscore]=1;
 }
 ?>
 <form id="form1" name="form1" method="post" action="doeditcomptime.php?action=<?php echo $_GET[action] ?>&ctid=<?php echo $_GET[ctid]; ?>">
@@ -89,7 +92,7 @@ else
   <tr>
     <td>公布成绩</td>
     <td>
-      <input name="showscore" type="checkbox" id="showscore" value="1" <?php if ($d[showscore]) echo 'checked="checked"'?> /> （已经加入当比赛未开始时不显示成绩列表的功能）</td>
+      <input name="showscore" type="checkbox" id="showscore" value="1" <?php if ($d[showscore]) echo 'checked="checked"'?> /> （比赛未开始时不显示成绩列表）</td>
   </tr>
   <tr>
     <td>介绍</td>
