@@ -72,7 +72,7 @@ if(time() < $d['starttime'] && !$_SESSION[admin]) {
     <td id="rank<?php echo $rowcnt ?>">&nbsp;</td>
     <td id="uid<?php echo $rowcnt ?>"><?php echo $d[uid] ?></td>
     <td id="nickname<?php echo $rowcnt ?>"><a href="comp.php?ctid=<?php echo $_GET['ctid'] ?>&uid=<?php echo $d['uid'] ?>" target="_blank">
-<?=gravatar::showImage($d['email'], 16);?>
+<?=gravatar::showImage($d['email'], 14);?>
 <?php echo $d['nickname'] ?></a></td>
 	<?php if ($_SESSION['admin']>0) { ?>
     <td id="realname<?php echo $rowcnt ?>"><a href="../user/detail.php?uid=<?php echo $d['uid'] ?>" target="_blank"><?php echo $d['realname'] ?></a></td><?php } ?>

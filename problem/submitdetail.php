@@ -14,7 +14,7 @@ $code = $r['code'];
 $sql="select submit.*,userinfo.nickname,userinfo.realname,submit.subtime,problem.probname,problem.filename from code,submit,userinfo,problem where submit.pid=problem.pid and submit.uid=userinfo.uid and submit.sid={$_GET['id']}";
 $cnt=$p->dosql($sql);
 if($cnt) {
-	$d=$p->rtnrlt(0);
+    $d=$p->rtnrlt(0);
     if(!$hascode) {
         $fp=fopen("{$SETTINGS['dir_source']}{$d['uid']}/{$d['srcname']}","r");
         if (is_resource($fp))
@@ -25,16 +25,15 @@ if($cnt) {
         $source=mysql_real_escape_string($code);
         $sql1="INSERT INTO `code`(`sid`,`code`)VALUES('{$_GET['id']}','$source')";
         $ok=$q->dosql($sql1);
-        echo $ok;
     }
 } else {
-	echo '<script>document.location="../error.php?id=16"</script>';
+    echo '<script>document.location="../error.php?id=16"</script>';
 }
 ?>
 <table width="100%" border="1" bordercolor=#000000 cellspacing=0 cellpadding=4>
   <tr>
-    <th width="10%" scope="col">SID</th>
-    <td width="90%" scope="col"><?php echo $d['sid']; ?></td>
+    <th width="60px" scope="col">SID</th>
+    <td scope="col"><?php echo $d['sid']; ?></td>
   </tr>
   <tr>
     <th scope="col">题目</th>
@@ -78,51 +77,45 @@ if($cnt) {
     <th scope="col">操作</th>
     <td scope="col"><form id="act" name="act" method="post" action="../compile/">
       重新评测
-		<input name="pid" type="hidden" id="pid" value="<?php echo  $d['pid']; ?>" />
-		<input name="sid" type="hidden" id="sid" value="<?php echo  $d['sid']; ?>" />
-		<input type="hidden" name="rejudge" value="1">
-		<input type="hidden" name="lang" value="<?php echo langnumtostr($d['lang']) ?>">
-		<input type="submit" name="Submit" value="Rejudge" class="Button"/>
+        <input name="pid" type="hidden" id="pid" value="<?php echo  $d['pid']; ?>" />
+        <input name="sid" type="hidden" id="sid" value="<?php echo  $d['sid']; ?>" />
+        <input type="hidden" name="rejudge" value="1">
+        <input type="hidden" name="lang" value="<?php echo langnumtostr($d['lang']) ?>">
+        <input type="submit" name="Submit" value="Rejudge" class="Button"/>
     </form>    </td>
   </tr>
   <tr>
     <th valign="top">代码</th>
-    <td><p>语言：<?php echo $STR['lang'][$d['lang']] ?> </p>
+    <td>
+    语言：<?php echo $STR['lang'][$d['lang']] ?>
 <?php
 if ($_SESSION['admin']>0 || $d['uid']==$_SESSION['ID'])
-	$forcetocode=1;
-else
-{
-	$sql="select code from discuss where code={$d['sid']}";
-	$cnt=$p->dosql($sql);
-	if ($cnt)
-	{
-		$f=$p->rtnrlt(0);
-		$forcetocode=$f['code'];
-	}
+    $forcetocode=1;
+else {
+    $sql="select code from discuss where code={$d['sid']}";
+    $cnt=$p->dosql($sql);
+    if ($cnt) {
+        $f=$p->rtnrlt(0);
+        $forcetocode=$f['code'];
+    }
 }
 
 if ($forcetocode) {
-    if($d['lang']==0) $langstr="delphi";
-    if($d['lang']==1) $langstr="cpp";
+    if($d['lang']==0) $langstr="pascal";
+    if($d['lang']==1) $langstr="c";
     if($d['lang']==2) $langstr="cpp";
 ?>
-<pre><code class=<?=$langstr?>><?=htmlspecialchars($code)?></code></pre><?php
-}
-else
-{
+<pre class="brush: <?=$langstr?>;"><?=htmlspecialchars($code)?></pre>
+<?php } else {
 ?>
-	<p>您没有权限查看代码。</p>
-<?php
-}
-?>    </td>
+    <h1>您没有权限查看代码。</h1>
+<?php } ?>
+</td>
   </tr>
 </table>
-<script class="javascript">
-sh_highlightDocument();
-</script>
 
+<script type="text/javascript">SyntaxHighlighter.all();</script>
 <?php
-	include_once("../include/stdtail.php");
+    include_once("../include/stdtail.php");
 ?>
 

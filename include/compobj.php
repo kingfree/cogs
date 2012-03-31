@@ -132,47 +132,32 @@ class Compiler
             $this->inputtext = $this->state['input'];
             $this->difftext = $this->state['diff'];
         }
-        if ($this->state['timeout'])
-        {
+        if ($this->state['timeout']) {
             $this->s_detail.='T';
-            return "<span style='color:#FF6600; background-color: #0033FF'>超过时间限制</span>";
+            return judgetext('T');
+        } else if ($this->state['memoryout']) {
+            $this->s_detail.='M';
+            return judgetext('M');
+        } else if ($this->state['runerr']) {
+            $this->s_detail.='E';
+            return judgetext('E');
+        } else if ($this->state['noreport']) {
+            $this->s_detail.='R';
+            return judgetext('R');
+        } else if ($this->state['noindata'] || $this->state['noansdata']) {
+            $this->s_detail.='D';
+            return judgetext('D');
+        } else if ($this->state['score']==0) {
+            $this->s_detail.='W';
+            return judgetext('W');
+        } else if ($this->state['score']!=1) {
+            $this->s_detail.='P';
+            return judgetext('P');
+        } else if ($this->state['score']==1) {
+            $this->s_detail.='A';
+            $this->ac++;
+            return judgetext('A');
         }
-        else
-            if ($this->state['memoryout'])
-            {
-                $this->s_detail.='M';
-                return "<span style='color:#000000; background-color:#00FF44'>超过内存限制</span>";
-            }
-            else
-                if ($this->state['runerr'])
-                {
-                    $this->s_detail.='E';
-                    return "<span style='color:#FFFF00; background-color:#000000'>运行时出错</span>";
-                }
-                else
-                    if ($this->state['noreport'])
-                    {
-                        $this->s_detail.='R';
-                        return "<span style='color: #006600; background-color: #FFCC00'>无输出文件</span>";
-                    }
-                    else
-                        if ($this->state['score']==0)
-                        {
-                            $this->s_detail.='W';
-                            return "<span style='color:#FF0000'>错误</span>";
-                        }
-                        else
-                            if ($this->state['score']!=1)
-                            {
-                                $this->s_detail.='P';
-                                return "<span style='color:#FFFF00; background-color: #0033FF'>部分得分</span>";
-                            }
-                            else
-                            {
-                                $this->s_detail.='A';
-                                $this->ac++;
-                                return "<span style='color:#0000FF'>正确</span>";
-                            }
     }
 
     public function getscore()

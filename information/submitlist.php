@@ -57,8 +57,8 @@ if (!isset($_GET[page])) {
 <table width="100%" border="1"  bordercolor=#000000  cellspacing=0 cellpadding=4>
 <tr>
 <th scope="col">SID</th>
-<th scope="col">题目名称</th>
-<th scope="col">用户</th>
+<th scope="col">(我)题目</th>
+<th scope="col">(他)用户</th>
 <th scope="col">评测结果</th>
 <th scope="col">得分</th>
 <th scope="col">提交时间</th>
@@ -74,7 +74,7 @@ for ($i=$st;$i<$cnt && $i<$st+$SETTINGS['style_pagesize'] ;$i++) {
 $d=$p->rtnrlt($i);
 ?>
 <tr>
-<td><?php echo $d['sid'] ?></td>
+<td align=center><?=$d['sid']?></td>
 <td><?php
 echo "<a href='../problem/pdetail.php?pid=".$d['pid']."' target='_blank'>";
 if ($_SESSION['ID']) {
@@ -92,11 +92,11 @@ echo "<a href='?pid={$d['pid']}'>{$d['probname']}</a>";
 ?></td>
 <td>
 <a href='../user/detail.php?uid=<?=$d['uid']?>' target='_blank'>
-<?=gravatar::showImage($d['email'], 16);?></a>
+<?=gravatar::showImage($d['email'], 14);?></a>
 <?php echo "<a href='?uid={$d[uid]}'>{$d['nickname']}</a>"; ?></td>
-<td><?php echo "<a href='../problem/submitdetail.php?id={$d['sid']}'>" ?><pre class="no-highlight" style='margin:0;'><?=judgeresult($d['result'])?></pre></a></td>
-<td><?php echo $d['score'] ?></td>
-<td><?php echo date('Y-m-d H:i:s',$d['subtime']); ?></td>
+<td><?php echo "<a href='../problem/submitdetail.php?id={$d['sid']}'>" ?><pre style='margin:0;'><?=judgeresult($d['result'])?></pre></a></td>
+<td align=center><span style="color: <?=$d['accepted']?'blue':'red'?>"><?php echo $d['score'] ?></span></td>
+<td align=center><?php echo date('Y-m-d H:i:s',$d['subtime']); ?></td>
 <td><?php printf("%.3f",$d['runtime']/1000.0) ?> s </td>
 <td><?php printf("%.2f",$d['memory']/1024) ?> MiB </td>
 <?php if ($_SESSION['admin']>0){ ?>

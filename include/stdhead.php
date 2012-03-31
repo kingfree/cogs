@@ -37,8 +37,6 @@ function gethead($head,$check,$title)
 		$nagbar=$SETTINGS['base']."include/stdbar.php";
 		$icon=$SETTINGS['base']."style/icon.css";
 		$iconpath=pathconvert($SETTINGS['cur'],$icon);
-		$coder=$SETTINGS['base']."include/highlight/";
-		$coderpath=pathconvert($SETTINGS['cur'],$coder);
 		$jq=$SETTINGS['base']."include/jquery.js";
 		$jqpath=pathconvert($SETTINGS['cur'],$jq);
 		$useracc=new DataAccess();
@@ -48,12 +46,10 @@ function gethead($head,$check,$title)
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <link rel=stylesheet href="<?php echo $stylepath ?>"><?php $LIB->tradsimp(); ?>
 <link rel=stylesheet type="text/css" href="<?=$iconpath?>" />
-<link rel=stylesheet type="text/css" href="<?=$coderpath?>styles/school_book.css" />
 <script type="text/javascript" src="<?=$jqpath?>"></script>
-<script type="text/javascript" src="<?=$coderpath?>highlight.pack.js"></script>
 <title><?php echo $title." - ".$SETTINGS['global_sitename'] ?></title>
 </head>
-<body onload="hljs.initHighlightingOnLoad();">
+<body>
 <div id="alltext">
 <div id="globalbar">
 <table class="Head" border="0" width="100%">
@@ -66,7 +62,7 @@ function gethead($head,$check,$title)
   </tr>
 </table>
 </div>
-<marquee id="publicbar" align="right" direction="left" scrollamount="5" onMouseOver="this.stop();" onMouseOut="this.start();">
+<marquee class="stdPanel" id="publicbar" align="right" direction="left" scrollamount="5" onMouseOver="this.stop();" onMouseOut="this.start();">
 <?php if ($_SESSION['admin']==2) { ?>[<a href="<?=pathconvert($SETTINGS['cur'],$editbulletin);?>">修改</a>]<?php } ?><font color="#003366"><b>公告 &gt;&gt;</b></font>
 <?=output_text($SETTINGS['global_bulletin']); ?>
 </marquee>

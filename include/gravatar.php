@@ -51,7 +51,7 @@ class gravatar
 		if ($default == "")
 			$default = self::$default;
 		$filename = md5($email)."?s={$size}&d={$default}";
-		$filenama = md5($email)."s{$size}d{$default}";
+		$filenama = md5($email)."s{$size}";
 		if (file_exists($path.$filenama))
 			$url = $path.$filenama;
 		else {

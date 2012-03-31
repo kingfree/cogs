@@ -41,7 +41,7 @@ if($cnt2 > 0) echo "<span style='color: red'>($cnt2)</span>";
 <td><a href="<?=pathconvert($SETTINGS['cur'],$userlist);?>"><span class="icon-user"></span>用户</a></td>
 <td><a href="<?=pathconvert($SETTINGS['cur'],$grouplist);?>"><span class="icon-th-large"></span>分组</a></td>
 <? if($_SESSION['ID']) {?>
-<td><a href="<?=pathconvert($SETTINGS['cur'],$panel); ?>"><span class="icon-picture"></span>个人</a></td>
+<td><a href="<?=pathconvert($SETTINGS['cur'],$panel); ?>"><span class="icon-picture"></span>设置</a></td>
 <td><a href="<?=pathconvert($SETTINGS['cur'],$mail); ?>"><span class="icon-envelope"></span>信件<?
 if($_SESSION['ID']) {
     $uid = $_SESSION['ID'];

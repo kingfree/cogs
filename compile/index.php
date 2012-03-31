@@ -3,10 +3,6 @@ require_once("../include/stdhead.php");
 gethead(1,"sess","编译执行");
 $LIB->dpshhl();
 
-/*if (!($_SESSION['admin']>0)) {
-echo "系统正在调试中，请稍候使用，谢谢合作。CmYkRgB123";
-exit;
-}*/
 if (!$_POST['pid']) {
 echo "你来错地方了！";
 include_once("../include/stdtail.php");
@@ -62,11 +58,8 @@ $Cp=new Compiler($info);
 <?php
 flush();
 $free=$Cp->getgds();
-if ($_SESSION['admin']==2) {
 ?>
-<a href="#" title="<?php echo $Cp->cmds ?>">Commands</a>
 <?php
-}
 if (!$free) //非空闲
 {
 	echo "当前没有空闲的评测机，请稍后重新提交。";
@@ -84,7 +77,6 @@ if ($_POST['rejudge']==1) {
 	exit;
 }
 ?></p>
-<p>连接评测机成功！</p>
 <table border="1">
   <tr>
     <td>GRID</td>
@@ -114,7 +106,6 @@ flush();
 if ($csucc)
 {
 ?>
-<p>编译成功</p>
 <p>
 <table border='1'>
 <tr>
@@ -132,27 +123,13 @@ $nodata = false;
 	{
 		$Cp->run($P);
 		flush();
-        if($Cp->noindata > 0 || $Cp->noansdata > 0) {
-            $nodata = true;
-            ?>
-	<td><?php echo $P;?></td>
-	<td>该测试点没有数据！</td>
-	<td></td>
-	<td></td>
-	<td></td>
-	<td></td>
-            <?
-        } else {
-?>
+       ?>
 	<td><?php echo $P;?></td>
 	<td><?php echo $Cp->getresult(); ?></td>
 	<td><?php echo $Cp->getthisscore(); ?></td>
 	<td><?php printf("%.3f s",$Cp->runtime/1000.0) ?></td>
 	<td><?php echo $Cp->memory ?> KB</td>
 	<td><?php echo $Cp->exitcode?></td>
-<?php 
-	}
-?>
 </tr>
 <?
     }
@@ -169,9 +146,9 @@ $nodata = false;
     <p>祝贺你通过了全部测试点!</p>
 <?php } else { if(($_SESSION['admin'] > 0 || $_SESSION['ID'] == $info['uid']) && $nodata == false) { ?>
 <p>你在第<?=$Cp->wrongpoint?>个测试点出现了爆〇的情况，下面是该题的输入数据：
-<pre><code class="no-highlight"><?=htmlspecialchars($Cp->inputtext)?></code></pre>
+<pre class="brush: text;"><?=htmlspecialchars($Cp->inputtext)?></pre>
 <p>下面是你的输出与标准答案不同的地方（上面带减号“-”的是你的输出，下面带加号“+”的是答案输出，“@@”之间的数字表示行号）：
-<pre><code class="diff"><?=htmlspecialchars($Cp->difftext)?></code></pre>
+<pre class="brush: diff;"><?=htmlspecialchars($Cp->difftext)?></pre>
 <p><a class="LinkButton" href="../problem/pdetail.php?pid=<?php echo $_POST['pid'] ?>">返回原题 “<?=$ptitle?>”</a></p>
 <?php } else echo "<p>你无法查看错误点的输入输出文件。</p>";?>
 <p><a href="../information/help.php" target="_blank" title="RP问题">为什么程序在我的电脑上能够正常运行，而在评测机上不能?</a></p>
@@ -191,6 +168,7 @@ $Dir=pathinfo($_SERVER['SCRIPT_FILENAME']);
 chdir($Dir['dirname']."/../include");
 ?>
 
+<script type="text/javascript">SyntaxHighlighter.all();</script>
 
 <?php
 	include_once("../include/stdtail.php");

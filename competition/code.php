@@ -60,17 +60,15 @@ else
   <tr>
     <th valign="top">代码</th>
     <td>	<p>语言：<?php echo $STR[lang][$d['lang']] ?> </p>
-<?  if($d['lang']==0) $langstr="delphi";
-    if($d['lang']==1) $langstr="cpp";
+<?  if($d['lang']==0) $langstr="pascal";
+    if($d['lang']==1) $langstr="c";
     if($d['lang']==2) $langstr="cpp";
-?><pre><code class=<?=$langstr?>><?=htmlspecialchars($code)?></code></pre>
+?>
+<pre class="brush: <?=$langstr?>;"><?=htmlspecialchars($code)?></pre>
   </tr>
 </table>
 
-<script class="javascript">
-dp.SyntaxHighlighter.HighlightAll('code');
-</script>
-
+<script type="text/javascript">SyntaxHighlighter.all();</script>
 
 <?php
 	include_once("../include/stdtail.php");

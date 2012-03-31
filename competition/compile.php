@@ -44,13 +44,10 @@ $Cp->getdir();
 
 $csucc=$Cp->compile();
 
-if (!$csucc)
-{
+if (!$csucc) {
 	echo "0!C";
 	$Cp->s_detail="C";
-}
-else
-{
+} else {
 	for ($P=1;$P<=$d[datacnt];$P++)
 	{
 		$Cp->run($P);

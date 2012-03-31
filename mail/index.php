@@ -29,7 +29,7 @@ $q = new DataAccess();
 </tr>
 <tr>
 <th>邮件内容</th>
-<td><textarea class="InputBox" name="msg" cols="30" rows="10" ></textarea></td>
+<td><textarea class="InputBox" name="msg" cols="30" rows="10"><?=$_POST['text']?></textarea></td>
 </tr>
 <tr>
 <th></th>

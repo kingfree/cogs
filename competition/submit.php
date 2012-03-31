@@ -2,6 +2,11 @@
 require_once("../include/stdhead.php");
 gethead(0,"sess","");
 
+if(time() > $_POST['endtime'] && !$_SESSION['admin']) {
+    echo '<meta http-equiv=refresh content=0;URL="../refresh.php?id=16">';
+    exit;
+}
+
 $fname=$_POST[filename];
 switch ($_POST[lang])
 {

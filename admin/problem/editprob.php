@@ -15,14 +15,14 @@ gethead(1,"admin","修改题目");
 function checkprobname(){
 var probname = $("#probname").val();
 $.get("checkprobname.php",{name: probname},function(txt){
-if(txt == 0){$("#msg1").html(probname+" - 名称可以使用");}
+if(txt == 0){$("#msg1").html(probname+" - 名称未查询到重复");}
 else {$("#msg1").html(probname+" - <span style='color:red;'>名称已被使用，请换一个！</span>");}
 });
 }
 function checkfilename(){
 var filename = $("#filename").val();
 $.get("checkfilename.php",{name: filename},function(txt){
-if(txt == 0){$("#msg2").html(filename+" - 名称可以使用");}
+if(txt == 0){$("#msg2").html(filename+" - 名称未查询到重复");}
 else {$("#msg2").html(filename+" - <span style='color:red;'>名称已被使用，请换一个！</span>");}
 });
 }
@@ -63,16 +63,16 @@ else echo '<script>document.location="../../error.php?id=12"</script>';
 <form action="doeditprob.php" method="post">
 <table width="100%" border="1"  bordercolor=#000000 cellspacing=0 cellpadding=4>
 <tr>
-<td width="10%" valign="top" scope="col">PID</td>
-<td width="90%" scope="col"><?php echo $d[pid] ?>
+<td width="60px" valign="top" scope="col">PID</td>
+<td scope="col"><?php echo $d[pid] ?>
 <input name="pid" type="hidden" id="pid" value="<?php echo $d['pid'] ?>" /></td>
 </tr>
 <tr>
-<td valign="top">题目名</td>
+<td valign="top">题目名称</td>
 <td><input name="probname" type="text" id="probname" onchange="checkprobname()" value="<?php echo $d[probname] ?>" class="InputBox" /><div id="msg1"></div></td>
 </tr>
 <tr>
-<td valign="top">文件名</td>
+<td valign="top">文件名称</td>
 <td><input name="filename" type="text" id="filename" onchange="checkfilename()" value="<?php echo $d[filename] ?>" class="InputBox" /><div id="msg2"></div></td>
 </tr>
 <tr>
@@ -126,6 +126,12 @@ $e=$q->rtnrlt($j);
 <option value="2"<?php if ($d['plugin']==2){ ?> selected="selected"<?php } ?>>逐字节对比</option>
 <option value="0"<?php if ($d['plugin']==0){ ?> selected="selected"<?php } ?>>评测插件</option>
 </select>                </td>
+</tr>
+<tr>
+<td valign="top">题目内容</td>
+<td>
+<textarea id="editor_id" name="detail" style="width:100%; height:500px;"><?=$ddetail?></textarea>
+</td>
 </tr>
 <tr>
 <td valign="top"><!--<a href="javascript:{switchhide('bc');switchhide('bctip')}">-->所属分类<!--</a>--></td>
@@ -187,12 +193,6 @@ for ($i=$linecnt;$i<$table_width;$i++)
 <?php
 }
 ?>
-</td>
-</tr>
-<tr>
-<td valign="top">题目内容</td>
-<td>
-<textarea id="editor_id" name="detail" style="width:100%; height:500px;"><?=$ddetail?></textarea>
 </td>
 </tr>
 </table>
