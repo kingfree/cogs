@@ -16,7 +16,7 @@ $q=new DataAccess();
 	<th scope="col">组管理员</th>
 	<th scope="col">加入</th>
 	<?php if ($_SESSION['admin']>0){ ?>
-    <th scope="col">操作</th>
+    <th class=admin scope="col">操作</th>
 	<?php } ?>
   </tr>
 <?php
@@ -51,7 +51,7 @@ if ($d['parent']!=-1)
 </form>
     </td>
 	<?php if ($_SESSION['admin']>0){ ?>
-    <td><a href="../admin/group/editgroup.php?action=edit&gid=<?php echo $d['gid'] ?>">修改</a></td>
+    <td class=admin><a href="../admin/group/editgroup.php?action=edit&gid=<?php echo $d['gid'] ?>">修改</a></td>
 	<?php } ?>
   </tr>
 <?php

@@ -7,25 +7,17 @@ $LIB->dpshhl();
 <?php
 $p=new DataAccess();
 $q=new DataAccess();
-$sql="select * from code where sid={$_GET['id']}";
-$hascode=$p->dosql($sql);
-$r=$p->rtnrlt(0);
-$code = $r['code'];
-$sql="select submit.*,userinfo.nickname,userinfo.realname,submit.subtime,problem.probname,problem.filename from code,submit,userinfo,problem where submit.pid=problem.pid and submit.uid=userinfo.uid and submit.sid={$_GET['id']}";
+$sql="select submit.*,userinfo.nickname,userinfo.realname,submit.subtime,problem.probname,problem.filename from submit,userinfo,problem where submit.pid=problem.pid and submit.uid=userinfo.uid and submit.sid={$_GET['id']}";
 $cnt=$p->dosql($sql);
 if($cnt) {
     $d=$p->rtnrlt(0);
-    if(!$hascode) {
-        $fp=fopen("{$SETTINGS['dir_source']}{$d['uid']}/{$d['srcname']}","r");
-        if (is_resource($fp))
-            $code=rfile($fp);
-        fclose($fp);
-        if(get_magic_quotes_gpc())
-            $code=stripslashes($code);
-        $source=mysql_real_escape_string($code);
-        $sql1="INSERT INTO `code`(`sid`,`code`)VALUES('{$_GET['id']}','$source')";
-        $ok=$q->dosql($sql1);
-    }
+    $fp=fopen("{$SETTINGS['dir_source']}{$d['uid']}/{$d['srcname']}","r");
+    if (is_resource($fp))
+        $code=rfile($fp);
+    fclose($fp);
+    if(get_magic_quotes_gpc())
+        $code=stripslashes($code);
+    $code=mb_convert_encoding($code, "utf-8", "gbk");
 } else {
     echo '<script>document.location="../error.php?id=16"</script>';
 }
@@ -43,11 +35,11 @@ if($cnt) {
 if ($_SESSION['admin']>0 || $d['uid']==$_SESSION['ID'])
     $forcetocode=1;
 else {
-    $sql="select code from discuss where code={$d['sid']}";
+    $sql="select showcode from comments where uid={$d['uid']} and pid={$d['pid']}";
     $cnt=$p->dosql($sql);
     if ($cnt) {
         $f=$p->rtnrlt(0);
-        $forcetocode=$f['code'];
+        $forcetocode=$f['showcode'];
     }
 }
 if ($forcetocode) {
@@ -93,8 +85,8 @@ if ($forcetocode) {
   <tr valign=top>
     <th scope="col">重新评测</th>
     <td scope="col"><form id="act" name="act" method="post" action="../compile/">
-        <input name="pid" type="hidden" id="pid" value="<?php echo  $d['pid']; ?>" />
-        <input name="sid" type="hidden" id="sid" value="<?php echo  $d['sid']; ?>" />
+        <input name="pid" type="hidden" id="pid" value="<?=$d['pid']; ?>" />
+        <input name="sid" type="hidden" id="sid" value="<?=$d['sid']; ?>" />
         <input type="hidden" name="rejudge" value="1">
         <input type="hidden" name="lang" value="<?php echo langnumtostr($d['lang']) ?>">
         <input type="submit" name="Submit" value="Rejudge" class="Button"/>

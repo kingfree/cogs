@@ -15,7 +15,7 @@ gethead(1,"sess","成绩公布");
 	$d=$p->rtnrlt(0);
 	if (!$d[showscore] && !$_SESSION[admin])
 	{
-		echo "成绩还未公布";
+		echo "<h1>成绩还未公布</h1>";
 	include_once("../include/stdtail.php");
 		exit;
 	}
@@ -77,7 +77,7 @@ if(time() < $d['starttime'] && !$_SESSION[admin]) {
 	<?php if ($_SESSION['admin']>0) { ?>
     <td id="realname<?php echo $rowcnt ?>"><a href="../user/detail.php?uid=<?php echo $d['uid'] ?>" target="_blank"><?php echo $d['realname'] ?></a></td><?php } ?>
 <?php
-		$sql="select pid,result,score from compscore where uid='{$d['uid']}' and ctid={$_GET[ctid]} order by pid asc";
+		$sql="select pid,result,score,csid from compscore where uid='{$d['uid']}' and ctid={$_GET[ctid]} order by pid asc";
 		$cnt_sub=$q->dosql($sql);
 		$sum=0;
 		$rank=$mbarray;
@@ -92,10 +92,12 @@ if(time() < $d['starttime'] && !$_SESSION[admin]) {
 		{
 ?>
     <td id="result<?=$v?>_<?=$rowcnt?>">
-    <a href="cdetail.php?pid=<?=$v?>&ctid=<?=$_GET['ctid']?>&uid=<?=$d['uid']?>"><pre style='margin:0;'><?php
-    if ($rank[$v][result] =="") echo "未评测"; else {
-        echo judgeresult($rank[$v][result]); 
-    }?></pre></a></td>
+    <?php
+    if ($rank[$v][result] =="") echo "未评测";
+    else if ($rank[$v][result] =="N") echo judgetext($rank[$v][result]);
+    else { ?>
+    <a href="code.php?csid=<?=$e['csid']?>" target="_blank"><pre style='margin:0;'><?=judgeresult($rank[$v][result])?></pre></a></td>
+    <? } ?>
     <td id="score<?php echo $v ?>_<?php echo $rowcnt ?>"><?php echo $rank[$v][score]; ?></td>
 <?php
 		}
