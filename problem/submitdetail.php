@@ -33,15 +33,38 @@ if($cnt) {
 <table width="100%" border="1" bordercolor=#000000 cellspacing=0 cellpadding=4>
   <tr>
     <th width="60px" scope="col">SID</th>
-    <td scope="col"><?php echo $d['sid']; ?></td>
+    <td width=100px scope="col"><?php echo $d['sid']; ?></td>
+    <th>代码语言：<?php echo $STR['lang'][$d['lang']] ?></th>
   </tr>
   <tr>
     <th scope="col">题目</th>
     <td scope="col"><a href="pdetail.php?pid=<?php echo $d['pid']; ?>" target="_blank"><?php echo $d['probname']; ?></a></td>
-  </tr>
+    <td rowspan=9><?php
+if ($_SESSION['admin']>0 || $d['uid']==$_SESSION['ID'])
+    $forcetocode=1;
+else {
+    $sql="select code from discuss where code={$d['sid']}";
+    $cnt=$p->dosql($sql);
+    if ($cnt) {
+        $f=$p->rtnrlt(0);
+        $forcetocode=$f['code'];
+    }
+}
+if ($forcetocode) {
+    if($d['lang']==0) $langstr="pascal";
+    else if($d['lang']==1) $langstr="c";
+    else if($d['lang']==2) $langstr="cpp";
+?>
+<pre class="brush: <?=$langstr?>;"><?=htmlspecialchars($code)?></pre>
+<?php } else {
+?>
+    <h1>您没有权限查看代码。</h1>
+<?php } ?>
+</td>  </tr>
   <tr>
     <th scope="col">用户</th>
     <td scope="col"><a href="../user/detail.php?uid=<?php echo $d['uid']; ?>" target="_blank"><?php echo $d['nickname']; ?></a></td>
+
   </tr>
   <tr>
     <th scope="col">得分</th>
@@ -49,7 +72,7 @@ if($cnt) {
   </tr>
   <tr>
     <th scope="col">测试点</th>
-    <td scope="col"><?php judgeresult($d['result']) ?></td>
+    <td scope="col"><pre style='margin:0;'><?php judgeresult($d['result']) ?></pre></td>
   </tr>
   <tr>
     <th scope="col">状态</th>
@@ -67,16 +90,9 @@ if($cnt) {
     <th scope="col">提交时间</th>
     <td scope="col"><?php echo date('Y-m-d H:i:s',$d[subtime]); ?></td>
   </tr>
-  <?php if ($_SESSION['admin']>0){ ?>
-  <tr>
-    <th style=admin scope="col">IP</th>
-    <td style=admin scope="col"><?php echo $d['IP'] ?></td>
-  </tr>
-  <?php } ?>
-  <tr>
-    <th scope="col">操作</th>
+  <tr valign=top>
+    <th scope="col">重新评测</th>
     <td scope="col"><form id="act" name="act" method="post" action="../compile/">
-      重新评测
         <input name="pid" type="hidden" id="pid" value="<?php echo  $d['pid']; ?>" />
         <input name="sid" type="hidden" id="sid" value="<?php echo  $d['sid']; ?>" />
         <input type="hidden" name="rejudge" value="1">
@@ -84,34 +100,12 @@ if($cnt) {
         <input type="submit" name="Submit" value="Rejudge" class="Button"/>
     </form>    </td>
   </tr>
-  <tr>
-    <th valign="top">代码</th>
-    <td>
-    语言：<?php echo $STR['lang'][$d['lang']] ?>
-<?php
-if ($_SESSION['admin']>0 || $d['uid']==$_SESSION['ID'])
-    $forcetocode=1;
-else {
-    $sql="select code from discuss where code={$d['sid']}";
-    $cnt=$p->dosql($sql);
-    if ($cnt) {
-        $f=$p->rtnrlt(0);
-        $forcetocode=$f['code'];
-    }
-}
-
-if ($forcetocode) {
-    if($d['lang']==0) $langstr="pascal";
-    if($d['lang']==1) $langstr="c";
-    if($d['lang']==2) $langstr="cpp";
-?>
-<pre class="brush: <?=$langstr?>;"><?=htmlspecialchars($code)?></pre>
-<?php } else {
-?>
-    <h1>您没有权限查看代码。</h1>
-<?php } ?>
-</td>
+  <?php if ($_SESSION['admin']>0){ ?>
+  <tr class=admin>
+    <th>IP</th>
+    <td colspan=2><?php echo $d['IP'] ?></td>
   </tr>
+  <?php } ?>
 </table>
 
 <script type="text/javascript">SyntaxHighlighter.all();</script>

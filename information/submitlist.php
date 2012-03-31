@@ -12,6 +12,7 @@ $q=new DataAccess();
 <input name="pid" type="text" id="pid" class="InputBox" value="<?php echo $_GET['pid'] ?>" />
 <input class="LinkButton" name="sc" type="submit" id="sc" value="检索" class="Button" />
 </form>
+<br />
 您现在正在查看<strong><?php
 if ((int)$_GET['uid']==0) {
 ?>所有人<?
@@ -65,8 +66,8 @@ if (!isset($_GET[page])) {
 <th scope="col">时间</th>
 <th scope="col">内存</th>
 <?php if ($_SESSION['admin']>0){ ?>
-<th style=admin scope="col">IP</th>
-<th style=admin scope="col">姓名</th>
+<th class=admin scope="col">IP</th>
+<th class=admin scope="col">姓名</th>
 <?php } ?>
 </tr>
 <?php if (!$err)
@@ -100,8 +101,8 @@ echo "<a href='?pid={$d['pid']}'>{$d['probname']}</a>";
 <td><?php printf("%.3f",$d['runtime']/1000.0) ?> s </td>
 <td><?php printf("%.2f",$d['memory']/1024) ?> MiB </td>
 <?php if ($_SESSION['admin']>0){ ?>
-<td style=admin><?php echo $d['IP'] ?></td>
-<td style=admin><?php echo $d['realname'] ?></td>
+<td class=admin><?php echo $d['IP'] ?></td>
+<td class=admin><?php echo $d['realname'] ?></td>
 <?php } ?>
 </tr>
 <?php

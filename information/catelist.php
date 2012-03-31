@@ -25,7 +25,7 @@ for ($i=$st;$i<$cnt;$i++) {
     <th scope="col">分类</th>
     <th scope="col">备注</th>
 	<?php if ($_SESSION['admin']>0){ ?>
-    <th scope="col">操作</th>
+    <th scope="col" class=admin>操作</th>
 	<?php } ?>
   </tr>
 <?php 
@@ -36,7 +36,7 @@ for ($i=$st;$i<$cnt;$i++) {
     <td><a href="../problem/problist.php?caid=<?php echo $d['caid'] ?>"><?php echo $d['cname'] ?></a></td>
     <td><?php echo sp2n(htmlspecialchars($d['memo'])) ?></td>
 	<?php if ($_SESSION['admin']>0){ ?>
-    <td><a href="../admin/category/editcate.php?action=edit&caid=<?php echo $d['caid'] ?>">修改</a></td><?php } ?>
+    <td class=admin><a href="../admin/category/editcate.php?action=edit&caid=<?php echo $d['caid'] ?>">修改</a></td><?php } ?>
   </tr>
 <?php
 	}

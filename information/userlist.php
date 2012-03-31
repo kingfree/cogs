@@ -128,9 +128,9 @@ if ($subgroup!=array()) {
     <th scope="col">权限</th>
     <th scope="col">所属分组</th>
     <?php if ($_SESSION['admin']>0){ ?>
-    <th scope="col" style=admin>真实姓名</th>
-    <th scope="col" style=admin>IP</th>
-    <th scope="col" style=admin>操作</th>
+    <th scope="col" class=admin>真实姓名</th>
+    <th scope="col" class=admin>IP</th>
+    <th scope="col" class=admin>操作</th>
 <script language=javascript>
 function okdel(name) {
 if(confirm("你确定要删除 "+name+" 的所有信息吗？\n删除之后将不可恢复！"))
@@ -158,9 +158,9 @@ return false;
     <td><?php echo $STR[adminn][$d['admin']] ?></td>
     <td><?php echo "<a href='?gid={$d[gbelong]}'>{$d['gname']}</a>"; ?></td>
     <?php if ($_SESSION['admin']>0){ ?>
-    <td style=admin><?php echo $d['realname'] ?></td>
-    <td style=admin><?php echo $d['lastip'] ?></a></td>
-    <td style=admin>
+    <td class=admin><?php echo $d['realname'] ?></td>
+    <td class=admin><?php echo $d['lastip'] ?></a></td>
+    <td class=admin>
 <a href="../admin/user/edituser.php?uid=<?php echo $d['uid'] ?>">修改</a>
 <a href="../admin/user/doedituser.php?uid=<?php echo $d['uid'] ?>&action=del" onclick="return okdel('<?=$d['nickname']?>')">删除</a>
 </td>

@@ -101,8 +101,8 @@ for ($i=1;$i<=10;$i++)
 <th scope="col">通过率</th>
 <th scope="col">上次通过</th>
 <?php if ($_SESSION['admin']>0){ ?>
-<th scope="col" style=admin>标识</th>
-<th scope="col" style=admin>权限</th>
+<th scope="col" class=admin>标识</th>
+<th scope="col" class=admin>权限</th>
 <?php } ?>
 </tr>
 <?php
@@ -147,10 +147,10 @@ else { ?><img src='../images/sign/todo.gif' />未提交 <? }
 <td><?php if ($d['uid']==1){ echo "无"; } else { ?>
 <a href="../user/detail.php?uid=<?php echo $d['uid'] ?>" target="_blank"><?php echo $d['name'];} ?></a></td>
 <?php if ($_SESSION['admin']>0){ ?>
-    <td style=admin>
+    <td class=admin>
         <?php if ($d['submitable']) echo "可提交"; else echo "不可提交"; ?>
     </td>
-    <td style=admin><?=$d['readforce']?>
+    <td class=admin><?=$d['readforce']?>
     </td>
     <?php } ?>
     </tr>
