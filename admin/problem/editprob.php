@@ -172,7 +172,7 @@ $e=$q->rtnrlt($j);
 <option value="2"<?php if ($d['plugin']==2){ ?> selected="selected"<?php } ?>>逐字节对比</option>
 <option value="0"<?php if ($d['plugin']==0){ ?> selected="selected"<?php } ?>>评测插件</option>
 </select>                </td>
-<td>提交修改：
+<td class=admin>提交修改：
 <input type="submit" value="单击此处提交对该题目的修改">
 <input name="action" type="hidden" id="action" value="<?php echo $_GET[action] ?>" />
 </td>

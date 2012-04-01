@@ -91,19 +91,14 @@ echo '<script>document.location="../error.php?id=11"</script>';
 <td><a href="../information/userlist.php?gid=<?php echo $d['gid'] ?>" target="_blank"><?php echo $d['gname'] ?></a></td>
 </tr>
 <tr>
-<?php if ($_SESSION['ID']){ ?>
-<td><?php
-$sql="SELECT * FROM submit WHERE pid ={$d['pid']} AND uid ={$_SESSION['ID']} order by accepted desc limit 1";
-$ac=$q->dosql($sql);
-if ($ac) {
-$e=$q->rtnrlt(0);
-?><a href="submitdetail.php?id=<?php echo $e['sid'] ?>" target='_blank'>
-<?php
-if ($e['accepted']) {?> <img src='../images/sign/right.gif' border="0" />已解决<? }
-else {?> <img src='../images/sign/error.gif' border="0" />未解决<?php } ?></a>
-<? } else { ?><img src='../images/sign/todo.gif' />未提交 <? } ?>
-</td><?php } else {?><td></td><? } ?>
 <td><a href="../information/submitlist.php?pid=<?php echo $pid; ?>">提交状态</a></td>
+<?php if($_SESSION['ID']) { ?>
+<td><?php
+$sql="SELECT * FROM submit WHERE pid ={$d['pid']} AND uid ={$_SESSION['ID']} order by score desc limit 1";
+$ac=$q->dosql($sql);
+if ($ac) { $e=$q->rtnrlt(0); ?>
+<a href="submitdetail.php?id=<?php echo $e['sid'] ?>"><pre style="margin:0;"><?=judgeresult($e['result'])?></pre></a>
+</td><?php } } else { ?><td></td><? }  ?>
 </tr>
 <tr>
 <td>所属分类</td>
@@ -121,7 +116,7 @@ echo " <a href='problist.php?caid={$e[caid]}'>{$e[cname]}</a> ";
 </tr>
 <tr>
 <?php if ($_SESSION['admin']>0){ ?>
-<td border=1><a href="../admin/problem/editprob.php?action=edit&pid=<?php echo  $d[pid]; ?>" class="LinkButton">修改该题</a></td>
+<td border=1 class=admin><a href="../admin/problem/editprob.php?action=edit&pid=<?php echo  $d[pid]; ?>">修改该题</a></td>
 <?php } else { ?>
 <td></td>
 <? } ?>
