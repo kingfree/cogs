@@ -48,8 +48,9 @@ if ($_POST['rejudge']==1) {
 $Cp=new Compiler($info);
 
 ?>
-<p>正在连接评测机……</p>
-<p>
+<table border="0"><tr>
+<td width=60%>
+正在连接评测机……
 <?php
 flush();
 $free=$Cp->getgds();
@@ -63,7 +64,7 @@ if ($_POST['rejudge']==1) {
 } else if (!$Cp->getupload()) {
 	异常("源代码上传失败。请检查文件大小 [ 1 Byte , 100 KB ]。");
 }
-?></p>
+?>
 <table border="1">
   <tr>
     <td>GRID</td>
@@ -82,15 +83,13 @@ if ($_POST['rejudge']==1) {
     <td><?=$Cp->state['memo']; ?></td>
   </tr>
 </table>
-</p>
-<p>正在编译...</p>
+正在编译...
 <?php
 flush();
 $csucc=$Cp->compile();
 flush();
 if ($csucc) {
 ?>
-<p>
 <table border='1'>
 <tr>
 	<td>测试点</td>
@@ -118,21 +117,23 @@ if ($csucc) {
     }
 ?>
 </table>
-</p>
-<p>你的程序运行完成了！</p>
+</td>
+<td width=40%>
 <p>运行时间 <?php printf ("%.3f",$Cp->gettotaltime()/1000.0) ?> s</p>
 <p>平均内存 <?php printf("%.2f",$Cp->getmemory()/1024) ?> MiB</p>
-<p>测试点通过状况 <a href="../problem/submitdetail.php?id=<?=$info['sid']?>"><?=judgeresult($Cp->s_detail) ?></a></p>
+<p>测试点通过状况 <a href="../problem/submitdetail.php?id=<?=$info['sid']?>"><?=评测结果($Cp->s_detail) ?></a></p>
 <p>得分：<?=$Cp->getscore(); ?></p>
-<p><a class="LinkButton" href="../problem/pdetail.php?pid=<?=$_POST['pid'] ?>">返回原题 “<?=$ptitle?>”</a></p>
+<p><a href="../problem/pdetail.php?pid=<?=$_POST['pid'] ?>">返回原题 “<?=$ptitle?>”</a></p>
+</td>
+</tr></table>
 <?php if ($Cp->ac==$d['datacnt']) { ?>
-    <p>祝贺你通过了全部测试点!</p>
+    <p class="ok">祝贺你通过了全部测试点!</p>
 <?php } else { if(($_SESSION['admin'] > 0 || $_SESSION['ID'] == $info['uid']) && $nodata == false) { ?>
-<p>你在第<?=$Cp->wrongpoint?>个测试点出现了爆〇的情况，下面是该题的输入数据：
+<p class="no">你在第<?=$Cp->wrongpoint?>个测试点出现了爆〇的情况，下面是该题的输入数据：
 <pre class="brush: text;"><?=htmlspecialchars($Cp->inputtext)?></pre>
 <p>下面是你的输出与标准答案不同的地方（上面带减号“-”的是你的输出，下面带加号“+”的是答案输出，“@@”之间的数字表示行号）：
 <pre class="brush: diff;"><?=htmlspecialchars($Cp->difftext)?></pre>
-<p><a class="LinkButton" href="../problem/pdetail.php?pid=<?=$_POST['pid'] ?>">返回原题 “<?=$ptitle?>”</a></p>
+<p><a href="../problem/pdetail.php?pid=<?=$_POST['pid'] ?>">返回原题 “<?=$ptitle?>”</a></p>
 <?php } else echo "<p>你无法查看错误点的输入输出文件。</p>";?>
 <p><a href="../information/help.php" target="_blank" title="RP问题">为什么程序在我的电脑上能够正常运行，而在评测机上不能?</a></p>
 <?php }
@@ -150,7 +151,6 @@ $Cp->unlock();
 $Dir=pathinfo($_SERVER['SCRIPT_FILENAME']);
 chdir($Dir['dirname']."/../include");
 ?>
-
 <script type="text/javascript">SyntaxHighlighter.all();</script>
 
 <?php

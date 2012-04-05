@@ -134,29 +134,29 @@ class Compiler
         }
         if ($this->state['timeout']) {
             $this->s_detail.='T';
-            return judgetext('T');
+            return 评测信息('T');
         } else if ($this->state['memoryout']) {
             $this->s_detail.='M';
-            return judgetext('M');
+            return 评测信息('M');
         } else if ($this->state['runerr']) {
             $this->s_detail.='E';
-            return judgetext('E');
+            return 评测信息('E');
         } else if ($this->state['noreport']) {
             $this->s_detail.='R';
-            return judgetext('R');
+            return 评测信息('R');
         } else if ($this->state['noindata'] || $this->state['noansdata']) {
             $this->s_detail.='D';
-            return judgetext('D');
+            return 评测信息('D');
         } else if ($this->state['score']==0) {
             $this->s_detail.='W';
-            return judgetext('W');
+            return 评测信息('W');
         } else if ($this->state['score']!=1) {
             $this->s_detail.='P';
-            return judgetext('P');
+            return 评测信息('P');
         } else if ($this->state['score']==1) {
             $this->s_detail.='A';
             $this->ac++;
-            return judgetext('A');
+            return 评测信息('A');
         }
     }
 

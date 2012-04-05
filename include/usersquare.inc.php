@@ -23,7 +23,8 @@ function showuser($uid,$user_access) {
 <table id="userinfo">
 <tr>
 <td rowspan=3><a href="<?=路径("user/login.php")."?from=".$SET['URI'];?>"><?=gravatar::showImage("", 64);?></a></td>
-<th><a href='javascript:$("#login").show()'>登录</a></th>
+<!--<th><a href='javascript:$("#login").show()'>登录</a></th>-->
+<th><a href='<?=路径("user/login.php")?>'>登录</a></th>
 </tr>
 <tr>
 <td align="center">

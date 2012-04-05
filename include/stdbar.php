@@ -4,6 +4,7 @@ $p=new DataAccess();
 <table id="nagbar">
 <tr>
 <td><a href="<?=路径("index.php");?>"><span class="icon-home"></span>首页</a></td>
+<td><a href="<?=路径("page/index.php");?>"><span class="icon-file"></span>页面</a></td>
 <td><a href="<?=路径("problem/problist.php");?>"><span class="icon-list"></span>题目</a></td>
 <td><a href="<?=路径("information/catelist.php");?>"><span class="icon-th"></span>分类</a></td>
 <td><a href="<?=路径("competition/index.php");?>"><span class="icon-list-alt"></span>比赛<?
@@ -26,7 +27,8 @@ if($cnt > 0) echo "<span class='todo'>($cnt)</span>";
 <td><a href="<?=路径("user/panel.php"); ?>"><span class="icon-picture"></span>设置</a></td>
 <td><a href="<?=路径("user/dologout.php")."?from=".$SET['URI'];?>"><span class="icon-off"></span>退出</a></td>
 <? } else { ?>
-<th><a href='javascript:$("#login").show()'><span class="icon-star"></span>登录</a></th>
+<!--<th><a href='javascript:$("#login").show()'><span class="icon-star"></span>登录</a></th>-->
+<th><a href='<?=路径("user/login.php")?>'><span class="icon-star"></span>登录</a></th>
 <th><a href="<?=路径("user/register.php?accept=1");?>"><span class="icon-shopping-cart"></span>注册</a></th>
 <? } ?>
 <?php if ($_SESSION['admin']>0)	{ ?>

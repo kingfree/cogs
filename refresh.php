@@ -106,6 +106,13 @@ gethead(1,"","提示");
 		echo "邮件发送成功"; 
 		$urlgo="./mail/index.php";
 		break;
+	case 23:
+		echo "页面修改成功！"; 
+		if ((int)$_GET['aid'])
+			$urlgo="./page/page.php?aid={$_GET['aid']}";
+		else
+			$urlgo="./page/index.php";
+		break;
 	}
 ?>
 </div></td>
