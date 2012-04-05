@@ -45,6 +45,6 @@ function sdir($dir,$dname)
 	}
 	closedir($dh);
 }
-sdir($SETTINGS['dir_source'],"");
+sdir($SET['dir_source'],"");
 ?>
 </pre>

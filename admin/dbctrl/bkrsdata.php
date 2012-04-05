@@ -46,12 +46,12 @@ if ($_GET[action]=="restore")
       <th scope="col">大小</th>
     </tr>
 <?php
-$handle=opendir($SETTINGS['dir_databackup']);
+$handle=opendir($SET['dir_databackup']);
 while ($file = readdir($handle)) 
 {
 	if ($file!='.'&& $file!='..')
 	{
-		$path="{$SETTINGS['dir_databackup']}/$file";
+		$path="{$SET['dir_databackup']}/$file";
 ?>
 	 <tr>
       <td><input name="filename" type="radio" value="<?php echo $file; ?>" checked="checked" /></td>

@@ -1,5 +1,5 @@
 <?php
-$problist=$SETTINGS['base']."problem/problist.php";
+$problist=$SET['base']."problem/problist.php";
 
 $sql="select * from category order by cname";
 $cnt=$p->dosql($sql);
@@ -20,7 +20,7 @@ if ($cnt)
 		$last=$d['pid'];
 		$linecnt++;
 ?>
-		<td><a href="<?php echo pathconvert($SETTINGS['cur'],$problist)."?caid=".$d['caid'] ?>"><?php echo $d['cname'] ?></a></td>
+		<td><a href="<?php echo pathconvert($SET['cur'],$problist)."?caid=".$d['caid'] ?>"><?php echo $d['cname'] ?></a></td>
 <?php
 		if ($linecnt==$table_width)
 		{

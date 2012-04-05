@@ -6,11 +6,11 @@ gethead(1,"","帮助");
 <tr><td colspan=2>评测结果说明</td></tr>
 <? $s="AWTMREDCNP";
 for($i=0; $i<strlen($s); $i++) {?>
-<tr><td><pre style='margin:0;'><?=judgeresult($s[$i])?></pre></td>
-<td><?=judgetext($s[$i])?></td></tr>
+<tr><td><pre style='margin:0;'><?=评测结果($s[$i])?></pre></td>
+<td><?=评测信息($s[$i])?></td></tr>
 <? } ?>
 </table>
-<?php echo output_text($SETTINGS['global_help']) ?>
+<?php echo 输出文本($SET['global_help']) ?>
 <?php
-	include_once("../include/stdtail.php");
+    include_once("../include/stdtail.php");
 ?>

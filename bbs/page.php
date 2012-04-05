@@ -10,7 +10,7 @@ $q = new DataAccess();
 $sql = "select discuss.*,problem.probname,userinfo.nickname,userinfo.email from discuss,problem,userinfo where (fid=$did or did=$did) and discuss.pid=problem.pid and userinfo.uid=discuss.uid order by did asc";
 $cnt = $p->dosql($sql);
 $page = (int) $_GET['page'];
-$st = $page ? (($page-1)*$SETTINGS['style_pagesize']) : 0;
+$st = $page ? (($page-1)*$SET['style_pagesize']) : 0;
 $d=$p->rtnrlt(0);
 $pid = $d['pid'];
 ?>
@@ -24,7 +24,7 @@ $pid = $d['pid'];
 </td>
 </tr>
 <?
-for ($i=$st;$i<$cnt && $i<$st+$SETTINGS['style_pagesize'];$i++) {
+for ($i=$st;$i<$cnt && $i<$st+$SET['style_pagesize'];$i++) {
 $d=$p->rtnrlt($i);
 ?>
 <tr>

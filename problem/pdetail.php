@@ -1,133 +1,96 @@
 <?php
 require_once("../include/stdhead.php");
-gethead(1,"","题目详细信息");
-?>
+gethead(1,"","题目");
 
-<?php
 $p=new DataAccess();
 $q=new DataAccess();
-$sql="select problem.*,groups.* from problem,groups where pid={$_GET[pid]} and groups.gid=problem.group";
-$cnt=$p->dosql($sql);
-if ($cnt)
-{
-$d=$p->rtnrlt(0);
-if ($d[readforce]>$_SESSION[readforce])
-{
-echo '<script>document.location="../error.php?id=17"</script>';
-exit;
-}
-if (!$d[submitable] && !($_SESSION['admin']>0))
-{
-echo '<script>document.location="../error.php?id=18"</script>';
-exit;
-}
-
-$subgroup=$LIB->getsubgroup($q,$d['gid']);
-$subgroup[0]=$d['gid'];
-$promise=false;
-foreach($subgroup as $value)
-{
-if ($value==(int)$_SESSION['group'])
-{
-$promise=true;
-break;
-}
-}
-if (!$promise && !($_SESSION['admin']>0))
-exit;
-
-
-$pid=$d[pid];
-?>
-
-<?php
-} else {
-echo '<script>document.location="../error.php?id=11"</script>';
-}
-?>
-
-<div id='problem'>
-<table class="pdetail" width=100% border=0><tr>
-<td width=250px valign=top>
-<table width="100%" style="margin: 2px 0;">
-<tr>
-<td width=70px>题目名称</td>
-<td><?php echo $d[probname]; ?></td>
-</tr>
-<tr>
-<td>难度等级</td>
-<td><?php echo difficulty($d['difficulty']); ?></td>
-</tr>
-<tr>
-<td>题目文件</td>
-<td><?php echo $d[filename]; ?>.cpp/pas/c</td>
-</tr>
-<tr>
-<td>输入输出</td>
-<td><?php echo $d[filename]; ?>.in/out</td>
-</tr>
-<tr>
-<td>时间限制</td>
-<td><?php echo $d['timelimit']; ?> ms (<?=$d['timelimit']/1000?> s)</td>
-</tr>
-<tr>
-<td>内存限制</td>
-<td><?php echo $d['memorylimit']; ?> MB </td>
-</tr>
-<tr>
-<td>对比方式</td>
-<td><?php echo $STR['plugin'][$d['plugin']]; ?></td>
-</tr>
-<tr>
-<td>测试点数</td>
-<td><?php echo $d[datacnt]; ?></td>
-</tr>
-<tr>
-<td>加入时间</td>
-<td><?php echo date('Y-m-d', $d['addtime']) ?></td>
-</tr>
-<tr>
-<td>开放分组</td>
-<td><a href="../information/userlist.php?gid=<?php echo $d['gid'] ?>" target="_blank"><?php echo $d['gname'] ?></a></td>
-</tr>
-<tr>
-<td><a href="../information/submitlist.php?pid=<?php echo $pid; ?>">提交状态</a></td>
-<?php if($_SESSION['ID']) { ?>
-<td><?php
-$sql="SELECT * FROM submit WHERE pid ={$d['pid']} AND uid ={$_SESSION['ID']} order by score desc limit 1";
-$ac=$q->dosql($sql);
-if ($ac) { $e=$q->rtnrlt(0); ?>
-<a href="submitdetail.php?id=<?php echo $e['sid'] ?>"><pre style="margin:0;"><?=judgeresult($e['result'])?></pre></a>
-</td><?php } } else { ?><td></td><? }  ?>
-</tr>
-<tr>
-<td>所属分类</td>
-<td>
-<?php
-$sql="select category.cname,category.caid from category,tag where tag.pid={$_GET[pid]} and category.caid=tag.caid";
 $r=new DataAccess();
-$cnt2=$r->dosql($sql);
-for ($i=0;$i<=$cnt2-1;$i++)
-{
-$e=$r->rtnrlt($i);
-echo " <a href='problist.php?caid={$e[caid]}'>{$e[cname]}</a> ";
+
+$sql="select problem.*,groups.* from problem,groups where pid=".(int)$_GET[pid]." and groups.gid=problem.group limit 1";
+$cnt=$p->dosql($sql);
+$d=$p->rtnrlt(0);
+
+if($cnt) {
+    if ($d[readforce]>$_SESSION[readforce]) {
+        echo '<script>document.location="../error.php?id=17"</script>';
+        exit;
+    }
+    if (!$d[submitable] && !($_SESSION['admin']>0)) {
+        echo '<script>document.location="../error.php?id=18"</script>';
+        exit;
+    }
+    $subgroup=$LIB->getsubgroup($q,$d['gid']);
+    $subgroup[0]=$d['gid'];
+    $promise=false;
+    foreach($subgroup as $value) {
+        if ($value==(int)$_SESSION['group']) {
+            $promise=true;
+            break;
+        }
+    }
+    if (!$promise && !($_SESSION['admin']>0))
+        exit;
+    $pid=$d[pid];
+} else {
+    echo '<script>document.location="../error.php?id=11"</script>';
 }
-?></td>
-</tr>
-<tr>
-<?php if ($_SESSION['admin']>0){ ?>
-<td border=1 class=admin><a href="../admin/problem/editprob.php?action=edit&pid=<?php echo  $d[pid]; ?>">修改该题</a></td>
+?>
+
+<table id="pdetail"><tr>
+<td id="prob_left">
+<table id="probinfo">
+<tr><th width=70px>题目名称</th>
+<td><b><?=$d[probname]; ?></b></td></tr>
+<tr><th>难度等级</th>
+<td><?=难度($d['difficulty']); ?></td></tr>
+<tr><th>程序文件</th>
+<td><?=$d[filename]; ?>.cpp/pas/c</td></tr>
+<tr><th>输入输出</th>
+<td><?=$d[filename]; ?>.in/out</td></tr>
+<tr><th>时间限制</th>
+<td><?=$d['timelimit']; ?> ms (<?=$d['timelimit']/1000?> s)</td></tr>
+<tr><th>内存限制</th>
+<td><?=$d['memorylimit']; ?> MB </td></tr>
+<tr><th>对比方式</th>
+<td><?=$STR['plugin'][$d['plugin']]; ?></td></tr>
+<tr><th>测试点数</th>
+<td><?=$d[datacnt]; ?></td></tr>
+<tr><th>添加时间</th>
+<td><?=date('Y-m-d', $d['addtime']) ?></td></tr>
+<tr><th>开放分组</th>
+<td><a href="../information/userlist.php?gid=<?=$d['gid'] ?>" target="_blank"><?=$d['gname'] ?></a></td></tr>
+<tr><th><a href="../information/submitlist.php?pid=<?=$pid; ?>">提交状态</a></th>
+<td><?php
+if($_SESSION['ID']) {
+    $sql="SELECT * FROM submit WHERE pid ={$pid} AND uid ={$_SESSION['ID']} order by score desc limit 1";
+    $ac=$q->dosql($sql);
+    if ($ac) {
+        $e=$q->rtnrlt(0);
+        echo "<a href='submitdetail.php?id={$e['sid']}'>";
+        评测结果($e['result']);
+        echo "</a>";
+    }
+} ?></td></tr>
+<tr><th>所属分类</th>
+<td><?php
+$sql="select category.cname,category.caid from category,tag where tag.pid={$_GET[pid]} and category.caid=tag.caid";
+$cnt2=$r->dosql($sql);
+for ($i=0;$i<=$cnt2-1;$i++) {
+    $e=$r->rtnrlt($i);
+    echo " <a href='problist.php?caid={$e[caid]}'>{$e[cname]}</a> ";
+}
+?></td></tr>
+<tr><?php if ($_SESSION['admin']>0){ ?>
+<th class=admin><a href="../admin/problem/editprob.php?action=edit&pid=<?= $d[pid]; ?>">修改该题</a></th>
 <?php } else { ?>
 <td></td>
 <? } ?>
 <td align=right>
 <a href="comments.php?pid=<?=$pid?>"><b>发表看法</b></a>
-</td>
-</tr>
-<tr>
-<form action="../compile/" method="post" enctype="multipart/form-data" name="sub">
+</td></tr>
+<tr><form action="../compile/" method="post" enctype="multipart/form-data" name="sub">
 <td colspan=2 align=right>
-<input type="file" name="file" class="Button"/>
+<input type="file" name="file"/>
 <input type="radio" name="lang" id="pas" value="pas" /><label for="pas">Pascal</label>
 <input type="radio" name="lang" id="c" value="c" /><label for="c">C</label>
 <input type="radio" name="lang" id="cpp" value="cpp" checked=1/><label for="cpp">C++</label>
@@ -135,29 +98,25 @@ echo " <a href='problist.php?caid={$e[caid]}'>{$e[cname]}</a> ";
 <input name="testmode" type="checkbox" id="testmode" value="1" /> 
 <label for="testmode">测试模式</label>
 <?php } ?>
-<input class="LinkButton" type="submit" name="Submit" style="font-size: 24px;" value="提交代码"/>
+<input type="submit" name="Submit" value="提交代码"/>
 <input name="pid" type="hidden" id="pid" value="<?=$d['pid']; ?>" />
 <input type="hidden" name="MAX_FILE_SIZE" value="102400">
-</td></form>
-</tr>
+</td></form></tr>
 </table>
-<div id="singlerank">
-<h3>运行速度 Top <?php echo $SETTINGS['style_single_ranksize']; ?></h3>
-<table border="1" width="100%">
-<tr><th>C++</th></tr>
-<tr><td valign="top"><?php $LIB->singlerank($p,$_GET['pid'],2) ?></td></tr>
-<tr><th>Pascal</th></tr>
-<tr><td valign="top"><?php $LIB->singlerank($p,$_GET['pid'],0) ?></td></tr>
-<tr><th>C</th></tr>
-<tr><td valign="top"><?php $LIB->singlerank($p,$_GET['pid'],1) ?></td></tr>
+<table id="singlerank">
+<tr><th colspan=3>运行速度前 <?=$SET['style_single_ranksize']; ?> 名</th><tr>
+<tr><th colspan=3>C++</th></tr>
+<?php $LIB->singlerank($p,$pid,2) ?>
+<tr><th colspan=3>Pascal</th></tr>
+<?php $LIB->singlerank($p,$pid,0) ?>
+<tr><th colspan=3>C</th></tr>
+<?php $LIB->singlerank($p,$pid,1) ?>
 </table>
-</div>
 </td>
-<td class="MainText" valign=top>
-<?php echo $d[detail] ?>
+<td id="probdetail">
+<?=$d['detail'] ?>
 </td>
 </tr></table>
-</div>
 
 <?php
 include_once("../include/stdtail.php");

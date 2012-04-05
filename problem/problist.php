@@ -18,15 +18,16 @@ if (restore) selObj.selectedIndex=0;
 //-->
 </script>
 
-<?php if ($_GET['caid']!=""){ 
-$sql="select * from category where caid={$_GET['caid']}";
-$cnt=$p->dosql($sql);
-$d=$p->rtnrlt(0);
+<?php if ($_GET['caid']!="") {
+    $sql="select * from category where caid={$_GET['caid']}";
+    $cnt=$p->dosql($sql);
+    $d=$p->rtnrlt(0);
 ?>
-当前分类：<span style="font-size:20px;"><?php echo $d['cname'] ?></span>（<?php echo nl2br(sp2n(htmlspecialchars($d['memo']))) ?>）
+
+<span id="cate_detail">当前分类：<span style="font-size:20px;"><?php echo $d['cname'] ?></span>（<?php echo nl2br(sp2n(htmlspecialchars($d['memo']))) ?>）</span>
 <?php } ?>
 <?php if ($_SESSION['admin']>0){ ?>
-<a class="adminButton" href="../admin/problem/editprob.php?action=add">添加新题目</a>
+<span class="admin_big"><a href="../admin/problem/editprob.php?action=add">添加新题目</a></span>
 <?php } ?>
 
 <?php
@@ -49,116 +50,79 @@ $sql.=" and difficulty='{$_GET['diff']}'";
 $sql.=" order by problem.pid asc";
 
 $cnt=$p->dosql($sql);
-$totalpage=(int)(($cnt-1)/$SETTINGS['style_pagesize'])+1;
-if ($_GET['page']=="") 
-{
-$_GET['page']=1;
-$st=0;
-}
-else 
-{
-if ($_GET[page]<1 || $_GET[page]>$totalpage)
-{
-echo "页错误！";
-$err=1;
-}
-else
-$st=(($_GET[page]-1)*$SETTINGS['style_pagesize']);
+$totalpage=(int)(($cnt-1)/$SET['style_pagesize'])+1;
+if(!$_GET['page']) {
+    $_GET['page']=1;
+    $st=0;
+} else {
+    if ($_GET[page]<1 || $_GET[page]>$totalpage)
+        异常("页面错误！");
+    else
+        $st=(($_GET[page]-1)*$SET['style_pagesize']);
 }
 ?>
-<form id="form1" name="form1" method="get" action="">
+<form id="search_prob" name="search_prob" method="get" action="">
 难度 
-<select name="diff" class="InputBox" id="diff" onchange="MM_jumpMenu_2('parent',this,0)">
+<select name="diff" id="diff" onchange="MM_jumpMenu_2('parent',this,0)">
 <option value="" selected="selected" <?php if ($_GET['diff']=="") {?> selected="selected"<?php } ?> >全部</option>
-<?php
-for ($i=1;$i<=10;$i++)
-{
-?>
-<option value="<?php echo $i;?>" <?php if ($_GET['diff']==$i) {?> selected="selected"<?php } ?> ><?php echo difficulty($i);?></option>
-<?php
-}
-?>
+<?php for ($i=1;$i<=10;$i++) { ?>
+<option value="<?php echo $i;?>" <?php if ($_GET['diff']==$i) {?> selected="selected"<?php } ?> ><?php echo 难度($i);?></option>
+<?php } ?>
 </select>
 搜索题目
-<input name="key" type="text" id="key" class="InputBox" value="<?php echo $_GET['key'] ?>" />
+<input name="key" type="text" id="key" value="<?php echo $_GET['key'] ?>" />
 <input class="LinkButton" name="sc" type="submit" id="sc" value="搜索"/>
 <input name="caid" type="hidden" id="caid" value="<?php echo $_GET['caid'] ?>" />
 </form>
-<? page_slice($cnt, $_GET['page'], '?caid='.$_GET['caid'].'&diff='.$_GET['diff'].'&key='.$_GET['key'].'&sc'.$_GET['sc'].'&'); ?>
-<table width="100%" border="1">
+<? 分页($cnt, $_GET['page'], '?caid='.$_GET['caid'].'&diff='.$_GET['diff'].'&key='.$_GET['key'].'&sc'.$_GET['sc'].'&'); ?>
+<table id="problist">
 <tr>
-<th scope="col">PID</th>
-<?php if ($_SESSION['ID']){ ?>
-<th scope="col">个人状态</th>
-<?php } ?>
-<th scope="col">题目名称</th>
-<th scope="col">文件名称</th>
-<th scope="col">时间限制</th>
-<th scope="col">空间限制</th>
-<th scope="col">难度</th>
-<th scope="col">通过</th>
-<th scope="col">提交</th>
-<th scope="col">通过率</th>
-<th scope="col">上次通过</th>
+<th>PID</th>
+<th>题目名称</th>
+<th>文件名称</th>
+<th>时间限制</th>
+<th>空间限制</th>
+<th>难度</th>
+<th>通过</th>
+<th>提交</th>
+<th>通过率</th>
+<th>上次通过</th>
 <?php if ($_SESSION['admin']>0){ ?>
-<th scope="col" class=admin>标识</th>
-<th scope="col" class=admin>权限</th>
+<th class=admin>标识</th>
+<th class=admin>权限</th>
+<th class=admin>编辑</th>
 <?php } ?>
 </tr>
 <?php
-if (!$err)
-for ($i=$st;$i<$cnt && $i<$st+$SETTINGS['style_pagesize'] ;$i++)
-{
-
-$d=$p->rtnrlt($i);
-if($_GET['key'] && $cnt == 1) {
-echo "<script language='javascript'>location='pdetail.php?pid={$d['pid']}';</script>";
-}
-if (!$d['submitable'] && !$_SESSION['admin']>0) continue;
-if ($d['readforce']>$_SESSION['readforce'] && !($_SESSION['admin']>0)) continue;
+if (!$err) for ($i=$st;$i<$cnt && $i<$st+$SET['style_pagesize'] ;$i++) {
+    $d=$p->rtnrlt($i);
+    if($_GET['key'] && $cnt == 1)
+        echo "<script language='javascript'>location='pdetail.php?pid={$d['pid']}';</script>";
+    if (!$d['submitable'] && !$_SESSION['admin']>0) continue;
+    if ($d['readforce']>$_SESSION['readforce'] && !($_SESSION['admin']>0)) continue;
 ?>
 <tr>
 <td><?php echo $d['pid'] ?></td>
-<?php if ($_SESSION['ID']){ ?>
-<td align=center><?php
-$sql="SELECT * FROM submit WHERE pid ={$d['pid']} AND uid ={$_SESSION['ID']} order by accepted desc limit 1";
-$ac=$q->dosql($sql);
-if ($ac)
-{
-$e=$q->rtnrlt(0);
-?><a href="submitdetail.php?id=<?php echo $e['sid'] ?>" target='_blank'>
-<?php
-if ($e['accepted']) {?> <img src='../images/sign/right.gif' border="0" />已解决 <? }
-else {?> <img src='../images/sign/error.gif' border="0" />未解决 <?php }
-?>
-</a>
-<?php
-}
-else { ?><img src='../images/sign/todo.gif' />未提交 <? }
-?></td><?php } ?>
-<td><a href="pdetail.php?pid=<?php echo $d['pid'] ?>"><?php echo $d['probname'] ?></a></td>
+<td><? 是否通过($d['pid'], $q);?><a href="pdetail.php?pid=<?=$d['pid'] ?>"><?=$d['probname'] ?></a></td>
 <td><?php echo $d['filename']; ?></td>
 <td align=center><?php echo $d['timelimit']/1000 . " s"; ?></td>
 <td align=center><?php echo $d['memorylimit'] . " MiB"; ?></td>
-<td><?php echo difficulty($d['difficulty']); ?></td>
+<td><?php echo 难度($d['difficulty']); ?></td>
 <td align=center><?php echo $d['acceptcnt']; ?></td>
 <td align=center><?php echo $d['submitcnt']; ?></td>
 <td align=center><?php echo @round($d['acceptcnt']/$d['submitcnt']*100,2); ?>%</td>
 <td><?php if ($d['uid']==1){ echo "无"; } else { ?>
-<a href="../user/detail.php?uid=<?php echo $d['uid'] ?>" target="_blank"><?php echo $d['name'];} ?></a></td>
-<?php if ($_SESSION['admin']>0){ ?>
-    <td class=admin>
-        <?php if ($d['submitable']) echo "可提交"; else echo "不可提交"; ?>
-    </td>
-    <td class=admin><?=$d['readforce']?>
-    </td>
-    <?php } ?>
-    </tr>
-    <?php
-}
-?>
+<a href="../user/detail.php?uid=<?=$d['uid'] ?>" target="_blank"><?=$d['name'];} ?></a></td>
+<?php if ($_SESSION['admin']>0) { ?>
+<td class=admin>
+<?php if ($d['submitable']) echo "<span class=ok>可提交</span>"; else echo "<span class=no>不可提交</span>"; ?>
+</td>
+<td class=admin><?=$d['readforce']?></td>
+<th class=admin><a href="../admin/problem/editprob.php?action=edit&pid=<?= $d[pid]; ?>">修改</a></th>
+<?php } ?>
+</tr>
+<?php } ?>
 </table>
-</p>
 
 <?php
 include_once("../include/stdtail.php");

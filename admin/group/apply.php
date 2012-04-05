@@ -28,7 +28,7 @@ function MM_jumpMenu(targ,selObj,restore){ //v3.0
 	$sql.=" order by gid asc";
 	
 	$cnt=$p->dosql($sql);
-	$totalpage=(int)(($cnt-1)/$SETTINGS['style_pagesize'])+1;
+	$totalpage=(int)(($cnt-1)/$SET['style_pagesize'])+1;
 	if (!isset($_GET[page])) 
 	{
 		$_GET[page]=1;
@@ -42,10 +42,10 @@ function MM_jumpMenu(targ,selObj,restore){ //v3.0
 			$err=1;
 		}
 		else
-		$st=(($_GET[page]-1)*$SETTINGS['style_pagesize']);
+		$st=(($_GET[page]-1)*$SET['style_pagesize']);
 	}
 ?>
-<p>当前第<strong><?php echo $_GET['page']?></strong>页 共<strong><?php echo $cnt?></strong>条记录 共<strong><?php echo $totalpage?></strong>页 每页最多显示<strong><?php echo $SETTINGS['style_pagesize'] ?></strong>个申请</p>
+<p>当前第<strong><?php echo $_GET['page']?></strong>页 共<strong><?php echo $cnt?></strong>条记录 共<strong><?php echo $totalpage?></strong>页 每页最多显示<strong><?php echo $SET['style_pagesize'] ?></strong>个申请</p>
 
 <form id="form1" name="form1" method="get" action="">
 <p>
@@ -114,7 +114,7 @@ for ($i=1;$i<=$totalpage;$i++)
   </tr>
 <?php
 	if (!$err)
-	for ($i=$st;$i<$cnt && $i<$st+$SETTINGS['style_pagesize'] ;$i++)
+	for ($i=$st;$i<$cnt && $i<$st+$SET['style_pagesize'] ;$i++)
 	{
 		$d=$p->rtnrlt($i);
 ?>

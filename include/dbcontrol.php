@@ -4,7 +4,7 @@ class DBControl
 	public function deletetable()
 	{
 		$p=new DataAccess();
-		$sql="drop table if exists settings";
+		$sql="drop table if exists SET";
 		$p->dosql($sql);
 		$sql="drop table if exists userinfo";
 		$p->dosql($sql);
@@ -34,7 +34,7 @@ class DBControl
 	{
 		chdir("../../include/sql");
 		$p=new DataAccess();
-		$fp=fopen("c_settings.sql","r");
+		$fp=fopen("c_SET.sql","r");
 		$sql=rfile($fp);
 		fclose($fp);
 		$p->dosql($sql);

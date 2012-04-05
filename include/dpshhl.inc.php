@@ -1,8 +1,8 @@
 <?php
-$commonjsfull=$SETTINGS['base']."include/common.js.php";
-$commonjs=pathconvert($SETTINGS['cur'],$commonjsfull);
-$SHfull=$SETTINGS['base']."include/syntaxhighlighter/";
-$SH=pathconvert($SETTINGS['cur'],$SHfull);
+$commonjsfull=$SET['base']."include/common.js.php";
+$commonjs=pathconvert($SET['cur'],$commonjsfull);
+$SHfull=$SET['base']."include/syntaxhighlighter/";
+$SH=pathconvert($SET['cur'],$SHfull);
 ?>
 <script type="text/javascript" src="<?=$SH?>scripts/shCore.js"></script>
 <script type="text/javascript" src="<?=$SH?>scripts/shBrushDelphi.js"></script>

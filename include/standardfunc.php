@@ -4,31 +4,23 @@ function encode($str) {
     return md5(sha1($str)."hasyzxcmykrgb123");
 }
 
-
 function rfile($fp) {
     $out="";
     if (is_resource($fp)) {
-        while (!feof($fp)) 
+        while (!feof($fp))
             $out.= fgets($fp, 1024000);
     }
     return $out;
 }
 
-
-function deldir($dir)
-{
+function deldir($dir) {
     $dh=opendir($dir);
-    while ($file=readdir($dh)) 
-    {
-        if($file!="." && $file!="..") 
-        {
+    while ($file=readdir($dh)) {
+        if($file!="." && $file!="..") {
             $fullpath=$dir."/".$file;
-            if(!is_dir($fullpath)) 
-            {
+            if(!is_dir($fullpath)) {
                 unlink($fullpath);
-            } 
-            else 
-            {
+            } else {
                 deldir($fullpath);
             }
         }
@@ -38,60 +30,54 @@ function deldir($dir)
     rmdir($dir);
 }
 
-function sp2n($s)
-{
+function sp2n($s) {
     $o="";
     $len=strlen($s);
-    for ($i=0;$i<$len;$i++)
-    {
+    for ($i=0; $i<$len; $i++) {
         if ($s[$i]==" ")
             $o.="&nbsp;";
+        else if ($s[$i]=="    ")
+            $o.="&nbsp;&nbsp;&nbsp;&nbsp;";
         else
-            if ($s[$i]=="	")
-                $o.="&nbsp;&nbsp;&nbsp;&nbsp;";
-            else
-                $o.=$s[$i];
+            $o.=$s[$i];
     }
     return $o;
 }
 
-function echotablearray($r)
-{
+function echotablearray($r) {
     echo "<table border='1'>\n";
-    foreach($r as $k=>$v)
-    {
-        if (is_array($v))
-        {
-            if  (count($v))
-            {
+    foreach($r as $k=>$v) {
+        if (is_array($v)) {
+            if  (count($v)) {
                 echo "<tr>\n<td>$k</td>\n<td>";
                 echotablearray($v);
                 echo "</td>\n</tr>\n";
-            }
-            else
+            } else
                 echo "<tr>\n<td>$k</td>\n<td>Null</td>\n</tr>\n";
-        }
-        else
+        } else
             echo "<tr>\n<td>$k</td>\n<td>$v</td>\n</tr>\n";
     }
     echo "</table>\n";
 }
 
-function getfilesize($bytes) 
-{
+function getfilesize($bytes) {
     if ($bytes >= pow(2,40)) {
         $return = round($bytes / pow(1024,4), 2);
         $suffix = "TB";
-    } elseif ($bytes >= pow(2,30)) {
+    }
+    elseif ($bytes >= pow(2,30)) {
         $return = round($bytes / pow(1024,3), 2);
         $suffix = "GB";
-    } elseif ($bytes >= pow(2,20)) {
+    }
+    elseif ($bytes >= pow(2,20)) {
         $return = round($bytes / pow(1024,2), 2);
         $suffix = "MB";
-    } elseif ($bytes >= pow(2,10)) {
+    }
+    elseif ($bytes >= pow(2,10)) {
         $return = round($bytes / pow(1024,1), 2);
         $suffix = "KB";
-    } else {
+    }
+    else {
         $return = $bytes;
         $suffix = "B";
     }
@@ -99,18 +85,15 @@ function getfilesize($bytes)
     return $return;
 }
 
-function gettime()
-{
-    list($usec, $sec) = explode(" ",microtime()); 
+function gettime() {
+    list($usec, $sec) = explode(" ",microtime());
     return $sec.substr($usec,1);
 }
 
-function array_encode($arr)
-{
+function array_encode($arr) {
     $sa=array();
     $i=0;
-    foreach($arr as $k=>$v)
-    {
+    foreach($arr as $k=>$v) {
         $sa[$i]=base64_encode($k);
         $sa[$i+1]=base64_encode($v);
         $i+=2;
@@ -119,21 +102,16 @@ function array_encode($arr)
     return base64_encode($s);
 }
 
-function array_decode($s)
-{
+function array_decode($s) {
     $arr=array();
     $s=base64_decode($s);
     $sa=explode("?",$s);
     $i=0;
     $t="";
-    foreach($sa as $k=>$v)
-    {
-        if ($i==0)
-        {
+    foreach($sa as $k=>$v) {
+        if ($i==0) {
             $t=base64_decode($v);
-        }
-        else
-        {
+        } else {
             $arr[$t]=base64_decode($v);
         }
         $i=!$i;
@@ -141,91 +119,87 @@ function array_decode($s)
     return $arr;
 }
 
-function pathconvert($cur,$absp)//当前文件，目标路径
-{
+function pathconvert($cur,$absp) { //当前文件，目标路径
     $cur = str_replace("\\","/",$cur);
     $absp = str_replace("\\","/",$absp);
     $sabsp=explode("/",$absp);
     $scur=explode("/",$cur);
     $la=count($sabsp)-1;
-    $lc=count($scur)-1;
+    $lb=count($scur)-1;
     $l=max($la,$lb);
 
-    for ($i=0;$i<=$l;$i++)
-    {
+    for ($i=0; $i<=$l; $i++) {
         if ($sabsp[$i]!=$scur[$i])
             break;
     }
     $k=$i-1;
     $path="";
-    for ($i=1;$i<=($lc-$k-1);$i++)
+    for ($i=1; $i<=($lb-$k-1); $i++)
         $path.="../";
-    for ($i=$k+1;$i<=($la-1);$i++)
+    for ($i=$k+1; $i<=($la-1); $i++)
         $path.=$sabsp[$i]."/";
     $path.=$sabsp[$la];
     return $path;
 }
 
-function output_text($S)
-{
-    global $Query_Times,$SETTINGS,$cfg,$time_Ls;
-    $S = str_replace("%global_sitename%",$SETTINGS['global_sitename'], $S);
-    $S = str_replace("%style_profile%",$SETTINGS['style_profile'], $S);
-    $S = str_replace("%global_adminname%",$SETTINGS['global_adminname'], $S);
-    $S = str_replace("%global_adminaddress%",$SETTINGS['global_adminaddress'], $S);
-    $S = str_replace("%constructiontime%",date("Y-m-d",$SETTINGS['global_constructiontime']), $S);
+function 路径($str) {
+    global $SET;
+    $str1 = $SET['base'].$str;
+    return pathconvert($SET['cur'],$str1);
+}
+
+function 输出文本($S) {
+    global $Query_Times,$SET,$cfg,$time_Ls;
+    $S = str_replace("%global_sitename%",$SET['global_sitename'], $S);
+    $S = str_replace("%style_profile%",$SET['style_profile'], $S);
+    $S = str_replace("%global_adminname%",$SET['global_adminname'], $S);
+    $S = str_replace("%global_adminaddress%",$SET['global_adminaddress'], $S);
+    $S = str_replace("%constructiontime%",date("Y-m-d",$SET['global_constructiontime']), $S);
     $S = str_replace("%processtime%",round(gettime()-$time_Ls,4), $S);
     $S = str_replace("%querytimes%",$Query_Times, $S);
     return $S;
 }
 
-function langstrtonum($str)
-{
-    switch ($str)
-    {
-        case 'pas':
-            return 0;
-        case 'c':
-            return 1;
-        case 'cpp':
-            return 2;
+function langstrtonum($str) {
+    switch ($str) {
+    case 'pas':
+        return 0;
+    case 'c':
+        return 1;
+    case 'cpp':
+        return 2;
     }
 }
 
-function langnumtostr($num)
-{
-    switch ($num)
-    {
-        case 0:
-            return 'pas';
-        case 1:
-            return 'c';
-        case 2:
-            return 'cpp';
+function langnumtostr($num) {
+    switch ($num) {
+    case 0:
+        return 'pas';
+    case 1:
+        return 'c';
+    case 2:
+        return 'cpp';
     }
 }
 
-function getextend($file_name)
-{
+function getextend($file_name) {
     $extend = pathinfo($file_name);
     $extend = strtolower($extend["extension"]);
     return $extend;
 }
 
-function difficulty($K)
-{
+function 难度($K) {
     $V=floor($K / 2);
     $K%=2;
     $str="";
-    for($i=1;$i<=$V;$i++)
+    for($i=1; $i<=$V; $i++)
         $str.="★";
-    for($i=1;$i<=$K;$i++)
+    for($i=1; $i<=$K; $i++)
         $str.="☆";
     return $str;
 }
 
-
-function judgeresult($str) {
+function 评测结果($str) {
     $res = "";
     for($i=0; $i<strlen($str); $i++)
         if($str[$i] == 'A') $res .= "<span style='color:#0000FF;'>A</span>";
@@ -238,9 +212,9 @@ function judgeresult($str) {
         else if($str[$i] == 'D') $res .= "<span style='color:#fff;background-color:#000'>D</span>";
         else if($str[$i] == 'N') $res .= "<span style='color:#FFFFFF;'>N</span>";
         else if($str[$i] == 'P') $res .= "<span style='color:#B8860B;'>P</span>";
-    echo $res;
+    echo "<pre style='margin:0;'>".$res."</pre>";
 }
-function judgetext($str) {
+function 评测信息($str) {
     $res = "";
     for($i=0; $i<strlen($str); $i++)
         if($str[$i] == 'A') $res .= "<span style='color:#0000FF;'>答案正确</span>";
@@ -256,15 +230,28 @@ function judgetext($str) {
     echo $res;
 }
 
-function page_slice($total,$page,$url='',$page_size='',$max_length='') {
-    global $SETTINGS;
+function 是否通过($pid, $q) {
+    if ($_SESSION['ID']) {
+        $sql="SELECT * FROM submit WHERE pid ={$pid} AND uid ={$_SESSION['ID']} order by score desc limit 1";
+        $ac=$q->dosql($sql);
+        if ($ac) {
+            $e=$q->rtnrlt(0);
+            echo "<a href='".路径("problem/submitdetail.php?id=").$e['sid']."' target='_blank'><span class='icon-".
+            ($e['accepted']?"ok":"remove")."'></span></a>";
+        } else echo "<span class='icon-minus'></span>";
+    }
+}
+
+function 分页($total,$page,$url='',$page_size='',$max_length='') {
+    if($total == 0) return;
+    global $SET;
     //$total :总数
     //$page  :传递过来的当前页的值,第八页$page = 8;
     //$page_size :每页显示的数据的数目
     //$url   :传递的地址,默认为当前页面
     //$max_length:分页代码时候,中间的分页数的一半
     $page = ($page < 1) ? 1 : $page ;
-    $page_size = $page_size ? $page_size : $SETTINGS['style_pagesize'];
+    $page_size = $page_size ? $page_size : $SET['style_pagesize'];
     $url = $url ? $url : $_SERVER['PHP_SELF'] . '?';
     $max_length = $max_length ? $max_length : 5 ;
     $start = $page ? ($page - 1) * $page_size : 0;
@@ -272,12 +259,12 @@ function page_slice($total,$page,$url='',$page_size='',$max_length='') {
 
     $page_table = '';
     //aways in the pages
-    $page_table = '<center><table id="page_slice"><tr>';
+    $page_table = '<div class="page_slice"><table align="center"><tr>';
     //显示第一页
     if($page == 1 )
         $page_table .= '<td class="current_page">1</td>';
     else
-        $page_table .= '<td><a href="'.$url.'page=1">[首页]</a></td>';
+        $page_table .= '<td><a href="'.$url.'page=1">[首]</a></td>';
 
     //循环中间页码
     if($total_page < $max_length*2) {
@@ -304,9 +291,9 @@ function page_slice($total,$page,$url='',$page_size='',$max_length='') {
         if($page == $i)
             $page_table .= '<td class="current_page">'.$i.'</td>';
         else if($page == $i + 1)
-            $page_table .= '<td><a href="'.$url.'page='.$i.'">[上一页]</a></td>';
+            $page_table .= '<td><a href="'.$url.'page='.$i.'">[上]</a></td>';
         else if($page == $i - 1)
-            $page_table .= '<td><a href="'.$url.'page='.$i.'">[下一页]</a></td>';
+            $page_table .= '<td><a href="'.$url.'page='.$i.'">[下]</a></td>';
         else
             $page_table .= '<td><a href="'.$url.'page='.$i.'">['.$i.']</a></td>';
     }
@@ -318,11 +305,34 @@ function page_slice($total,$page,$url='',$page_size='',$max_length='') {
         if($page == $total_page)
             $page_table .= '<td class="current_page">'.$total_page.'</td>';
         else
-            $page_table .= '<td><a href="'.$url.'page='.$total_page.'">[末页]</a></td>';
+            $page_table .= '<td><a href="'.$url.'page='.$total_page.'">[末]</a></td>';
     }
-    $page_table .= "</tr></table></center>";
+    $page_table .= "</tr></table></div>";
     //输出分页代码
     echo $page_table;
+}
+
+function 异常($msg = "错误", $id = "") {
+    global $SET;
+    if($id == "") $id = base64_encode("/".$SET['global_root']);
+    else $id = base64_decode($id);
+    echo '<div id="dialog"><div id="error_title">错误</div>';
+    echo '<div id="dialog_text">'.$msg.'</div>';
+    echo '<div id="dialog_button" onclick="url.go('.$id.');">确定</div></div>';
+    echo '<meta http-equiv="refresh" content="'.$SET['style_jumptime'].'; URL='.$id.'" >';
+    exit;
+}
+
+function 提示($msg = "提示", $id = "") {
+    global $SET;
+    if($id == "") $id = base64_encode("/".$SET['global_root']);
+    else $id = base64_decode($id);
+    echo $id;
+    echo '<div id="dialog"><div id="dialog_title">提示</div>';
+    echo '<div id="dialog_text">'.$msg.'</div>';
+    echo '<div id="dialog_button" onclick="url.go('.$id.');">确定</div></div>';
+    //echo '<meta http-equiv="refresh" content="'.$SET['style_jumptime'].'; URL='.$id.'" >';
+    exit;
 }
 
 ?>

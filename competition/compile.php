@@ -15,7 +15,7 @@ else
 {
 	exit;
 }
-$cdir="{$SETTINGS['dir_competition']}/{$d[ctid]}";
+$cdir="{$SET['dir_competition']}/{$d[ctid]}";
 
 $info=array();
 $info['pid']=$d['pid'];

@@ -1,6 +1,5 @@
 <?php
 require_once("../include/stdhead.php");
-gethead(0,"","");
 $p = new DataAccess();
 $sql = "select max(pid) as maxpid from problem";
 $cnt = $p->dosql($sql);

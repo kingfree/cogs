@@ -2,73 +2,74 @@
 require_once("../include/stdhead.php");
 gethead(1,"admin","后台管理");
 ?>
-<center>
-<h3>后台管理界面</h3>
-
-<table border="1" bordercolor=#000000>
+<table id="admin_index" align=center>
+<tr><th colspan=3>后台管理</th></tr>
 <tr>
-<th>题目管理</th>
-<td></td>
-<td><span style="font-size:20pt;" class="admin">
+<th width=20%>题目</th>
+<td width=40%><span>
+<a href="../problem/problist.php">题目列表</a>
+</span></td>
+<td width=40%><span class="admin">
 <a href="problem/editprob.php?action=add">添加新题目</a>
 </span></td>
 </tr>
 <tr>
-<th>比赛管理</th>
-<td><span style="font-size:20pt;">
-<a href="settings.php?settings=comp">比赛管理</a>
+<th>比赛</th>
+<td><span>
+<a href="../competition/index.php">比赛场次列表</a>
+</span>
+<span class="admin">
+<a href="settings.php?settings=comp">比赛列表</a>
 </span></td>
-<td><span style="font-size:20pt;" class="admin">
+<td><span class="admin">
 <a href="comp/editcompbase.php?action=add">添加新比赛</a>
 </span></td>
 </tr>
 <tr>
-<th>记录管理</th>
-<td><span style="font-size:20pt;"><a href="settings.php?settings=rank">排名管理</a></span></td>
-<td></td>
-</tr>
-<tr>
-<th>分类管理</th>
-<td></td>
-<td><span style="font-size:20pt;" class="admin">
+<th>分类</th>
+<td><span>
+<a href="../information/catelist.php">分类列表</a>
+</span></td>
+<td><span class="admin">
 <a href="category/editcate.php?action=add">添加新分类</a>
 </span></td>
 </tr>
 <tr>
-<th>分组管理</th>
-<td></td>
-<td><span style="font-size:20pt;" class="admin">
+<th>分组</th>
+<td><span>
+<a href="../information/grouplist.php">分组列表</a>
+</span></td>
+<td><span class="admin">
 <a href="group/editgroup.php?action=add">添加新分组</a>
 </span></td>
 </tr>
 <tr>
-<th>评论管理</th>
-<td><span style="font-size:20pt;"><a href="settings.php?settings=comments"><?php echo $STR[admin][comments] ?></a></span></td>
+<th>评论</th>
+<td><span><a href="settings.php?settings=comments"><?php echo $STR[admin][comments] ?></a></span></td>
 <td></td>
 </tr>
 <tr>
-<th>评测机设置</th>
-<td><span style="font-size:20pt;">
-<a href="../information/grader.php">终端查看</a>
+<th>评测</th>
+<td><span>
+<a href="../information/grader.php">评测机列表</a>
 </span></td>
-<td><a style="font-size:20pt;" class="admin" href="../admin/grader/editgrader.php?action=add">添加新评测机</a></td>
+<td><span class="admin"><a href="../admin/grader/editgrader.php?action=add">添加新评测机</a></span></td>
 </tr>
 <tr>
-<th>系统设置</th>
-<td><span style="font-size:20pt;" class="LinkButton"><a href="settings.php?settings=settings">参数设置</a></span></td>
-<td></td>
+<th>系统</th>
+<td><span class="admin"><a href="settings.php?settings=settings">参数设置</a></span></td>
+<td><span class="admin"><a href="settings.php?settings=rank">排名管理</a></span></td>
 </tr>
 <tr>
-<th rowspan=2>高级管理</th>
-<td><span style="font-size:20pt;"><a href="settings.php?settings=dbctrl"><?php echo $STR[admin][data] ?></a></span></td>
-<td><span style="font-size:20pt;"><a href="settings.php?settings=serverinfo"><?php echo $STR[admin]['serverinfo'] ?></a></span></td>
+<th rowspan=2>高级</th>
+<td><span><a href="settings.php?settings=dbctrl">数据库管理</a></span></td>
+<td><span><a href="settings.php?settings=terminal">PHP终端访问</a></span></td>
 </tr>
 <tr>
-<td><span style="font-size:20pt;"><a href="settings.php?settings=phpinfo"><?php echo $STR[admin]['phpinfo'] ?></a></span></td>
-<td><span style="font-size:20pt;"><a href="settings.php?settings=terminal"><?php echo $STR[admin]['terminal'] ?></a></span></td>
+<td><span><a href="settings.php?settings=serverinfo">服务器信息</a></span></td>
+<td><span><a href="settings.php?settings=phpinfo">PHP信息</a></span></td>
 </tr>
 </table>
-</center>
 <?php
 include_once("../include/stdtail.php");
 ?>

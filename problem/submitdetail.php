@@ -11,26 +11,24 @@ $sql="select submit.*,userinfo.nickname,userinfo.realname,submit.subtime,problem
 $cnt=$p->dosql($sql);
 if($cnt) {
     $d=$p->rtnrlt(0);
-    $fp=fopen("{$SETTINGS['dir_source']}{$d['uid']}/{$d['srcname']}","r");
+    $fp=fopen("{$SET['dir_source']}{$d['uid']}/{$d['srcname']}","r");
     if (is_resource($fp))
         $code=rfile($fp);
     fclose($fp);
     if(get_magic_quotes_gpc())
         $code=stripslashes($code);
     $code=mb_convert_encoding($code, "utf-8", "gbk");
-} else {
-    echo '<script>document.location="../error.php?id=16"</script>';
-}
+} else 异常("提交记录不存在");
 ?>
-<table width="100%" border="1" bordercolor=#000000 cellspacing=0 cellpadding=4>
+<table id="submitdetail">
   <tr>
-    <th width="60px" scope="col">SID</th>
-    <td width=100px scope="col"><?php echo $d['sid']; ?></td>
+    <th width="60px">SID</th>
+    <td width="100px"><?php echo $d['sid']; ?></td>
     <th>代码语言：<?php echo $STR['lang'][$d['lang']] ?></th>
   </tr>
   <tr>
-    <th scope="col">题目</th>
-    <td scope="col"><a href="pdetail.php?pid=<?php echo $d['pid']; ?>" target="_blank"><?php echo $d['probname']; ?></a></td>
+    <th>题目名称</th>
+    <td><a href="pdetail.php?pid=<?php echo $d['pid']; ?>" target="_blank"><?php echo $d['probname']; ?></a></td>
     <td rowspan=9><?php
 if ($_SESSION['admin']>0 || $d['uid']==$_SESSION['ID'])
     $forcetocode=1;
@@ -54,37 +52,37 @@ if ($forcetocode) {
 <?php } ?>
 </td>  </tr>
   <tr>
-    <th scope="col">用户</th>
-    <td scope="col"><a href="../user/detail.php?uid=<?php echo $d['uid']; ?>" target="_blank"><?php echo $d['nickname']; ?></a></td>
+    <th>用户昵称</th>
+    <td><a href="../user/detail.php?uid=<?php echo $d['uid']; ?>" target="_blank"><?php echo $d['nickname']; ?></a></td>
 
   </tr>
   <tr>
-    <th scope="col">得分</th>
-    <td scope="col"><?php echo $d['score'] ?></td>
+    <th>最终得分</th>
+    <td><?php echo $d['score'] ?></td>
   </tr>
   <tr>
-    <th scope="col">测试点</th>
-    <td scope="col"><pre style='margin:0;'><?php judgeresult($d['result']) ?></pre></td>
+    <th>评测结果</th>
+    <td><pre style='margin:0;'><?php 评测结果($d['result']) ?></pre></td>
   </tr>
   <tr>
-    <th scope="col">状态</th>
-    <td scope="col"><?php echo $d['accepted']?"通过":"未通过"; ?></td>
+    <th>是否通过</th>
+    <td><?php echo $d['accepted']?"通过":"未通过"; ?></td>
   </tr>
   <tr>
-    <th scope="col">耗时</th>
-    <td scope="col"><?php printf("%.3f",$d['runtime']/1000.0) ?> s </td>
+    <th>运行时间</th>
+    <td><?php printf("%.3f",$d['runtime']/1000.0) ?> s </td>
   </tr>
   <tr>
-    <th scope="col">内存使用</th>
-    <td scope="col"><?php printf("%.2f",$d['memory']/1024) ?> MiB </td>
+    <th>内存使用</th>
+    <td><?php printf("%.2f",$d['memory']/1024) ?> MiB </td>
   </tr>
   <tr>
-    <th scope="col">提交时间</th>
-    <td scope="col"><?php echo date('Y-m-d H:i:s',$d[subtime]); ?></td>
+    <th>提交时间</th>
+    <td><?php echo date('Y-m-d H:i:s',$d[subtime]); ?></td>
   </tr>
-  <tr valign=top>
-    <th scope="col">重新评测</th>
-    <td scope="col"><form id="act" name="act" method="post" action="../compile/">
+  <tr>
+    <th>重新评测</th>
+    <td><form id="act" name="act" method="post" action="../compile/">
         <input name="pid" type="hidden" id="pid" value="<?=$d['pid']; ?>" />
         <input name="sid" type="hidden" id="sid" value="<?=$d['sid']; ?>" />
         <input type="hidden" name="rejudge" value="1">

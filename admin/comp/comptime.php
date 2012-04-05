@@ -70,8 +70,8 @@ if ($cnt)
 ?>
 <form id="form1" name="form1" method="post" action="../../competition/judge.php">
 <p>
-  <input name="do" type="submit" id="do" value="评测选定" class="Button" />
-  <input name="do" type="submit" id="do" value="评测全部" class="Button" />
+  <input name="do" type="submit" id="do" value="评测选定" />
+  <input name="do" type="submit" id="do" value="评测全部" />
   <input name="ctid" type="hidden" id="ctid" value="<?php echo $_GET['ctid'] ?>" />
 </p>
 <table width="100%" border="1">
@@ -121,7 +121,7 @@ if ($cnt)
 		<td><a href="../../competition/code.php?csid=<?php echo $e[csid] ?>" target="_blank"><?php echo $STR[lang][$e[lang]] ?></a></td>
 		<td><?php echo date("Y年m月d日 H:i:s",$e[subtime]) ?></td>
 		<td><?php echo $e[score] ?></td>
-		<td><?php echo $e[result] ?></td>
+		<td><?php echo 评测结果($e[result]) ?></td>
 	  </tr>
 	<?php
 		}

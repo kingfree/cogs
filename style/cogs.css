@@ -3,21 +3,31 @@
 */
 /* 通用设置 */
 body {
-    background-color: #CCCCFF;
+    color: Black;
+    background-color: Lavender;
     font-size: 14px;
     margin: 0;
     padding: 0;
 }
 table {
-    border-collapse : collapse;
+    border: 0;
     width: 100%;
+    color: Black;
+    background-color: WhiteSmoke;
 }
 th {
     border: 0;
     color: Black;
-    background-color: rgba(255, 255, 255, 0.5);
+    background-color: MintCream;
 }
-td, tr {
+tr {
+    border: 0;
+    color: Black;
+    vertical-align: top;
+}
+td {
+    border: 0;
+    color: Black;
     vertical-align: top;
 }
 a:link {
@@ -36,20 +46,19 @@ a:hover {
 a:active {
     text-decoration: none;
     background-color: MintCream;
-}input {
-    border : 1px solid #000000;
-    background : #ffff99;
+}
+input {
+    border: 0;
+    background-color: White;
 }
 input[type="submit"] {
-    padding : 1px 5px 1px 5px;
-    border : 0;
-    background-color : #6efe78;
+    border: medium double White;
+    padding: 2px 8px 2px 8px;
+    background-color: LightBlue;
 }
 textarea {
-    border : 2px solid #000000;
-    background : #66ffcc;
-    font-size : 12px;
-    padding : 5px 5px 5px 5px;
+    border: 0;
+    background-color: White;
 }
 /* 类选择器 */
 .ok {
@@ -68,11 +77,13 @@ textarea {
     color: Indigo;
 }
 .admin {
-    background-color : #99ffcc;
+    color: MintCream;
+    background-color: MediumAquaMarine;
 }
 .admin_big {
     font-size: 200%;
-    background-color : #99ffcc;
+    color: MintCream;
+    background-color: MediumAquaMarine;
 }
 .page_slice {
     position: relative;
@@ -142,22 +153,29 @@ textarea {
 }
 /* 标题尾部 */
 #alltext {
+    margin: 0;
+    padding: 0;
+    background-color: GhostWhite;
 }
 #globalbar {
     width: 100%;
+    color: Lavender;
+    background-color: AliceBlue;
 }
 #global_head {
-font-size : 40px;
-font-family : Times New Roman;
-color : #000099;
-text-align : center;
+    font-size: 40px;
+    text-align: center;
+    color: DarkBlue;
+    background-color: AliceBlue;
 }
 #nagbar {
     width: 100%;
     text-align: center;
+    background-color: AliceBlue;
 }
 #userinfo {
     width: 100%;
+    background-color: AliceBlue;
 }
 #body {
     margin: 0;
@@ -167,17 +185,19 @@ text-align : center;
     background-color: LavenderBlush;
 }
 #publictail {
-text-align : right;
-color : #999999;
-font-size : 12px;
+    margin: 0;
+    background-color: LavenderBlush;
 }
 #global_tail {
-background-color : #c0c0ff;
-padding : 2px;
+    margin: 0;
+    padding: 0;
+    font-size: 10px;
+    text-align: right;
+    color: LightSlateGray;
+    background-color: AliceBlue;
 }
 /* 首页 */
 #index {
-background-color : #cfffff;
 }
 #prob_short {
     margin: 0;
@@ -215,12 +235,14 @@ background-color : #cfffff;
 }
 #probinfo {
     margin: 2px 0;
+    background-color: WhiteSmoke;
 }
 #singlerank {
+    background-color: OldLace;
 }
 #probdetail {
-background-color : #cfffff;
-padding : 10px 10px 10px 10px;
+    color: Black;
+    background-color: White;
 }
 /* 分类 */
 #cate_tags {
@@ -303,35 +325,30 @@ padding : 10px 10px 10px 10px;
 /* 关于 */
 /* 评论 */
 .Comments {
-background-color : #ffffff;
-border : solid #000000;
-border-width : 1px 1px 1px;
+    border: 0;
+    background-color: White;
 }
 .CommentsK {
-background-color : #ffccff;
-border : solid #000000;
-border-width : 1px 1px 1px;
-font-size : 14px;
-padding : 10px 10px 10px 10px;
+    height: 40px;
+    background-color: LightYellow;
+    border: 0;
+    padding: 10px 10px 10px 10px;
 }
 .CommentsCode {
-background-color : #ffffcc;
-border : solid #000000;
-border-width : 1px 1px 1px;
-padding : 10px 10px 10px 10px;
+    border: 0;
+    text-align: center;
+    width: 250px;
+    background-color: Khaki;
 }
 .CommentsTime {
-background-color : #ffffcc;
-border : solid #000000;
-border-width : 1px 1px 1px;
-padding : 10px 10px 10px 10px;
+    border: 0;
+    text-align: right;
+    background-color: LightGoldenRodYellow;
 }
 .CommentsU {
-background-color : #cccfff;
-border : solid #000000;
-border-width : 1px 1px 1px;
-font-size : 14px;
-text-align : center;
+    width: 250px;
+    background-color: HoneyDew;
+    border: 0;
 }
 /* 登录 */
 #login {

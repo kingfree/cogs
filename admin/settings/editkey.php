@@ -29,7 +29,7 @@ $sname=$d['name'];
 <p><a href="editkey.php?sname=<?php echo $sname ?>&method=html">HTML视图</a>
 <a href="editkey.php?sname=<?php echo $sname ?>&method=text">文本视图</a></p>
 <form id="form1" name="form1" method="post" action="doeditkey.php?ssid=<?php echo $ssid ?>">
-<table width="100%" border="1"  bordercolor=#000000  cellspacing=0 cellpadding=4>
+<table>
   <tr>
     <th width="60px">参数</th>
     <td><b><?php echo $sname; ?></b></td>
@@ -41,11 +41,11 @@ $sname=$d['name'];
 if ($_GET['method']=='text')
 {
 ?>
-<textarea name="value" style="width:90%; height:500px;" class="TextArea"><?php echo $d['value'] ?></textarea>
+<textarea name="value" style="width:90%; height:200px;" class="TextArea"><?php echo $d['value'] ?></textarea>
 <?php
 }
 else if($_GET['method']=='html'){ ?>
-<textarea id="editor_id" name="value" style="width:90%; height:500px;"><?=$d['value']?></textarea>
+<textarea id="editor_id" name="value" style="width:90%; height:200px;"><?=$d['value']?></textarea>
 <? } ?>
 
 </td>

@@ -16,7 +16,7 @@
 		$sql="select comments.*,userinfo.nickname,problem.probname from comments,userinfo,problem where userinfo.uid=comments.uid and problem.pid=comments.pid and (comments.detail like '%{$_GET[key]}%' or comments.cid ='{$_GET[key]}' or comments.pid ='{$_GET[key]}' or comments.uid ='{$_GET[key]}') order by stime desc";
 	}
 	$cnt=$p->dosql($sql);
-	$totalpage=(int)(($cnt-1)/$SETTINGS['style_pagesize'])+1;
+	$totalpage=(int)(($cnt-1)/$SET['style_pagesize'])+1;
 	if (!isset($_GET[page])) 
 	{
 		$_GET[page]=1;
@@ -30,10 +30,10 @@
 			$err=1;
 		}
 		else
-		$st=(($_GET[page]-1)*$SETTINGS['style_pagesize']);
+		$st=(($_GET[page]-1)*$SET['style_pagesize']);
 	}
 	if (!$err)
-	for ($i=$st;$i<$cnt && $i<$st+$SETTINGS['style_pagesize'] ;$i++)
+	for ($i=$st;$i<$cnt && $i<$st+$SET['style_pagesize'] ;$i++)
 	{
 		$d=$p->rtnrlt($i);
 ?>
@@ -49,7 +49,7 @@
 	}
 ?>
 </table>
-<p>当前第<?php echo $_GET[page]?>页 共<?php echo $cnt?>条记录 共<?php echo $totalpage?>页 每页最多显示<?php echo $SETTINGS['style_pagesize'] ?>条记录</p>
+<p>当前第<?php echo $_GET[page]?>页 共<?php echo $cnt?>条记录 共<?php echo $totalpage?>页 每页最多显示<?php echo $SET['style_pagesize'] ?>条记录</p>
 <form id="form1" name="form1" method="get" action="">
   <p>
     <?php 

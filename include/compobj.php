@@ -8,7 +8,7 @@ class Compiler
 
     public function __construct($info)
     {
-        global $SETTINGS;
+        global $SET;
         $this->compiledir=$info['compiledir'];
         $this->info=$info;
         $this->s_score=0;

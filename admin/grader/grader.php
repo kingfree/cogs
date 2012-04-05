@@ -16,7 +16,7 @@
 	$p=new DataAccess();
 	$sql="select * from grader";
 	$cnt=$p->dosql($sql);
-	$totalpage=(int)(($cnt-1)/$SETTINGS['style_pagesize'])+1;
+	$totalpage=(int)(($cnt-1)/$SET['style_pagesize'])+1;
 	if (!isset($_GET[page])) 
 	{
 		$_GET[page]=1;
@@ -30,10 +30,10 @@
 			$err=1;
 		}
 		else
-		$st=(($_GET[page]-1)*$SETTINGS['style_pagesize']);
+		$st=(($_GET[page]-1)*$SET['style_pagesize']);
 	}
 	if (!$err)
-	for ($i=$st;$i<$cnt && $i<$st+$SETTINGS['style_pagesize'] ;$i++)
+	for ($i=$st;$i<$cnt && $i<$st+$SET['style_pagesize'] ;$i++)
 	{
 		$d=$p->rtnrlt($i);
 		$s['action']="state";
@@ -64,7 +64,7 @@
 ?>
 </table>
 <p><a href="grader/editgrader.php?action=add">添加新评测机</a></p>
-<p>当前第<?php echo $_GET[page]?>页 共<?php echo $cnt?>条记录 共<?php echo $totalpage?>页 每页最多显示<?php echo $SETTINGS['style_pagesize'] ?>条记录</p>
+<p>当前第<?php echo $_GET[page]?>页 共<?php echo $cnt?>条记录 共<?php echo $totalpage?>页 每页最多显示<?php echo $SET['style_pagesize'] ?>条记录</p>
 <form id="form1" name="form1" method="get" action="">
   <p>
 

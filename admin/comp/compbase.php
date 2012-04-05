@@ -5,32 +5,26 @@ function MM_jumpMenu(targ,selObj,restore){ //v3.0
 }
 </script>
 
-<a href="comp/editcompbase.php?action=add" class="adminButton">添加新比赛</a>
+<a href="comp/editcompbase.php?action=add" class="admin_big">添加新比赛</a>
 <?php
 	$p=new DataAccess();
 	$q=new DataAccess();
 	$sql="select compbase.*,userinfo.nickname from compbase,userinfo where userinfo.uid=compbase.ouid order by compbase.cbid desc";
 	
-	$cnt=$p->dosql($sql);
-	$totalpage=(int)(($cnt-1)/$SETTINGS['style_pagesize'])+1;
-	if (!isset($_GET[page])) 
-	{
-		$_GET[page]=1;
-		$st=0;
-	}
-	else 
-	{
-		if ($_GET[page]<1 || $_GET[page]>$totalpage)
-		{
-			echo "页错误！";
-			$err=1;
-		}
-		else
-		$st=(($_GET[page]-1)*$SETTINGS['style_pagesize']);
-	}
+$cnt=$p->dosql($sql);
+$totalpage=(int)(($cnt-1)/$SET['style_pagesize'])+1;
+if(!$_GET['page']) {
+    $_GET['page']=1;
+    $st=0;
+} else {
+    if ($_GET[page]<1 || $_GET[page]>$totalpage)
+        异常("页面错误！");
+    else
+        $st=(($_GET[page]-1)*$SET['style_pagesize']);
+}
 ?>
 
-<? page_slice($cnt, $_GET['page'], '?settings=comp&'); ?>
+<? 分页($cnt, $_GET['page'], '?settings=comp&'); ?>
 <table width="100%" border="1"  bordercolor=#000000  cellspacing=0 cellpadding=4>
   <tr>
     <th width="11%" scope="col">CBID</th>
@@ -42,7 +36,7 @@ function MM_jumpMenu(targ,selObj,restore){ //v3.0
   </tr>
 <?
 	if (!$err)
-	for ($i=$st;$i<$cnt && $i<$st+$SETTINGS['style_pagesize'] ;$i++)
+	for ($i=$st;$i<$cnt && $i<$st+$SET['style_pagesize'] ;$i++)
 	{
 		$d=$p->rtnrlt($i);
 ?>

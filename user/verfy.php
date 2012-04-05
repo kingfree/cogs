@@ -12,7 +12,7 @@ if ($_GET['action']=='verfy')
 		$sql="update userinfo set admin='0' where uid={$_GET['uid']}";
 		$p->dosql($sql);
 	}
-	header("location: /{$SETTINGS['global_root']}");
+	header("location: /{$SET['global_root']}");
 }
 require_once("../include/stdhead.php");
 gethead(1,"verfy","用户验证");

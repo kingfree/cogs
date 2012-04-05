@@ -1,67 +1,39 @@
-<div id="bar" style="border:none">
 <?php
 $p=new DataAccess();
-global $STR,$LIB;
-$panel=$SETTINGS['base']."user/panel.php";
-$index=$SETTINGS['base']."index.php";
-$problist=$SETTINGS['base']."problem/problist.php";
-$cate=$SETTINGS['base']."information/catelist.php";
-$competition=$SETTINGS['base']."competition/index.php";
-$help=$SETTINGS['base']."information/help.php";
-$about=$SETTINGS['base']."information/about.php";
-$mail=$SETTINGS['base']."mail/index.php";
-$register=$SETTINGS['base']."user/register.php?accept=1";
-$login=$SETTINGS['base']."user/login.php";
-$logout=$SETTINGS['base']."user/dologout.php";
-$bbs=$SETTINGS['base']."bbs/index.php";
-$admin=$SETTINGS['base']."admin/index.php";
-$grader=$SETTINGS['base']."information/grader.php";
-$submitlist=$SETTINGS['base']."information/submitlist.php";
-$userlist=$SETTINGS['base']."information/userlist.php";
-$grouplist=$SETTINGS['base']."information/grouplist.php";
-$udetail=$SETTINGS['base']."user/detail.php?uid={$_SESSION['ID']}";
-$rank=$SETTINGS['base']."information/rank.php";
-$verfy=$SETTINGS['base']."user/verfy.php";
-$editbulletin=$SETTINGS['base']."admin/settings/editkey.php?sname=global_bulletin&method=text";
 ?>
-<table width=100% border="0" id="nag">
-<tr text-align="center">
-<td><a href="<?=pathconvert($SETTINGS['cur'],$index);?>"><span class="icon-home"></span>首页</a></td>
-<td><a href="<?=pathconvert($SETTINGS['cur'],$problist);?>"><span class="icon-list"></span>题目</a></td>
-<td><a href="<?=pathconvert($SETTINGS['cur'],$cate);?>"><span class="icon-th"></span>分类</a></td>
-<td><a href="<?=pathconvert($SETTINGS['cur'],$competition);?>"><span class="icon-list-alt"></span>比赛<?$now = time();
-$sql = "select ctid from comptime where starttime > $now and endtime > $now";
-$cnt1 = $p->dosql($sql);
-if($cnt1 > 0) echo "<span style='color: blue'>($cnt1)</span>";
-$sql = "select ctid from comptime where starttime < $now and endtime > $now";
-$cnt2 = $p->dosql($sql);
-if($cnt2 > 0) echo "<span style='color: red'>($cnt2)</span>";
+<table id="nagbar">
+<tr>
+<td><a href="<?=路径("index.php");?>"><span class="icon-home"></span>首页</a></td>
+<td><a href="<?=路径("problem/problist.php");?>"><span class="icon-list"></span>题目</a></td>
+<td><a href="<?=路径("information/catelist.php");?>"><span class="icon-th"></span>分类</a></td>
+<td><a href="<?=路径("competition/index.php");?>"><span class="icon-list-alt"></span>比赛<?
+$now = time();
+$cnt2 = $p->dosql("select ctid from comptime where starttime < $now and endtime > $now");
+if($cnt2 > 0) echo "<span class='doing'>($cnt2)</span>";
+$cnt1 = $p->dosql("select ctid from comptime where starttime > $now and endtime > $now");
+if($cnt1 > 0) echo "<span class='todo'>($cnt1)</span>";
 ?></a></td>
-<td><a href="<?=pathconvert($SETTINGS['cur'],$submitlist);?>"><span class="icon-film"></span>记录</a></td>
-<td><a href="<?=pathconvert($SETTINGS['cur'],$userlist);?>"><span class="icon-user"></span>用户</a></td>
-<td><a href="<?=pathconvert($SETTINGS['cur'],$grouplist);?>"><span class="icon-th-large"></span>分组</a></td>
+<td><a href="<?=路径("information/submitlist.php");?>"><span class="icon-film"></span>记录</a></td>
+<td><a href="<?=路径("information/userlist.php");?>"><span class="icon-user"></span>用户</a></td>
+<td><a href="<?=路径("information/grouplist.php");?>"><span class="icon-th-large"></span>分组</a></td>
 <? if($_SESSION['ID']) {?>
-<td><a href="<?=pathconvert($SETTINGS['cur'],$panel); ?>"><span class="icon-picture"></span>设置</a></td>
-<td><a href="<?=pathconvert($SETTINGS['cur'],$mail); ?>"><span class="icon-envelope"></span>信件<?
-if($_SESSION['ID']) {
-    $uid = $_SESSION['ID'];
-    $sql = "select mid from mail where readed = 0 and toid = $uid";
-    $cnt = $p->dosql($sql);
-    if($cnt > 0)
-        echo "<span style='color: #FF0000;'>($cnt)</span>";
-}
+<td><a href="<?=路径("mail/index.php"); ?>"><span class="icon-envelope"></span>信件<?
+$cnt = $p->dosql("select mid from mail where readed = 0 and toid = {$_SESSION['ID']}");
+if($cnt > 0) echo "<span class='doing'>($cnt)</span>";
+$cnt = $p->dosql("select mid from mail where readed = 0 and fromid = {$_SESSION['ID']}");
+if($cnt > 0) echo "<span class='todo'>($cnt)</span>";
 ?></a></td>
-<td><a href="<?=pathconvert($SETTINGS['cur'],$logout);?>"><span class="icon-off"></span>退出</a></td>
+<td><a href="<?=路径("user/panel.php"); ?>"><span class="icon-picture"></span>设置</a></td>
+<td><a href="<?=路径("user/dologout.php")."?from=".$SET['URI'];?>"><span class="icon-off"></span>退出</a></td>
 <? } else { ?>
-<th><a href="<?=pathconvert($SETTINGS['cur'],$login);?>"><span class="icon-star"></span>登录</a></th>
-<th><a href="<?=pathconvert($SETTINGS['cur'],$register);?>"><span class="icon-shopping-cart"></span>注册</a></th>
+<th><a href='javascript:$("#login").show()'><span class="icon-star"></span>登录</a></th>
+<th><a href="<?=路径("user/register.php?accept=1");?>"><span class="icon-shopping-cart"></span>注册</a></th>
 <? } ?>
 <?php if ($_SESSION['admin']>0)	{ ?>
-<td><a style="color: darkred;" href="<?=pathconvert($SETTINGS['cur'],$admin)?>"><span class="icon-asterisk"></span>后台</a></td>
+<td><a class="admin" href="<?=路径("admin/index.php");?>"><span class="icon-asterisk"></span>后台</a></td>
 <? } ?>
-<td><a href="<?=pathconvert($SETTINGS['cur'],$help);?>"><span class="icon-question-sign"></span>帮助</a></td>
-<td><a href="<?=pathconvert($SETTINGS['cur'],$about);?>"><span class="icon-info-sign"></span>关于</a></td>
-<td style="text-align:right;font-size:10pt;"><a href="#" onclick="document.getElementById('trad').innerHTML='正';document.getElementById('alltext').innerHTML = TradSimp.getTrad(document.getElementById('alltext').innerHTML);" id="trad">繁</a>/<a href="#" onclick="document.getElementById('trad').innerHTML='繁';document.getElementById('alltext').innerHTML = TradSimp.getSimp(document.getElementById('alltext').innerHTML);" id="simp">简</a></td>
+<td><a href="<?=路径("information/help.php");?>"><span class="icon-question-sign"></span>帮助</a></td>
+<td><a href="<?=路径("information/about.php");?>"><span class="icon-info-sign"></span>关于</a></td>
+<td style="text-align:right;"><a href="#" onclick="document.getElementById('trad').innerHTML='正';document.getElementById('alltext').innerHTML = TradSimp.getTrad(document.getElementById('alltext').innerHTML);" id="trad">繁</a>/<a href="#" onclick="document.getElementById('trad').innerHTML='繁';document.getElementById('alltext').innerHTML = TradSimp.getSimp(document.getElementById('alltext').innerHTML);" id="simp">简</a></td>
 </tr>
 </table>
-</div>

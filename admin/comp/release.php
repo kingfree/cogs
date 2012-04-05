@@ -36,7 +36,7 @@ foreach($pbs as $k=>$v)
 	$probname[$cnt_prob]=$d['probname'];
 }
 $total=100*$cnt_prob;
-$subject="你在{$SETTINGS['global_sitename']}比赛{$cname}的成绩";
+$subject="你在{$SET['global_sitename']}比赛{$cname}的成绩";
 $compinfo="<p>这是{$subject}。</p>\n<p>- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -</p>\n<p>该比赛开始于{$starttime},结束于{$endtime}。</p>\n<p>共{$cnt_prob}道题</p>";
 for ($i=1;$i<=$cnt_prob;$i++)
 	$compinfo.="<p>{$probname[$i]} 100</p>";

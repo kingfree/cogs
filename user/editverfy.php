@@ -3,7 +3,7 @@ require_once("../include/stdhead.php");
 gethead(0,"verfy","");
 $LIB->get_userinfo($_SESSION['ID']);
 if ($_SESSION['admin']!=-1)
-	header("location: /{$SETTINGS['global_root']}");
+	header("location: /{$SET['global_root']}");
 
 $p=new DataAccess();
 $sql="update userinfo set email='{$_POST['email']}' where uid={$_SESSION['ID']}";

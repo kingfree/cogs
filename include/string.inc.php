@@ -2,7 +2,7 @@
 global $STR;
 
 $STR[info][done]="执行成功!";
-$STR[info][editenv]="环境变量设置成功";
+$STR[info][editenv]="环境变量SET成功";
 $STR[info][jump]="秒后将会跳转，如果没有跳转请点击这里";
 $STR[info][loginsucc]="登录成功";
 $STR[info][logout]="登出成功";
@@ -50,7 +50,7 @@ $STR[err][pwdans]="密码提示问题答案错误";
 $STR[err][unsubmitable]="该题不可提交";
 $STR[err][comptime]="场次不存在";
 
-$STR[admin][env]="环境变量设置";
+$STR[admin][env]="环境变量SET";
 $STR[admin][user]="用户列表";
 $STR[admin][group]="用户组列表";
 $STR[admin][prob]="题目列表";

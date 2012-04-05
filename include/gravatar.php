@@ -29,10 +29,10 @@ class gravatar
 	 * @param string $default
 	 * @return string HTML image
 	 */
-	public static function showImage($email,$size=0,$default="")
+	public static function showImage($email,$size=14,$default="mm")
 	{
 		$url = self::getGravatarURL($email,$size,$default);
-		return "<img src=\"{$url}\" alt=\"Gravatar\" border=0 />";
+		return "<img src=\"{$url}\" alt=\"Gravatar\" border=0 width=\"{$size}\" height=\"{$size}\" />";
 	}
 	/**
 	 *
@@ -41,15 +41,11 @@ class gravatar
 	 * @param string $default
 	 * @return string URL
 	 */
-	public static function getGravatarURL($email,$size=0,$default="")
+	public static function getGravatarURL($email,$size=14,$default="mm")
 	{
-		global $SETTINGS,$STR;
-		$portrait=$SETTINGS['base']."images/gravatar";
-		$path = pathconvert($SETTINGS['cur'],$portrait).'/';
-		if ($size == 0)
-			$size = self::$size;
-		if ($default == "")
-			$default = self::$default;
+		global $SET,$STR;
+		$portrait=$SET['base']."images/gravatar";
+		$path = pathconvert($SET['cur'],$portrait).'/';
 		$filename = md5($email)."?s={$size}&d={$default}";
 		$filenama = md5($email)."s{$size}";
 		if (file_exists($path.$filenama) && filesize($path.$filenama) > 0)
@@ -62,3 +58,4 @@ class gravatar
 		return $url;
 	}
 }
+?>

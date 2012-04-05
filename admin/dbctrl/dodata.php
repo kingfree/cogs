@@ -4,7 +4,7 @@
 if ($_GET[action]=="reset") 
 {
 	require_once("../../include/stdlib.php");
-	if ($_SESSION['admin']!=2)header("location: /{$SETTINGS['global_root']}error.php?id=7");
+	if ($_SESSION['admin']!=2)header("location: /{$SET['global_root']}error.php?id=7");
 	$LIB->cls_dbctrl(); 
 	$dbc=new DBControl;
 	echo $STR[info][resetingdata];
@@ -52,7 +52,7 @@ if ($_GET[action]=="backup")
     }
 	
 	$phpc.="\n?>";
-	$file="{$SETTINGS['dir_databackup']}/$_GET[filename]";
+	$file="{$SET['dir_databackup']}/$_GET[filename]";
 	$fp=fopen($file,"w");
 	fwrite($fp,$phpc);
 	fclose($fp);
@@ -60,14 +60,14 @@ if ($_GET[action]=="backup")
 }
 if ($_GET[action]=="restore")
 {
-	echo "{$SETTINGS['dir_databackup']}/$_GET[filename]";
-	if (file_exists("{$SETTINGS['dir_databackup']}/$_GET[filename]"))
+	echo "{$SET['dir_databackup']}/$_GET[filename]";
+	if (file_exists("{$SET['dir_databackup']}/$_GET[filename]"))
 	{
 		echo "正在恢复，请稍候";
 		flush();
 		
 		$p=new DataAccess();
-		include("{$SETTINGS['dir_databackup']}/$_GET[filename]");
+		include("{$SET['dir_databackup']}/$_GET[filename]");
 		echo "<meta http-equiv=refresh content='0; url=bkrsdata.php?action=restoresucc&file=".$_GET[filename]."'>"; 
 		exit;
 	}

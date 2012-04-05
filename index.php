@@ -4,135 +4,105 @@ gethead(1,"","首页");
 $p=new DataAccess();
 $q=new DataAccess();
 ?>
-
-<table width="100%" class="MainText">
+<table id="index">
 <tr>
-<td valign="top" width="160px">
-<table width=100% border="0">
-<tr><td align=center>
-题目快捷方式
-</td></tr>
-<tr><td align=center>
-<form id="form1" name="form1" method="get" action="problem/problist.php">
-<input name="key" type="text" id="key" class="InputBox" size="10"/>
-<input class="icon-search LinkButton" name="sc" type="submit" id="sc" value=""/>
-</form>
-</td></tr>
-<tr><td align=center>
-<form action="problem/pdetail.php" method="get" name="gotoprob" target="_blank" id="gotoprob">
-<input name="pid" type="text" class="InputBox" id="pid" size="6" />
-<input class="LinkButton" type="submit" name="Submit" value="进入" class="Button" />
-</form>
-</td></tr>
-<tr><td align=center>
-<a class="LinkButton" href="problem/random.php" title="随机选择一道你没有通过的题目" target="_blank">随机题目<span class="icon-random"></span></a>
-</td></tr>
+<td id="index_prob">
+<table id="prob_short">
+<tr><form id="search" name="search" method="get" action="problem/problist.php">
+<td><input name="key" type="text" id="key" /></td>
+<td><input type="submit" value="搜索"/></td>
+</form></tr>
+<tr><form id="gotoprob" name="gotoprob" method="get" action="problem/pdetail.php">
+<td><input name="pid" type="text" id="pid" value=1 /></td>
+<td><input type="submit" value="进入" /></td>
+</form></tr>
+<tr><th colspan=2>
+<a href="problem/random.php" title="随机选择一道你没有通过的题目">随机题目</a>
+</th></tr>
 </table>
 <br />
-<table width=100% border="1">
+<?php 
+$now = time();
+$cnt = $p->dosql("select comptime.*,compbase.*,userinfo.nickname,groups.* from comptime,compbase,userinfo,groups where comptime.cbid=compbase.cbid and userinfo.uid=compbase.ouid and comptime.group=groups.gid and endtime > $now order by starttime asc");
+for($i=0; $i<$cnt; $i++) {
+    $d=$p->rtnrlt($i);
+?>
+<table class="index_contest">
+  <tr>
+    <th width="40px">比赛</th>
+    <th><?php echo $d[cname] ?></th>
+  </tr>
+  <tr>
+    <td>状态</td>
+    <td><?php
+	 if (time()>$d[endtime]) echo "<span class='did'>已结束</span>"; else
+	 if (time()<$d[endtime] && time()>$d[starttime]) echo "<a href='competition/comp.php?ctid={$d[ctid]}&uid={$_SESSION['ID']}'><span class='doing'>正在进行...</span></a>"; else
+	 echo "<span class='todo'>还未开始</span>"; 
+	 ?></td>
+  </tr>
+  <tr>
+    <td>开始</td>
+    <td><?php echo date('Y-m-d H:i:s', $d[starttime]) ?></td>
+  </tr>
+  <tr>
+    <td>结束</td>
+    <td><?php echo date('Y-m-d H:i:s', $d[endtime]) ?></td>
+  </tr>
+  <tr>
+    <td>分组</td>
+    <td><a href="../information/userlist.php?gid=<?php echo $d['gid'] ?>" target="_blank"><?php echo $d['gname'] ?></a></td>
+  </tr>
+  <tr>
+    <td>介绍</td>
+    <td><?php echo nl2br(sp2n(htmlspecialchars($d[intro]))) ?></td>
+  </tr>
+</table>
+<?php } ?>
+<br />
+<table id="lastest_prob">
 <tr>
-<th style="width:15%;">PID</th>
-<th style="width:80%;">题目</th>
+<th width="40px">PID</th>
+<th>最新题目</th>
 </tr>
 <?php 
-$sql="select * from problem where submitable=1 order by pid desc limit 16";
-$cnt=$p->dosql($sql);
-for ($i=0;$i<$cnt;$i++)
-{
-$d=$p->rtnrlt($i);
+$cnt=$p->dosql("select * from problem where submitable=1 order by pid desc limit 5");
+for($i=0;$i<$cnt;$i++) {
+    $d=$p->rtnrlt($i);
 ?>
 <tr>
 <td><?php echo $d['pid']; ?></td>
 <td>
-<?
-    if ($_SESSION['ID']) {
-        $sql="SELECT * FROM submit WHERE pid ={$d['pid']} AND uid ={$_SESSION['ID']} order by accepted desc limit 1";
-        $ac=$q->dosql($sql);
-        if ($ac) {
-            $e=$q->rtnrlt(0);
-            if ($e['accepted'])
-                echo "<img src='images/sign/right.gif' border='0' />";
-            else echo "<img src='images/sign/error.gif' border='0' />";
-        } else echo "<img src='images/sign/todo.gif' border='0' />";
-    }
-?>
+<? 是否通过($d['pid'], $q); ?>
 <a href="problem/pdetail.php?pid=<?php echo $d['pid']; ?>" target="_blank"><?php echo $d['probname']; ?></a></td>
 </tr>
 <?php } ?>
 </table>
 </td>
-<td valign="top" >
-<?php echo output_text($SETTINGS['global_index']); ?>
-<!--<div class="Tags">
-<?$sql="select * from category order by cname";
-$cnt=$p->dosql($sql);
-for ($i=$st;$i<$cnt;$i++) {
-    $d=$p->rtnrlt($i);
-?> <a href="../problem/problist.php?caid=<?=$d['caid']?>" title="<?=sp2n(htmlspecialchars($d['memo']))?>"><?=$d['cname']?></a> <? } ?>
-</div>-->
+<td id="index_text">
+<marquee id="publicbar" id="publicbar" align="right" direction="left" scrollamount="5" onMouseOver="this.stop();" onMouseOut="this.start();">
+<?php if ($_SESSION['admin']==2) { ?>[<a href="<?=pathconvert($SET['cur'],$editbulletin);?>">修改</a>]<?php } ?><font color="#003366"><b>公告 &gt;&gt;</b></font>
+<?=输出文本($SET['global_bulletin']); ?>
+</marquee>
+<?php echo 输出文本($SET['global_index']); ?>
 </td>
-<td width="220px">
-<center>
-等级Top <?php echo $SETTINGS['style_ranksize']; ?>
-<table width=100% border="1">
-<tr>
-<th></th>
-<th>用户</th>
-<th>等级</th>
-<th>通过</th>
-</tr>
+<td id="index_rank">
+<table>
+<tr><th colspan=5>等级前 <?=$SET['style_ranksize'];?> 名</th></tr>
+<tr><th></th><th></th><th>用户</th><th>等级</th><th>通过</th></tr>
 <?php 
-$sql="select * from userinfo order by grade desc limit 0, {$SETTINGS['style_ranksize']}";
-$cnt=$p->dosql($sql);
-for ($i=0;$i<$cnt;$i++) {
+$cnt=$p->dosql("select * from userinfo order by grade desc limit 0, {$SET['style_ranksize']}");
+for($i=0;$i<$cnt;$i++) {
 $d=$p->rtnrlt($i);
 ?>
 <tr>
-<td style="text-align:center;"><?php echo $i+1 ?></td>
-<td style="text-align:left">
-<a href="user/detail.php?uid=<?php echo $d['uid']; ?>" target="_blank">
-<?=gravatar::showImage($d['email'], 28);?>
-<?php echo $d['nickname']; ?>
-</a>
-</td>
-<td><strong><?php echo $d['grade'] ?></strong></td>
-<td><strong><?php echo $d['accepted'] ?></strong></td>
+<td><i><?=$i+1 ?></i></td>
+<td><a href="user/detail.php?uid=<?php echo $d['uid']; ?>" target="_blank"><?=gravatar::showImage($d['email'], 28);?></a></td>
+<td><a href="user/detail.php?uid=<?php echo $d['uid']; ?>" target="_blank"><?=$d['nickname']?></a></td>
+<td><b><?php echo $d['grade'] ?></b></td>
+<td><b><?php echo $d['accepted'] ?></b></td>
 </tr>
 <?php } ?>
 </table>
-</center>
-</td>
-<td width="220px">
-<center>
-等级Top <?php echo $SETTINGS['style_ranksize']*2; ?>
-<table width=100% border="1">
-<tr>
-<th>&nbsp;</th>
-<th>用户</th>
-<th>等级</th>
-<th>通过</th>
-</tr>
-<?php 
-$sql="select * from userinfo order by grade desc limit {$SETTINGS['style_ranksize']}, {$SETTINGS['style_ranksize']}";
-$cnt=$p->dosql($sql);
-for ($i=0;$i<$cnt;$i++)
-{
-$d=$p->rtnrlt($i);
-?>
-<tr>
-<td style="text-align:center;"><?php echo $SETTINGS['style_ranksize']+$i+1 ?></td>
-<td style="text-align:left">
-<a class="useri" href="user/detail.php?uid=<?php echo $d['uid']; ?>" target="_blank">
-<? echo gravatar::showImage($d['email'], 28);?>
-<?php echo $d['nickname']; ?>
-</a>
-</td>
-<td><strong><?php echo $d['grade'] ?></strong></td>
-<td><strong><?php echo $d['accepted'] ?></strong></td>
-</tr>
-<?php } ?>
-</table>
-</center>
 </td>
 </table>
 <?php

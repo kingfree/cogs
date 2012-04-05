@@ -2,7 +2,6 @@
 require_once("./include/stdhead.php");
 gethead(1,"","错误");
 ?>
-
   <table width="100%" border="1"  bordercolor=#000000  cellspacing=0 cellpadding=4>
     <tr>
       <th bgcolor="#FFFFFF"><div align="center">
@@ -107,11 +106,11 @@ gethead(1,"","错误");
 </div></td>
     </tr>
     <tr>
-      <td bgcolor="#66FF99"><div align="center"><a href=<?php echo $urlgo ?>><?php echo $SETTINGS['style_jumptime'].$STR[info][jump]; ?></a></div></td>
+      <td bgcolor="#66FF99"><div align="center"><a href=<?php echo $urlgo ?>><?php echo $SET['style_jumptime'].$STR[info][jump]; ?></a></div></td>
     </tr>
   </table>
 
-<meta http-equiv=refresh content=<?php echo $SETTINGS['style_jumptime'] ?>;URL=<?php echo $urlgo ?>>
+<meta http-equiv=refresh content=<?php echo $SET['style_jumptime'] ?>;URL=<?php echo $urlgo ?>>
 
 <?php
 	include_once("./include/stdtail.php");

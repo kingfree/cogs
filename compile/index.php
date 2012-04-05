@@ -3,11 +3,7 @@ require_once("../include/stdhead.php");
 gethead(1,"sess","编译执行");
 $LIB->dpshhl();
 
-if (!$_POST['pid']) {
-echo "你来错地方了！";
-include_once("../include/stdtail.php");
-exit;
-}
+if (!$_POST['pid']) 异常("你来错地方了！");
 
 $LIB->cls_compile(); 
 $LIB->func_socket();
@@ -36,12 +32,11 @@ $info['timelimit']=$d['timelimit'];
 $ptitle = $d['probname'];
 $info['memorylimit']=$d['memorylimit'];
 $info['plugin']=$d['plugin'];
-$info['compiledir']=$SETTINGS['dir_source'];
+$info['compiledir']=$SET['dir_source'];
 $info['mode']="normal";
 if ($_POST['testmode']=='1' && $_SESSION['admin']>0)
 	$info['mode']="test";
-if ($_POST['rejudge']==1)
-{
+if ($_POST['rejudge']==1) {
 	$info['rejudge']=1;
 	$q=new DataAccess();
 	$sql="select * from submit where sid='{$info['sid']}'";
@@ -58,41 +53,33 @@ $Cp=new Compiler($info);
 <?php
 flush();
 $free=$Cp->getgds();
-?>
-<?php
-if (!$free) //非空闲
-{
-	echo "当前没有空闲的评测机，请稍后重新提交。";
-	include_once("../include/stdtail.php");
-	exit;
-}
+
+if (!$free) 异常("当前没有空闲的评测机，请稍后重新提交。");
 
 $Cp->lock();
 $Cp->getdir();
 if ($_POST['rejudge']==1) {
 	$Cp->get_rejudge_src($src);
 } else if (!$Cp->getupload()) {
-	echo "源代码上传失败。请检查文件大小 [ 1 Byte , 100 KB ]。";
-	include_once("../include/stdtail.php");
-	exit;
+	异常("源代码上传失败。请检查文件大小 [ 1 Byte , 100 KB ]。");
 }
 ?></p>
 <table border="1">
   <tr>
     <td>GRID</td>
-    <td><?php echo $Cp->state['grid']; ?></td>
+    <td><?=$Cp->state['grid']; ?></td>
   </tr>
   <tr>
     <td>名称</td>
-    <td><?php echo $Cp->state['name']; ?></td>
+    <td><?=$Cp->state['name']; ?></td>
   </tr>
   <tr>
     <td>系统版本</td>
-    <td><?php echo $Cp->state['ver']; ?></td>
+    <td><?=$Cp->state['ver']; ?></td>
   </tr>
   <tr>
     <td>备注</td>
-    <td><?php echo $Cp->state['memo']; ?></td>
+    <td><?=$Cp->state['memo']; ?></td>
   </tr>
 </table>
 </p>
@@ -100,11 +87,8 @@ if ($_POST['rejudge']==1) {
 <?php
 flush();
 $csucc=$Cp->compile();
-?>
-<?php
 flush();
-if ($csucc)
-{
+if ($csucc) {
 ?>
 <p>
 <table border='1'>
@@ -118,18 +102,17 @@ if ($csucc)
 </tr>
 <tr>
 <?php
-$nodata = false;
-	for ($P=1;$P<=$d['datacnt'];$P++)
-	{
+    $nodata = false;
+	for ($P=1;$P<=$d['datacnt'];$P++) {
 		$Cp->run($P);
 		flush();
-       ?>
-	<td><?php echo $P;?></td>
-	<td><?php echo $Cp->getresult(); ?></td>
-	<td><?php echo $Cp->getthisscore(); ?></td>
+?>
+	<td><?=$P;?></td>
+	<td><?=$Cp->getresult(); ?></td>
+	<td><?=$Cp->getthisscore(); ?></td>
 	<td><?php printf("%.3f s",$Cp->runtime/1000.0) ?></td>
-	<td><?php echo $Cp->memory ?> KB</td>
-	<td><?php echo $Cp->exitcode?></td>
+	<td><?=$Cp->memory ?> KB</td>
+	<td><?=$Cp->exitcode?></td>
 </tr>
 <?
     }
@@ -139,9 +122,9 @@ $nodata = false;
 <p>你的程序运行完成了！</p>
 <p>运行时间 <?php printf ("%.3f",$Cp->gettotaltime()/1000.0) ?> s</p>
 <p>平均内存 <?php printf("%.2f",$Cp->getmemory()/1024) ?> MiB</p>
-<p>测试点通过状况 <a href="../problem/submitdetail.php?id=<?=$info['sid']?>"><?php echo judgeresult($Cp->s_detail) ?></a></p>
-<p>得分：<?php echo $Cp->getscore(); ?></p>
-<p><a class="LinkButton" href="../problem/pdetail.php?pid=<?php echo $_POST['pid'] ?>">返回原题 “<?=$ptitle?>”</a></p>
+<p>测试点通过状况 <a href="../problem/submitdetail.php?id=<?=$info['sid']?>"><?=judgeresult($Cp->s_detail) ?></a></p>
+<p>得分：<?=$Cp->getscore(); ?></p>
+<p><a class="LinkButton" href="../problem/pdetail.php?pid=<?=$_POST['pid'] ?>">返回原题 “<?=$ptitle?>”</a></p>
 <?php if ($Cp->ac==$d['datacnt']) { ?>
     <p>祝贺你通过了全部测试点!</p>
 <?php } else { if(($_SESSION['admin'] > 0 || $_SESSION['ID'] == $info['uid']) && $nodata == false) { ?>
@@ -149,7 +132,7 @@ $nodata = false;
 <pre class="brush: text;"><?=htmlspecialchars($Cp->inputtext)?></pre>
 <p>下面是你的输出与标准答案不同的地方（上面带减号“-”的是你的输出，下面带加号“+”的是答案输出，“@@”之间的数字表示行号）：
 <pre class="brush: diff;"><?=htmlspecialchars($Cp->difftext)?></pre>
-<p><a class="LinkButton" href="../problem/pdetail.php?pid=<?php echo $_POST['pid'] ?>">返回原题 “<?=$ptitle?>”</a></p>
+<p><a class="LinkButton" href="../problem/pdetail.php?pid=<?=$_POST['pid'] ?>">返回原题 “<?=$ptitle?>”</a></p>
 <?php } else echo "<p>你无法查看错误点的输入输出文件。</p>";?>
 <p><a href="../information/help.php" target="_blank" title="RP问题">为什么程序在我的电脑上能够正常运行，而在评测机上不能?</a></p>
 <?php }

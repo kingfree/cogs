@@ -10,12 +10,9 @@ $p=new DataAccess();
 $sql="select * from comments where pid={$_POST['pid']} and uid={$_SESSION[ID]}";
 $cnt=$p->dosql($sql);
 $tm=time();
-if (!$cnt)
-{
+if (!$cnt) {
 	$sql="insert into comments(pid,uid,detail,stime,showcode) values({$_POST['pid']},{$_SESSION[ID]},'{$_POST['detail']}',{$tm} ,{$scd})";
-}
-else
-{
+} else {
 	$sql="update comments set detail='{$_POST['detail']}', stime={$tm} ,showcode={$scd} where pid={$_POST['pid']} and uid={$_SESSION[ID]}";
 }
 $p->dosql($sql);
