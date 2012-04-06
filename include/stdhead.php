@@ -52,17 +52,7 @@ if ($check=="sess") {
     <td><?php include($SET['base']."include/stdbar.php") ?></td>
   </tr>
 </table>
-<? if(!$_SESSION['ID']) { ?>
-<form method="post" action=<?=路径("user/dologin.php")?> ><table id="login">
-<tr><th>用户名</th><td><input name="username" type="text" id="username" /></td></tr>
-<tr><th>密　码</th><td><input name="password" type="password" id="password" /></td></tr>
-<tr><td></td><td><input type="submit" name="Login" value="登录" />
-<!--<input name="savepwd" type="checkbox" id="savepwd" value="1" /><label for="savepwd">自动登录<label>-->
-</td></tr><tr><input name="from" type="hidden" id="from" value="<?=$SET['URI']?>" />
-<td></td><td><a href=<?=路径("user/lost.php")?>>忘记密码</a>
-<a href=<?=路径("user/register.php")?>>立即注册</a></td></tr>
-</table></form>
-<? } ?>
+
 <div id="body">
 <?php
     }

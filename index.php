@@ -88,7 +88,7 @@ for($i=0;$i<$cnt;$i++) {
 <td id="index_rank">
 <table>
 <tr><th colspan=5>等级前 <?=$SET['style_ranksize'];?> 名</th></tr>
-<tr><th></th><th></th><th>用户</th><th>等级</th><th>通过</th></tr>
+<tr><th></th><th></th><th>用户</th><th>等级</th><th>过</th></tr>
 <?php 
 $cnt=$p->dosql("select * from userinfo order by grade desc limit 0, {$SET['style_ranksize']}");
 for($i=0;$i<$cnt;$i++) {
@@ -96,7 +96,7 @@ $d=$p->rtnrlt($i);
 ?>
 <tr>
 <td><i><?=$i+1 ?></i></td>
-<td><a href="user/detail.php?uid=<?php echo $d['uid']; ?>" target="_blank"><?=gravatar::showImage($d['email'], 28);?></a></td>
+<td style="font-size:26px; padding:0; margin:0;"><a href="user/detail.php?uid=<?php echo $d['uid']; ?>" target="_blank"><?=gravatar::showImage($d['email'], 28);?></a></td>
 <td><a href="user/detail.php?uid=<?php echo $d['uid']; ?>" target="_blank"><?=$d['nickname']?></a></td>
 <td><b><?php echo $d['grade'] ?></b></td>
 <td><b><?php echo $d['accepted'] ?></b></td>

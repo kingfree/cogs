@@ -1,116 +1,175 @@
-﻿/*
+/*
     COGS 样式文件
 */
+
 /* 通用设置 */
+
 body {
     color: Black;
-    background-color: Lavender;
-    //font-size: 14px;
+    background-color: #36727a;
+    font-size: 14px;
     margin: 0;
     padding: 0;
 }
+
 table {
     border: 0;
     width: 100%;
     color: Black;
-    background-color: WhiteSmoke;
+    background-color: #dfeaf5;
 }
+
 th {
     border: 0;
     color: Black;
-    background-color: MintCream;
+    background-color: rgba(252, 252, 252, 0.6);
 }
+
 tr {
     border: 0;
     color: Black;
     vertical-align: top;
 }
+
 td {
     border: 0;
     color: Black;
     vertical-align: top;
 }
-a:link {
+
+tr:nth-child(even) {
+    border: 0;
+    color: Black;
+    vertical-align: top;
+}
+
+a:link, a:visited {
     text-decoration: none;
     color: MidnightBlue;
+    border: thin solid #dfeaf5;
 }
-a:visited {
-    text-decoration: none;
-    color: MidnightBlue;
-}
+
 a:hover {
     text-decoration: none;
     color: Black;
-    background-color: Lavender;
+    background-color: #f3f8ff;
+    border: thin solid #0077ec;
 }
+
 a:active {
     text-decoration: none;
-    background-color: MintCream;
+    background-color: #dae8fb;
+    border: thin solid #0077ec;
 }
+
 input {
-    border: 0;
+    border: thin solid LightBlue;
     background-color: White;
 }
+
+input:hover {
+    border: thin solid #2491b3;
+    background-color: White;
+}
+
+input:active {
+    border: thin solid #eeea50;
+    background-color: White;
+}
+
 input[type="submit"] {
-    border: medium double White;
+    border: thin solid LightBlue;
+    padding: 2px 8px 2px 8px;
+    background-color: #f7f1fa;
+}
+
+input[type="submit"]:hover {
+    border: thin solid #0077ec;
+    padding: 2px 8px 2px 8px;
+    background-color: #e5eef9;
+}
+
+input[type="submit"]:active {
+    border: thin solid #0077ec;
     padding: 2px 8px 2px 8px;
     background-color: LightBlue;
 }
+
 textarea {
     border: 0;
+    border: thin solid LightBlue;
     background-color: White;
 }
+
 /* 类选择器 */
+
 .ok {
     color: Green;
 }
+
 .no {
     color: Red;
 }
+
 .todo {
     color: Green;
 }
+
 .doing {
     color: Red;
 }
+
 .did {
     color: Indigo;
 }
-.admin {
-    color: MintCream;
-    background-color: MediumAquaMarine;
+
+.judge {
+    border: none;
+    margin: 0;
+    font-family: monospace;
 }
+
+.admin {
+    background-color: #cccc99;
+}
+
 .admin_big {
     font-size: 200%;
-    color: MintCream;
-    background-color: MediumAquaMarine;
+    background-color: #cccc99;
 }
+
 .page_slice {
     position: relative;
     left: 30%;
     width: 40%;
     text-align: center;
     color: CornflowerBlue;
-    background-color: Azure;
+    //background-color: Azure;
 }
+
 .page_slice table, .page_slice a:link, .page_slice a:visited {
     color: CornflowerBlue;
-    background-color: Azure;
+    //background-color: Azure;
 }
+
 .page_slice a:hover, .page_slice a:active {
     color: Blue;
-    background-color: Azure;
+    //background-color: Azure;
 }
+
 .current_page {
     font-weight: bold;
     color: Blue;
-    background-color: Azure;
+    //background-color: Azure;
 }
+
 .Spliter {
-    border : 1px #000000;
-    border-style : dotted;
+    border: 1px #000000;
+    border-style: dotted;
 }
+
 /* 提示信息 */
+
 #dialog {
     position: fixed;
     width: 40%;
@@ -121,6 +180,7 @@ textarea {
     background-color: LightBlue;
     z-index: 9999;
 }
+
 #dialog_title {
     border: 0;
     height: 15%;
@@ -130,6 +190,7 @@ textarea {
     color: Black;
     background-color: Blue;
 }
+
 #error_title {
     border: 0;
     height: 20px;
@@ -138,12 +199,14 @@ textarea {
     color: Black;
     background-color: Red;
 }
+
 #dialog_text {
     border: 0;
     height: 70%;
     text-align: center;
     color: DarkBlue;
 }
+
 #dialog_button {
     position: fixed;
     left: 46%;
@@ -151,206 +214,313 @@ textarea {
     border: medium outset Red;
     text-align: center;
 }
-/* 标题尾部 */
+
+/* 标题 尾部 */
+
 #alltext {
     margin: 0;
     padding: 0;
-    background-color: GhostWhite;
+    background-color: #e5eef9;
 }
+
 #globalbar {
     width: 100%;
     color: Lavender;
-    background-color: AliceBlue;
+    background-color: #8dc0c7;
 }
+
 #global_head {
     font-size: 40px;
     text-align: center;
-    color: DarkBlue;
-    background-color: AliceBlue;
+    color: Black;
+    background-color: #8dc0c7;
+    text-shadow: 5px 1px 9px #fff;
 }
+
 #nagbar {
     width: 100%;
     text-align: center;
-    background-color: AliceBlue;
+    background-color: #8dc0c7;
+    font-family: 黑体;
 }
+
+#globalbar tr td a:link, #globalbar tr td a:visited {
+    color: Black;
+    background-color: #8dc0c7;
+    text-shadow: 1px 1px 5px #fff;
+    border: thin solid #8dc0c7;
+}
+
+#globalbar tr td a:hover, #globalbar tr td a:active {
+    color: Black;
+    background-color: #dae8fb;
+    text-shadow: 1px 1px 5px #fff;
+    border: thin solid #0077ec;
+}
+
+#globalbar tr th, #globalbar tr th a:link, #globalbar tr th a:visited {
+    color: Black;
+    background-color: #8dc0c7;
+    text-shadow: 5px 1px 5px #fcf;
+    border: thin solid #8dc0c7;
+}
+
+#globalbar tr th a:hover, #globalbar tr th a:active {
+    color: Black;
+    background-color: #dae8fb;
+    text-shadow: 5px 2px 5px #ccf;
+    border: thin solid #0077ec;
+}
+
 #userinfo {
     width: 100%;
-    background-color: AliceBlue;
+    background-color: #8dc0c7;
 }
+
 #body {
     margin: 0;
 }
+
 #publicbar {
     margin: 0;
     background-color: LavenderBlush;
+    border: thin solid #f96531;
 }
+
 #publictail {
     margin: 0;
-    background-color: LavenderBlush;
+    color: #f9fcff;
+    background-color: #4d9378;
+    text-shadow: 0px 2px 8px #fcf;
 }
+
 #global_tail {
     margin: 0;
     padding: 0;
     font-size: 10px;
     text-align: right;
-    color: LightSlateGray;
-    background-color: AliceBlue;
+    color: #f9fcff;
+    background-color: #4d6366;
 }
+
 /* 首页 */
+
 #index {
+    background-color: #dfeaf5;
 }
+
 #prob_short {
     margin: 0;
+    background-color: #dfeaf5;
 }
+
 #lastest_prob {
     margin: 0;
+    background-color: #dfeaff;
 }
+
 .index_contest {
     margin: 0;
+    background-color: #e3eef8;
 }
+
 #index_prob {
     margin: 0;
     width: 20%;
 }
+
 #index_text {
     padding: 5px;
+    background-color: #f7f8f9;
 }
+
 #index_rank {
     margin: 0;
     width: 20%;
 }
+
 /* 题目 */
+
 #cate_detail {
 }
+
 #search_prob {
-    text-align:center;
+    text-align: center;
 }
+
 #problist {
     width: 100%;
 }
+
 #prob_left {
     width: 250px;
 }
+
 #pdetail {
 }
+
 #probinfo {
     margin: 2px 0;
-    background-color: WhiteSmoke;
+    //background-color: WhiteSmoke;
 }
+
 #singlerank {
     background-color: OldLace;
 }
+
 #probdetail {
     color: Black;
     background-color: White;
 }
+
 /* 分类 */
+
 #cate_tags {
 }
+
 #cate_tags td {
-    padding: 0 0 0 5px;
+    font-size: 90%;
 }
+
 #catelist {
 }
+
 /* 比赛 */
+
 #nowtime {
     border: thick outset LightGreen;
     text-align: center;
 }
+
 #contestlist {
 }
+
 #cprobinfo {
     width: 100%;
     margin: 0;
     background-color: WhiteSmoke;
 }
+
 #contest_prob {
-    width: 90%;
-    margin: 0;
     width: 250px;
+    margin: 0;
 }
+
 #contest_prob li {
     font-size: 120%;
     display: block;
 }
+
 .cp_now {
     background-color: Yellow;
 }
+
 .cp_nnow {
     background-color: WhiteSmoke;
 }
+
 #contest_report {
 }
+
 /* 记录 */
+
 #search_submit {
-    text-align:center;
+    text-align: center;
 }
+
 #sublist_now {
-    text-align:center;
+    text-align: center;
 }
+
 #submitlist {
 }
+
 #submitdetail {
 }
+
 /* 用户 */
+
 #group_now {
 }
+
 #search_user {
-    text-align:center;
+    text-align: center;
 }
+
 #rank {
-    text-align:center;
+    text-align: center;
 }
+
 #userlist {
 }
+
 #userdetail {
 }
+
 #probstatics {
 }
+
 #did_contests {
 }
+
 /* 分组 */
+
 #grouplist {
 }
+
 /* 信件 */
+
 /* 设置 */
+
 #userpanel {
 }
+
 /* 后台 */
+
 #admin_index {
     font-size: 180%;
     width: 80%;
 }
+
 /* 帮助 */
+
 /* 关于 */
+
 /* 评论 */
+
 .Comments {
     border: 0;
     background-color: White;
 }
+
 .CommentsK {
     height: 40px;
     background-color: LightYellow;
     border: 0;
     padding: 10px 10px 10px 10px;
 }
+
 .CommentsCode {
     border: 0;
     text-align: center;
     width: 250px;
     background-color: Khaki;
 }
+
 .CommentsTime {
     border: 0;
     text-align: right;
     background-color: LightGoldenRodYellow;
 }
+
 .CommentsU {
     width: 250px;
     background-color: HoneyDew;
     border: 0;
 }
+
 /* 登录 */
+
 #login {
     position: fixed;
     width: 30%;
@@ -361,10 +531,10 @@ textarea {
     background-color: LightGray;
     z-index: 999;
 }
+
 #login td, #login th {
     border: 0;
     color: Black;
     background-color: LightGray;
 }
-
 

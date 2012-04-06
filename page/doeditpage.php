@@ -1,7 +1,6 @@
 <?php
 require_once("../include/stdhead.php");
-gethead(0,"admin","");
-
+//date_default_timezone_set("Asia/Shanghai");
 if ($_REQUEST[action]=='add') {
 	$p=new DataAccess();
 	$sql="insert into page(title,`force`,`text`,`time`,etime,uid,`group`) values('{$_POST[title]}','{$_POST[force]}','".mysql_real_escape_string($_POST[text])."','".time()."','".time()."','{$_SESSION[ID]}','{$_POST['group']}')";

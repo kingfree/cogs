@@ -61,9 +61,9 @@ else echo '<script>document.location="../../error.php?id=12"</script>';
 }
 ?>
 <form action="doeditprob.php" method="post">
-<table width="100%" border="1"  bordercolor=#000000 cellspacing=0 cellpadding=4>
+<table width="100%" border="1" bordercolor=#000000 cellspacing=0 cellpadding=4>
 <tr>
-<td width="60px" valign="top" scope="col">PID</td>
+<td width="80px" valign="top" scope="col">PID</td>
 <td scope="col"><?php echo $d[pid] ?>
 <input name="pid" type="hidden" id="pid" value="<?php echo $d['pid'] ?>" /></td>
 <th valign="top" scope="col">题目分类</th>

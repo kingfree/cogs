@@ -6,7 +6,7 @@ $p=new DataAccess();
 $q=new DataAccess();
 $r=new DataAccess();
 
-$sql="select page.*,groups.* from page,groups where aid=".(int)$_GET[aid]." and groups.gid=page.group limit 1";
+$sql="select page.*,groups.*,userinfo.nickname from page,groups,userinfo where aid=".(int)$_GET[aid]." and userinfo.uid=page.uid and groups.gid=page.group limit 1";
 $cnt=$p->dosql($sql);
 $d=$p->rtnrlt(0);
 
@@ -40,14 +40,14 @@ if($cnt) {
 <?php } else { ?>
 <td></td>
 <? } ?>
-<td></td>
+<td><?=$d['nickname']?></td>
 </tr>
 <tr><th>添加时间</th>
-<td><?=date('Y-m-d m:i:s', $d['time']) ?></td>
-<th>编辑时间</th>
-<td><?=date('Y-m-d m:i:s', $d['etime']) ?></td></tr>
-<tr><th>开放分组</th>
-<td><a href="../information/userlist.php?gid=<?=$d['gid'] ?>" target="_blank"><?=$d['gname'] ?></a></td>
+<td><?=date('Y-m-d', $d['time']) ?></td>
+<th>开放分组</th>
+<td><a href="../information/userlist.php?gid=<?=$d['gid'] ?>" target="_blank"><?=$d['gname'] ?></a></td></tr>
+<tr><th>编辑时间</th>
+<td><?=date('Y-m-d', $d['etime']) ?></td>
 <th>阅读权限</th>
 <td><?=$d['force'] ?></td>
 </tr>

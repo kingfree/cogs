@@ -212,7 +212,7 @@ function 评测结果($str) {
         else if($str[$i] == 'D') $res .= "<span style='color:#fff;background-color:#000'>D</span>";
         else if($str[$i] == 'N') $res .= "<span style='color:#FFFFFF;'>N</span>";
         else if($str[$i] == 'P') $res .= "<span style='color:#B8860B;'>P</span>";
-    echo "<pre style='margin:0;'>".$res."</pre>";
+    echo "<span class='judge'>".$res."</span>";
 }
 function 评测信息($str) {
     $res = "";
@@ -315,7 +315,7 @@ function 分页($total,$page,$url='',$page_size='',$max_length='') {
 function 异常($msg = "错误", $id = "") {
     global $SET;
     if($id == "") $id = base64_encode("/".$SET['global_root']);
-    else $id = base64_decode($id);
+    $id = base64_decode($id);
     echo '<div id="dialog"><div id="error_title">错误</div>';
     echo '<div id="dialog_text">'.$msg.'</div>';
     echo '<div id="dialog_button" onclick="url.go('.$id.');">确定</div></div>';

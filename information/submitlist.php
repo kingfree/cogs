@@ -58,20 +58,21 @@ if(!$_GET['page']) {
 <? 分页($cnt, $_GET['page'], '?pid='.$_GET['pid'].'&uid='.$_GET['uid'].'&display='.$_GET['display'].'&'); ?>
 
 <table id="submitlist">
-<tr>
+<thead><tr>
 <th>SID</th>
-<th>题目</th>
-<th>用户</th>
-<th>结果</th>
-<th>得分</th>
-<th>时间</th>
-<th>用时</th>
-<th>内存</th>
+<th onclick="sortTable('submitlist', 1, 'int')">题目</th>
+<th onclick="sortTable('submitlist', 2, 'int')">用户</th>
+<th onclick="sortTable('submitlist', 3)">结果</th>
+<th onclick="sortTable('submitlist', 4, 'int')">得分</th>
+<th>语言</th>
+<th onclick="sortTable('submitlist', 6)">时间</th>
+<th onclick="sortTable('submitlist', 7, 'int')">用时</th>
+<th onclick="sortTable('submitlist', 8, 'int')">内存</th>
 <?php if ($_SESSION['admin']>0){ ?>
 <th class=admin>IP</th>
 <th class=admin>姓名</th>
 <?php } ?>
-</tr>
+</tr></thead>
 <?php if (!$err)
 for ($i=$st;$i<$cnt && $i<$st+$SET['style_pagesize'] ;$i++) {
     $d=$p->rtnrlt($i);
@@ -82,12 +83,10 @@ for ($i=$st;$i<$cnt && $i<$st+$SET['style_pagesize'] ;$i++) {
 echo "<a href='?pid={$d['pid']}'>{$d['probname']}</a>";
 echo "<a href='../problem/pdetail.php?pid={$d['pid']}' target='_blank'><span class='icon-share'></span></a>";
 ?></td>
-<td>
-<a href='../user/detail.php?uid=<?=$d['uid']?>' target='_blank'>
-<?=gravatar::showImage($d['email']);?></a>
-<?php echo "<a href='?uid={$d[uid]}'>{$d['nickname']}</a>"; ?></td>
-<td><?php echo "<a href='../problem/submitdetail.php?id={$d['sid']}'>" ?><?=评测结果($d['result'])?></a></td>
-<td align=center><span class="<?=$d['accepted']?'ok':'no'?>"><?php echo $d['score'] ?></span></td>
+<td><a href='../user/detail.php?uid=<?=$d['uid']?>' target='_blank'><?=gravatar::showImage($d['email']);?></a><?php echo "<a href='?uid={$d[uid]}'>{$d['nickname']}</a>"; ?></td>
+<td><?=评测结果($d['result'])?></td>
+<td align=center><span class="<?=$d['accepted']?'ok':'no'?>"><?=$d['score'] ?></span></td>
+<td><a href='../problem/submitdetail.php?id=<?=$d['sid']?>'><?=$STR['lang'][$d['lang']]?></a></td>
 <td align=center><?php echo date('Y-m-d H:i:s',$d['subtime']); ?></td>
 <td><?php printf("%.3f",$d['runtime']/1000.0) ?> s </td>
 <td><?php printf("%.2f",$d['memory']/1024) ?> MiB </td>

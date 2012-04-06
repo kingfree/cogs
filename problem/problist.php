@@ -76,23 +76,23 @@ if(!$_GET['page']) {
 </form>
 <? 分页($cnt, $_GET['page'], '?caid='.$_GET['caid'].'&diff='.$_GET['diff'].'&key='.$_GET['key'].'&sc'.$_GET['sc'].'&'); ?>
 <table id="problist">
-<tr>
+<thead><tr>
 <th>PID</th>
-<th>题目名称</th>
+<th onclick="sortTable('problist', 0, 'int')">题目名称</th>
 <th>文件名称</th>
 <th>时间限制</th>
 <th>空间限制</th>
 <th>难度</th>
-<th>通过</th>
-<th>提交</th>
-<th>通过率</th>
+<th onclick="sortTable('problist', 6, 'int')">通过</th>
+<th onclick="sortTable('problist', 7, 'int')">提交</th>
+<th onclick="sortTable('problist', 8, 'int')">通过率</th>
 <th>上次通过</th>
 <?php if ($_SESSION['admin']>0){ ?>
 <th class=admin>标识</th>
 <th class=admin>权限</th>
 <th class=admin>编辑</th>
 <?php } ?>
-</tr>
+</tr></thead>
 <?php
 if (!$err) for ($i=$st;$i<$cnt && $i<$st+$SET['style_pagesize'] ;$i++) {
     $d=$p->rtnrlt($i);

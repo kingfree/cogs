@@ -16,6 +16,8 @@ else {
         $q=new DataAccess();
         $sql="UPDATE `userinfo` SET `lastip` = '{$_SERVER['REMOTE_ADDR']}' WHERE `uid` ={$d['uid']}";
         $q->dosql($sql);
+        $sql="insert into login(uid,ua,ip,ltime) values({$d['uid']},'".mysql_real_escape_string($_SERVER['HTTP_USER_AGENT'])."','{$_SERVER['REMOTE_ADDR']}',NOW())";
+        $q->dosql($sql);
         if ($_REQUEST['savepwd']) {
             setcookie("cojs_login",$d['pwdhash'], time()+7776000);
             setcookie("User",$_POST['username'], time()+7776000);

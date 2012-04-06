@@ -39,7 +39,7 @@ if($cnt) {
 <table id="pdetail"><tr>
 <td id="prob_left">
 <table id="probinfo">
-<tr><th width=70px>题目名称</th>
+<tr><th width=80px>题目名称</th>
 <td><b><?=$d[probname]; ?></b></td></tr>
 <tr><th>难度等级</th>
 <td><?=难度($d['difficulty']); ?></td></tr>
@@ -91,9 +91,9 @@ for ($i=0;$i<=$cnt2-1;$i++) {
 <tr><form action="../compile/" method="post" enctype="multipart/form-data" name="sub">
 <td colspan=2 align=right>
 <input type="file" name="file"/>
-<input type="radio" name="lang" id="pas" value="pas" /><label for="pas">Pascal</label>
-<input type="radio" name="lang" id="c" value="c" /><label for="c">C</label>
-<input type="radio" name="lang" id="cpp" value="cpp" checked=1/><label for="cpp">C++</label>
+<input type="radio" name="lang" id="pas" value="pas" title="Pascal" /><label for="pas">Pascal</label>
+<input type="radio" name="lang" id="c" value="c"  title="C" /><label for="c">C</label>
+<input type="radio" name="lang" id="cpp" value="cpp" checked=1 title="C++" /><label for="cpp">C++</label>
 <?php if ($_SESSION['admin']>0){ ?>
 <input name="testmode" type="checkbox" id="testmode" value="1" /> 
 <label for="testmode">测试模式</label>

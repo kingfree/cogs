@@ -28,7 +28,7 @@ if($cnt > 0) echo "<span class='todo'>($cnt)</span>";
 <td><a href="<?=路径("user/dologout.php")."?from=".$SET['URI'];?>"><span class="icon-off"></span>退出</a></td>
 <? } else { ?>
 <!--<th><a href='javascript:$("#login").show()'><span class="icon-star"></span>登录</a></th>-->
-<th><a href='<?=路径("user/login.php")?>'><span class="icon-star"></span>登录</a></th>
+<th><a href='<?=路径("user/login.php")?>?from=<?=$SET['URI']?>'><span class="icon-star"></span>登录</a></th>
 <th><a href="<?=路径("user/register.php?accept=1");?>"><span class="icon-shopping-cart"></span>注册</a></th>
 <? } ?>
 <?php if ($_SESSION['admin']>0)	{ ?>

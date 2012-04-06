@@ -43,6 +43,7 @@ if(!$_GET['page']) {
 <th>修改时间</th>
 <th>开放分组</th>
 <?php if ($_SESSION['admin']>0){ ?>
+<th class=admin>添加用户</th>
 <th class=admin>权限</th>
 <th class=admin>编辑</th>
 <?php } ?>
@@ -52,16 +53,16 @@ for ($i=$st;$i<$cnt && $i<$st+$SET['style_pagesize'] ;$i++) {
     $d=$p->rtnrlt($i);
     if($_GET['key'] && $cnt == 1)
         echo "<script language='javascript'>location='page.php?aid={$d['aid']}';</script>";
-    if (!$d['submitable'] && !$_SESSION['admin']>0) continue;
-    if ($d['readforce']>$_SESSION['readforce'] && !($_SESSION['admin']>0)) continue;
+    if ($d['force']>$_SESSION['readforce'] && !($_SESSION['admin']>0)) continue;
 ?>
 <tr>
 <td><?php echo $d['aid'] ?></td>
 <th><a href="page.php?aid=<?=$d['aid'] ?>"><?=$d['title'] ?></h></td>
-<td><?=date('Y-m-d m:i', $d['time']) ?></td>
-<td><?=date('Y-m-d m:i', $d['etime']) ?></td>
+<td><?=date('Y-m-d', $d['time']) ?></td>
+<td><?=date('Y-m-d', $d['etime']) ?></td>
 <td><a href="../information/userlist.php?gid=<?=$d['gid'] ?>" target="_blank"><?=$d['gname'] ?></a></td>
 <?php if ($_SESSION['admin']>0) { ?>
+<td class=admin><?=$d['name']?></td>
 <td class=admin><?=$d['force']?></td>
 <th class=admin><a href="editpage.php?action=edit&aid=<?=$d['aid']?>">修改</a></th>
 <?php } ?>

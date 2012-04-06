@@ -7,6 +7,12 @@ $LIB->dpshhl();
 <?php
 $p=new DataAccess();
 $q=new DataAccess();
+if(!$_GET['id']) {
+    $sql = "select max(sid) as sid from submit";
+    $p->dosql($sql);
+    $d=$p->rtnrlt(0);
+    $_GET['id'] = $d['sid'];
+}
 $sql="select submit.*,userinfo.nickname,userinfo.realname,submit.subtime,problem.probname,problem.filename from submit,userinfo,problem where submit.pid=problem.pid and submit.uid=userinfo.uid and submit.sid={$_GET['id']}";
 $cnt=$p->dosql($sql);
 if($cnt) {
