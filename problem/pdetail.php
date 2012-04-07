@@ -113,8 +113,10 @@ for ($i=0;$i<=$cnt2-1;$i++) {
 <?php $LIB->singlerank($p,$pid,1) ?>
 </table>
 </td>
-<td id="probdetail">
+<td>
+<div id="probdetail">
 <?=$d['detail'] ?>
+</div>
 </td>
 </tr></table>
 

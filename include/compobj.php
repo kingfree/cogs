@@ -134,36 +134,36 @@ class Compiler
         }
         if ($this->state['timeout']) {
             $this->s_detail.='T';
-            return 评测信息('T');
+            return 评测信息a('T');
         } else if ($this->state['memoryout']) {
             $this->s_detail.='M';
-            return 评测信息('M');
+            return 评测信息a('M');
         } else if ($this->state['runerr']) {
             $this->s_detail.='E';
-            return 评测信息('E');
+            return 评测信息a('E');
         } else if ($this->state['noreport']) {
             $this->s_detail.='R';
-            return 评测信息('R');
+            return 评测信息a('R');
         } else if ($this->state['noindata'] || $this->state['noansdata']) {
             $this->s_detail.='D';
-            return 评测信息('D');
+            return 评测信息a('D');
         } else if ($this->state['score']==0) {
             $this->s_detail.='W';
-            return 评测信息('W');
+            return 评测信息a('W');
         } else if ($this->state['score']!=1) {
             $this->s_detail.='P';
-            return 评测信息('P');
+            return 评测信息a('P');
         } else if ($this->state['score']==1) {
             $this->s_detail.='A';
             $this->ac++;
-            return 评测信息('A');
+            return 评测信息a('A');
         }
     }
 
     public function getscore()
     {
         $this->s_score=(int)( (float)$this->s_score / (float)$this->info['datacnt'] *100);
-        return $this->s_score;
+        return (int)$this->s_score;
     }
 
     public function getmemory()
@@ -228,11 +228,11 @@ class Compiler
             $sql="insert into submit(pid,uid,lang,result,score,memory,accepted,subtime,IP,runtime,srcname) values({$this->info['pid']},{$this->info['uid']},{$this->info['language']},'{$this->s_detail}',{$this->s_score},{$this->avgmemory},{$ac},".time().",'{$_SERVER['REMOTE_ADDR']}',{$this->totaltime},'{$this->srcname}')";
             $p->dosql($sql);
         }
-        if (mt_rand(0,10)==1)
+        /*if (mt_rand(0,10)==1)
         {
             echo "<p>已完成数据库校验。</p>";
             require("gen_rank.php");
-        }
+        }*/
     }
 
     public function writedb_comp($csid)

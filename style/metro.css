@@ -369,7 +369,17 @@ textarea {
 }
 
 #probdetail {
+    margin: 0 0 0 0;
+    padding: 5px 5px 5px 5px;
     color: Black;
+    background-color: White;
+    font-size: 15px;
+}
+
+#probdetail table, #probdetail td{
+    border-collapse: collapse;
+    border: 1px solid black;
+    width: auto;
     background-color: White;
 }
 

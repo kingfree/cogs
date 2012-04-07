@@ -1,21 +1,20 @@
 <?php
 require_once("../include/stdhead.php");
-gethead(1,"sess","");
 
 if(time() > $_POST['endtime'] && !$_SESSION['admin'])
-    异常("比赛已经结束，不能再交题了！");
+header("location: ../refresh.php?id=16");
 
 $fname=$_POST[filename];
 switch ($_POST[lang]) {
-	case 'pas':
+    case 'pas':
         $fname.=".pas";
         $nlang=0;
         break;
-	case 'c':
+    case 'c':
         $fname.=".c";
         $nlang=1;
         break;
-	case 'cpp':
+    case 'cpp':
         $fname.=".cpp";
         $nlang=2;
         break;
@@ -24,15 +23,15 @@ switch ($_POST[lang]) {
 chdir($SET['dir_competition']);
 
 if (!file_exists($_POST[ctid])) {
-	mkdir($_POST[ctid]);
-	chmod($_POST[ctid],0775);
+    mkdir($_POST[ctid]);
+    chmod($_POST[ctid],0775);
 }
 
 chdir($_POST[ctid]);
 
 if (!file_exists($_SESSION[ID])) {
-	mkdir($_SESSION[ID]);
-	chmod($_SESSION[ID],0775);
+    mkdir($_SESSION[ID]);
+    chmod($_SESSION[ID],0775);
 }
 chdir($_SESSION[ID]);
 
@@ -45,12 +44,12 @@ $p=new DataAccess();
 $sql="select csid from compscore where uid={$_SESSION[ID]} and pid={$_POST[pid]} and ctid={$_POST[ctid]}";
 $cnt=$p->dosql($sql);
 if ($cnt) {
-	$sql="update compscore set subtime=".time().",lang={$nlang} where ctid={$_POST[ctid]} and uid={$_SESSION[ID]} and pid={$_POST[pid]}";
-	$p->dosql($sql);
+    $sql="update compscore set subtime=".time().",lang={$nlang} where ctid={$_POST[ctid]} and uid={$_SESSION[ID]} and pid={$_POST[pid]}";
+    $p->dosql($sql);
 } else {
-	$sql="insert into compscore(ctid,uid,pid,subtime,lang) values({$_POST[ctid]},{$_SESSION[ID]},{$_POST[pid]},".time().",{$nlang})";
-	$p->dosql($sql);
+    $sql="insert into compscore(ctid,uid,pid,subtime,lang) values({$_POST[ctid]},{$_SESSION[ID]},{$_POST[pid]},".time().",{$nlang})";
+    $p->dosql($sql);
 }
 
-提示("题目提交成功！");
+header("location: ../refresh.php?id=16");
 ?>

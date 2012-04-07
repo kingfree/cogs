@@ -5,10 +5,10 @@ gethead(1,"admin","比赛评测");
 
 <?php
 if ($_POST['do']=="评测选定") {
-    echo "<p>评测选定</p>";
+    echo "<h2>评测选定</h2>";
     $list=$_POST['doit'];
 } else if ($_POST['do']=="评测全部") {
-    echo "<p>评测全部</p>";
+    echo "<h2>评测全部</h2>";
     $list=$_POST['doall'];
 }
 if (!is_array($list))$list=array();

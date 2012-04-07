@@ -229,7 +229,21 @@ function 评测信息($str) {
         else if($str[$i] == 'P') $res .= "<span style='color:#B8860B;'>答案部分正确</span>";
     echo $res;
 }
-
+function 评测信息a($str) {
+    $res = "";
+    for($i=0; $i<strlen($str); $i++)
+        if($str[$i] == 'A') $res .= "<span style='color:#0000FF;'>答案正确</span>";
+        else if($str[$i] == 'W') $res .= "<span style='color:#ff0000;'>答案错误</span>";
+        else if($str[$i] == 'T') $res .= "<span style='background-color:#0033FF;color:#FFFF00;'>超过时间限制</span>";
+        else if($str[$i] == 'M') $res .= "<span style='background-color:#00FF44;color:#000000;'>超过内存限制</span>";
+        else if($str[$i] == 'E') $res .= "<span style='background-color:#000000;color:#FFFF00;'>运行时错误</span>";
+        else if($str[$i] == 'R') $res .= "<span style='background-color:#FFCC00;color:#006600;'>没有输出文件</span>";
+        else if($str[$i] == 'C') $res .= "<span style='background-color:#FF0000;'>编译错误</span>";
+        else if($str[$i] == 'D') $res .= "<span style='color:#fff;background-color:#000'>没有测试点数据</span>";
+        else if($str[$i] == 'N') $res .= "<span style='color:#FFFFFF;'>没有源代码</span>";
+        else if($str[$i] == 'P') $res .= "<span style='color:#B8860B;'>答案部分正确</span>";
+    return $res;
+}
 function 是否通过($pid, $q) {
     if ($_SESSION['ID']) {
         $sql="SELECT * FROM submit WHERE pid ={$pid} AND uid ={$_SESSION['ID']} order by score desc limit 1";

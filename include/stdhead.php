@@ -14,6 +14,8 @@ function gethead($head,$check,$title) {
     /*if(!$_SESSION['ID'])
         if($_COOKIE['User']) if($_COOKIE['cojs_login'])
             header("location: ".路径("user/dologin.php"));*/
+    if ($head==1) {
+        $useracc=new DataAccess();
 ?>
 <!DOCTYPE HTML>
 <head>
@@ -40,8 +42,6 @@ if ($check=="sess") {
     if ($_SESSION['admin']!=-1)
         echo '<script>document.location="../error.php?id=2"</script>';
 }
-    if ($head==1) {
-        $useracc=new DataAccess();
 ?>
 <table id="globalbar">
   <tr>

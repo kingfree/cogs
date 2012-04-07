@@ -6,10 +6,12 @@ $LIB->dpshhl();
 
 <?php
 $p=new DataAccess();
-$sql="select problem.filename,problem.probname,userinfo.uid,userinfo.nickname,userinfo.realname,compscore.ctid,compscore.subtime,compscore.score,compscore.result,compscore.lang from problem,compscore,userinfo where compscore.pid=problem.pid and userinfo.uid=compscore.uid and compscore.csid={$_GET[csid]}";
+$sql="select problem.filename,problem.probname,userinfo.uid,userinfo.nickname,userinfo.realname,compscore.ctid,compscore.subtime,comptime.endtime,compscore.score,compscore.result,compscore.lang from problem,compscore,comptime,userinfo where compscore.pid=problem.pid and comptime.ctid=compscore.ctid and userinfo.uid=compscore.uid and compscore.csid={$_GET[csid]}";
 $cnt=$p->dosql($sql);
 if ($cnt) {
 	$d=$p->rtnrlt(0);
+if(time() < $d['endtime'] && !$_SESSION['admin'])
+异常("比赛未结束！");
 	if ($d[lang]==0) $ext="pas"; else
 	if ($d[lang]==1) $ext="c"; else
 	if ($d[lang]==2) $ext="cpp"; 
