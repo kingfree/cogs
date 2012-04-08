@@ -115,8 +115,8 @@ $d=$p->rtnrlt($i);
 <td><i><?=$i+1 ?></i></td>
 <td style="font-size:26px; padding:0; margin:0;"><a href="user/detail.php?uid=<?php echo $d['uid']; ?>" target="_blank"><?=gravatar::showImage($d['email'], 28);?></a></td>
 <td><a href="user/detail.php?uid=<?php echo $d['uid']; ?>" target="_blank"><?=$d['nickname']?></a></td>
-<td><b><?php echo $d['grade'] ?></b></td>
-<td><b><?php echo $d['accepted'] ?></b></td>
+<td align=center><b><?php echo $d['grade'] ?></b></td>
+<td align=center><b><?php echo $d['accepted'] ?></b></td>
 </tr>
 <?php } ?>
 </table>

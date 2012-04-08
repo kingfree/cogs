@@ -3,6 +3,7 @@
 $rand_gen_data_access=new DataAccess();
 
 $subcnt=array();
+$supcnt=array();
 $accnt=array();
 
 $sql="select * from problem";
@@ -23,12 +24,13 @@ for ($i=0;$i<$cnt;$i++) {
     if ($d['pid']>$lastprob && $d['score']) {
         $lastprob=$d['pid'];
         if($d['accepted']) $accnt[ $lastuser ]++;
-        $grade[ $lastuser ] += $d['difficulty'] * $d['score'] / 10.0;
+        $supcnt[ $lastuser ]++;
+        $grade[ $lastuser ] += $d['difficulty'] * $d['score'] / 30.0;
     }
 }
 $users=$lastuser;
 for ($i=1;$i<=$users;$i++) {
-    $grade[$i]=(int)$grade[$i];
+    $grade[$i]=(int) ($grade[$i] * ($accnt[$i] / $supcnt[$i]));
     $sql="update userinfo set accepted='{$accnt[$i]}',submited='{$subcnt[$i]}',grade='{$grade[$i]}' where uid='{$i}'";
     $rand_gen_data_access->dosql($sql);
 }
@@ -51,5 +53,6 @@ for ($i=1;$i<=$probs;$i++) {
     $sql="update problem set acceptcnt='{$accnt[$i]}',submitcnt='{$subcnt[$i]}' where pid='{$i}'";
     $rand_gen_data_access->dosql($sql);
 }
+echo "<span class=ok>计算完成！</span>";
 
 ?>

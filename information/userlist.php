@@ -80,6 +80,8 @@ if ($subgroup!=array()) {
         $sql.=" order by realname asc";
     else if($_GET['rank']=="按权限排序")
         $sql.=" order by admin desc";
+    else if($_GET['rank']=="按阅读权限排序")
+        $sql.=" order by readforce desc";
     else if($_GET['rank']=="按分组排序")
         $sql.=" order by gbelong asc";
     else
@@ -109,6 +111,7 @@ if(!$_GET['page']) {
   <input name="rank" type="submit" id="rank_rn" class="admin" value="按姓名排序" />
   <? } ?>
   <input name="rank" type="submit" id="rank_ad" value="按权限排序" />
+  <input name="rank" type="submit" id="rank_rd" value="按阅读权限排序" />
   <input name="rank" type="submit" id="rank_gr" value="按分组排序" />
   <input name="rank" type="submit" id="rank_ac" value="按通过数量排序" />
   <input name="rank" type="submit" id="rank_lv" value="按通过率排序" />
@@ -129,6 +132,7 @@ function okdel(name) {
     <th>昵称</th>
     <? if($_SESSION['admin']>0) { ?><th class=admin>姓名</th><? } ?>
     <th>权限</th>
+    <th>阅读</th>
     <th>分组</th>
     <th>通过</th>
     <th>通过率</th>
@@ -143,10 +147,10 @@ function okdel(name) {
   <tr>
     <th><?=$i+1; ?></th>
     <td align=center><?=$d['uid'] ?></td>
-    <td><?=gravatar::showImage($d['email']);?>
-        <a href="../user/detail.php?uid=<?=$d['uid'] ?>" target="_blank"><?=$d['nickname'] ?></a></td>
+    <td><a href="../user/detail.php?uid=<?=$d['uid'] ?>" target="_blank"><?=gravatar::showImage($d['email']);?><?=$d['nickname'] ?></a></td>
     <? if($_SESSION['admin']>0) { ?><td class=admin align=center><?=$d['realname'] ?></td><? } ?>
     <td align=center><?=$STR[adminn][$d['admin']] ?></td>
+    <td align=center><?=$d['readforce'] ?></td>
     <td align=center><?="<a href='?gid={$d[gbelong]}'>{$d['gname']}</a>"; ?></td>
     <td align=center><?=$d['accepted'] ?></td>
     <td align=center><?=@round($d['accepted']/$d['submited']*100,2); ?>%</td>

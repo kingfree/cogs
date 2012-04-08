@@ -34,10 +34,11 @@ if (restore) selObj.selectedIndex=0;
 $sql="update problem set lastacid=1 where lastacid=0";
 $p->dosql($sql);
 
-if ((int)$_GET['caid']!=0)
-$sql="select problem.*,userinfo.nickname as name,userinfo.uid from problem,userinfo,tag where tag.pid=problem.pid and tag.caid={$_GET['caid']} and";
+$sql="select problem.*,userinfo.nickname,userinfo.email,userinfo.uid from problem,userinfo";
+if($_GET['caid'])
+$sql.=",tag where tag.pid=problem.pid and tag.caid={$_GET['caid']} and";
 else
-$sql="select problem.*,userinfo.nickname as name,userinfo.uid from problem,userinfo where";
+$sql.=" where";
 
 $sql.=" userinfo.uid=problem.lastacid";
 
@@ -111,8 +112,8 @@ if (!$err) for ($i=$st;$i<$cnt && $i<$st+$SET['style_pagesize'] ;$i++) {
 <td align=center><?php echo $d['acceptcnt']; ?></td>
 <td align=center><?php echo $d['submitcnt']; ?></td>
 <td align=center><?php echo @round($d['acceptcnt']/$d['submitcnt']*100,2); ?>%</td>
-<td><?php if ($d['uid']==1){ echo "无"; } else { ?>
-<a href="../user/detail.php?uid=<?=$d['uid'] ?>" target="_blank"><?=$d['name'];} ?></a></td>
+<td><?php if ($d['uid']<=1){ echo "无"; } else { ?>
+<a href="../user/detail.php?uid=<?=$d['uid'] ?>" target="_blank"><? echo gravatar::showImage($d['email']).$d['nickname']; } ?></a></td>
 <?php if ($_SESSION['admin']>0) { ?>
 <td class=admin>
 <?php if ($d['submitable']) echo "<span class=ok>可提交</span>"; else echo "<span class=no>不可提交</span>"; ?>

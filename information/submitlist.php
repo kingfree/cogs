@@ -15,23 +15,26 @@ $q=new DataAccess();
 <div id="sublist_now">
 这里是 <b><?php
 if ((int)$_GET['uid']==0) {
-?>所有人<?
+    echo "所有人";
 } else {
-$sql="select nickname from userinfo where uid='{$_GET['uid']}'";
-$cnt=$p->dosql($sql);
-if (!$cnt) exit;
-$d=$p->rtnrlt(0);
-?><a href="../user/detail.php?uid=<?php echo $_GET['uid'] ?>" target="_blank"><?php echo $d['nickname'] ?></a><?php } ?></b>的<b><?php
+    $sql="select nickname,email from userinfo where uid='{$_GET['uid']}'";
+    $cnt=$p->dosql($sql);
+    if (!$cnt) exit;
+    $d=$p->rtnrlt(0);
+?>
+<a href="../user/detail.php?uid=<?php echo $_GET['uid'] ?>" target="_blank"><?=gravatar::showImage($d['email']);?><?php echo $d['nickname'] ?></a><?php } ?></b>的<b><?php
 if ((int)$_GET['pid']==0) {
-?>所有题目<?
+    echo "所有题目";
 } else {
-$sql="select probname from problem where pid='{$_GET['pid']}' limit 1";
-$cnt=$p->dosql($sql);
-if (!$cnt) exit;
-$d=$p->rtnrlt(0);
-?><a href="../problem/pdetail.php?pid=<?php echo $_GET['pid'] ?>" target="_blank"><?php echo $d['probname'] ?></a><?php } ?></b>的记录。
-<a href="?pid=<?php echo $_GET['pid'] ?>&uid=<?php echo $_GET['uid'] ?>&display=all">全部显示</a>
-<a href="?pid=<?php echo $_GET['pid'] ?>&uid=<?php echo $_GET['uid'] ?>&display=ac">只显示通过的</a>
+    $sql="select probname from problem where pid='{$_GET['pid']}' limit 1";
+    $cnt=$p->dosql($sql);
+    if (!$cnt) exit;
+    $d=$p->rtnrlt(0);
+?>
+<? 是否通过($_GET['pid'], $q);?><a href="../problem/pdetail.php?pid=<?php echo $_GET['pid'] ?>" target="_blank"><?php echo $d['probname'] ?></a><?php } ?></b>的记录。
+<a href="?pid=<?=$_GET['pid']?>&uid=<?=$_GET['uid']?>&display=all">全部显示</a>
+<a href="?pid=<?=$_GET['pid']?>&uid=<?=$_GET['uid']?>&display=ac">只显示通过的</a>
+<a href="?pid=<?=$_GET['pid']?>&uid=<?=$_GET['uid']?>&show=yes">显示所有记录</a>
 </div>
 <?php
 $sql="select submit.*,userinfo.nickname,userinfo.email,userinfo.realname,problem.probname from submit,userinfo,problem where submit.pid=problem.pid and submit.uid=userinfo.uid ";
@@ -42,7 +45,7 @@ if ($_GET['uid'])
 if ($_GET['pid'])
     $sql.=" and submit.pid={$_GET['pid']} ";
 $sql.=" order by submit.sid desc";
-
+if(!$_GET['show']) $sql .= " limit {$SET['style_ranksize']}";
 $cnt=$p->dosql($sql);
 $totalpage=(int)(($cnt-1)/$SET['style_pagesize'])+1;
 if(!$_GET['page']) {
@@ -55,7 +58,10 @@ if(!$_GET['page']) {
         $st=(($_GET[page]-1)*$SET['style_pagesize']);
 }
 ?>
-<? 分页($cnt, $_GET['page'], '?pid='.$_GET['pid'].'&uid='.$_GET['uid'].'&display='.$_GET['display'].'&'); ?>
+<?
+if($_GET['show'])
+    分页($cnt, $_GET['page'], '?pid='.$_GET['pid'].'&uid='.$_GET['uid'].'&display='.$_GET['display'].'&show='.$_GET['show'].'&');
+?>
 
 <table id="submitlist">
 <thead><tr>
@@ -79,11 +85,14 @@ for ($i=$st;$i<$cnt && $i<$st+$SET['style_pagesize'] ;$i++) {
 ?>
 <tr>
 <td align=center><?=$d['sid']?></td>
-<td><?php 是否通过($d['pid'], $q);
-echo "<a href='?pid={$d['pid']}'>{$d['probname']}</a>";
-echo "<a href='../problem/pdetail.php?pid={$d['pid']}' target='_blank'><span class='icon-share'></span></a>";
+<td><?php if(!$_GET['pid']) {
+    是否通过($d['pid'], $q);
+    echo "<a href='?pid={$d['pid']}&uid={$_GET['uid']}'>{$d['probname']}</a>";
+    echo "<a href='../problem/pdetail.php?pid={$d['pid']}' target='_blank'><span class='icon-share'></span></a>";
+} else
+    echo "<a href='../problem/pdetail.php?pid={$d['pid']}' target='_blank'>{$d['probname']}</a>";
 ?></td>
-<td><a href='../user/detail.php?uid=<?=$d['uid']?>' target='_blank'><?=gravatar::showImage($d['email']);?></a><?php echo "<a href='?uid={$d[uid]}'>{$d['nickname']}</a>"; ?></td>
+<td><a href='../user/detail.php?uid=<?=$d['uid']?>' target='_blank'><?=gravatar::showImage($d['email']);?></a><?php echo "<a href='?uid={$d[uid]}&pid={$_GET['pid']}'>{$d['nickname']}</a>"; ?></td>
 <td><?=评测结果($d['result'])?></td>
 <td align=center><span class="<?=$d['accepted']?'ok':'no'?>"><?=$d['score'] ?></span></td>
 <td><a href='../problem/submitdetail.php?id=<?=$d['sid']?>'><?=$STR['lang'][$d['lang']]?></a></td>
