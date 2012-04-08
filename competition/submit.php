@@ -1,8 +1,10 @@
 <?php
 require_once("../include/stdhead.php");
 
-if(time() > $_POST['endtime'] && !$_SESSION['admin'])
+if(time() > $_POST['endtime'] && !$_SESSION['admin']) {
 header("location: ../refresh.php?id=16");
+exit;
+}
 
 $fname=$_POST[filename];
 switch ($_POST[lang]) {

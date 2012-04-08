@@ -59,6 +59,23 @@ for($i=0; $i<$cnt; $i++) {
 </table>
 <?php } ?>
 <br />
+<table id="lastest_page">
+<tr>
+<th width="40px">时间</th>
+<th>最新页面</th>
+</tr>
+<?php 
+$cnt=$p->dosql("select * from page order by etime desc limit 5");
+for($i=0;$i<$cnt;$i++) {
+    $d=$p->rtnrlt($i);
+?>
+<tr>
+<td><?=date("m-d", $d['etime'])?></td>
+<td><a href="page/page.php?aid=<?=$d['aid']?>" target="_blank"><?=$d['title']?></a></td>
+</tr>
+<?php } ?>
+</table>
+<br />
 <table id="lastest_prob">
 <tr>
 <th width="40px">PID</th>
