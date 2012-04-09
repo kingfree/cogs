@@ -17,6 +17,8 @@ $sql.=" userinfo.uid=page.uid and groups.gid=page.group";
 if ($_GET['key']!="")
 $sql.=" and (page.text like '%{$_GET[key]}%' or page.title like '%{$_GET[key]}%')";
 
+$sql .= " order by title asc";
+
 $cnt=$p->dosql($sql);
 $totalpage=(int)(($cnt-1)/$SET['style_pagesize'])+1;
 if(!$_GET['page']) {
@@ -57,7 +59,7 @@ for ($i=$st;$i<$cnt && $i<$st+$SET['style_pagesize'] ;$i++) {
 ?>
 <tr>
 <td><?php echo $d['aid'] ?></td>
-<th><a href="page.php?aid=<?=$d['aid'] ?>"><?=$d['title'] ?></h></td>
+<th align=left><a href="page.php?aid=<?=$d['aid'] ?>"><?=$d['title'] ?></h></td>
 <td><?=date('Y-m-d', $d['time']) ?></td>
 <td><?=date('Y-m-d', $d['etime']) ?></td>
 <td><a href="../information/userlist.php?gid=<?=$d['gid'] ?>" target="_blank"><?=$d['gname'] ?></a></td>

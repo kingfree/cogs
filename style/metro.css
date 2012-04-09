@@ -22,7 +22,7 @@ table {
 th {
     border: 0;
     color: Black;
-    background-color: rgba(252, 252, 252, 0.6);
+    background-color: rgba(252, 252, 252, 0.8);
 }
 
 tr {
@@ -32,15 +32,14 @@ tr {
 }
 
 td {
-    border: 0;
+    border: none;
+    margin: 0 0 0 0;
     color: Black;
     vertical-align: top;
 }
 
 tr:nth-child(even) {
-    border: 0;
-    color: Black;
-    vertical-align: top;
+    background-color: rgba(252, 252, 252, 0.45);
 }
 
 a:link, a:visited {
@@ -242,6 +241,10 @@ textarea {
     text-align: center;
     background-color: #8dc0c7;
     font-family: 黑体;
+}
+
+#globalbar tr {
+    background-color: #8dc0c7;
 }
 
 #globalbar tr td a:link, #globalbar tr td a:visited {
@@ -468,6 +471,7 @@ textarea {
 }
 
 #probstatics {
+    font-size: 80%;
 }
 
 #did_contests {

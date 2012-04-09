@@ -60,29 +60,31 @@ for($i=0; $i<$cnt; $i++) {
 <?php } ?>
 <br />
 <table id="lastest_page">
+<thead>
 <tr>
-<th width="40px">时间</th>
 <th>最新页面</th>
+</thead>
 </tr>
 <?php 
-$cnt=$p->dosql("select * from page order by etime desc limit 5");
+$cnt=$p->dosql("select * from page order by etime desc limit 6");
 for($i=0;$i<$cnt;$i++) {
     $d=$p->rtnrlt($i);
 ?>
 <tr>
-<td><?=date("m-d", $d['etime'])?></td>
 <td><a href="page/page.php?aid=<?=$d['aid']?>" target="_blank"><?=$d['title']?></a></td>
 </tr>
 <?php } ?>
 </table>
 <br />
 <table id="lastest_prob">
+<thead>
 <tr>
 <th width="40px">PID</th>
 <th>最新题目</th>
+</thead>
 </tr>
 <?php 
-$cnt=$p->dosql("select * from problem where submitable=1 order by pid desc limit 5");
+$cnt=$p->dosql("select * from problem where submitable=1 order by pid desc limit 6");
 for($i=0;$i<$cnt;$i++) {
     $d=$p->rtnrlt($i);
 ?>
@@ -104,8 +106,10 @@ for($i=0;$i<$cnt;$i++) {
 </td>
 <td id="index_rank">
 <table>
+<thead>
 <tr><th colspan=5>等级前 <?=$SET['style_ranksize'];?> 名</th></tr>
 <tr><th></th><th></th><th>用户</th><th>等级</th><th>过</th></tr>
+</thead>
 <?php 
 $cnt=$p->dosql("select * from userinfo order by grade desc limit 0, {$SET['style_ranksize']}");
 for($i=0;$i<$cnt;$i++) {

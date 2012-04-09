@@ -16,10 +16,10 @@ gethead(1,"admin","后台管理");
 <tr>
 <th>比赛</th>
 <td><span>
-<a href="../competition/index.php">比赛场次列表</a>
+<a href="../competition/index.php">比赛列表</a>
 </span>
 <span class="admin">
-<a href="settings.php?settings=comp">比赛列表</a>
+<a href="settings.php?settings=comp">比赛管理</a>
 </span></td>
 <td><span class="admin">
 <a href="comp/editcompbase.php?action=add">添加新比赛</a>
@@ -57,10 +57,10 @@ gethead(1,"admin","后台管理");
 </tr>
 <tr>
 <th>系统</th>
-<td><span class="admin"><a href="settings.php?settings=settings">参数设置</a></span></td>
+<td><? if($_SESSION['admin'] > 1) { ?><span class="admin"><a href="settings.php?settings=settings">参数设置</a></span><? } ?></td>
 <td><span class="admin"><a href="settings.php?settings=rank">排名管理</a></span></td>
 </tr>
-<tr>
+<? if($_SESSION['admin'] > 1) { ?><tr>
 <th rowspan=2>高级</th>
 <td><span><a href="settings.php?settings=dbctrl">数据库管理</a></span></td>
 <td><span><a href="settings.php?settings=terminal">PHP终端访问</a></span></td>
@@ -68,7 +68,7 @@ gethead(1,"admin","后台管理");
 <tr>
 <td><span><a href="settings.php?settings=serverinfo">服务器信息</a></span></td>
 <td><span><a href="settings.php?settings=phpinfo">PHP信息</a></span></td>
-</tr>
+</tr><? } ?>
 </table>
 <?php
 include_once("../include/stdtail.php");

@@ -126,6 +126,7 @@ function okdel(name) {
 }
 </script>
 <table id="userlist">
+<thead>
   <tr>
     <th>名次</th>
     <th>UID</th>
@@ -140,6 +141,7 @@ function okdel(name) {
     <? if($_SESSION['admin']>0) { ?><th class=admin>IP</th><? } ?>
     <? if($_SESSION['admin']>0) { ?><th class=admin>操作</th><? } ?>
   </tr>
+</thead>
 <?php
     if (!$err) for ($i=$st;$i<$cnt && $i<$st+$SET['style_pagesize'] ;$i++) {
         $d=$p->rtnrlt($i);

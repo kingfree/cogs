@@ -48,7 +48,27 @@ $sql.=" and (problem.probname like '%{$_GET[key]}%' or problem.pid ='{$_GET[key]
 if ($_GET['diff']!="")
 $sql.=" and difficulty='{$_GET['diff']}'";
 
-$sql.=" order by problem.pid asc";
+if($_GET['rank']=="按题目名称排序")
+    $sql.=" order by problem.probname asc";
+else if($_GET['rank']=="按文件名称排序")
+    $sql.=" order by problem.filename asc";
+else if($_GET['rank']=="按评测方式排序")
+    $sql.=" order by problem.plugin asc";
+else if($_GET['rank']=="按时间限制排序")
+    $sql.=" order by problem.timelimit asc";
+else if($_GET['rank']=="按空间限制排序")
+    $sql.=" order by problem.memorylimit asc";
+else if($_GET['rank']=="按题目难度排序")
+    $sql.=" order by problem.difficulty asc";
+else if($_GET['rank']=="按通过次数排序")
+    $sql.=" order by problem.acceptcnt desc";
+else if($_GET['rank']=="按可否提交排序")
+    $sql.=" order by problem.submitable asc";
+else if($_GET['rank']=="按阅读权限排序")
+    $sql.=" order by problem.readforce desc";
+else
+    $sql.=" order by problem.pid asc";
+
 
 $cnt=$p->dosql($sql);
 $totalpage=(int)(($cnt-1)/$SET['style_pagesize'])+1;
@@ -75,7 +95,19 @@ if(!$_GET['page']) {
 <input class="LinkButton" name="sc" type="submit" id="sc" value="搜索"/>
 <input name="caid" type="hidden" id="caid" value="<?php echo $_GET['caid'] ?>" />
 </form>
-<? 分页($cnt, $_GET['page'], '?caid='.$_GET['caid'].'&diff='.$_GET['diff'].'&key='.$_GET['key'].'&sc'.$_GET['sc'].'&'); ?>
+<form id="rank" action="" method="get" name="rank">
+  <input name="rank" type="submit" value="按题目名称排序" />
+  <input name="rank" type="submit" value="按文件名称排序" />
+  <input name="rank" type="submit" value="按评测方式排序" />
+  <input name="rank" type="submit" value="按时间限制排序" />
+  <input name="rank" type="submit" value="按空间限制排序" />
+  <input name="rank" type="submit" value="按题目难度排序" />
+  <input name="rank" type="submit" value="按通过次数排序" />
+  <?php if ($_SESSION['admin']>0) { ?>
+  <input name="rank" type="submit" value="按可否提交排序" />
+  <? } ?>
+</form>
+<? 分页($cnt, $_GET['page'], '?caid='.$_GET['caid'].'&diff='.$_GET['diff'].'&key='.$_GET['key'].'&rank='.$_GET['rank'].'&'); ?>
 <table id="problist">
 <thead><tr>
 <th>PID</th>

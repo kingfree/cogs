@@ -47,7 +47,7 @@ $q = new DataAccess();
 <th width=80px>发送时间</th>
 </tr>
 <?
-$sql = "select * from mail where toid = $uid order by mid desc";
+$sql = "select * from mail where toid = $uid order by mid desc limit 10";
 $cnt = $p->dosql($sql);
 for($i=0; $i<$cnt; $i++) {
 	$d=$p->rtnrlt($i);
@@ -77,7 +77,7 @@ for($i=0; $i<$cnt; $i++) {
 <th width=80px>发送时间</th>
 </tr>
 <?
-$sql = "select * from mail where fromid = $uid order by mid desc";
+$sql = "select * from mail where fromid = $uid order by mid desc limit 10";
 $cnt = $p->dosql($sql);
 for($i=0; $i<$cnt; $i++) {
 	$d=$p->rtnrlt($i);

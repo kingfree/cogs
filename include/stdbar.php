@@ -34,7 +34,6 @@ if($cnt > 0) echo "<span class='todo'>($cnt)</span>";
 <?php if ($_SESSION['admin']>0)	{ ?>
 <td><a class="admin" href="<?=路径("admin/index.php");?>"><span class="icon-asterisk"></span>后台</a></td>
 <? } ?>
-<td><a href="<?=路径("information/help.php");?>"><span class="icon-question-sign"></span>帮助</a></td>
 <td><a href="<?=路径("information/about.php");?>"><span class="icon-info-sign"></span>关于</a></td>
 <td style="text-align:right;"><a href="#" onclick="document.getElementById('trad').innerHTML='正';document.getElementById('alltext').innerHTML = TradSimp.getTrad(document.getElementById('alltext').innerHTML);" id="trad">繁</a>/<a href="#" onclick="document.getElementById('trad').innerHTML='繁';document.getElementById('alltext').innerHTML = TradSimp.getSimp(document.getElementById('alltext').innerHTML);" id="simp">简</a></td>
 </tr>
