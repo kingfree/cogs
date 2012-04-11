@@ -1,6 +1,6 @@
 <?php
 require_once("../include/stdhead.php");
-gethead(1,"sess","提交详细记录");
+gethead(1,"sess","代码");
 $LIB->dpshhl();
 ?>
 

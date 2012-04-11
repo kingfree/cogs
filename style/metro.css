@@ -42,6 +42,10 @@ tr:nth-child(even) {
     background-color: rgba(252, 252, 252, 0.45);
 }
 
+p {
+    margin: 2px 2px 2px 2px;
+}
+
 a:link, a:visited {
     text-decoration: none;
     color: MidnightBlue;
@@ -375,6 +379,7 @@ textarea {
     margin: 0 0 0 0;
     padding: 5px 5px 5px 5px;
     color: Black;
+	overflow: auto;
     background-color: White;
     font-size: 15px;
 }

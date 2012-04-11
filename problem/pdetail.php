@@ -54,7 +54,7 @@ if($cnt) {
 <tr><th>对比方式</th>
 <td><?=$STR['plugin'][$d['plugin']]; ?></td></tr>
 <tr><th>测试点数</th>
-<td><?=$d[datacnt]; ?></td></tr>
+<td><?=$d[datacnt]; ?> <?=$d['submitable']?"<span class=ok>可提交":"<span class=no>不可提交"?></span></td></tr>
 <tr><th>添加时间</th>
 <td><?=date('Y-m-d', $d['addtime']) ?></td></tr>
 <tr><th>开放分组</th>

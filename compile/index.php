@@ -50,7 +50,7 @@ $Cp=new Compiler($info);
 ?>
 <table border="0"><tr>
 <td width=60%>
-正在连接评测机……
+正在连接评测机...
 <?php
 flush();
 $free=$Cp->getgds();
@@ -124,26 +124,38 @@ if ($csucc) {
 <p>测试点通过状况 <a href="../problem/submitdetail.php?id=<?=$info['sid']?>"><?=评测结果($Cp->s_detail) ?></a></p>
 <p>得分：<?=$Cp->getscore(); ?></p>
 <p><a href="../problem/pdetail.php?pid=<?=$_POST['pid'] ?>">返回原题 “<?=$ptitle?>”</a></p>
+<?php if ($Cp->ac==$d['datacnt']) {
+    $AC = 1;
+} else {
+    $AC = 0;
+    if(($_SESSION['admin'] > 0 || $_SESSION['ID'] == $info['uid']) &&
+            $nodata == false) {
+        $AC = -1;
+    } 
+}?>
+<?php if($AC == 1) { ?>
+    <p class="ok">祝贺你通过了全部测试点！</p>
+<?php } else if($AC < 1) { ?>
+    <p class="no">你没有通过这道题！</p>
+    <p><a href="../information/help.php" target="_blank" title="RP问题">为什么程序在我的电脑上能够正常运行，而在评测机上不能?</a></p>
+<?php } ?>
+<?php
+if($nodata == false && ($_POST['testmode'] != 1 || $_SESSION['admin']==0))
+	$Cp->writedb_single();
+else echo "<p class=no>没有写入数据库</p>";
+?>
 </td>
 </tr></table>
-<?php if ($Cp->ac==$d['datacnt']) { ?>
-    <p class="ok">祝贺你通过了全部测试点!</p>
-<?php } else { if(($_SESSION['admin'] > 0 || $_SESSION['ID'] == $info['uid']) && $nodata == false) { ?>
-<p class="no">你在第<?=$Cp->wrongpoint?>个测试点出现了爆〇的情况，下面是该题的输入数据：
+<?php if($AC == -1) { ?>
+<p class="no">你在第<?=$Cp->wrongpoint?>个测试点出现了爆零的情况，下面是该题的输入数据：
 <pre class="brush: text;"><?=htmlspecialchars($Cp->inputtext)?></pre>
 <p>下面是你的输出与标准答案不同的地方（上面带减号“-”的是你的输出，下面带加号“+”的是答案输出，“@@”之间的数字表示行号）：
 <pre class="brush: diff;"><?=htmlspecialchars($Cp->difftext)?></pre>
 <p><a href="../problem/pdetail.php?pid=<?=$_POST['pid'] ?>">返回原题 “<?=$ptitle?>”</a></p>
-<?php } else echo "<p>你无法查看错误点的输入输出文件。</p>";?>
-<p><a href="../information/help.php" target="_blank" title="RP问题">为什么程序在我的电脑上能够正常运行，而在评测机上不能?</a></p>
-<?php }
-if($nodata == false && ($_POST['testmode'] != 1 || $_SESSION['admin']==0))
-	$Cp->writedb_single();
-}
-else {//编译失败
-?>
+<?php } ?>
+<?php } else { ?>
 <p>编译失败：</p>
-<pre><?=htmlspecialchars($Cp->compilemessage)?></pre>
+<pre class="brush: bash;"><?=htmlspecialchars($Cp->compilemessage)?></pre>
 <?php 
 }
 $Cp->unlock();
