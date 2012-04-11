@@ -52,12 +52,12 @@ class lib {
         global $SET;
         require_once("sendverfy.inc.php");
     }
-    public function singlerank($p,$pid,$lang) {
-        global $SET;
+    public function singlerank($p,$pid) {
+        global $SET, $STR;
         require("singlerank.inc.php");
     }
     public function category_bar($p) {
-        global $SET;
+        global $SET, $STR;
         require("categorybar.inc.php");
     }
     public function getsubgroup($p,$gid) {

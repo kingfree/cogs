@@ -34,7 +34,7 @@ for ($i=0;$i<$cnt;$i++) {
 $users=$lastuser;
 echo "更新数据库……<br />";
 for ($i=1;$i<=$users;$i++) {
-    $grade[$i]=(int) ($grade[$i] * ($accnt[$i] / $supcnt[$i]));
+    $grade[$i]=(int) ($grade[$i] /* * ($accnt[$i] / $supcnt[$i])*/);
     if($grade[$i]) echo "计算用户{$i}的等级为{$grade[$i]}……<br />";
     $sql="update userinfo set accepted='{$accnt[$i]}',submited='{$subcnt[$i]}',grade='{$grade[$i]}' where uid='{$i}'";
     $rand_gen_data_access->dosql($sql);

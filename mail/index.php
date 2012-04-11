@@ -25,7 +25,7 @@ $q = new DataAccess();
 </tr>
 <tr>
 <th>收件人ID</th>
-<td><input class="InputBox" name="toid" value="<?=$_POST['toid']?>" /></td>
+<td><input class="InputBox" name="toid" value="<?=$_POST['toid']?$_POST['toid']:$_GET['toid']?>" /></td>
 </tr>
 <tr>
 <th>邮件内容</th>

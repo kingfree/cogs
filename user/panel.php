@@ -19,7 +19,16 @@ $d=$p->rtnrlt(0);
   <tr>
     <th>用户</th>
     <td><?=$d[usr] ?></td>
-    <td rowspan=3 align=center><?=gravatar::showImage($d['email'], 64);?></td>
+    <td rowspan=6 align=center>
+    <?=gravatar::showImage($d['email'], 200);?><br />
+    <a href="dodelimg.php?email=<?=md5($d['email'])?>">清空头像缓存</a><br />
+    <div>
+      <input type="submit" name="Submit" style="font-size:200%;" value="修改" />
+      <input name="action" type="hidden" id="action" value="edit" />
+      <input name="uid" type="hidden" id="uid" value="<?=$d['uid']?>" />
+    </div>
+    <a class=admin href="editpwd.php">修改密码</a>
+    </td>
   </tr>
   <tr>
     <th>用户昵称</th>
@@ -32,21 +41,15 @@ $d=$p->rtnrlt(0);
   <tr>
     <th>E-mail</th>
     <td><input class="InputBox" name="email" type="email" value=<?=$d[email]?> /> 这个电子邮箱现在用于显示用户头像，请一律小写</td>
-    <td align=center><a href="dodelimg.php?email=<?=md5($d['email'])?>">清空头像缓存</a></td>
   </tr>
   <tr>
     <th>等级</th>
     <td><b><?=$d[grade] ?></b> 等级 = (通过题目难度之和 * 2000) / 提交题目数</td>
-    <td align=center class=admin><a href="editpwd.php">修改密码</a></td>
   </tr>
   <tr>
     <th>个人介绍</th>
     <td><textarea name="memo" cols="60" rows="10" class="TextArea"><?=$d[memo] ?> </textarea></td>
-    <td align=center>
-  <input type="submit" name="Submit" value="修改"  class="Button"/>
-  <input name="action" type="hidden" id="action" value="edit" />
-  <input name="uid" type="hidden" id="uid" value="<?=$d['uid']?>" />
-    </td>  </tr>
+</tr>
   <tr>
   </tr>
 </table>

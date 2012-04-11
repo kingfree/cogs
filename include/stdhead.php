@@ -20,7 +20,9 @@ function gethead($head,$check,$title) {
 <!DOCTYPE HTML>
 <head>
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
-<link rel=stylesheet href="<?=路径("style/".$SET['style_profile'])?>"><?php $LIB->tradsimp(); ?>
+<link rel=stylesheet href="<?=路径("style/".$SET['style_profile'])?>" />
+<?php $LIB->tradsimp(); ?>
+
 <link rel=stylesheet type="text/css" href="<?=路径("style/icon.css")?>" />
 <script type="text/javascript" src="<?=路径("include/jquery.js")?>"></script>
 <script type="text/javascript" src="<?=路径("include/sortTable.js")?>"></script>

@@ -30,7 +30,7 @@ for ($i=0;$i<$cnt;$i++) {
 }
 $users=$lastuser;
 for ($i=1;$i<=$users;$i++) {
-    $grade[$i]=(int) ($grade[$i] * ($accnt[$i] / $supcnt[$i]));
+    $grade[$i]=(int) ($grade[$i]/* * ($accnt[$i] / $supcnt[$i])*/);
     $sql="update userinfo set accepted='{$accnt[$i]}',submited='{$subcnt[$i]}',grade='{$grade[$i]}' where uid='{$i}'";
     $rand_gen_data_access->dosql($sql);
 }

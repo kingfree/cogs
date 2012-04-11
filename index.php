@@ -108,7 +108,6 @@ for($i=0;$i<$cnt;$i++) {
 <table>
 <thead>
 <tr><th colspan=5>等级前 <?=$SET['style_ranksize'];?> 名</th></tr>
-<tr><th></th><th></th><th>用户</th><th>等级</th><th>过</th></tr>
 </thead>
 <?php 
 $cnt=$p->dosql("select * from userinfo order by grade desc limit 0, {$SET['style_ranksize']}");

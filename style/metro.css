@@ -44,6 +44,7 @@ tr:nth-child(even) {
 
 p {
     margin: 2px 2px 2px 2px;
+    text-indent: 2em;
 }
 
 a:link, a:visited {
@@ -65,17 +66,17 @@ a:active {
     border: thin solid #0077ec;
 }
 
-input {
+input, textarea {
     border: thin solid LightBlue;
     background-color: White;
 }
 
-input:hover {
+input:hover, textarea:hover {
     border: thin solid #2491b3;
     background-color: White;
 }
 
-input:active {
+input:active, textarea:active {
     border: thin solid #eeea50;
     background-color: White;
 }
@@ -98,10 +99,8 @@ input[type="submit"]:active {
     background-color: LightBlue;
 }
 
-textarea {
-    border: 0;
-    border: thin solid LightBlue;
-    background-color: White;
+pre {
+    margin: 0;
 }
 
 /* 类选择器 */
@@ -233,6 +232,7 @@ textarea {
 }
 
 #global_head {
+    font-family: Times New Roman;
     font-size: 40px;
     text-align: center;
     color: Black;

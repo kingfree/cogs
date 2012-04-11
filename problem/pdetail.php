@@ -39,7 +39,9 @@ if($cnt) {
 <table id="pdetail"><tr>
 <td id="prob_left">
 <table id="probinfo">
-<tr><th width=80px>题目名称</th>
+<tr><th width=80px>题目编号</th>
+<td><?=$d[pid]; ?></td></tr>
+<tr><th>题目名称</th>
 <td><b><?=$d[probname]; ?></b></td></tr>
 <tr><th>难度等级</th>
 <td><?=难度($d['difficulty']); ?></td></tr>
@@ -80,14 +82,6 @@ for ($i=0;$i<=$cnt2-1;$i++) {
     echo " <a href='problist.php?caid={$e[caid]}'>{$e[cname]}</a> ";
 }
 ?></td></tr>
-<tr><?php if ($_SESSION['admin']>0){ ?>
-<th class=admin><a href="../admin/problem/editprob.php?action=edit&pid=<?= $d[pid]; ?>">修改该题</a></th>
-<?php } else { ?>
-<td></td>
-<? } ?>
-<td align=right>
-<a href="comments.php?pid=<?=$pid?>"><b>发表看法</b></a>
-</td></tr>
 <tr><form action="../compile/" method="post" enctype="multipart/form-data" name="sub">
 <td colspan=2 align=right>
 <input type="file" name="file"/>
@@ -102,15 +96,38 @@ for ($i=0;$i<=$cnt2-1;$i++) {
 <input name="pid" type="hidden" id="pid" value="<?=$d['pid']; ?>" />
 <input type="hidden" name="MAX_FILE_SIZE" value="102400">
 </td></form></tr>
+<tr><?php if ($_SESSION['admin']>0){ ?>
+<th class=admin><a href="../admin/problem/editprob.php?action=edit&pid=<?= $d[pid]; ?>">修改该题</a></th>
+<?php } else { ?>
+<td></td>
+<? } ?>
+<td align=right>
+<a href="comments.php?pid=<?=$pid?>"><b>发表看法</b></a>
+</td></tr>
 </table>
 <table id="singlerank">
 <tr><th colspan=3>运行速度前 <?=$SET['style_single_ranksize']; ?> 名</th><tr>
-<tr><th colspan=3>C++</th></tr>
-<?php $LIB->singlerank($p,$pid,2) ?>
-<tr><th colspan=3>Pascal</th></tr>
-<?php $LIB->singlerank($p,$pid,0) ?>
-<tr><th colspan=3>C</th></tr>
-<?php $LIB->singlerank($p,$pid,1) ?>
+<?php $LIB->singlerank($q,$pid) ?>
+</table>
+<hr />
+<table id="Comments">
+<tr><th colspan=3>最新讨论</th><tr>
+<?
+$sql="select comments.*,userinfo.* from comments,userinfo where userinfo.uid=comments.uid and comments.pid='{$d['pid']}' order by comments.stime desc limit {$SET['style_single_ranksize']}";
+$cnt=$q->dosql($sql);
+for ($i=0;$i<$cnt;$i++) {
+    $e=$q->rtnrlt($i);
+?>
+    <tr class="CommentsU">
+    <td width=10px><a href="<?=路径("mail/index.php")?>?toid=<?=$e['uid']?>" title="给<?=$e['nickname']?>发送信件"><span class="icon-envelope"></span></a></td>
+    <td><a href="../user/detail.php?uid=<?=$e['uid'] ?>"><?=gravatar::showImage($e['email']);?><?=$e['nickname'] ?></a></td>
+    <td width=30px>#<?=$cnt-$i?></td>
+    </tr>
+    <tr><td colspan=3 class="CommentsK"><?php echo nl2br(sp2n(htmlspecialchars($e['detail'])))?></td></tr>
+    <tr><td colspan=3 class="CommentsTime"><?=date('Y-m-d H:i:s',$e['stime'])?></td></tr>
+<?
+}
+?>
 </table>
 </td>
 <td>

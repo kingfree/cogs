@@ -72,7 +72,7 @@ if ($forcetocode) {
   </tr>
   <tr>
     <th>是否通过</th>
-    <td><?php echo $d['accepted']?"通过":"未通过"; ?></td>
+    <td><?php echo $d['accepted']?"<span class=ok>通过":"<span class=no>未通过"; ?></span></td>
   </tr>
   <tr>
     <th>运行时间</th>

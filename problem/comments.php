@@ -30,13 +30,14 @@ if ($cnt)
     <td colspan=2 class="CommentsK"><?php echo nl2br(sp2n(htmlspecialchars($d['detail'])))?></td>
   </tr>
   <tr>
-	<td class="CommentsCode"><?php if ($d['showcode']){ 
+	<td class="CommentsCode"><?php if ($d['showcode']){
 	$sql="select sid from submit where uid='{$d['uid']}' and pid='{$pid}' order by accepted desc";
 	$q->dosql($sql);
 	$e=$q->rtnrlt(0);
 	?>
 	<a href="submitdetail.php?id=<?php echo $e['sid'] ?>">查看该用户最后一次提交的代码</a>
 	<?php } ?>
+    <a href="<?=路径("mail/index.php")?>?toid=<?=$d['uid']?>" title="给<?=$d['nickname']?>发送信件"><span class="icon-envelope"></span></a>
 	</div>
     </td>
 	<td  class="CommentsTime">发表时间：<?php echo date('Y-m-d H:i:s',$d['stime']);?></td>
