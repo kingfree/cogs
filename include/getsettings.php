@@ -7,8 +7,9 @@ for ($i=0;$i<$cnt;$i++) {
 	$SET[$d['name']]=$d['value'];
 }
 
-$cfg['Version']='1.8.0.0';
 $SET['cur']=$_SERVER['SCRIPT_FILENAME'];
 $SET['base']=$_SERVER['DOCUMENT_ROOT'].$SET['global_root'];
 $SET['URI']=base64_encode($_SERVER['REQUEST_URI']);
+
+$cfg['Version']='2.1.6.1';
 ?>

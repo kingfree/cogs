@@ -142,15 +142,17 @@ pre {
 }
 
 .page_slice {
-    position: relative;
-    left: 30%;
-    width: 40%;
     text-align: center;
     color: CornflowerBlue;
     //background-color: Azure;
 }
 
-.page_slice table, .page_slice a:link, .page_slice a:visited {
+.page_slice table {
+    text-align: center;
+    width: auto;
+}
+
+.page_slice a:link, .page_slice a:visited {
     color: CornflowerBlue;
     //background-color: Azure;
 }
@@ -281,8 +283,9 @@ pre {
 }
 
 #userinfo {
-    width: 100%;
+    font-family: 黑体;
     background-color: #8dc0c7;
+    text-shadow: 5px 2px 5px #ccf;
 }
 
 #body {
@@ -295,17 +298,18 @@ pre {
     border: thin solid #f96531;
 }
 
-#publictail {
+#publictail , #publictail a {
     margin: 0;
     color: #f9fcff;
     background-color: #4d9378;
     text-shadow: 0px 2px 8px #fcf;
 }
 
-#global_tail {
+#global_tail, #global_tail a {
+    border: 0;
     margin: 0;
     padding: 0;
-    font-size: 10px;
+    font-size: 90%;
     text-align: right;
     color: #f9fcff;
     background-color: #4d6366;
@@ -477,7 +481,7 @@ pre {
 }
 
 #probstatics {
-    font-size: 80%;
+    font-size: 90%;
 }
 
 #did_contests {

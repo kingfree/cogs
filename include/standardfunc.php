@@ -278,7 +278,7 @@ function 分页($total,$page,$url='',$page_size='',$max_length='') {
     if($page == 1 )
         $page_table .= '<td class="current_page">1</td>';
     else
-        $page_table .= '<td><a href="'.$url.'page=1">[首]</a></td>';
+        $page_table .= '<td><a href="'.$url.'page=1">[首页]</a></td>';
 
     //循环中间页码
     if($total_page < $max_length*2) {
@@ -305,9 +305,9 @@ function 分页($total,$page,$url='',$page_size='',$max_length='') {
         if($page == $i)
             $page_table .= '<td class="current_page">'.$i.'</td>';
         else if($page == $i + 1)
-            $page_table .= '<td><a href="'.$url.'page='.$i.'">[上]</a></td>';
+            $page_table .= '<td><a href="'.$url.'page='.$i.'">[上一页]</a></td>';
         else if($page == $i - 1)
-            $page_table .= '<td><a href="'.$url.'page='.$i.'">[下]</a></td>';
+            $page_table .= '<td><a href="'.$url.'page='.$i.'">[下一页]</a></td>';
         else
             $page_table .= '<td><a href="'.$url.'page='.$i.'">['.$i.']</a></td>';
     }
@@ -319,7 +319,7 @@ function 分页($total,$page,$url='',$page_size='',$max_length='') {
         if($page == $total_page)
             $page_table .= '<td class="current_page">'.$total_page.'</td>';
         else
-            $page_table .= '<td><a href="'.$url.'page='.$total_page.'">[末]</a></td>';
+            $page_table .= '<td><a href="'.$url.'page='.$total_page.'">[末页]</a></td>';
     }
     $page_table .= "</tr></table></div>";
     //输出分页代码

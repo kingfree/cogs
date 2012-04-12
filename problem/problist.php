@@ -31,44 +31,38 @@ if (restore) selObj.selectedIndex=0;
 <?php } ?>
 
 <?php
-$sql="update problem set lastacid=1 where lastacid=0";
-$p->dosql($sql);
-
-$sql="select problem.*,userinfo.nickname,userinfo.email,userinfo.uid from problem,userinfo";
+$sql="select problem.* from problem";
 if($_GET['caid'])
-$sql.=",tag where tag.pid=problem.pid and tag.caid={$_GET['caid']} and";
+$sql.=",tag where tag.pid=problem.pid and tag.caid={$_GET['caid']}";
 else
-$sql.=" where";
-
-$sql.=" userinfo.uid=problem.lastacid";
+$sql .= " where problem.readforce>=0";
 
 if ($_GET['key']!="")
 $sql.=" and (problem.probname like '%{$_GET[key]}%' or problem.pid ='{$_GET[key]}' or problem.filename like '%{$_GET[key]}%')";
 
 if ($_GET['diff']!="")
-$sql.=" and difficulty='{$_GET['diff']}'";
+$sql.=" and problem.difficulty='{$_GET['diff']}'";
 
 if($_GET['rank']=="按题目名称排序")
-    $sql.=" order by problem.probname asc";
+    $sql.=" order by probname asc";
 else if($_GET['rank']=="按文件名称排序")
-    $sql.=" order by problem.filename asc";
+    $sql.=" order by filename asc";
 else if($_GET['rank']=="按评测方式排序")
-    $sql.=" order by problem.plugin asc";
+    $sql.=" order by plugin asc";
 else if($_GET['rank']=="按时间限制排序")
-    $sql.=" order by problem.timelimit asc";
+    $sql.=" order by timelimit asc";
 else if($_GET['rank']=="按空间限制排序")
-    $sql.=" order by problem.memorylimit asc";
+    $sql.=" order by memorylimit asc";
 else if($_GET['rank']=="按题目难度排序")
-    $sql.=" order by problem.difficulty asc";
+    $sql.=" order by difficulty asc";
 else if($_GET['rank']=="按通过次数排序")
-    $sql.=" order by problem.acceptcnt desc";
+    $sql.=" order by acceptcnt desc";
 else if($_GET['rank']=="按可否提交排序")
-    $sql.=" order by problem.submitable asc";
+    $sql.=" order by submitable asc";
 else if($_GET['rank']=="按阅读权限排序")
-    $sql.=" order by problem.readforce desc";
+    $sql.=" order by readforce desc";
 else
     $sql.=" order by problem.pid asc";
-
 
 $cnt=$p->dosql($sql);
 $totalpage=(int)(($cnt-1)/$SET['style_pagesize'])+1;
@@ -119,7 +113,6 @@ if(!$_GET['page']) {
 <th onclick="sortTable('problist', 6, 'int')">通过</th>
 <th onclick="sortTable('problist', 7, 'int')">提交</th>
 <th onclick="sortTable('problist', 8, 'int')">通过率</th>
-<th>上次通过</th>
 <?php if ($_SESSION['admin']>0){ ?>
 <th class=admin>标识</th>
 <th class=admin>权限</th>
@@ -144,8 +137,6 @@ if (!$err) for ($i=$st;$i<$cnt && $i<$st+$SET['style_pagesize'] ;$i++) {
 <td align=center><?php echo $d['acceptcnt']; ?></td>
 <td align=center><?php echo $d['submitcnt']; ?></td>
 <td align=center><?php echo @round($d['acceptcnt']/$d['submitcnt']*100,2); ?>%</td>
-<td><?php if ($d['uid']<=1){ echo "无"; } else { ?>
-<a href="../user/detail.php?uid=<?=$d['uid'] ?>" target="_blank"><? echo gravatar::showImage($d['email']).$d['nickname']; } ?></a></td>
 <?php if ($_SESSION['admin']>0) { ?>
 <td class=admin>
 <?php if ($d['submitable']) echo "<span class=ok>可提交</span>"; else echo "<span class=no>不可提交</span>"; ?>

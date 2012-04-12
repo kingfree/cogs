@@ -20,7 +20,7 @@ if($cnt1 > 0) echo "<span class='todo'>($cnt1)</span>";
 </tr>
 <tr>
 <td>通过: <?php echo $d['accepted'] ?>/<?php echo $d['submited'] ?></td>
-<td><a href="<?=路径("user/panel.php"); ?>"><span class="icon-picture"></span>设置</a></td>
+<td><a href="<?=路径("user/panel.php"); ?>"><span class="icon-cog"></span>设置</a></td>
 </tr>
 <tr>
 <td>等级: <?php echo $d['grade'] ?></td>

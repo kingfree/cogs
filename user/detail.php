@@ -72,10 +72,10 @@ if ($cnt) {
 <a href="../information/submitlist.php?uid=<?=$_GET['uid']?>" target="_blank">查看全部提交记录</a>
 <?php
 $accnt=0;
-$sql="select problem.pid,problem.probname,submit.accepted,submit.sid from submit,problem where submit.uid={$_GET['uid']} and submit.pid=problem.pid order by problem.pid asc, submit.score desc ";
+$sql="select problem.pid,problem.probname,submit.accepted,submit.lang,submit.sid from submit,problem where submit.uid={$_GET['uid']} and submit.pid=problem.pid order by submit.lang asc, problem.pid asc, submit.score desc ";
 $cnt=$p->dosql($sql);
 if ($cnt) {
-	$table_width=8;
+	$table_width=6;
 ?>
 <table id="probstatics">
 <?php
@@ -94,7 +94,7 @@ if ($cnt) {
         $ppp[$d['pid']] = true;
 		$linecnt++;
 ?>
-<td><a href='../problem/submitdetail.php?id=<?=$d['sid']?>' target='_blank'><span class='icon-<?=($d['accepted']?"ok":"remove")?>'></span></a><a href="../problem/pdetail.php?pid=<?=$d['pid'] ?>" target="_blank"><?=$d['probname'] ?></a></td>
+<td><a href='../problem/submitdetail.php?id=<?=$d['sid']?>' target='_blank'><span class='icon-<?=($d['accepted']?"ok":"remove")?>'></span><?=$STR['lang'][$d['lang']]?></a><a href="../problem/pdetail.php?pid=<?=$d['pid'] ?>" target="_blank"><?=$d['probname'] ?></a></td>
 <?php
 	}
 ?>

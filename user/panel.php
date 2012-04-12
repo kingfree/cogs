@@ -12,13 +12,13 @@ $d=$p->rtnrlt(0);
 <form method="post" action="doedit.php?uid=<?=$_SESSION[ID] ?>">
 <table id="userpanel">
   <tr>
-    <th>用户ID</th>
+    <th>用户编号</th>
     <td><?=$d[uid] ?></td>
-    <th>头像</th>
+    <th>用户头像</th>
   </tr>
   <tr>
-    <th>用户</th>
-    <td><?=$d[usr] ?></td>
+    <th>用户名称</th>
+    <td><?=gravatar::showImage($d['email']);?><?=$d[usr] ?></td>
     <td rowspan=6 align=center>
     <?=gravatar::showImage($d['email'], 200);?><br />
     <a href="dodelimg.php?email=<?=md5($d['email'])?>">清空头像缓存</a><br />

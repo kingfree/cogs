@@ -24,6 +24,7 @@ $q=new DataAccess();
 <?php 
 $now = time();
 $cnt = $p->dosql("select comptime.*,compbase.*,userinfo.nickname,groups.* from comptime,compbase,userinfo,groups where comptime.cbid=compbase.cbid and userinfo.uid=compbase.ouid and comptime.group=groups.gid and endtime > $now order by starttime asc");
+if($cnt) {
 for($i=0; $i<$cnt; $i++) {
     $d=$p->rtnrlt($i);
 ?>
@@ -59,6 +60,7 @@ for($i=0; $i<$cnt; $i++) {
 </table>
 <?php } ?>
 <br />
+<? } else { ?>
 <table id="lastest_page">
 <thead>
 <tr>
@@ -76,6 +78,7 @@ for($i=0;$i<$cnt;$i++) {
 <?php } ?>
 </table>
 <br />
+<? } ?>
 <table id="lastest_prob">
 <thead>
 <tr>

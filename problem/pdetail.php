@@ -1,6 +1,15 @@
 <?php
 require_once("../include/stdhead.php");
-gethead(1,"","题目");
+
+$pid = (int)$_GET['pid'];
+$db = @mysql_connect($cfg['data_server'],$cfg['data_uid'],$cfg['data_pwd']);
+@mysql_select_db($cfg['data_database'],$db);
+@mysql_query("set names utf8");
+$res = @mysql_query("select probname from problem where pid=$pid");
+$ress = @mysql_fetch_object($res);
+$title = $ress->probname;
+@mysql_close($db);
+gethead(1,"",$pid.": ".$title);
 
 $p=new DataAccess();
 $q=new DataAccess();
@@ -75,8 +84,9 @@ if($_SESSION['ID']) {
     if ($ac) {
         $e=$q->rtnrlt(0);
         echo "<a href='submitdetail.php?id={$e['sid']}'>";
+        echo $STR['lang'][$e['lang']];
+        echo "</a> ";
         评测结果($e['result']);
-        echo "</a>";
     }
 } ?></td></tr>
 <tr><th>所属分类</th>

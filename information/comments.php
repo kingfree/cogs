@@ -58,7 +58,7 @@ if ($cnt) {
   </tr>
   <tr>
 	<td class="CommentsCode"><?php if ($d['showcode']){
-	$sql="select sid from submit where uid='{$d['uid']}' and pid='{$pid}' order by accepted desc";
+	$sql="select sid from submit where uid='{$d['uid']}' and pid='{$d['pid']}' order by subtime desc";
 	$q->dosql($sql);
 	$e=$q->rtnrlt(0);
 	?>
