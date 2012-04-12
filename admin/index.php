@@ -45,7 +45,12 @@ gethead(1,"admin","后台管理");
 </tr>
 <tr>
 <th>评论</th>
-<td><span><a href="settings.php?settings=comments"><?php echo $STR[admin][comments] ?></a></span></td>
+<td><span>
+<a href="../information/comments.php">评论列表</a>
+</span>
+<span class="admin">
+<a href="settings.php?settings=comments">评论管理</a>
+</span></td>
 <td></td>
 </tr>
 <tr>

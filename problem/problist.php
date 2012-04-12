@@ -92,7 +92,7 @@ if(!$_GET['page']) {
 </select>
 搜索题目
 <input name="key" type="text" id="key" value="<?php echo $_GET['key'] ?>" />
-<input class="LinkButton" name="sc" type="submit" id="sc" value="搜索"/>
+<input name="sc" type="submit" id="sc" value="搜索"/>
 <input name="caid" type="hidden" id="caid" value="<?php echo $_GET['caid'] ?>" />
 </form>
 <form id="rank" action="" method="get" name="rank">

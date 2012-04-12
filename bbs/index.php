@@ -21,7 +21,7 @@ $st = $page ? (($page-1)*$SET['style_pagesize']) : 0;
 <th>权值</th>
 </tr>
 <?
-for ($i=$st;$i<$cnt && $i<$st+$SET['style_pagesize'];$i++) {
+if($cnt) for ($i=$st;$i<$cnt && $i<$st+$SET['style_pagesize'];$i++) {
 $d=$p->rtnrlt($i);
 ?>
 <tr>

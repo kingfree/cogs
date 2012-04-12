@@ -5,6 +5,7 @@ $p=new DataAccess();
 <tr>
 <td><a href="<?=路径("index.php");?>"><span class="icon-home"></span>首页</a></td>
 <td><a href="<?=路径("page/index.php");?>"><span class="icon-file"></span>页面</a></td>
+<td><a href="<?=路径("information/comments.php");?>"><span class="icon-th"></span>讨论</a></td>
 <td><a href="<?=路径("problem/problist.php");?>"><span class="icon-list"></span>题目</a></td>
 <td><a href="<?=路径("information/catelist.php");?>"><span class="icon-th"></span>分类</a></td>
 <td><a href="<?=路径("competition/index.php");?>"><span class="icon-list-alt"></span>比赛<?
@@ -18,14 +19,6 @@ if($cnt1 > 0) echo "<span class='todo'>($cnt1)</span>";
 <td><a href="<?=路径("information/userlist.php");?>"><span class="icon-user"></span>用户</a></td>
 <td><a href="<?=路径("information/grouplist.php");?>"><span class="icon-th-large"></span>分组</a></td>
 <? if($_SESSION['ID']) {?>
-<td><a href="<?=路径("mail/index.php"); ?>"><span class="icon-envelope"></span>信件<?
-$cnt = $p->dosql("select mid from mail where readed = 0 and toid = {$_SESSION['ID']}");
-if($cnt > 0) echo "<span class='doing'>($cnt)</span>";
-$cnt = $p->dosql("select mid from mail where readed = 0 and fromid = {$_SESSION['ID']}");
-if($cnt > 0) echo "<span class='todo'>($cnt)</span>";
-?></a></td>
-<td><a href="<?=路径("user/panel.php"); ?>"><span class="icon-picture"></span>设置</a></td>
-<td><a href="<?=路径("user/dologout.php")."?from=".$SET['URI'];?>"><span class="icon-off"></span>退出</a></td>
 <? } else { ?>
 <!--<th><a href='javascript:$("#login").show()'><span class="icon-star"></span>登录</a></th>-->
 <th><a href='<?=路径("user/login.php")?>?from=<?=$SET['URI']?>'><span class="icon-star"></span>登录</a></th>

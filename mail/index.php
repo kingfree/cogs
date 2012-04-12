@@ -8,11 +8,10 @@ $p = new DataAccess();
 $q = new DataAccess();
 ?>
 
-<table width=100% border=2>
+<table width=100%>
 <tr>
-<th width="70px">写邮件</th>
+<th width=40%>写邮件</th>
 <th>收件箱</th>
-<th>发件箱</th>
 </tr>
 <tr>
 <td valign=top>
@@ -20,25 +19,49 @@ $q = new DataAccess();
 <input name="fromid" type="hidden" value=<?=$uid?> />
 <table>
 <tr>
-<th>邮件主题</th>
-<td><input class="InputBox" name="title" value="<?=$_POST['title']?>" /></td>
+<th width=80px>邮件主题</th>
+<td><input name="title" value="<?=$_POST['title']?>" /></td>
 </tr>
 <tr>
 <th>收件人ID</th>
-<td><input class="InputBox" name="toid" value="<?=$_POST['toid']?$_POST['toid']:$_GET['toid']?>" /></td>
+<td><input name="toid" value="<?=$_POST['toid']?$_POST['toid']:$_GET['toid']?>" /></td>
 </tr>
 <tr>
 <th>邮件内容</th>
-<td><textarea class="InputBox" name="msg" cols="30" rows="10"><?=$_POST['text']?></textarea></td>
+<td><textarea name="msg" cols="30" rows="10"><?=$_POST['text']?></textarea></td>
 </tr>
 <tr>
 <th></th>
-<td><input class="LinkButton" type="submit" name="Submit" value="发送站内邮件"  class="Button"/></td>
+<td><input type="submit" name="Submit" value="发送站内邮件" /></td>
 </tr>
-</table>
+<tr>
+<th colspan=2>发件箱</th>
+</tr><tr>
+<td colspan=2>
+<table border=1>
+<tr>
+<th>ID</th>
+<th>收件人</th>
+<th>标题</th>
+</tr>
+<?
+$sql = "select mail.*,userinfo.* from mail,userinfo where mail.fromid = $uid and mail.toid = userinfo.uid order by mid desc";
+$cnt = $p->dosql($sql);
+for($i=0; $i<$cnt; $i++) {
+	$d=$p->rtnrlt($i);
+	echo "<tr>";
+	echo "<td width=30px>{$d['mid']}</td> <td width=80px>";
+	if($d['readed'] ==  0) echo "❤";
+	echo "<a href='../user/detail.php?uid={$d['toid']}' target='_blank'>".gravatar::showImage($d['email'])."{$d['nickname']}</a></td>";
+	$url = "inbox.php?mid={$d['mid']}";
+	echo "<td><a href='$url' target='_blank'>".$d['title']."</a></td>";
+	echo "</tr>";
+}
+?>
+</table></table>
 </form>
 </td>
-<td width=30% valign=top>
+<td valign=top>
 <table width=100% border=1>
 <tr>
 <th>ID</th>
@@ -47,48 +70,17 @@ $q = new DataAccess();
 <th width=80px>发送时间</th>
 </tr>
 <?
-$sql = "select * from mail where toid = $uid order by mid desc limit 10";
+$sql = "select mail.*,userinfo.* from mail,userinfo where mail.toid = $uid and mail.fromid = userinfo.uid order by mid desc";
 $cnt = $p->dosql($sql);
 for($i=0; $i<$cnt; $i++) {
 	$d=$p->rtnrlt($i);
-	$sql = "select nickname from userinfo where uid = {$d['fromid']}";
-	$q->dosql($sql);
-	$e = $q->rtnrlt();
 	echo "<tr>";
-	echo "<td>{$d['mid']}</td>";
-	echo "<td><a href='../user/detail.php?uid={$d['fromid']}' target='_blank'>{$e['nickname']}</a></td>";
+	echo "<td width=30px>{$d['mid']}</td> <td width=80px>";
+	echo "<a href='../user/detail.php?uid={$d['toid']}' target='_blank'>".gravatar::showImage($d['email'])."{$d['nickname']}</a></td>";
 	$url = "inbox.php?mid={$d['mid']}";
 	if($d['readed'] ==  0)
 	echo "<td style='background-color:#FF0000;'><b><a href='$url' target='_blank'>".$d['title']."</a></b></td>";
 	else
-	echo "<td><a href='$url' target='_blank'>".$d['title']."</a></td>";
-	echo "<td>".date('Y-m-d',$d['time'])."</td>";
-	echo "</tr>";
-}
-?>
-</table>
-</td>
-<td width=30% valign=top>
-<table width=100% border=1>
-<tr>
-<th>ID</th>
-<th>收件人</th>
-<th>标题</th>
-<th width=80px>发送时间</th>
-</tr>
-<?
-$sql = "select * from mail where fromid = $uid order by mid desc limit 10";
-$cnt = $p->dosql($sql);
-for($i=0; $i<$cnt; $i++) {
-	$d=$p->rtnrlt($i);
-	$sql = "select nickname from userinfo where uid = {$d['toid']}";
-	$q->dosql($sql);
-	$e = $q->rtnrlt();
-	echo "<tr>";
-	echo "<td>{$d['mid']}</td> <td>";
-	if($d['readed'] ==  0) echo "❤";
-	echo "<a href='../user/detail.php?uid={$d['toid']}' target='_blank'>{$e['nickname']}</a></td>";
-	$url = "inbox.php?mid={$d['mid']}";
 	echo "<td><a href='$url' target='_blank'>".$d['title']."</a></td>";
 	echo "<td>".date('Y-m-d',$d['time'])."</td>";
 	echo "</tr>";

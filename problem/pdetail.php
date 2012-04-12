@@ -57,11 +57,17 @@ if($cnt) {
 <td><?=$STR['plugin'][$d['plugin']]; ?></td></tr>
 <tr><th>测试点数</th>
 <td><?=$d[datacnt]; ?> <?=$d['submitable']?"<span class=ok>可提交":"<span class=no>不可提交"?></span></td></tr>
-<tr><th>添加时间</th>
-<td><?=date('Y-m-d', $d['addtime']) ?></td></tr>
+<tr>
+<th>添加时间</th>
+<td>
+<?php if ($_SESSION['admin']>0){ ?>
+<a class=admin href="../admin/problem/editprob.php?action=edit&pid=<?= $d[pid]; ?>">[修改该题]</a>
+<? } ?>
+<?=date('Y-m-d', $d['addtime']) ?>
+</td></tr>
 <tr><th>开放分组</th>
-<td><a href="../information/userlist.php?gid=<?=$d['gid'] ?>" target="_blank"><?=$d['gname'] ?></a></td></tr>
-<tr><th><a href="../information/submitlist.php?pid=<?=$pid; ?>">提交状态</a></th>
+<td><a href="../information/userlist.php?gid=<?=$d['gid'] ?>" target="_blank">[<?=$d['gname'] ?>]</a></td></tr>
+<tr><th><a href="../information/submitlist.php?pid=<?=$pid; ?>">[提交状态]</a></th>
 <td><?php
 if($_SESSION['ID']) {
     $sql="SELECT * FROM submit WHERE pid ={$pid} AND uid ={$_SESSION['ID']} order by score desc limit 1";
@@ -96,24 +102,18 @@ for ($i=0;$i<=$cnt2-1;$i++) {
 <input name="pid" type="hidden" id="pid" value="<?=$d['pid']; ?>" />
 <input type="hidden" name="MAX_FILE_SIZE" value="102400">
 </td></form></tr>
-<tr><?php if ($_SESSION['admin']>0){ ?>
-<th class=admin><a href="../admin/problem/editprob.php?action=edit&pid=<?= $d[pid]; ?>">修改该题</a></th>
-<?php } else { ?>
-<td></td>
-<? } ?>
-<td align=right>
-<a href="comments.php?pid=<?=$pid?>"><b>发表看法</b></a>
-</td></tr>
 </table>
 <table id="singlerank">
-<tr><th colspan=3>运行速度前 <?=$SET['style_single_ranksize']; ?> 名</th><tr>
+<tr><th colspan=4>综合排行前 <?=$SET['style_single_ranksize']; ?> 名</th><tr>
 <?php $LIB->singlerank($q,$pid) ?>
 </table>
 <hr />
 <table id="Comments">
-<tr><th colspan=3>最新讨论</th><tr>
+<tr><th colspan=3>最新讨论
+<a href="comments.php?pid=<?=$pid?>"><b>[发表看法]</b></a>
+</th><tr>
 <?
-$sql="select comments.*,userinfo.* from comments,userinfo where userinfo.uid=comments.uid and comments.pid='{$d['pid']}' order by comments.stime desc limit {$SET['style_single_ranksize']}";
+$sql="select comments.*,userinfo.nickname,userinfo.uid,userinfo.email from comments,userinfo where userinfo.uid=comments.uid and comments.pid='{$d['pid']}' order by comments.stime desc limit {$SET['style_single_ranksize']}";
 $cnt=$q->dosql($sql);
 for ($i=0;$i<$cnt;$i++) {
     $e=$q->rtnrlt($i);

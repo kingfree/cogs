@@ -36,6 +36,7 @@ td {
     margin: 0 0 0 0;
     color: Black;
     vertical-align: top;
+    word-break: break-all;
 }
 
 tr:nth-child(even) {
@@ -44,7 +45,7 @@ tr:nth-child(even) {
 
 p {
     margin: 2px 2px 2px 2px;
-    text-indent: 2em;
+    //text-indent: 2em;
 }
 
 a:link, a:visited {
@@ -380,7 +381,7 @@ pre {
     padding: 5px 5px 5px 5px;
     color: Black;
 	overflow: auto;
-    background-color: White;
+    background-color: #f1f1f1;
     font-size: 15px;
 }
 
