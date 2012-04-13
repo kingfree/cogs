@@ -20,6 +20,7 @@ function gethead($head,$check,$title) {
 <!DOCTYPE HTML>
 <head>
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<link rel="Shortcut Icon" href="<?=路径("style/favicon.ico")?>" />
 <link rel=stylesheet href="<?=路径("style/".$SET['style_profile'])?>" />
 <?php $LIB->tradsimp(); ?>
 

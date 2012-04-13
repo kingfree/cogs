@@ -11,5 +11,5 @@ $SET['cur']=$_SERVER['SCRIPT_FILENAME'];
 $SET['base']=$_SERVER['DOCUMENT_ROOT'].$SET['global_root'];
 $SET['URI']=base64_encode($_SERVER['REQUEST_URI']);
 
-$cfg['Version']='2.1.6.1';
+$cfg['Version']='2.1.6.3';
 ?>

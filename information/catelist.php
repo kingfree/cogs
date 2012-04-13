@@ -11,7 +11,7 @@ $p=new DataAccess();
 $cnt=$p->dosql($sql);
 for ($i=$st;$i<$cnt;$i++) {
     $d=$p->rtnrlt($i);
-    if($i % 10 == 0 && $i) echo "<tr>";
+    if($i % 8 == 0 && $i) echo "<tr>";
 ?>
 <td><a href="../problem/problist.php?caid=<?=$d['caid']?>" title="<?=sp2n(htmlspecialchars($d['memo']))?>" target="_blank"><?=$d['cname']?></a></td>
 <? } ?>
