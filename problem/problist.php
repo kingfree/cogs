@@ -88,6 +88,7 @@ if(!$_GET['page']) {
 <input name="key" type="text" id="key" value="<?php echo $_GET['key'] ?>" />
 <input name="sc" type="submit" id="sc" value="搜索"/>
 <input name="caid" type="hidden" id="caid" value="<?php echo $_GET['caid'] ?>" />
+<a href="problem/random.php" title="随机选择一道你没有通过的题目">随机题目</a>
 </form>
 <form id="rank" action="" method="get" name="rank">
   <input name="rank" type="submit" value="按题目名称排序" />
@@ -128,9 +129,9 @@ if (!$err) for ($i=$st;$i<$cnt && $i<$st+$SET['style_pagesize'] ;$i++) {
     if ($d['readforce']>$_SESSION['readforce'] && !($_SESSION['admin']>0)) continue;
 ?>
 <tr>
-<td><?php echo $d['pid'] ?></td>
+<td align=center><?php echo $d['pid'] ?></td>
 <td><? 是否通过($d['pid'], $q);?><b><a href="pdetail.php?pid=<?=$d['pid'] ?>"><?=$d['probname'] ?></a></b></td>
-<td><?php echo $d['filename']; ?></td>
+<td align=center><?php echo $d['filename']; ?></td>
 <td align=center><?php echo $d['timelimit']/1000 . " s"; ?></td>
 <td align=center><?php echo $d['memorylimit'] . " MiB"; ?></td>
 <td><?php echo 难度($d['difficulty']); ?></td>
@@ -138,11 +139,11 @@ if (!$err) for ($i=$st;$i<$cnt && $i<$st+$SET['style_pagesize'] ;$i++) {
 <td align=center><?php echo $d['submitcnt']; ?></td>
 <td align=center><?php echo @round($d['acceptcnt']/$d['submitcnt']*100,2); ?>%</td>
 <?php if ($_SESSION['admin']>0) { ?>
-<td class=admin>
+<td class=admin align=center>
 <?php if ($d['submitable']) echo "<span class=ok>可提交</span>"; else echo "<span class=no>不可提交</span>"; ?>
 </td>
-<td class=admin><?=$d['readforce']?></td>
-<th class=admin><a href="../admin/problem/editprob.php?action=edit&pid=<?= $d[pid]; ?>">修改</a></th>
+<td class=admin align=center><?=$d['readforce']?></td>
+<td class=admin align=center><a href="../admin/problem/editprob.php?action=edit&pid=<?= $d[pid]; ?>">修改</a></td>
 <?php } ?>
 </tr>
 <?php } ?>

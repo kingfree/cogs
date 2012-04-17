@@ -87,11 +87,13 @@ echo "还未开始";
 </div>
 <table id="probinfo">
 <tr><th width=60px>题目名称</th>
-<td><b><?php echo $d[probname]; ?></b></td></tr>
+<td><b><?php echo $d['probname']; ?></b>
+<? if(time() > $e['endtime']) { ?><a href="../problem/pdetail.php?pid=<?=$_GET['pid']?>">跳转</a><? } ?>
+</td></tr>
 <tr><th>题目文件</th>
-<td><?php echo $d[filename]; ?>.cpp/pas/c</td></tr>
+<td><?php echo $d['filename']; ?>.cpp/pas/c</td></tr>
 <tr><th>输入输出</th>
-<td><?php echo $d[filename]; ?>.in/out</td></tr>
+<td><?php echo $d['filename']; ?>.in/out</td></tr>
 <tr><th>时间限制</th>
 <td><?php echo $d['timelimit']; ?> ms (<?=$d['timelimit']/1000?> s)</td></tr>
 <tr><th>内存限制</th>

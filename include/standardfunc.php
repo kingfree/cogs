@@ -250,9 +250,9 @@ function 是否通过($pid, $q) {
         $ac=$q->dosql($sql);
         if ($ac) {
             $e=$q->rtnrlt(0);
-            echo "<a href='".路径("problem/submitdetail.php?id=").$e['sid']."' target='_blank'><span class='icon-".
-            ($e['accepted']?"ok":"remove")."'></span></a>";
-        } else echo "<span class='icon-minus'></span>";
+            echo "<a href='".路径("problem/submitdetail.php?id=").$e['sid']."' target='_blank'><span class=".
+                ($e['accepted']?"ok>√":"no>×")."</span></a>";
+        } else echo "<span class='did'>－</span>";
     }
 }
 

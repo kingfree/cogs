@@ -48,7 +48,7 @@ for ($i=$st;$i<$cnt && $i<$st+$SET['style_pagesize'] ;$i++) {
 ?>
 <tr>
     <th><a href='comp.php?ctid=<?=$d[ctid] ?>&uid=<?=$_SESSION['ID'] ?>'><?=$d[cname] ?></a></th>
-    <td width=14%><?=nl2br(sp2n(htmlspecialchars($d[intro]))) ?></td>
+    <td><?=nl2br(sp2n(htmlspecialchars($d[intro]))) ?></td>
     <td align=center><?php
 	 if (time()>$d[endtime]) echo "<span class='did'>结束</span>"; else
 	 if (time()<$d[endtime] && time()>$d[starttime]) echo "<span class='doing'>进行</span>"; else
@@ -59,15 +59,15 @@ for ($i=$st;$i<$cnt && $i<$st+$SET['style_pagesize'] ;$i++) {
             if (!$d[showscore])
                 echo "未";
      ?></td>
-    <td><?=date('Y-m-d H:i', $d[starttime]) ?></td>
-    <td><?=date('Y-m-d H:i', $d[endtime]) ?></td>
-    <td width=8%><a href="../information/userlist.php?gid=<?=$d['gid'] ?>" target="_blank"><?=$d['gname'] ?></a></td>
+    <td align=center><?=date('Y-m-d H:i', $d[starttime]) ?></td>
+    <td align=center><?=date('Y-m-d H:i', $d[endtime]) ?></td>
+    <td align=center><a href="../information/userlist.php?gid=<?=$d['gid'] ?>" target="_blank"><?=$d['gname'] ?></a></td>
 <? if($_SESSION['admin']) { ?>
-<th class=admin><a href="../admin/comp/comptime.php?ctid=<?=$d['ctid']?>">评测</a></th>
-<td class=admin><a href="../admin/comp/editcompbase.php?action=edit&cbid=<?=$d['cbid']?>"><?=$d['cbid']?></a></td>
-<td class=admin><a href="../admin/comp/editcomptime.php?action=edit&ctid=<?=$d['ctid']?>"><?=$d['ctid']?></a></td>
-<td class=admin><?=$d['readforce']?></td>
-<td class=admin width=6%><a href='../user/detail.php?uid=<?=$d['ouid']?>' target='_blank'><?=$d['realname']?></a></td>
+<td class=admin align=center><a href="../admin/comp/comptime.php?ctid=<?=$d['ctid']?>">评测</a></td>
+<td class=admin align=center><a href="../admin/comp/editcompbase.php?action=edit&cbid=<?=$d['cbid']?>"><?=$d['cbid']?></a></td>
+<td class=admin align=center><a href="../admin/comp/editcomptime.php?action=edit&ctid=<?=$d['ctid']?>"><?=$d['ctid']?></a></td>
+<td class=admin align=center><?=$d['readforce']?></td>
+<td class=admin align=center><a href='../user/detail.php?uid=<?=$d['ouid']?>' target='_blank'><?=$d['realname']?></a></td>
 <? } ?>
 </tr>
 <? } ?>

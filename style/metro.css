@@ -7,6 +7,7 @@
 body {
     color: Black;
     background-color: #36727a;
+    font-family: monospace;
     font-size: 14px;
     margin: 0;
     padding: 0;
@@ -41,10 +42,6 @@ td {
 
 tr:nth-child(even) {
     background-color: rgba(252, 252, 252, 0.45);
-}
-
-tr:hover {
-    background-color: rgba(252, 252, 252, 0.9);
 }
 
 p {
@@ -258,7 +255,7 @@ pre {
     background-color: #8dc0c7;
 }
 
-#globalbar tr td a:link, #globalbar tr td a:visited {
+#globalbar tr th, #globalbar tr td a:link, #globalbar tr td a:visited {
     color: Black;
     background-color: #8dc0c7;
     text-shadow: 1px 1px 5px #fff;
@@ -269,20 +266,6 @@ pre {
     color: Black;
     background-color: #dae8fb;
     text-shadow: 1px 1px 5px #fff;
-    border: thin solid #0077ec;
-}
-
-#globalbar tr th, #globalbar tr th a:link, #globalbar tr th a:visited {
-    color: Black;
-    background-color: #8dc0c7;
-    text-shadow: 5px 1px 5px #fcf;
-    border: thin solid #8dc0c7;
-}
-
-#globalbar tr th a:hover, #globalbar tr th a:active {
-    color: Black;
-    background-color: #dae8fb;
-    text-shadow: 5px 2px 5px #ccf;
     border: thin solid #0077ec;
 }
 
@@ -556,13 +539,13 @@ pre {
     top: 35%;
     left: 35%;
     border: thick outset LightBlue;
-    background-color: LightGray;
+    background-color: #e1e1e1;
     z-index: 999;
 }
 
 #login td, #login th {
     border: 0;
     color: Black;
-    background-color: LightGray;
+    background-color: #e1e1e1;
 }
 
