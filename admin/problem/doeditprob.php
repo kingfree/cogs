@@ -6,7 +6,7 @@ if ($_POST[submitable]==1) $sub=1; else $sub=0;
 if ($_REQUEST[action]=='add')
 {
 	$p=new DataAccess();
-	$sql="insert into problem(probname,filename,readforce,submitable,datacnt,timelimit,memorylimit,detail,addtime,addid,difficulty,plugin,`group`) values('{$_POST[probname]}','{$_POST[filename]}',{$_POST[readforce]},{$sub},{$_POST[datacnt]},{$_POST[timelimit]},{$_POST[memorylimit]},'".str_replace("'", "\'", $_POST[detail])."',".time().",{$_SESSION[ID]},{$_POST[difficulty]},'{$_POST['plugin']}','{$_POST['group']}')";
+	$sql="insert into problem(probname,filename,readforce,submitable,datacnt,timelimit,memorylimit,detail,addtime,addid,difficulty,plugin,`group`) values('{$_POST[probname]}','{$_POST[filename]}',{$_POST[readforce]},{$sub},{$_POST[datacnt]},{$_POST[timelimit]},{$_POST[memorylimit]},'".str_replace("'", "\'", $_POST['detail'])."',".time().",{$_SESSION[ID]},{$_POST[difficulty]},'{$_POST['plugin']}','{$_POST['group']}')";
 	$p->dosql($sql);
 	
 	$sql="select pid from problem where filename='{$_POST['filename']}'";
@@ -26,7 +26,7 @@ if ($_REQUEST[action]=='add')
 if ($_REQUEST[action]=='edit')
 {
 	$p=new DataAccess();
-	$sql="update problem set probname='{$_POST[probname]}',filename='{$_POST[filename]}',readforce={$_POST[readforce]},submitable={$sub},datacnt={$_POST[datacnt]},timelimit={$_POST[timelimit]},memorylimit={$_POST[memorylimit]},detail='".str_replace("'", "\'", $_POST[detail])."',difficulty={$_POST[difficulty]},plugin='{$_POST['plugin']}',`group`='{$_POST['group']}' where pid={$_REQUEST[pid]}";
+	$sql="update problem set probname='{$_POST[probname]}',filename='{$_POST[filename]}',readforce={$_POST[readforce]},submitable={$sub},datacnt={$_POST[datacnt]},timelimit={$_POST[timelimit]},memorylimit={$_POST[memorylimit]},detail='".mysql_escape_string($_POST['detail'])."',difficulty={$_POST[difficulty]},plugin='{$_POST['plugin']}',`group`='{$_POST['group']}' where pid={$_REQUEST[pid]}";
 	$p->dosql($sql);
 	foreach($_POST[cate] as $k=>$v)
 	{

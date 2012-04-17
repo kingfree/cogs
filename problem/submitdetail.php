@@ -45,6 +45,15 @@ else {
         $f=$p->rtnrlt(0);
         $forcetocode=$f['showcode'];
     }
+
+    if(!$forcetocode) {
+        $sql = "select accepted from submit where uid={$_SESSION['ID']} and pid={$d['pid']} order by score desc limit 1";
+        $cnt=$p->dosql($sql);
+        if ($cnt) {
+            $f=$p->rtnrlt(0);
+            $forcetocode=$f['accepted'];
+        }
+    }
 }
 if ($forcetocode) {
     if($d['lang']==0) $langstr="pascal";

@@ -19,10 +19,10 @@ $pbs=explode(":",$d['contains']);
 
 <table id="contest_report">
   <tr>
-    <th width="30px"><a href="javascript:qsort('rank')">名次</a></th>
+    <th width="40px"><a href="javascript:qsort('rank')">名次</a></th>
     <th width="40px"><a href="javascript:qsort('uid')">UID</a></th>
-    <th width="120px">用户昵称</th>
-    <? if ($_SESSION['admin']>0) { ?><th width="60px" class=admin>姓名</th><? } ?>
+    <th width="100px">用户昵称</th>
+    <? if ($_SESSION['admin']>0) { ?><th width="50px" class=admin>姓名</th><? } ?>
 <?php
     $cnt_prob=0;
     foreach($pbs as $k=>$v) {
@@ -34,11 +34,11 @@ $pbs=explode(":",$d['contains']);
         $cnt_prob++;
 ?>
     <th width="150px"><?=$d[probname] ?></th>
-    <th width="50px"><a href="javascript:qsort('score<?=$v ?>_')">得分</a></th>
+    <th width="40px"><a href="javascript:qsort('score<?=$v ?>_')">得分</a></th>
 <?php
     }
 ?>
-    <th width="55px"><a href="javascript:qsort('sum')">总分</a></th>
+    <th width="50px"><a href="javascript:qsort('sum')">总分</a></th>
   </tr>
 <?php 
     $sql="select userinfo.uid,userinfo.nickname,userinfo.realname,userinfo.email from userinfo,compscore where compscore.uid=userinfo.uid and compscore.ctid=$_GET[ctid] order by uid";
@@ -58,7 +58,7 @@ $pbs=explode(":",$d['contains']);
 <?=gravatar::showImage($d['email'], 14);?>
 <?=$d['nickname'] ?></a></td>
     <?php if ($_SESSION['admin']>0) { ?>
-    <td id="realname<?=$rowcnt ?>" class=admin><a href="../user/detail.php?uid=<?=$d['uid'] ?>" target="_blank"><?=$d['realname'] ?></a></td><?php } ?>
+    <td id="realname<?=$rowcnt ?>" class=admin align=center><a href="../user/detail.php?uid=<?=$d['uid'] ?>" target="_blank"><?=$d['realname'] ?></a></td><?php } ?>
 <?php
         $sql="select pid,result,score,csid from compscore where uid='{$d['uid']}' and ctid={$_GET[ctid]} order by pid asc";
         $cnt_sub=$q->dosql($sql);
@@ -73,18 +73,18 @@ $pbs=explode(":",$d['contains']);
         }
         foreach($pbs as $k=>$v) {
 ?>
-    <td id="result<?=$v?>_<?=$rowcnt?>">
+    <td id="result<?=$v?>_<?=$rowcnt?>" align=center>
     <?php
     if ($rank[$v][result] =="") echo "未评测";
     else if ($rank[$v][result] =="N") echo 评测信息($rank[$v][result]);
     else { ?>
     <a href="code.php?csid=<?=$rank[$v]['csid']?>" target="_blank"><?=评测结果($rank[$v][result])?></a></td>
     <? } ?>
-    <td id="score<?=$v ?>_<?=$rowcnt ?>"><?=$rank[$v][score]; ?></td>
+    <td id="score<?=$v ?>_<?=$rowcnt ?>" align=center><?=$rank[$v][score]; ?></td>
 <?php
         }
 ?>
-    <td id="sum<?=$rowcnt ?>"><?=$sum ?></td>
+    <td id="sum<?=$rowcnt ?>" align=center><?=$sum ?></td>
   </tr>
 <?php 
     }

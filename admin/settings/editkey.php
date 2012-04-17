@@ -37,21 +37,15 @@ $sname=$d['name'];
   <tr>
     <th>值</th>
     <td>
-<?php
-if ($_GET['method']=='text')
-{
-?>
-<textarea name="value" style="width:90%; height:200px;" class="TextArea"><?php echo $d['value'] ?></textarea>
-<?php
-}
-else if($_GET['method']=='html'){ ?>
+<?php if ($_GET['method']=='text') { ?>
+<textarea name="value" style="width:90%; height:200px;"><?php echo $d['value'] ?></textarea>
+<?php } else if($_GET['method']=='html') { ?>
 <textarea id="editor_id" name="value" style="width:90%; height:200px;"><?=$d['value']?></textarea>
-<? } ?>
+<?php } ?>
 
 </td>
   </tr>
 </table>
-<p>
   <input type="submit" name="Submit" value="提交修改"  class="Button" />
 </form>
 

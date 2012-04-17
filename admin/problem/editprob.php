@@ -2,16 +2,7 @@
 require_once("../../include/stdhead.php");
 gethead(1,"admin","修改题目");
 ?>
-
-<script charset="utf-8" src="../../include/kindeditor/kindeditor.js"></script>
-<script charset="utf-8" src="../../include/kindeditor/lang/zh_CN.js"></script>
 <script>
-        var editor;
-        KindEditor.ready(function(K) {
-                editor = K.create('#editor_id');
-        });
-</script>
-<script type = "text/javascript">
 function checkprobname(){
 var probname = $("#probname").val();
 $.get("checkprobname.php",{name: probname},function(txt){
@@ -27,6 +18,16 @@ else {$("#msg2").html("<b><span style='color:red;'>NO</span></b>");}
 });
 }
 </script>
+
+<script charset="utf-8" src="../../include/kindeditor/kindeditor.js"></script>
+<script charset="utf-8" src="../../include/kindeditor/lang/zh_CN.js"></script>
+<script>
+        var editor;
+        KindEditor.ready(function(K) {
+                editor = K.create('#detail');
+        });
+</script>
+
 <p>
 <?php
 if ($_GET[action]=='del')
@@ -43,7 +44,7 @@ $cnt=$p->dosql($sql);
 }
 if ($cnt) {
 $d=$p->rtnrlt(0);
-$ddetail=$d['detail'];
+$d['detail'];
 } else {
 if ($_GET[action]=='add') {
 $d=array();
@@ -55,12 +56,12 @@ $d['difficulty']=2;
 $d['readforce']=0;
 $d['plugin']=1;
 $d['group']=0;
-$ddetail="请在此键入题目内容";
+$d['detail']="请在此键入题目内容";
 }
 else echo '<script>document.location="../../error.php?id=12"</script>';
 }
 ?>
-<form action="doeditprob.php" method="post">
+<form id="form1" name="form1" action="doeditprob.php" method="post">
 <table width="100%" border="1" bordercolor=#000000 cellspacing=0 cellpadding=4>
 <tr>
 <td width="80px" valign="top" scope="col">PID</td>
@@ -119,19 +120,19 @@ if ($linecnt>0 && $line>1)
 </td></tr>
 <tr>
 <td valign="top">文件名称</td>
-<td><input name="filename" type="text" id="filename" onchange="checkfilename()" value="<?php echo $d[filename] ?>" class="InputBox" /><span id="msg2"></span></td>
+<td><input name="filename" type="text" id="filename" onchange="checkfilename()" value="<?php echo $d[filename] ?>" /><span id="msg2"></span></td>
 </tr>
 <tr>
 <td valign="top">阅读权限</td>
-<td><input name="readforce" type="number" id="readforce" value="<?php echo $d['readforce'] ?>" class="InputBox" /></td>
+<td><input name="readforce" type="number" id="readforce" value="<?php echo $d['readforce'] ?>" /></td>
 </tr>
 <tr>
 <td valign="top">可提交</td>
-<td><input name="submitable" type="checkbox" id="submitable" value="1" <?php if ($d['submitable']) echo 'checked="checked"'; ?> class="InputBox" /></td>
+<td><input name="submitable" type="checkbox" id="submitable" value="1" <?php if ($d['submitable']) echo 'checked="checked"'; ?> /></td>
 </tr>
 <tr>
 <td valign="top">测点数目</td>
-<td><input name="datacnt" type="number" id="datacnt" value="<?php echo $d[datacnt] ?>" class="InputBox" />
+<td><input name="datacnt" type="number" id="datacnt" value="<?php echo $d[datacnt] ?>" />
 <!--【暂不可用】测试数据打包zip(文件包含一个以该题目命名的文件夹，其中为in和ans数据)：
 <input type="file" name="file" id="file" class="Button"/>
 <input type="hidden" name="MAX_FILE_SIZE" value="102400">
@@ -140,19 +141,19 @@ if ($linecnt>0 && $line>1)
 </tr>
 <tr>
 <td valign="top">时间限制</td>
-<td><input name="timelimit" type="number" id="timelimit" value="<?php echo $d[timelimit] ?>" class="InputBox" /> ms</td>
+<td><input name="timelimit" type="number" id="timelimit" value="<?php echo $d[timelimit] ?>" /> ms</td>
 </tr>
 <tr>
 <td valign="top">内存限制</td>
-<td><input name="memorylimit" type="number" id="memorylimit" value="<?php echo $d['memorylimit'] ?>" class="InputBox" /> MiB</td>
+<td><input name="memorylimit" type="number" id="memorylimit" value="<?php echo $d['memorylimit'] ?>" /> MiB</td>
 </tr>
 <tr>
 <td valign="top">难度等级</td>
-<td><input name="difficulty" type="number" id="difficulty" value="<?php echo $d['difficulty'] ?>" class="InputBox" /></td>
+<td><input name="difficulty" type="number" id="difficulty" value="<?php echo $d['difficulty'] ?>" /></td>
 </tr>
 <tr>
 <td valign="top">开放分组</td>
-<td><select name="group" id="group" class="InputBox">
+<td><select name="group" id="group">
 <?php
 $sql="select * from groups order by gname";
 $c=$q->dosql($sql);
@@ -166,21 +167,21 @@ $e=$q->rtnrlt($j);
 </tr>
 <tr>
 <td valign="top">对比方式</td>
-<td><select name="plugin" id="plugin" class="InputBox">
+<td><select name="plugin" id="plugin">
 <option value="-1"<?php if ($d['plugin']==-1){ ?> selected="selected"<?php } ?>>交互式</option>
 <option value="1"<?php if ($d['plugin']==1){ ?> selected="selected"<?php } ?>>简单对比</option>
 <option value="2"<?php if ($d['plugin']==2){ ?> selected="selected"<?php } ?>>逐字节对比</option>
 <option value="0"<?php if ($d['plugin']==0){ ?> selected="selected"<?php } ?>>评测插件</option>
 </select>                </td>
 <td class=admin>提交修改：
-<input type="submit" value="单击此处提交对该题目的修改">
+<input type="submit" value="单击此处提交对该题目的修改" />
 <input name="action" type="hidden" id="action" value="<?php echo $_GET[action] ?>" />
 </td>
 </tr>
 <tr>
 <td valign="top">题目内容</td>
 <td colspan=2>
-<textarea id="editor_id" name="detail" style="width:100%; height:500px;"><?=$ddetail?></textarea>
+<textarea id="detail" name="detail" style="width:100%; height:400px;"><?=$d['detail']?></textarea>
 </td>
 </tr>
 </table>
