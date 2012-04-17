@@ -59,7 +59,7 @@ for ($i=$st;$i<$cnt && $i<$st+$SET['style_pagesize'] ;$i++) {
 ?>
 <tr>
 <td><?php echo $d['aid'] ?></td>
-<th align=left><a href="page.php?aid=<?=$d['aid'] ?>"><?=$d['title'] ?></h></td>
+<td align=left><b><a href="page.php?aid=<?=$d['aid'] ?>"><?=$d['title'] ?></b></td>
 <td><?=date('Y-m-d', $d['time']) ?></td>
 <td><?=date('Y-m-d', $d['etime']) ?></td>
 <td><a href="../information/userlist.php?gid=<?=$d['gid'] ?>" target="_blank"><?=$d['gname'] ?></a></td>

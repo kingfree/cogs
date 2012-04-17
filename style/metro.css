@@ -43,6 +43,10 @@ tr:nth-child(even) {
     background-color: rgba(252, 252, 252, 0.45);
 }
 
+tr:hover {
+    background-color: rgba(252, 252, 252, 0.9);
+}
+
 p {
     margin: 2px 2px 2px 2px;
     //text-indent: 2em;
@@ -133,12 +137,12 @@ pre {
 }
 
 .admin {
-    background-color: #cccc99;
+    background-color: #ccccff;
 }
 
 .admin_big {
     font-size: 200%;
-    background-color: #cccc99;
+    background-color: #ccccff;
 }
 
 .page_slice {

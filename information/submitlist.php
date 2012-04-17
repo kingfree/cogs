@@ -71,9 +71,9 @@ if($_GET['show'])
 <th onclick="sortTable('submitlist', 3)">结果</th>
 <th onclick="sortTable('submitlist', 4, 'int')">得分</th>
 <th>语言</th>
-<th onclick="sortTable('submitlist', 6)">时间</th>
-<th onclick="sortTable('submitlist', 7, 'int')">用时</th>
-<th onclick="sortTable('submitlist', 8, 'int')">内存</th>
+<th onclick="sortTable('submitlist', 6, 'int')">用时</th>
+<th onclick="sortTable('submitlist', 7, 'int')">内存</th>
+<th onclick="sortTable('submitlist', 8)">时间</th>
 <?php if ($_SESSION['admin']>0){ ?>
 <th class=admin>IP</th>
 <th class=admin>姓名</th>
@@ -93,15 +93,15 @@ for ($i=$st;$i<$cnt && $i<$st+$SET['style_pagesize'] ;$i++) {
     echo "<a href='../problem/pdetail.php?pid={$d['pid']}' target='_blank'>{$d['probname']}</a>";
 ?></td>
 <td><a href='../user/detail.php?uid=<?=$d['uid']?>' target='_blank'><?=gravatar::showImage($d['email']);?></a><?php echo "<a href='?uid={$d[uid]}&pid={$_GET['pid']}'>{$d['nickname']}</a>"; ?></td>
-<td><?=评测结果($d['result'])?></td>
+<td align=center><?=评测结果($d['result'])?></td>
 <td align=center><span class="<?=$d['accepted']?'ok':'no'?>"><?=$d['score'] ?></span></td>
-<td><a href='../problem/submitdetail.php?id=<?=$d['sid']?>'><?=$STR['lang'][$d['lang']]?></a></td>
+<td align=center><a href='../problem/submitdetail.php?id=<?=$d['sid']?>'><?=$STR['lang'][$d['lang']]?></a></td>
+<td align=center><?php printf("%.3f",$d['runtime']/1000.0) ?> s </td>
+<td align=center><?php printf("%.2f",$d['memory']/1024) ?> MiB </td>
 <td align=center><?php echo date('Y-m-d H:i:s',$d['subtime']); ?></td>
-<td><?php printf("%.3f",$d['runtime']/1000.0) ?> s </td>
-<td><?php printf("%.2f",$d['memory']/1024) ?> MiB </td>
 <?php if ($_SESSION['admin']>0){ ?>
 <td class=admin><?php echo $d['IP'] ?></td>
-<td class=admin><?php echo $d['realname'] ?></td>
+<td class=admin align=center><?php echo $d['realname'] ?></td>
 <?php } ?>
 </tr>
 <?php

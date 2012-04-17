@@ -98,7 +98,7 @@ echo "还未开始";
 <td><?php echo $d['memorylimit']; ?> MiB </td></tr>
   <tr>
   <td colspan=2 align=right>
-  <? if((time() < $e['endtime'] && time() > $e['starttime']) || $_SESSION['admin']) { ?>
+  <? if((time() < $e['endtime'] && time() > $e['starttime'])) { ?>
 <form action="submit.php" method="post" enctype="multipart/form-data" name="sub">
 <input type="file" name="file"/>
 <input type="radio" name="lang" id="pas" value="pas" /><label for="pas">Pascal</label>

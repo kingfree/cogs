@@ -129,7 +129,7 @@ if (!$err) for ($i=$st;$i<$cnt && $i<$st+$SET['style_pagesize'] ;$i++) {
 ?>
 <tr>
 <td><?php echo $d['pid'] ?></td>
-<td><? 是否通过($d['pid'], $q);?><a href="pdetail.php?pid=<?=$d['pid'] ?>"><?=$d['probname'] ?></a></td>
+<td><? 是否通过($d['pid'], $q);?><b><a href="pdetail.php?pid=<?=$d['pid'] ?>"><?=$d['probname'] ?></a></b></td>
 <td><?php echo $d['filename']; ?></td>
 <td align=center><?php echo $d['timelimit']/1000 . " s"; ?></td>
 <td align=center><?php echo $d['memorylimit'] . " MiB"; ?></td>
