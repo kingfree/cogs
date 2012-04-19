@@ -20,8 +20,7 @@ $pbs=explode(":",$d['contains']);
 <table id="contest_report">
   <tr>
     <th width="40px"><a href="javascript:qsort('rank')">名次</a></th>
-    <th width="40px"><a href="javascript:qsort('uid')">UID</a></th>
-    <th width="100px">用户昵称</th>
+    <th width="100px">用户</th>
     <? if ($_SESSION['admin']>0) { ?><th width="50px" class=admin>姓名</th><? } ?>
 <?php
     $cnt_prob=0;
@@ -33,7 +32,7 @@ $pbs=explode(":",$d['contains']);
         $d=$p->rtnrlt(0);
         $cnt_prob++;
 ?>
-    <th width="150px"><?=$d[probname] ?></th>
+    <th width="150px"><a href="../problem/pdetail.php?pid=<?=$v?>" target="_blank"><?=$d['probname'] ?></a></th>
     <th width="40px"><a href="javascript:qsort('score<?=$v ?>_')">得分</a></th>
 <?php
     }
@@ -53,7 +52,6 @@ $pbs=explode(":",$d['contains']);
 ?>
   <tr>
     <th id="rank<?=$rowcnt ?>">&nbsp;</th>
-    <td id="uid<?=$rowcnt ?>"><?=$d[uid] ?></td>
     <td id="nickname<?=$rowcnt ?>"><a href="comp.php?ctid=<?=$_GET['ctid'] ?>&uid=<?=$d['uid'] ?>" target="_blank">
 <?=gravatar::showImage($d['email'], 14);?>
 <?=$d['nickname'] ?></a></td>
@@ -130,10 +128,6 @@ function qsort(key) {
 }
 
 function swap(a,b) {
-    t=document.getElementById("uid"+a).innerHTML;
-    document.getElementById("uid"+a).innerHTML=document.getElementById("uid"+b).innerHTML;
-    document.getElementById("uid"+b).innerHTML=t;
-    
     t=document.getElementById("nickname"+a).innerHTML;
     document.getElementById("nickname"+a).innerHTML=document.getElementById("nickname"+b).innerHTML;
     document.getElementById("nickname"+b).innerHTML=t;

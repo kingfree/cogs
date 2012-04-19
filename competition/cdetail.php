@@ -110,7 +110,7 @@ echo "还未开始";
 <input name="filename" type="hidden" id="filename" value="<?php echo $d[filename]; ?>" />
 <input name="pid" type="hidden" id="pid" value="<?=$d['pid']?>" />
 <input name="ctid" type="hidden" id="pid" value="<?=$_GET['ctid']?>" />
-<input name="endtime" type="hidden" id="endtime" value="<?=$e['endtime']?>" />
+<input name="endtime" type="hidden" value="<?=$e['endtime']?>" />
 <input type="hidden" name="MAX_FILE_SIZE" value="102400">
 </form>
 <? } ?>

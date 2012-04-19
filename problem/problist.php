@@ -88,7 +88,7 @@ if(!$_GET['page']) {
 <input name="key" type="text" id="key" value="<?php echo $_GET['key'] ?>" />
 <input name="sc" type="submit" id="sc" value="搜索"/>
 <input name="caid" type="hidden" id="caid" value="<?php echo $_GET['caid'] ?>" />
-<a href="problem/random.php" title="随机选择一道你没有通过的题目">随机题目</a>
+<a href="random.php" title="随机选择一道你没有通过的题目">随机题目</a>
 </form>
 <form id="rank" action="" method="get" name="rank">
   <input name="rank" type="submit" value="按题目名称排序" />
