@@ -1,4 +1,5 @@
 images
+images/
 include/env.inc.php
 judge/cnt.php
 judge/settings.php

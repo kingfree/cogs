@@ -8,9 +8,9 @@ for ($i=0;$i<$cnt;$i++) {
 }
 
 $SET['cur']=$_SERVER['SCRIPT_FILENAME'];
-$SET['global_root']="cogs_tjf/";
+$SET['global_root']=$cfg['dir_root'];
 $SET['base']=$_SERVER['DOCUMENT_ROOT'].$SET['global_root'];
 $SET['URI']=base64_encode($_SERVER['REQUEST_URI']);
 
-$cfg['Version']='2.2.0.0';
+$cfg['Version']='2.2.0.1';
 ?>
