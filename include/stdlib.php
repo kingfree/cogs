@@ -90,5 +90,6 @@ $LIB->cls_usersquare();
 $time_Ls=gettime();
 
 require_once("string.inc.php");
+require_once("privilege.php");
 
 ?>

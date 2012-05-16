@@ -6,8 +6,9 @@
 
 body {
     color: Black;
-    background-color: #36727a;
     font-family: monospace;
+    background-size: 100%;
+    background-attachment: fixed;
     font-size: 14px;
     margin: 0;
     padding: 0;
@@ -17,13 +18,13 @@ table {
     border: 0;
     width: 100%;
     color: Black;
-    background-color: #dfeaf5;
+    background-color: rgba(223,234,245,0.4);
 }
 
 th {
     border: 0;
     color: Black;
-    background-color: rgba(252, 252, 252, 0.8);
+    background-color: rgba(252,252,252,0.4);
 }
 
 tr {
@@ -41,7 +42,7 @@ td {
 }
 
 tr:nth-child(even) {
-    background-color: rgba(252, 252, 252, 0.45);
+    background-color: rgba(252,252,252,0.2);
 }
 
 p {
@@ -52,20 +53,20 @@ p {
 a:link, a:visited {
     text-decoration: none;
     color: MidnightBlue;
-    border: thin solid #dfeaf5;
+    border: 0;
 }
 
 a:hover {
-    text-decoration: none;
+    text-decoration: underline;
     color: Black;
-    background-color: #f3f8ff;
-    border: thin solid #0077ec;
+    //background-color: #f3f8ff;
+    border: 0;
 }
 
 a:active {
     text-decoration: none;
     background-color: #dae8fb;
-    border: thin solid #0077ec;
+    border: 0;
 }
 
 input, textarea {
@@ -86,13 +87,13 @@ input:active, textarea:active {
 input[type="submit"] {
     border: thin solid LightBlue;
     padding: 2px 8px 2px 8px;
-    background-color: #f7f1fa;
+    background-color: rgba(247,247,250,0.6);
 }
 
 input[type="submit"]:hover {
     border: thin solid #0077ec;
     padding: 2px 8px 2px 8px;
-    background-color: #e5eef9;
+    background-color: rgba(229,238,249,0.8);
 }
 
 input[type="submit"]:active {
@@ -226,13 +227,13 @@ pre {
 #alltext {
     margin: 0;
     padding: 0;
-    background-color: #e5eef9;
+    background-color: rgba(229,238,249,0.2);
 }
 
 #globalbar {
     width: 100%;
     color: Lavender;
-    background-color: #8dc0c7;
+    background-color: rgba(141,192,199,0);
 }
 
 #global_head {
@@ -240,38 +241,37 @@ pre {
     font-size: 40px;
     text-align: center;
     color: Black;
-    background-color: #8dc0c7;
+    background-color: rgba(141,192,199,0);
     text-shadow: 5px 1px 9px #fff;
 }
 
 #nagbar {
     width: 100%;
     text-align: center;
-    background-color: #8dc0c7;
+    background-color: rgba(141,192,199,0);
     font-family: 黑体;
 }
 
 #globalbar tr {
-    background-color: #8dc0c7;
+    background-color: rgba(141,192,199,0);
 }
 
 #globalbar tr th, #globalbar tr td a:link, #globalbar tr td a:visited {
     color: Black;
-    background-color: #8dc0c7;
+    background-color: rgba(141,192,199,0);
     text-shadow: 1px 1px 5px #fff;
-    border: thin solid #8dc0c7;
+    border: 0;
 }
 
 #globalbar tr td a:hover, #globalbar tr td a:active {
     color: Black;
     background-color: #dae8fb;
     text-shadow: 1px 1px 5px #fff;
-    border: thin solid #0077ec;
 }
 
 #userinfo {
     font-family: 黑体;
-    background-color: #8dc0c7;
+    background-color: rgba(141,192,199,0);
     text-shadow: 5px 2px 5px #ccf;
 }
 
@@ -281,14 +281,14 @@ pre {
 
 #publicbar {
     margin: 0;
-    background-color: LavenderBlush;
+    background-color: rgba(250, 230, 230, 0.6);
     border: thin solid #f96531;
 }
 
 #publictail , #publictail a {
     margin: 0;
     color: #f9fcff;
-    background-color: #4d9378;
+    background-color: rgba(77,147,120,0);
     text-shadow: 0px 2px 8px #fcf;
 }
 
@@ -299,28 +299,25 @@ pre {
     font-size: 90%;
     text-align: right;
     color: #f9fcff;
-    background-color: #4d6366;
+    background-color: rgba(77,99,102,0.1);
 }
 
 /* 首页 */
 
 #index {
-    background-color: #dfeaf5;
+    background-color: rgba(223,234,245,0);
 }
 
 #prob_short {
     margin: 0;
-    background-color: #dfeaf5;
 }
 
 #lastest_prob {
     margin: 0;
-    background-color: #dfeaff;
 }
 
 .index_contest {
     margin: 0;
-    background-color: #e3eef8;
 }
 
 #index_prob {
@@ -330,7 +327,6 @@ pre {
 
 #index_text {
     padding: 5px;
-    background-color: #f7f8f9;
 }
 
 #index_rank {
@@ -364,7 +360,7 @@ pre {
 }
 
 #singlerank {
-    background-color: OldLace;
+    //background-color: OldLace;
 }
 
 #probdetail {
@@ -372,7 +368,7 @@ pre {
     padding: 5px 5px 5px 5px;
     color: Black;
 	overflow: auto;
-    background-color: #f1f1f1;
+    background-color: rgba(255,255,255,0.5);
     font-size: 15px;
 }
 
@@ -380,7 +376,7 @@ pre {
     border-collapse: collapse;
     border: 1px solid black;
     width: auto;
-    background-color: White;
+    //background-color: White;
 }
 
 /* 分类 */

@@ -1,6 +1,6 @@
 <?php
 require_once("../include/stdhead.php");
-gethead(1,"","用户详细信息");
+gethead(1,"","用户详细信息", $_GET['uid']);
 ?>
 
 <?php

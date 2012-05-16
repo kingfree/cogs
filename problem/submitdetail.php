@@ -36,7 +36,7 @@ if($cnt) {
     <th>题目名称</th>
     <td><a href="pdetail.php?pid=<?php echo $d['pid']; ?>" target="_blank"><?php echo $d['probname']; ?></a></td>
     <td rowspan=9><?php
-if ($_SESSION['admin']>0 || $d['uid']==$_SESSION['ID'])
+if(有此权限($q, '查看代码') || $d['uid']==$_SESSION['ID'])
     $forcetocode=1;
 else {
     $sql="select showcode from comments where uid={$d['uid']} and pid={$d['pid']}";
@@ -105,7 +105,7 @@ if ($forcetocode) {
         <input type="submit" name="Submit" value="Rejudge" class="Button"/>
     </form>    </td>
   </tr>
-  <?php if ($_SESSION['admin']>0){ ?>
+  <?php if(有此权限($q, '查看用户')) { ?>
   <tr class=admin>
     <th>IP</th>
     <td colspan=2><?php echo $d['IP'] ?></td>

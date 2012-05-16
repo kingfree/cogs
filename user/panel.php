@@ -9,7 +9,7 @@ $sql="select * from userinfo where uid={$_SESSION[ID]}";
 $cnt=$p->dosql($sql);
 $d=$p->rtnrlt(0);
 ?>
-<form method="post" action="doedit.php?uid=<?=$_SESSION[ID] ?>">
+<form method="post" action="doedit.php?uid=<?=$_SESSION[ID] ?>" enctype="multipart/form-data">
 <table id="userpanel">
   <tr>
     <th>用户编号</th>
@@ -19,7 +19,7 @@ $d=$p->rtnrlt(0);
   <tr>
     <th>用户名称</th>
     <td><?=gravatar::showImage($d['email']);?><?=$d[usr] ?></td>
-    <td rowspan=6 align=center>
+    <td rowspan=7 align=center>
     <?=gravatar::showImage($d['email'], 200);?><br />
     <a href="dodelimg.php?email=<?=md5($d['email'])?>">清空头像缓存</a><br />
     <div>
@@ -44,13 +44,17 @@ $d=$p->rtnrlt(0);
   </tr>
   <tr>
     <th>等级</th>
-    <td><b><?=$d[grade] ?></b> 等级 = (通过题目难度之和 * 2000) / 提交题目数</td>
+    <td><b><?=$d[grade] ?></b>
+ = 求和(题目的最高得分 * 题目的难度 / 30)
+    </td>
   </tr>
   <tr>
     <th>个人介绍</th>
-    <td><textarea name="memo" cols="60" rows="10" class="TextArea"><?=$d[memo] ?> </textarea></td>
+    <td><textarea name="memo" cols="60" rows="8" class="TextArea"><?=$d[memo] ?> </textarea></td>
 </tr>
   <tr>
+    <th>背景图片</th>
+    <td><input type="file" name="file"/></td>
   </tr>
 </table>
 </form>

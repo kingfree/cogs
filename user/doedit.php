@@ -4,6 +4,19 @@ gethead(0,"sess","");
 
 if ($_POST[action]=="edit") 
 {
+    if($_FILES['file']['tmp_name']) {
+        $portrait=$SET['base']."images/background";
+        $path = pathconvert($SET['cur'],$portrait).'/';
+        $backfile = $path . $_POST['uid'] . ".png";
+        if(file_exists($backfile)) {
+            $cmd = "rm $backfile";
+            $hr = popen($cmd, 'r');
+            pclose($hr);
+        }
+        $cmd = "convert {$_FILES['file']['tmp_name']} $backfile";
+        $hr = popen($cmd, 'r');
+        pclose($hr);
+    }
 	$p=new DataAccess();
 	$sql="update userinfo set nickname='{$_POST[nick]}',realname='{$_POST[realname]}',email='{$_POST[email]}',memo='{$_POST[memo]}' where uid={$_POST['uid']}";
 	$p->dosql($sql);

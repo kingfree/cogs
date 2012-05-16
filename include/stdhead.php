@@ -9,7 +9,7 @@ if(!isset($_SESSION['ID'])) {
     $_SESSION['ID']=0;
 }
 
-function gethead($head,$check,$title) {
+function gethead($head,$check,$title,$userid=0) {
     global $SET,$cfg,$LIB;
     /*if(!$_SESSION['ID'])
         if($_COOKIE['User']) if($_COOKIE['cojs_login'])
@@ -22,6 +22,7 @@ function gethead($head,$check,$title) {
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <link rel="Shortcut Icon" href="<?=路径("style/favicon.ico")?>" />
 <link rel=stylesheet href="<?=路径("style/".$SET['style_profile'])?>" />
+<?背景图片($userid ? $userid :$_SESSION['ID']);?>
 <?php $LIB->tradsimp(); ?>
 
 <link rel=stylesheet type="text/css" href="<?=路径("style/icon.css")?>" />
@@ -32,7 +33,7 @@ function gethead($head,$check,$title) {
 <body>
 <div id="alltext">
 <?
-if ($check=="sess") {
+/*if ($check=="sess") {
     if (!$_SESSION['ID'])
         echo '<script>document.location="../error.php?id=1"</script>';
 } else if ($check=="admin") {
@@ -44,7 +45,7 @@ if ($check=="sess") {
 } else if ($check=="verfy") {
     if ($_SESSION['admin']!=-1)
         echo '<script>document.location="../error.php?id=2"</script>';
-}
+}*/
 ?>
 <table id="globalbar">
   <tr>

@@ -51,7 +51,10 @@ gethead(1,"admin","后台管理");
 <span class="admin">
 <a href="settings.php?settings=comments">评论管理</a>
 </span></td>
-<td></td>
+<td>
+<span class="admin">
+<a href="settings.php?settings=privilege">权限管理</a>
+</span></td>
 </tr>
 <tr>
 <th>评测</th>

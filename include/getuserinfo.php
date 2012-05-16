@@ -12,4 +12,5 @@ $_SESSION['portrait']=$d['portrait'];
 $_SESSION['group']=$d['gbelong'];
 $_SESSION['email']=$d['email'];
 $_SESSION['grade']=$d['grade'];
+
 ?>

@@ -24,7 +24,7 @@ if($cnt) {
         echo '<script>document.location="../error.php?id=17"</script>';
         exit;
     }
-    if (!$d[submitable] && !($_SESSION['admin']>0)) {
+    if (!$d[submitable] && !有此权限($q, '查看题目')) {
         echo '<script>document.location="../error.php?id=18"</script>';
         exit;
     }
@@ -37,7 +37,7 @@ if($cnt) {
             break;
         }
     }
-    if (!$promise && !($_SESSION['admin']>0))
+    if (!$promise && !有此权限($q, '查看题目'))
         exit;
     $pid=$d[pid];
 } else {
@@ -69,7 +69,7 @@ if($cnt) {
 <tr>
 <th>添加时间</th>
 <td>
-<?php if ($_SESSION['admin']>0){ ?>
+<?php if(有此权限($q, '修改题目')) { ?>
 <a class=admin href="../admin/problem/editprob.php?action=edit&pid=<?= $d[pid]; ?>">[修改该题]</a>
 <? } ?>
 <?=date('Y-m-d', $d['addtime']) ?>
@@ -104,7 +104,7 @@ for ($i=0;$i<=$cnt2-1;$i++) {
 <input type="radio" name="lang" id="pas" value="pas" title="Pascal" /><label for="pas">Pascal</label>
 <input type="radio" name="lang" id="c" value="c"  title="C" /><label for="c">C</label>
 <input type="radio" name="lang" id="cpp" value="cpp" checked=1 title="C++" /><label for="cpp">C++</label>
-<?php if ($_SESSION['admin']>0){ ?>
+<?php if(有此权限($q, '修改题目')){ ?>
 <input name="testmode" type="checkbox" id="testmode" value="1" /> 
 <label for="testmode">测试模式</label>
 <?php } ?>

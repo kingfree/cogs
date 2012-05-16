@@ -24,7 +24,7 @@ if($cnt1 > 0) echo "<span class='todo'>($cnt1)</span>";
 <th><a href='<?=路径("user/login.php")?>?from=<?=$SET['URI']?>'><span class="icon-star"></span>登录</a></th>
 <th><a href="<?=路径("user/register.php?accept=1");?>"><span class="icon-shopping-cart"></span>注册</a></th>
 <? } ?>
-<?php if ($_SESSION['admin']>0)	{ ?>
+<?php if(有此权限($p, '管理教师')) { ?>
 <td><a class="admin" href="<?=路径("admin/index.php");?>"><span class="icon-asterisk"></span>后台</a></td>
 <? } ?>
 <td><a href="<?=路径("information/about.php");?>"><span class="icon-info-sign"></span>关于</a></td>

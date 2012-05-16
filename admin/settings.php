@@ -45,6 +45,9 @@ switch ($_REQUEST['settings'])
 	case "rank":
 		gethead(1,"admin","排名管理");
 		break;
+	case "privilege":
+		gethead(1,"admin","权限管理");
+		break;
 }
 ?>
 
@@ -95,6 +98,9 @@ switch ($_REQUEST['settings'])
 		break;
 	case "rank":
 		require("rank/rank.php");
+		break;
+	case "privilege":
+		require("privilege/index.php");
 		break;
 }
 ?>

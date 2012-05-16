@@ -102,7 +102,7 @@ for($i=0;$i<$cnt;$i++) {
 </td>
 <td id="index_text">
 <marquee id="publicbar" id="publicbar" align="right" direction="left" scrollamount="5" onMouseOver="this.stop();" onMouseOut="this.start();">
-<?php if ($_SESSION['admin']==2) { ?>[<a href="<?=pathconvert($SET['cur'],$editbulletin);?>">修改</a>]<?php } ?><font color="#003366"><b>公告 &gt;&gt;</b></font>
+<?php if(有此权限($p, '参数设置')) { ?>[<a href="<?=路径("admin/settings/editkey.php?sname=global_bulletin&method=html")?>">修改</a>]<?php } ?><font color="#003366"><b>公告 &gt;&gt;</b></font>
 <?=输出文本($SET['global_bulletin']); ?>
 </marquee>
 <?php echo 输出文本($SET['global_index']); ?>

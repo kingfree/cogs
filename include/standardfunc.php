@@ -349,4 +349,13 @@ function 提示($msg = "提示", $id = "") {
     exit;
 }
 
+function 背景图片($uid=0) {
+    global $SET;
+    $portrait=$SET['base']."images/background";
+    $path = pathconvert($SET['cur'],$portrait).'/';
+    $backfile = $path . $uid . ".png";
+    if(!file_exists($backfile) || filesize($backfile) < 1)
+        $backfile = $path . "0.png";
+    echo "<style type='text/css'>body {background-image: url($backfile);}</style>";
+}
 ?>
