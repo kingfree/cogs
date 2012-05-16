@@ -5,7 +5,7 @@ $p=new DataAccess();
 $q=new DataAccess();
 ?>
 
-<?php if ($_SESSION['admin']>0){ ?>
+<?php if(有此权限($q, '修改页面')) { ?>
 <span class="admin_big"><a href="editpage.php?action=add">添加新页面</a></span>
 <?php } ?>
 
@@ -44,9 +44,11 @@ if(!$_GET['page']) {
 <th>创建时间</th>
 <th>修改时间</th>
 <th>开放分组</th>
-<?php if ($_SESSION['admin']>0){ ?>
+<?php if(有此权限($q, '查看页面')) { ?>
 <th class=admin>添加用户</th>
 <th class=admin>权限</th>
+<?php } ?>
+<?php if(有此权限($q, '修改页面')) { ?>
 <th class=admin>编辑</th>
 <?php } ?>
 </tr>
@@ -63,9 +65,11 @@ for ($i=$st;$i<$cnt && $i<$st+$SET['style_pagesize'] ;$i++) {
 <td><?=date('Y-m-d', $d['time']) ?></td>
 <td><?=date('Y-m-d', $d['etime']) ?></td>
 <td><a href="../information/userlist.php?gid=<?=$d['gid'] ?>" target="_blank"><?=$d['gname'] ?></a></td>
-<?php if ($_SESSION['admin']>0) { ?>
+<?php if(有此权限($q, '查看页面')) { ?>
 <td class=admin><?=$d['name']?></td>
 <td class=admin><?=$d['force']?></td>
+<?php } ?>
+<?php if(有此权限($q, '修改页面')) { ?>
 <th class=admin><a href="editpage.php?action=edit&aid=<?=$d['aid']?>">修改</a></th>
 <?php } ?>
 </tr>

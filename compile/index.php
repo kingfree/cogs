@@ -53,7 +53,7 @@ $Cp=new Compiler($info);
 正在连接评测机...
 <?php
 flush();
-$free=$Cp->getgds();
+$free=$Cp->getgds($_POST['judger']);
 
 if (!$free) 异常("当前没有空闲的评测机，请稍后重新提交。");
 

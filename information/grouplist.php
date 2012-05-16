@@ -4,7 +4,7 @@ gethead(1,"","分组列表");
 $p=new DataAccess();
 $q=new DataAccess();
 ?>
-<?php if ($_SESSION['admin']>0) { ?>
+<?php if(有此权限($q, '分组管理')) { ?>
 <a href="../admin/group/editgroup.php?action=add" class="admin_big">添加新分组</a>
 <?php } ?>
 <p />
@@ -14,8 +14,10 @@ $q=new DataAccess();
     <th>上级分组</th>
     <th>备注</th>
     <th>组管理员</th>
+    <?php if(有此权限($q, '普通用户')) { ?>
     <th>加入</th>
-    <?php if ($_SESSION['admin']>0){ ?>
+    <?php } ?>
+    <?php if(有此权限($q, '分组管理')) { ?>
     <th class=admin>操作</th>
     <?php } ?>
   </tr>
@@ -41,6 +43,7 @@ if ($d['parent']!=-1)
 ?></td>
     <td><?=sp2n(htmlspecialchars($d['memo'])) ?></td>
     <td><a href="../user/detail.php?uid=<?=$d['uid']?>"><?=$d['nickname']?></a></td>
+    <?php if(有此权限($q, '普通用户')) { ?>
     <td>
 <form id="form" name="form" method="post" action="../mail/index.php">
 <input name="fromid" type="hidden" value=<?=$uid?> />
@@ -50,7 +53,8 @@ if ($d['parent']!=-1)
 <input type="submit" name="Submit" value="申请" class="LinkButton"/>
 </form>
     </td>
-    <?php if ($_SESSION['admin']>0){ ?>
+    <?php } ?>
+    <?php if(有此权限($q, '分组管理')) { ?>
     <td class=admin><a href="../admin/group/editgroup.php?action=edit&gid=<?=$d['gid'] ?>">修改</a></td>
     <?php } ?>
   </tr>

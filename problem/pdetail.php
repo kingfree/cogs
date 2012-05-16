@@ -105,12 +105,22 @@ for ($i=0;$i<=$cnt2-1;$i++) {
 <input type="radio" name="lang" id="c" value="c"  title="C" /><label for="c">C</label>
 <input type="radio" name="lang" id="cpp" value="cpp" checked=1 title="C++" /><label for="cpp">C++</label>
 <?php if(有此权限($q, '修改题目')){ ?>
-<input name="testmode" type="checkbox" id="testmode" value="1" /> 
-<label for="testmode">测试模式</label>
+<input name="testmode" type="checkbox" id="testmode" value="1" /><label for="testmode">测试模式</label>
 <?php } ?>
-<input type="submit" name="Submit" value="提交代码"/>
 <input name="pid" type="hidden" id="pid" value="<?=$d['pid']; ?>" />
 <input type="hidden" name="MAX_FILE_SIZE" value="102400">
+    <select name='judger' id='judger'>
+    <option value=0 selected=selected>自动选择</option>
+<?
+    $sql="select grid,address,memo from grader where enabled=1 order by priority desc";
+    $cnt=$q->dosql($sql);
+    for ($i=0;$i<$cnt;$i++) {
+        $e=$q->rtnrlt($i);
+        echo "<option value={$e['grid']} >{$e['memo']}</option>";
+    }
+?>       
+    </select>
+<input type="submit" name="Submit" value="提交代码"/>
 </td></form></tr>
 </table>
 <table id="singlerank">

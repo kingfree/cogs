@@ -65,13 +65,13 @@ a:hover {
 
 a:active {
     text-decoration: none;
-    background-color: #dae8fb;
+    //background-color: #dae8fb;
     border: 0;
 }
 
 input, textarea {
     border: thin solid LightBlue;
-    background-color: White;
+    background-color: rgba(255,255,255,0.7);
 }
 
 input:hover, textarea:hover {
@@ -87,13 +87,13 @@ input:active, textarea:active {
 input[type="submit"] {
     border: thin solid LightBlue;
     padding: 2px 8px 2px 8px;
-    background-color: rgba(247,247,250,0.6);
+    background-color: rgba(247,247,250,0.7);
 }
 
 input[type="submit"]:hover {
     border: thin solid #0077ec;
     padding: 2px 8px 2px 8px;
-    background-color: rgba(229,238,249,0.8);
+    background-color: White;
 }
 
 input[type="submit"]:active {
@@ -135,12 +135,12 @@ pre {
 }
 
 .admin {
-    background-color: #ccccff;
+    background-color: rgba(204,204,255,0.5);
 }
 
 .admin_big {
     font-size: 200%;
-    background-color: #ccccff;
+    background-color: rgba(204,204,255,0.5);
 }
 
 .page_slice {
@@ -497,12 +497,12 @@ pre {
 
 .Comments {
     border: 0;
-    background-color: White;
+    background-color: rgba(255,255,255,0.1);
 }
 
 .CommentsK {
     height: 40px;
-    background-color: LightYellow;
+    background-color: rgba(252,253,254,0.8);
     border: 0;
     padding: 10px 10px 10px 10px;
 }
@@ -511,37 +511,43 @@ pre {
     border: 0;
     text-align: center;
     width: 250px;
-    background-color: Khaki;
+    background-color: rgba(252,223,200,0.8);
 }
 
 .CommentsTime {
     border: 0;
     text-align: right;
-    background-color: LightGoldenRodYellow;
+    background-color: rgba(252,253,184,0.8);
 }
 
 .CommentsU {
     width: 250px;
-    background-color: HoneyDew;
+    background-color: rgba(197,248,252,0.4);
+    border: 0;
+}
+
+.CommentsU tr{
+    background-color: rgba(255,255,255,0);
     border: 0;
 }
 
 /* 登录 */
 
 #login {
-    position: fixed;
+    /*position: fixed;
     width: 30%;
     height: 30%;
     top: 35%;
-    left: 35%;
-    border: thick outset LightBlue;
-    background-color: #e1e1e1;
-    z-index: 999;
+    left: 35%;*/
+    border: thin solid LightBlue;
+    //z-index: 999;
+    width: 300px;
+    text-align: center;
 }
 
-#login td, #login th {
+#login td, #login th, #login tr {
     border: 0;
     color: Black;
-    background-color: #e1e1e1;
+    background-color: rgba(255,255,255,0.2);
 }
 

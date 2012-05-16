@@ -1,6 +1,6 @@
 <?php
 require_once("../include/stdhead.php");
-gethead(1,"sess","题目信息");
+gethead(1,"","题目信息");
 $uid = $_GET['uid'];
 ?>
 
@@ -24,7 +24,7 @@ if ($cnt) {
             break;
         }
     }
-    if (!$promise && !($_SESSION['admin']>0))
+    if (!$promise && !有此权限($q, '查看比赛'))
         异常("你没有权限访问该页面！");
     if (!$c)
         异常("比赛场次不存在！");
@@ -34,7 +34,7 @@ if ($cnt) {
         if ($v==$_GET['pid'])
             $pb=1;
     }
-    if (!$_SESSION['admin']>0) {
+    if (!有此权限($q, '查看比赛')) {
         if (time()<$e[starttime])
             异常("比赛尚未开始！");
         if ($d[readforce]>$_SESSION[readforce])

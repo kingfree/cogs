@@ -24,7 +24,7 @@ if($cnt) {
             break;
         }
     }
-    if (!$promise && !($_SESSION['admin']>0))
+    if (!$promise && !有此权限($q, '查看页面'))
         exit;
     $aid=$d[aid];
 } else {
@@ -35,7 +35,7 @@ if($cnt) {
 <table>
 <tr><th>页面名称</th>
 <th><b><?=$d[title]?></b></th>
-<?php if ($_SESSION['admin']>0){ ?>
+<?php if(有此权限($q, '修改页面')) { ?>
 <td><a class=admin href="editpage.php?action=edit&aid=<?= $d[aid]; ?>">修改该页</a></td>
 <?php } else { ?>
 <td></td>

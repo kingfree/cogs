@@ -1,6 +1,6 @@
 <?php
 require_once("../../include/stdhead.php");
-gethead(1,"admin","修改题目");
+gethead(1,"修改题目","修改题目");
 ?>
 <script>
 function checkprobname(){

@@ -74,7 +74,7 @@ if($_GET['show'])
 <th onclick="sortTable('submitlist', 6, 'int')">用时</th>
 <th onclick="sortTable('submitlist', 7, 'int')">内存</th>
 <th onclick="sortTable('submitlist', 8)">时间</th>
-<?php if ($_SESSION['admin']>0){ ?>
+<?php if(有此权限($q, '查看代码')) { ?>
 <th class=admin>IP</th>
 <th class=admin>姓名</th>
 <?php } ?>
@@ -99,7 +99,7 @@ for ($i=$st;$i<$cnt && $i<$st+$SET['style_pagesize'] ;$i++) {
 <td align=center><?php printf("%.3f",$d['runtime']/1000.0) ?> s </td>
 <td align=center><?php printf("%.2f",$d['memory']/1024) ?> MiB </td>
 <td align=center><?php echo date('Y-m-d H:i:s',$d['subtime']); ?></td>
-<?php if ($_SESSION['admin']>0){ ?>
+<?php if(有此权限($q, '查看代码')) { ?>
 <td class=admin><?php echo $d['IP'] ?></td>
 <td class=admin align=center><?php echo $d['realname'] ?></td>
 <?php } ?>

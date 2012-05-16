@@ -1,6 +1,6 @@
 <?php
 require_once("../include/stdhead.php");
-gethead(1,"sess","成绩公布");
+gethead(1,"","成绩公布");
 
 $p=new DataAccess();
 $r=new DataAccess();
@@ -9,9 +9,9 @@ $cnt=$p->dosql($sql);
 if (!$cnt)
     异常("未查询到记录！");
 $d=$p->rtnrlt(0);
-if (!$d[showscore] && !$_SESSION[admin])
+if (!$d['showscore'] && !有此权限($r, '查看比赛'))
     异常("成绩还未公布！");
-if(time() < $d['starttime'] && !$_SESSION[admin])
+if(time() < $d['starttime'] && !有此权限($r, '查看比赛'))
     异常("比赛尚未开始，不能查看关于题目的任何信息！");
 $q=new DataAccess();
 $pbs=explode(":",$d['contains']);
@@ -21,7 +21,7 @@ $pbs=explode(":",$d['contains']);
   <tr>
     <th width="40px"><a href="javascript:qsort('rank')">名次</a></th>
     <th width="100px">用户</th>
-    <? if ($_SESSION['admin']>0) { ?><th width="50px" class=admin>姓名</th><? } ?>
+    <? if(有此权限($r, '查看用户')) { ?><th width="50px" class=admin>姓名</th><? } ?>
 <?php
     $cnt_prob=0;
     foreach($pbs as $k=>$v) {
@@ -55,7 +55,7 @@ $pbs=explode(":",$d['contains']);
     <td id="nickname<?=$rowcnt ?>"><a href="comp.php?ctid=<?=$_GET['ctid'] ?>&uid=<?=$d['uid'] ?>" target="_blank">
 <?=gravatar::showImage($d['email'], 14);?>
 <?=$d['nickname'] ?></a></td>
-    <?php if ($_SESSION['admin']>0) { ?>
+    <?php if(有此权限($r, '查看用户')) { ?>
     <td id="realname<?=$rowcnt ?>" class=admin align=center><a href="../user/detail.php?uid=<?=$d['uid'] ?>" target="_blank"><?=$d['realname'] ?></a></td><?php } ?>
 <?php
         $sql="select pid,result,score,csid from compscore where uid='{$d['uid']}' and ctid={$_GET[ctid]} order by pid asc";

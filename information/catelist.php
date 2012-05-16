@@ -2,8 +2,9 @@
 require_once("../include/stdhead.php");
 gethead(1,"","分类列表");
 $p=new DataAccess();
+$q=new DataAccess();
 ?>
-<?php if ($_SESSION['admin']>0){ ?>
+<?php if(有此权限($p, '修改分类')) { ?>
 <a class="admin_big" href="../admin/category/editcate.php?action=add">添加新分类</a>
 <?php } ?>
 <table id="cate_tags">
@@ -24,7 +25,7 @@ for ($i=$st;$i<$cnt;$i++) {
   <tr>
     <th>分类</th>
     <th>备注</th>
-    <?php if ($_SESSION['admin']>0){ ?>
+    <?php if(有此权限($q, '修改分类')) { ?>
     <th class=admin>操作</th>
     <?php } ?>
   </tr>
@@ -35,7 +36,7 @@ for ($i=$st;$i<$cnt;$i++) {
   <tr>
     <td><a href="../problem/problist.php?caid=<?php echo $d['caid'] ?>"><?php echo $d['cname'] ?></a></td>
     <td><?php echo sp2n(htmlspecialchars($d['memo'])) ?></td>
-    <?php if ($_SESSION['admin']>0){ ?>
+    <?php if(有此权限($q, '修改分类')) { ?>
     <td class=admin><a href="../admin/category/editcate.php?action=edit&caid=<?php echo $d['caid'] ?>">修改</a></td><?php } ?>
   </tr>
 <?php

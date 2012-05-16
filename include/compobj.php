@@ -21,9 +21,12 @@ class Compiler
         $this->avgmemory=$this->totaltime=0;
     }
 
-    public function getgds()
+    public function getgds($judger)
     {
         $p=new DataAccess();
+        if($judger)
+        $sql="select grid,address,memo from grader where enabled=1 and grid=$judger";
+        else
         $sql="select grid,address,memo from grader where enabled=1 order by priority desc";
         $cnt=$p->dosql($sql);
         for ($i=0;$i<$cnt;$i++)

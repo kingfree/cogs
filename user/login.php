@@ -22,19 +22,13 @@ gethead(1,"","用户登录");
       <td align=left valign=center><input name="VerifyCode" type="text" class="InputBox" id="VerifyCode" size="8" maxlength="4" />
       <img src="../include/verifycode.php" /></td>
     </tr>-->
-    <tr><td></td>
+    <tr><td>
+<a href="lost.php">忘记密码</a><br />
+<a href="register.php">立即注册</a></td>
 <td><input type="submit" name="Login" value=" 登录 " style="font-size:25px;" />
 <input name="savepwd" type="checkbox" id="savepwd" value="1" /><label for="savepwd">自动登录<label></td>
-    </tr>
-    <tr>
 <input name="from" type="hidden" id="from" value="<?=$_GET['from'] ?>" />
- <td></td>
-<td><a href="lost.php">忘记密码</a></td>
-   </tr>
-    <tr>
- <td></td>
-<td><a href="register.php">立即注册</a></td>
-   </tr>
+    </tr>
   </table>
 </form>
 </center>

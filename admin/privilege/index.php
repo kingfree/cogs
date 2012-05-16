@@ -1,4 +1,4 @@
-<a href='privilege/add.php'>添加权限</a>
+<a class='admin_big' href='privilege/add.php'>添加权限</a>
 <?php
 	$p=new DataAccess();
 	$sql="select privilege.*,userinfo.nickname from privilege,userinfo where userinfo.uid=privilege.uid order by uid,pri asc";

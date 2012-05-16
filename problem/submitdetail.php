@@ -1,6 +1,6 @@
 <?php
 require_once("../include/stdhead.php");
-gethead(1,"sess","代码");
+gethead(1,"","代码");
 $LIB->dpshhl();
 ?>
 
@@ -28,7 +28,7 @@ if($cnt) {
 ?>
 <table id="submitdetail">
   <tr>
-    <th width="60px">SID</th>
+    <th width="60px">记录编号</th>
     <td width="100px"><?php echo $d['sid']; ?></td>
     <th>代码语言：<?php echo $STR['lang'][$d['lang']] ?></th>
   </tr>
@@ -97,13 +97,27 @@ if ($forcetocode) {
   </tr>
   <tr>
     <th>重新评测</th>
-    <td><form id="act" name="act" method="post" action="../compile/">
+<td>
+<? if(有此权限($q, '查看代码')) { ?>
+    <form id="act" name="act" method="post" action="../compile/">
         <input name="pid" type="hidden" id="pid" value="<?=$d['pid']; ?>" />
         <input name="sid" type="hidden" id="sid" value="<?=$d['sid']; ?>" />
         <input type="hidden" name="rejudge" value="1">
         <input type="hidden" name="lang" value="<?php echo langnumtostr($d['lang']) ?>">
-        <input type="submit" name="Submit" value="Rejudge" class="Button"/>
-    </form>    </td>
+    <select name='judger' id='judger'>
+    <option value=0 selected=selected>自动选择</option>
+<?
+    $sql="select grid,address,memo from grader where enabled=1 order by priority desc";
+    $cnt=$q->dosql($sql);
+    for ($i=0;$i<$cnt;$i++) {
+        $e=$q->rtnrlt($i);
+        echo "<option value={$e['grid']} >{$e['memo']}</option>";
+    }
+?>       
+    </select>
+    <input type="submit" name="Submit" value="重新评测" />
+    </form>
+    <? } ?></td>
   </tr>
   <?php if(有此权限($q, '查看用户')) { ?>
   <tr class=admin>

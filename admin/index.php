@@ -1,9 +1,14 @@
 <?php
 require_once("../include/stdhead.php");
 gethead(1,"admin","后台管理");
+    $q=new DataAccess();
 ?>
 <table id="admin_index" align=center>
-<tr><th colspan=3>后台管理</th></tr>
+<tr><th colspan=3>后台管理
+<span class="admin">
+<a href="settings.php?settings=privilege">权限管理</a>
+</span>
+</th></tr>
 <tr>
 <th width=20%>题目</th>
 <td width=40%><span>
@@ -52,9 +57,7 @@ gethead(1,"admin","后台管理");
 <a href="settings.php?settings=comments">评论管理</a>
 </span></td>
 <td>
-<span class="admin">
-<a href="settings.php?settings=privilege">权限管理</a>
-</span></td>
+</td>
 </tr>
 <tr>
 <th>评测</th>
@@ -65,10 +68,10 @@ gethead(1,"admin","后台管理");
 </tr>
 <tr>
 <th>系统</th>
-<td><? if($_SESSION['admin'] > 1) { ?><span class="admin"><a href="settings.php?settings=settings">参数设置</a></span><? } ?></td>
+<td><? if(有此权限($q, '超级用户')) { ?><span class="admin"><a href="settings.php?settings=settings">参数设置</a></span><? } ?></td>
 <td><span class="admin"><a href="settings.php?settings=rank">排名管理</a></span></td>
 </tr>
-<? if($_SESSION['admin'] > 1) { ?><tr>
+<? if(有此权限($q, '超级用户')) { ?><tr>
 <th rowspan=2>高级</th>
 <td><span><a href="settings.php?settings=dbctrl">数据库管理</a></span></td>
 <td><span><a href="settings.php?settings=terminal">PHP终端访问</a></span></td>

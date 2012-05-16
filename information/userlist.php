@@ -159,7 +159,9 @@ function okdel(name) {
     <td align=center><?=$d['grade'] ?></td>
     <? if(有此权限($q, '查看用户')) { ?><td class=admin align=right><?=$d['lastip'] ?></a></td><? } ?>
     <? if(有此权限($q, '修改用户')) { ?><td class=admin align=center>
-    <a href="../admin/privilege/add.php?uid=<?=$d['uid'] ?>">权限</a>
+    <? if(有此权限($q, '修改权限')) { ?>
+    <b><a href="../admin/privilege/add.php?uid=<?=$d['uid'] ?>">权限</a></b>
+    <? } ?>
     <a href="../admin/user/edituser.php?uid=<?=$d['uid'] ?>">修改</a>
     <a href="../admin/user/doedituser.php?uid=<?=$d['uid'] ?>&action=del" onclick="return okdel('<?=$d['nickname']?>')">删除</a>
     </td><? } ?>

@@ -1,6 +1,6 @@
 <?php
 require_once("../include/stdhead.php");
-gethead(1,"admin","修改页面");
+gethead(1,"修改页面","修改页面");
 ?>
 
 <script charset="utf-8" src="../include/kindeditor/kindeditor.js"></script>

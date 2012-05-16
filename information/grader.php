@@ -1,10 +1,11 @@
 <?php
 require_once("../include/stdhead.php");
 gethead(1,"","评测机状态");
+    $q=new DataAccess();
 ?>
 
-<?php if ($_SESSION['admin']>0) { ?>
-<a class="adminButton" href="../admin/grader/editgrader.php?action=add">添加新评测机</a>
+<?php if(有此权限($q, '管理评测')) { ?>
+<a class="admin_big" href="../admin/grader/editgrader.php?action=add">添加新评测机</a>
 <?php } ?>
 <p />
 <center>
@@ -16,7 +17,7 @@ gethead(1,"","评测机状态");
     <th scope="col">状态</th>
     <th scope="col">版本</th>
     <th scope="col">备注</th>
-<?php if ($_SESSION['admin']>0){ ?>
+<?php if(有此权限($q, '管理评测')) { ?>
     <th bgcolor="#99FFCC"  scope="col">地址</th>
     <th bgcolor="#99FFCC"  scope="col">优先级</th>
     <th bgcolor="#99FFCC"  scope="col">操作</th>
@@ -47,10 +48,10 @@ gethead(1,"","评测机状态");
     <td><?php echo $tmp['state'] ?></td>
     <td><?php echo $tmp['ver'] ?></td>
     <td><?php echo sp2n(htmlspecialchars($d['memo'])) ?></td>
-<?php if ($_SESSION['admin']>0){ ?>
-    <td bgcolor="#99FFCC"><?php echo $d['address'] ?></td>
-    <td bgcolor="#99FFCC"><?php echo $d['priority'] ?></td>
-    <td bgcolor="#99FFCC"><a href="../admin/grader/editgrader.php?action=edit&amp;grid=<?php echo $d['grid'] ?>">修改</a> <a href="../admin/grader/doeditgrader.php?action=start&amp;grid=<?php echo $d['grid'] ?>">启动</a> <a href="../admin/grader/doeditgrader.php?action=stop&amp;grid=<?php echo $d['grid'] ?>">关闭</a></td>
+<?php if(有此权限($q, '管理评测')) { ?>
+    <td class="admin"><a href='<?=$d['address']?>'><?php echo $d['address'] ?></a></td>
+    <td class="admin"><?php echo $d['priority'] ?></td>
+    <td class="admin"><a href="../admin/grader/editgrader.php?action=edit&amp;grid=<?php echo $d['grid'] ?>">修改</a> <a href="../admin/grader/doeditgrader.php?action=start&amp;grid=<?php echo $d['grid'] ?>">启动</a> <a href="../admin/grader/doeditgrader.php?action=stop&amp;grid=<?php echo $d['grid'] ?>">关闭</a></td>
 <?php } ?>
   </tr>
 <?php
