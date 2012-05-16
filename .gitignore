@@ -1,3 +1,7 @@
 images/gravatar/
 include/env.inc.php
 images/upload/
+judge/cnt.php
+judge/settings.php
+judge/running.php
+judge/mode.php
