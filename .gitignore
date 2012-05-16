@@ -5,3 +5,5 @@ judge/cnt.php
 judge/settings.php
 judge/running.php
 judge/mode.php
+include/kindeditor/attached
+
