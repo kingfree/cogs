@@ -1,5 +1,5 @@
-Judger
-1.12
-/home/ruvtex/grading_data/gradecompile
-/home/ruvtex/grading_data/testdata
-/home/ruvtex/www/grading
+测试评测机
+1.2
+/home/syzx/grading_data/gradecompile
+/home/syzx/grading_data/testdata
+/home/tjf/cogs/judge

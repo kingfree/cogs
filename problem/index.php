@@ -147,7 +147,7 @@ if (!$err) for ($i=$st;$i<$cnt && $i<$st+$SET['style_pagesize'] ;$i++) {
 <td class=admin align=center><?=$d['readforce']?></td>
 <?php } ?>
 <?php if(有此权限('修改题目')) { ?>
-<td class=admin align=center><a href="../admin/problem/editprob.php?action=edit&pid=<?= $d[pid]; ?>">修改</a></td>
+<td class=admin align=center><a href="../admin/problem/editprob.php?action=edit&pid=<?=$d['pid']; ?>">修改</a></td>
 <?php } ?>
 </tr>
 <?php } ?>

@@ -63,7 +63,7 @@ $d['detail']="请在此键入题目内容";
 else echo '<script>document.location="../../error.php?id=12"</script>';
 }
 ?>
-<form id="form1" name="form1" action="doeditprob.php" method="post">
+<form id="form1" name="form1" action="doeditprob.php" method="post" enctype="multipart/form-data">
 <table width="100%" border="1" bordercolor=#000000 cellspacing=0 cellpadding=4>
 <tr>
 <td width="80px" valign="top" scope="col">PID</td>
@@ -73,7 +73,7 @@ else echo '<script>document.location="../../error.php?id=12"</script>';
 </tr>
 <tr>
 <td valign="top">题目名称</td>
-<td><input name="probname" type="text" id="probname" onchange="checkprobname()" value="<?php echo $d[probname] ?>" class="InputBox" /><span id="msg1"></span></td>
+<td><input name="probname" type="text" id="probname" onchange="checkprobname()" value="<?php echo $d[probname] ?>" /><span id="msg1"></span></td>
 <td rowspan=9 valign="top">
 <?php
 if ($_GET[pid]) {
@@ -133,13 +133,13 @@ if ($linecnt>0 && $line>1)
 <td><input name="submitable" type="checkbox" id="submitable" value="1" <?php if ($d['submitable']) echo 'checked="checked"'; ?> /></td>
 </tr>
 <tr>
-<td valign="top">测点数目</td>
-<td><input name="datacnt" type="number" id="datacnt" value="<?php echo $d[datacnt] ?>" />
-<!--【暂不可用】测试数据打包zip(文件包含一个以该题目命名的文件夹，其中为in和ans数据)：
-<input type="file" name="file" id="file" class="Button"/>
-<input type="hidden" name="MAX_FILE_SIZE" value="102400">
--->
-</td>
+<td valign="top">对比方式</td>
+<td><select name="plugin" id="plugin">
+<option value="-1"<?php if ($d['plugin']==-1){ ?> selected="selected"<?php } ?>>交互式</option>
+<option value="1"<?php if ($d['plugin']==1){ ?> selected="selected"<?php } ?>>简单对比</option>
+<option value="2"<?php if ($d['plugin']==2){ ?> selected="selected"<?php } ?>>逐字节对比</option>
+<option value="0"<?php if ($d['plugin']==0){ ?> selected="selected"<?php } ?>>评测插件</option>
+</select>                </td>
 </tr>
 <tr>
 <td valign="top">时间限制</td>
@@ -168,17 +168,17 @@ $e=$q->rtnrlt($j);
 </select></td>
 </tr>
 <tr>
-<td valign="top">对比方式</td>
-<td><select name="plugin" id="plugin">
-<option value="-1"<?php if ($d['plugin']==-1){ ?> selected="selected"<?php } ?>>交互式</option>
-<option value="1"<?php if ($d['plugin']==1){ ?> selected="selected"<?php } ?>>简单对比</option>
-<option value="2"<?php if ($d['plugin']==2){ ?> selected="selected"<?php } ?>>逐字节对比</option>
-<option value="0"<?php if ($d['plugin']==0){ ?> selected="selected"<?php } ?>>评测插件</option>
-</select>                </td>
+<td valign="top">测试点数</td>
+<td><input name="datacnt" type="number" id="datacnt" value="<?php echo $d[datacnt] ?>" /></td>
 <td class=admin>提交修改：
 <input type="submit" value="单击此处提交对该题目的修改" />
 <input name="action" type="hidden" id="action" value="<?php echo $_GET[action] ?>" />
 </td>
+<tr><td>测试数据</td>
+<td colspan=2>
+<input type="file" name="datafile" id="datafile" />
+打包zip文件包含一个以该题目命名的文件夹，其中为*#.in和*#ans数据，*.cc为评测插件
+</td></tr>
 </tr>
 <tr>
 <td valign="top">题目内容</td>

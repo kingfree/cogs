@@ -54,18 +54,9 @@ if ($_REQUEST[action]=='del') {
 	$pid=0;
 }
 
-/*if($_FILES['file']) {
-if($_FILES['file']['error'] > 0) {
-    echo "<h3>文件上传失败！</h3>";
-} else {
-    echo "解压缩数据。";
-    chdir("/home/ruvtex/grading_data/testdata");
-    move_uploaded_file($_FILES['file']['tmp_name'],"tmp.zip");
-    chmod("tmp.zip",0664);
-    $handle = popen("unzip -cl -o tmp.zip", 'r');
-    rfile($handle);
+if(有此权限('修改题目') && $_FILES['datafile']['size']) {
+    $handle = popen("unzip -o {$_FILES['datafile']['tmp_name']} -d\"{$cfg['testdata']}\"", 'r');
     pclose($handle);
 }
-} else*/
 echo "<script>document.location=\"../../refresh.php?id=7&pid={$pid}\"</script>";
 ?>
