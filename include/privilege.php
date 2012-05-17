@@ -6,6 +6,8 @@ $pri['超级用户']=2;
 $pri['查看代码']=21;
 $pri['修改题目']=11;
 $pri['查看题目']=12;
+$pri['查看数据']=13;
+$pri['测试题目']=14;
 $pri['修改页面']=15;
 $pri['查看页面']=16;
 $pri['查看比赛']=31;
@@ -24,20 +26,14 @@ $pri['管理评测']=61;
 $pri['修改权限']=72;
 $pri['参数设置']=99;
 
-function 有此权限($lq, $qx, $uid=0) {
+function 有此权限($qx, $uid=0) {
+    global $pri, $cfg, $_SESSION;
     if(!$qx) return true;
     if($qx == '普通用户' && $_SESSION['ID']) return true;
-    global $pri;
-    $uid = $uid ? $uid : $_SESSION['ID'];
-    $sql = "select def from privilege where uid=$uid and pri=".(int)$pri[$qx]." and def=1";
-    $cnt = $lq->dosql($sql);
-    if(!$cnt) {
-        $sql = "select def from privilege where uid=$uid and pri=".(int)$pri['超级用户']." and def=1";
-        $cnt = $lq->dosql($sql);
-    }
-    if(!$cnt && $pri['qx']<60)
-        $cnt = $lq->dosql("select def from privilege where uid=$uid and pri=".(int)$pri['管理教师']." and def=1");
-    return $cnt ? true : false;
+    if($_SESSION['pri'.$pri[$qx]]) return true;
+    if($_SESSION['pri'.$pri['超级用户']]) return true;
+    if($pri[$qx]<60 && $_SESSION['pri'.$pri['管理用户']]) return true;
+    return false;
 }
 
 

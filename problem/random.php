@@ -26,7 +26,7 @@ function canuse($pid) {
 for(;;) {
 	$pid = rand(1, $mpid);
 	if(canuse($pid)) {
-		$url = "pdetail.php?pid=" . $pid;
+		$url = "problem.php?pid=" . $pid;
 		header("Location:$url");
 		break;
 	}

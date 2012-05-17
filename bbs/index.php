@@ -26,7 +26,7 @@ $d=$p->rtnrlt($i);
 ?>
 <tr>
 <td><?=$d['did']?></td>
-<td><a href="../problem/pdetail.php?pid=<?=$d['pid']?>"><?=$d['probname']?></a></td>
+<td><a href="../problem/problem.php?pid=<?=$d['pid']?>"><?=$d['probname']?></a></td>
 <td><a href="page.php?did=<?=$d['did']?>"><?=$d['title']?></a></td>
 <td><a href="../user/detail.php?uid=<?=$d['uid']?>">
 <?=gravatar::showImage($d['email'], 16);?><?=$d['nickname']?></a></td>

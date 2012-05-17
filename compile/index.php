@@ -11,10 +11,11 @@ $LIB->func_socket();
 
 <?php
 $p=new DataAccess();
+$q=new DataAccess();
 $sql="select * from problem where pid={$_POST['pid']}";
 $p->dosql($sql);
 $d=$p->rtnrlt(0);
-if (!$d['submitable'] && !$_SESSION['admin']>0) {
+if (!$d['submitable'] && !有此权限('查看题目')) {
 	echo '<script>document.location="../error.php?id=18"</script>';
 	exit;
 }
@@ -34,11 +35,10 @@ $info['memorylimit']=$d['memorylimit'];
 $info['plugin']=$d['plugin'];
 $info['compiledir']=$SET['dir_source'];
 $info['mode']="normal";
-if ($_POST['testmode']=='1' && $_SESSION['admin']>0)
+if ($_POST['testmode']=='1' && 有此权限('测试题目'))
 	$info['mode']="test";
 if ($_POST['rejudge']==1) {
 	$info['rejudge']=1;
-	$q=new DataAccess();
 	$sql="select * from submit where sid='{$info['sid']}'";
 	$q->dosql($sql);
 	$e=$q->rtnrlt(0);
@@ -121,14 +121,14 @@ if ($csucc) {
 <td width=40%>
 <p>运行时间 <?php printf ("%.3f",$Cp->gettotaltime()/1000.0) ?> s</p>
 <p>平均内存 <?php printf("%.2f",$Cp->getmemory()/1024) ?> MiB</p>
-<p>测试点通过状况 <a href="../problem/submitdetail.php?id=<?=$info['sid']?>"><?=评测结果($Cp->s_detail) ?></a></p>
+<p>测试点通过状况 <a href="../problem/code.php?id=<?=$info['sid']?>"><?=评测结果($Cp->s_detail) ?></a></p>
 <p>得分：<?=$Cp->getscore(); ?></p>
-<p><a href="../problem/pdetail.php?pid=<?=$_POST['pid'] ?>">返回原题 “<?=$ptitle?>”</a></p>
+<p><a href="../problem/problem.php?pid=<?=$_POST['pid'] ?>">返回原题 “<?=$ptitle?>”</a></p>
 <?php if ($Cp->ac==$d['datacnt']) {
     $AC = 1;
 } else {
     $AC = 0;
-    if(($_SESSION['admin'] > 0 || $_SESSION['ID'] == $info['uid']) &&
+    if(($_SESSION['ID'] == $info['uid'] || 有此权限('查看数据')) &&
             $nodata == false) {
         $AC = -1;
     } 
@@ -140,7 +140,7 @@ if ($csucc) {
     <p><a href="../information/help.php" target="_blank" title="RP问题">为什么程序在我的电脑上能够正常运行，而在评测机上不能?</a></p>
 <?php } ?>
 <?php
-if($nodata == false && ($_POST['testmode'] != 1 || $_SESSION['admin']==0))
+if($nodata == false && ($_POST['testmode'] != 1 || !有此权限('测试题目')))
 	$Cp->writedb_single();
 else echo "<p class=no>没有写入数据库</p>";
 ?>
@@ -151,7 +151,7 @@ else echo "<p class=no>没有写入数据库</p>";
 <pre class="brush: text;"><?=htmlspecialchars($Cp->inputtext)?></pre>
 <p>下面是你的输出与标准答案不同的地方（上面带减号“-”的是你的输出，下面带加号“+”的是答案输出，“@@”之间的数字表示行号）：
 <pre class="brush: diff;"><?=htmlspecialchars($Cp->difftext)?></pre>
-<p><a href="../problem/pdetail.php?pid=<?=$_POST['pid'] ?>">返回原题 “<?=$ptitle?>”</a></p>
+<p><a href="../problem/problem.php?pid=<?=$_POST['pid'] ?>">返回原题 “<?=$ptitle?>”</a></p>
 <?php } ?>
 <?php } else { ?>
 <p>编译失败：</p>

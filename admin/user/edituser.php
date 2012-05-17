@@ -1,6 +1,6 @@
 <?php
 require_once("../../include/stdhead.php");
-gethead(1,"admin","修改用户");
+gethead(1,"修改用户","修改用户");
 ?>
 
 <?php

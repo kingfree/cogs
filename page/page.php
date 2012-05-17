@@ -24,7 +24,7 @@ if($cnt) {
             break;
         }
     }
-    if (!$promise && !有此权限($q, '查看页面'))
+    if (!$promise && !有此权限('查看页面'))
         exit;
     $aid=$d[aid];
 } else {
@@ -35,7 +35,7 @@ if($cnt) {
 <table>
 <tr><th>页面名称</th>
 <th><b><?=$d[title]?></b></th>
-<?php if(有此权限($q, '修改页面')) { ?>
+<?php if(有此权限('修改页面')) { ?>
 <td><a class=admin href="editpage.php?action=edit&aid=<?= $d[aid]; ?>">修改该页</a></td>
 <?php } else { ?>
 <td></td>
@@ -45,7 +45,7 @@ if($cnt) {
 <tr><th>添加时间</th>
 <td><?=date('Y-m-d', $d['time']) ?></td>
 <th>开放分组</th>
-<td><a href="../information/userlist.php?gid=<?=$d['gid'] ?>" target="_blank"><?=$d['gname'] ?></a></td></tr>
+<td><a href="../user/index.php?gid=<?=$d['gid'] ?>" target="_blank"><?=$d['gname'] ?></a></td></tr>
 <tr><th>编辑时间</th>
 <td><?=date('Y-m-d', $d['etime']) ?></td>
 <th>阅读权限</th>

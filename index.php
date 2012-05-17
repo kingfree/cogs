@@ -8,11 +8,11 @@ $q=new DataAccess();
 <tr>
 <td id="index_prob">
 <table id="prob_short">
-<tr><form id="search" name="search" method="get" action="problem/problist.php">
+<tr><form id="search" name="search" method="get" action="problem/index.php">
 <td><input name="key" type="text" id="key" /></td>
 <td><input type="submit" value="搜索"/></td>
 </form></tr>
-<tr><form id="gotoprob" name="gotoprob" method="get" action="problem/pdetail.php">
+<tr><form id="gotoprob" name="gotoprob" method="get" action="problem/problem.php">
 <td><input name="pid" type="text" id="pid" value=1 /></td>
 <td><input type="submit" value="进入" /></td>
 </form></tr>
@@ -51,7 +51,7 @@ for($i=0; $i<$cnt; $i++) {
   </tr>
   <tr>
     <td>分组</td>
-    <td><a href="../information/userlist.php?gid=<?php echo $d['gid'] ?>" target="_blank"><?php echo $d['gname'] ?></a></td>
+    <td><a href="../user/index.php?gid=<?php echo $d['gid'] ?>" target="_blank"><?php echo $d['gname'] ?></a></td>
   </tr>
   <tr>
     <td>介绍</td>
@@ -95,14 +95,14 @@ for($i=0;$i<$cnt;$i++) {
 <td><?php echo $d['pid']; ?></td>
 <td>
 <? 是否通过($d['pid'], $q); ?>
-<a href="problem/pdetail.php?pid=<?php echo $d['pid']; ?>" target="_blank"><?php echo $d['probname']; ?></a></td>
+<a href="problem/problem.php?pid=<?php echo $d['pid']; ?>" target="_blank"><?php echo $d['probname']; ?></a></td>
 </tr>
 <?php } ?>
 </table>
 </td>
 <td id="index_text">
 <marquee id="publicbar" id="publicbar" align="right" direction="left" scrollamount="5" onMouseOver="this.stop();" onMouseOut="this.start();">
-<?php if(有此权限($p, '参数设置')) { ?>[<a href="<?=路径("admin/settings/editkey.php?sname=global_bulletin&method=html")?>">修改</a>]<?php } ?><font color="#003366"><b>公告 &gt;&gt;</b></font>
+<?php if(有此权限('参数设置')) { ?>[<a href="<?=路径("admin/settings/editkey.php?sname=global_bulletin&method=html")?>">修改</a>]<?php } ?><font color="#003366"><b>公告 &gt;&gt;</b></font>
 <?=输出文本($SET['global_bulletin']); ?>
 </marquee>
 <?php echo 输出文本($SET['global_index']); ?>

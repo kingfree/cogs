@@ -1,6 +1,6 @@
 <?php
 require_once("../include/stdhead.php");
-gethead(1,"admin","比赛评测");
+gethead(1,"查看比赛","比赛评测");
 ?>
 
 <?php

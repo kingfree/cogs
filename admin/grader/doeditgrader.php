@@ -1,6 +1,6 @@
 <?php
 require_once("../../include/stdhead.php");
-gethead(0,"admin","");
+gethead(0,"管理评测","");
 $LIB->func_socket();
 
 if ($_POST['enabled']==1) $enabled=1; else $enabled=0;

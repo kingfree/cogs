@@ -1,6 +1,6 @@
 <?php
 require_once("../../include/stdhead.php");
-gethead(0,"admin","");
+gethead(0,"修改题目","");
 
 if ($_POST[submitable]==1) $sub=1; else $sub=0;
 if ($_REQUEST[action]=='add')

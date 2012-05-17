@@ -34,9 +34,9 @@ if($cnt) {
   </tr>
   <tr>
     <th>题目名称</th>
-    <td><a href="pdetail.php?pid=<?php echo $d['pid']; ?>" target="_blank"><?php echo $d['probname']; ?></a></td>
+    <td><a href="problem.php?pid=<?php echo $d['pid']; ?>" target="_blank"><?php echo $d['probname']; ?></a></td>
     <td rowspan=9><?php
-if(有此权限($q, '查看代码') || $d['uid']==$_SESSION['ID'])
+if(有此权限('查看代码') || $d['uid']==$_SESSION['ID'])
     $forcetocode=1;
 else {
     $sql="select showcode from comments where uid={$d['uid']} and pid={$d['pid']}";
@@ -98,7 +98,7 @@ if ($forcetocode) {
   <tr>
     <th>重新评测</th>
 <td>
-<? if(有此权限($q, '查看代码')) { ?>
+<? if(有此权限('测试题目')) { ?>
     <form id="act" name="act" method="post" action="../compile/">
         <input name="pid" type="hidden" id="pid" value="<?=$d['pid']; ?>" />
         <input name="sid" type="hidden" id="sid" value="<?=$d['sid']; ?>" />
@@ -119,7 +119,7 @@ if ($forcetocode) {
     </form>
     <? } ?></td>
   </tr>
-  <?php if(有此权限($q, '查看用户')) { ?>
+  <?php if(有此权限('查看用户')) { ?>
   <tr class=admin>
     <th>IP</th>
     <td colspan=2><?php echo $d['IP'] ?></td>

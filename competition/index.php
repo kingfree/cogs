@@ -5,7 +5,7 @@ $p=new DataAccess();
 $q=new DataAccess();
 ?>
 
-<?php if(有此权限($p, '修改比赛')) { ?>
+<?php if(有此权限('修改比赛')) { ?>
 <a class="admin_big" href="../admin/comp/editcompbase.php?action=add">添加新比赛</a>
 <?php } ?>
 <div id="nowtime">
@@ -35,12 +35,14 @@ if(!$_GET['page']) {
     <th>开始时间</th>
     <th>结束时间</th>
     <th>开放分组</th>
-<?php if(有此权限($q, '修改比赛')) { ?>
+<?php if(有此权限('查看比赛')) { ?>
     <th class=admin>评测</th>
+    <th class=admin>组织者</th>
+    <th class=admin>权限</th>
+<? } ?>
+<?php if(有此权限('修改比赛')) { ?>
     <th class=admin>比赛</th>
     <th class=admin>场次</th>
-    <th class=admin>权限</th>
-    <th class=admin>组织者</th>
 <? } ?>
 </tr>
 <?
@@ -62,13 +64,15 @@ for ($i=$st;$i<$cnt && $i<$st+$SET['style_pagesize'] ;$i++) {
      ?></td>
     <td align=center><?=date('Y-m-d H:i', $d[starttime]) ?></td>
     <td align=center><?=date('Y-m-d H:i', $d[endtime]) ?></td>
-    <td align=center><a href="../information/userlist.php?gid=<?=$d['gid'] ?>" target="_blank"><?=$d['gname'] ?></a></td>
-<?php if(有此权限($q, '修改比赛')) { ?>
+    <td align=center><a href="../user/index.php?gid=<?=$d['gid'] ?>" target="_blank"><?=$d['gname'] ?></a></td>
+<?php if(有此权限('查看比赛')) { ?>
 <td class=admin align=center><a href="../admin/comp/comptime.php?ctid=<?=$d['ctid']?>">评测</a></td>
+<td class=admin align=center><a href='../user/detail.php?uid=<?=$d['ouid']?>' target='_blank'><?=$d['realname']?></a></td>
+<td class=admin align=center><?=$d['readforce']?></td>
+<? } ?>
+<?php if(有此权限('修改比赛')) { ?>
 <td class=admin align=center><a href="../admin/comp/editcompbase.php?action=edit&cbid=<?=$d['cbid']?>"><?=$d['cbid']?></a></td>
 <td class=admin align=center><a href="../admin/comp/editcomptime.php?action=edit&ctid=<?=$d['ctid']?>"><?=$d['ctid']?></a></td>
-<td class=admin align=center><?=$d['readforce']?></td>
-<td class=admin align=center><a href='../user/detail.php?uid=<?=$d['ouid']?>' target='_blank'><?=$d['realname']?></a></td>
 <? } ?>
 </tr>
 <? } ?>

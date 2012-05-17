@@ -33,7 +33,7 @@ gethead(1,"","提示");
 		break;
 	case 5:
 		echo $STR[info][editusersucc]; 
-		$urlgo="./information/userlist.php";
+		$urlgo="./user/index.php";
 		break;
 	case 6:
 		echo $STR[info][resetdatasucc]; 
@@ -42,9 +42,9 @@ gethead(1,"","提示");
 	case 7:
 		echo $STR[info][editprobsucc]; 
 		if ((int)$_GET['pid'])
-			$urlgo="./problem/pdetail.php?pid={$_GET['pid']}";
+			$urlgo="./problem/problem.php?pid={$_GET['pid']}";
 		else
-			$urlgo="./problem/problist.php";
+			$urlgo="./problem/index.php";
 		break;
 	case 8:
 		echo $STR[info][editusersucc]; 

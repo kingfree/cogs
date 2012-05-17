@@ -79,11 +79,11 @@ gethead(1,"","错误");
 		break;	
 	case 17:
 		echo $STR[err][force]; 
-		$urlgo="./problem/problist.php";
+		$urlgo="./problem/index.php";
 		break;	
 	case 18:
 		echo $STR[err][unsubmitable]; 
-		$urlgo="./problem/problist.php";
+		$urlgo="./problem/index.php";
 		break;	
 	case 19:
 		echo $STR[err][comptime]; 

@@ -4,7 +4,7 @@ gethead(1,"","分类列表");
 $p=new DataAccess();
 $q=new DataAccess();
 ?>
-<?php if(有此权限($p, '修改分类')) { ?>
+<?php if(有此权限('修改分类')) { ?>
 <a class="admin_big" href="../admin/category/editcate.php?action=add">添加新分类</a>
 <?php } ?>
 <table id="cate_tags">
@@ -14,7 +14,7 @@ for ($i=$st;$i<$cnt;$i++) {
     $d=$p->rtnrlt($i);
     if($i % 8 == 0 && $i) echo "<tr>";
 ?>
-<td><a href="../problem/problist.php?caid=<?=$d['caid']?>" title="<?=sp2n(htmlspecialchars($d['memo']))?>" target="_blank"><?=$d['cname']?></a></td>
+<td><a href="../problem/index.php?caid=<?=$d['caid']?>" title="<?=sp2n(htmlspecialchars($d['memo']))?>" target="_blank"><?=$d['cname']?></a></td>
 <? } ?>
 </table>
 <?
@@ -25,7 +25,7 @@ for ($i=$st;$i<$cnt;$i++) {
   <tr>
     <th>分类</th>
     <th>备注</th>
-    <?php if(有此权限($q, '修改分类')) { ?>
+    <?php if(有此权限('修改分类')) { ?>
     <th class=admin>操作</th>
     <?php } ?>
   </tr>
@@ -34,9 +34,9 @@ for ($i=$st;$i<$cnt;$i++) {
     $d=$p->rtnrlt($i);
 ?>
   <tr>
-    <td><a href="../problem/problist.php?caid=<?php echo $d['caid'] ?>"><?php echo $d['cname'] ?></a></td>
+    <td><a href="../problem/index.php?caid=<?php echo $d['caid'] ?>"><?php echo $d['cname'] ?></a></td>
     <td><?php echo sp2n(htmlspecialchars($d['memo'])) ?></td>
-    <?php if(有此权限($q, '修改分类')) { ?>
+    <?php if(有此权限('修改分类')) { ?>
     <td class=admin><a href="../admin/category/editcate.php?action=edit&caid=<?php echo $d['caid'] ?>">修改</a></td><?php } ?>
   </tr>
 <?php

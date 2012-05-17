@@ -1,6 +1,6 @@
 <?php
 require_once("../../include/stdhead.php");
-gethead(1,"admin","修改评论");
+gethead(1,"管理评论","修改评论");
 ?>
 
 <a href="../settings.php?settings=comments"><?php echo $STR[admin][comments]; ?></a>

@@ -36,7 +36,7 @@ if ($cnt)
 </td>
 </tr>
 <tr>
-<td style="font-size:140%;"><a href="../problem/pdetail.php?pid=<?=$d['pid']?>"><?=$d['pid']?>: <?=$d['probname'] ?></a></td>
+<td style="font-size:140%;"><a href="../problem/problem.php?pid=<?=$d['pid']?>"><?=$d['pid']?>: <?=$d['probname'] ?></a></td>
 </tr>
 </table>
 </td>
@@ -48,7 +48,7 @@ if ($cnt)
 	$q->dosql($sql);
 	$e=$q->rtnrlt(0);
 	?>
-	<a href="submitdetail.php?id=<?php echo $e['sid'] ?>">查看该用户最后一次提交的代码</a>
+	<a href="code.php?id=<?php echo $e['sid'] ?>">查看该用户最后一次提交的代码</a>
 	<?php } ?>
 	</div>
     </td>
@@ -67,7 +67,7 @@ if ($cnter) {
 <form id="formcomm" name="formcomm" method="post" action="sendcomments.php">
 <textarea name="detail" cols="100" rows="8" id="detail" class="TextArea"><?php echo $detail ?></textarea>
 <br />
-<a href="pdetail.php?pid=<?php echo $pid ?>">[返回原题]</a>
+<a href="problem.php?pid=<?php echo $pid ?>">[返回原题]</a>
 <input name="showcode" type="checkbox" id="showcode" value="1" <?php if ($sc){ ?> checked="checked" <?php } ?> />
 <label for="showcode">显示你的代码</label>
 <input name="Submit" type="submit" id="Submit" value="发表" />

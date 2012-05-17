@@ -24,7 +24,7 @@ if($cnt) {
         echo '<script>document.location="../error.php?id=17"</script>';
         exit;
     }
-    if (!$d[submitable] && !有此权限($q, '查看题目')) {
+    if (!$d[submitable] && !有此权限('查看题目')) {
         echo '<script>document.location="../error.php?id=18"</script>';
         exit;
     }
@@ -37,7 +37,7 @@ if($cnt) {
             break;
         }
     }
-    if (!$promise && !有此权限($q, '查看题目'))
+    if (!$promise && !有此权限('查看题目'))
         exit;
     $pid=$d[pid];
 } else {
@@ -69,13 +69,13 @@ if($cnt) {
 <tr>
 <th>添加时间</th>
 <td>
-<?php if(有此权限($q, '修改题目')) { ?>
+<?php if(有此权限('修改题目')) { ?>
 <a class=admin href="../admin/problem/editprob.php?action=edit&pid=<?= $d[pid]; ?>">[修改该题]</a>
 <? } ?>
 <?=date('Y-m-d', $d['addtime']) ?>
 </td></tr>
 <tr><th>开放分组</th>
-<td><a href="../information/userlist.php?gid=<?=$d['gid'] ?>" target="_blank">[<?=$d['gname'] ?>]</a></td></tr>
+<td><a href="../user/index.php?gid=<?=$d['gid'] ?>" target="_blank">[<?=$d['gname'] ?>]</a></td></tr>
 <tr><th><a href="../information/submitlist.php?pid=<?=$pid; ?>">[提交状态]</a></th>
 <td><?php
 if($_SESSION['ID']) {
@@ -83,7 +83,7 @@ if($_SESSION['ID']) {
     $ac=$q->dosql($sql);
     if ($ac) {
         $e=$q->rtnrlt(0);
-        echo "<a href='submitdetail.php?id={$e['sid']}'>";
+        echo "<a href='code.php?id={$e['sid']}'>";
         echo $STR['lang'][$e['lang']];
         echo "</a> ";
         评测结果($e['result']);
@@ -95,7 +95,7 @@ $sql="select category.cname,category.caid from category,tag where tag.pid={$_GET
 $cnt2=$r->dosql($sql);
 for ($i=0;$i<=$cnt2-1;$i++) {
     $e=$r->rtnrlt($i);
-    echo " <a href='problist.php?caid={$e[caid]}'>{$e[cname]}</a> ";
+    echo " <a href='index.php?caid={$e[caid]}'>{$e[cname]}</a> ";
 }
 ?></td></tr>
 <tr><form action="../compile/" method="post" enctype="multipart/form-data" name="sub">
@@ -104,7 +104,7 @@ for ($i=0;$i<=$cnt2-1;$i++) {
 <input type="radio" name="lang" id="pas" value="pas" title="Pascal" /><label for="pas">Pascal</label>
 <input type="radio" name="lang" id="c" value="c"  title="C" /><label for="c">C</label>
 <input type="radio" name="lang" id="cpp" value="cpp" checked=1 title="C++" /><label for="cpp">C++</label>
-<?php if(有此权限($q, '修改题目')){ ?>
+<?php if(有此权限('测试题目')){ ?>
 <input name="testmode" type="checkbox" id="testmode" value="1" /><label for="testmode">测试模式</label>
 <?php } ?>
 <input name="pid" type="hidden" id="pid" value="<?=$d['pid']; ?>" />

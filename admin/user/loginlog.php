@@ -1,6 +1,6 @@
 <?php
 require_once("../../include/stdhead.php");
-gethead(1,"admin","用户登录日志");
+gethead(1,"查看用户","用户登录日志");
 ?>
 
 <?php

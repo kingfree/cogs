@@ -1,6 +1,6 @@
 <?php
 require_once("../../include/stdhead.php");
-gethead(0,"admin","");
+gethead(0,"分类管理","");
 
 if ($_REQUEST['action']=='add')
 {

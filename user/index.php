@@ -14,6 +14,7 @@ function MM_jumpMenu(targ,selObj,restore){ //v3.0
 <?php
     $p=new DataAccess();
     $q=new DataAccess();
+    $r=new DataAccess();
     $sql="select userinfo.*,groups.gname from userinfo,groups where groups.gid=userinfo.gbelong ";
 
     if ($_GET['gid']=="")
@@ -107,10 +108,10 @@ if(!$_GET['page']) {
 </form>
 <form id="rank" action="" method="get" name="rank">
   <input name="rank" type="submit" id="rank_us" value="按昵称排序" />
-  <?php if(有此权限($q, '查看用户')) { ?>
+  <?php if(有此权限('查看用户')) { ?>
   <input name="rank" type="submit" id="rank_rn" class="admin" value="按姓名排序" />
   <? } ?>
-  <input name="rank" type="submit" id="rank_ad" value="按权限排序" />
+  <?//<input name="rank" type="submit" id="rank_ad" value="按权限排序" />?>
   <input name="rank" type="submit" id="rank_rd" value="按阅读权限排序" />
   <input name="rank" type="submit" id="rank_gr" value="按分组排序" />
   <input name="rank" type="submit" id="rank_ac" value="按通过数量排序" />
@@ -131,15 +132,15 @@ function okdel(name) {
     <th>名次</th>
     <th>UID</th>
     <th>昵称</th>
-    <? if(有此权限($q, '查看用户')) { ?><th class=admin>姓名</th><? } ?>
+    <? if(有此权限('查看用户')) { ?><th class=admin>姓名</th><? } ?>
     <th>权限</th>
     <th>阅读</th>
     <th>分组</th>
     <th>通过</th>
     <th>通过率</th>
     <th>等级</th>
-    <? if(有此权限($q, '查看用户')) { ?><th class=admin>IP</th><? } ?>
-    <? if(有此权限($q, '修改用户')) { ?><th class=admin>操作</th><? } ?>
+    <? if(有此权限('查看用户')) { ?><th class=admin>IP</th><? } ?>
+    <? if(有此权限('修改用户')) { ?><th class=admin>操作</th><? } ?>
   </tr>
 </thead>
 <?php
@@ -150,16 +151,23 @@ function okdel(name) {
     <th><?=$i+1; ?></th>
     <td align=center><?=$d['uid'] ?></td>
     <td><a href="../user/detail.php?uid=<?=$d['uid'] ?>" target="_blank"><?=gravatar::showImage($d['email']);?><?=$d['nickname'] ?></a></td>
-    <? if(有此权限($q, '查看用户')) { ?><td class=admin align=center><?=$d['realname'] ?></td><? } ?>
-    <td align=center><?=$STR[adminn][$d['admin']] ?></td>
+    <? if(有此权限('查看用户')) { ?><td class=admin align=center><?=$d['realname'] ?></td><? } ?>
+    <td align=center><?
+    $sql="select privilege.* from privilege where uid={$d['uid']} order by pri asc";
+	$cnt1=$r->dosql($sql);
+    if(!$cnt1) echo array_search(0,$pri) . " ";
+	for($i1=0;$i1<$cnt1;$i1++) {
+		$e=$r->rtnrlt($i1);
+        echo array_search($e['pri'],$pri) . " ";
+    } ?></td>
     <td align=center><?=$d['readforce'] ?></td>
     <td align=center><?="<a href='?gid={$d[gbelong]}'>{$d['gname']}</a>"; ?></td>
     <td align=center><?=$d['accepted'] ?></td>
     <td align=center><?=@round($d['accepted']/$d['submited']*100,2); ?>%</td>
     <td align=center><?=$d['grade'] ?></td>
-    <? if(有此权限($q, '查看用户')) { ?><td class=admin align=right><?=$d['lastip'] ?></a></td><? } ?>
-    <? if(有此权限($q, '修改用户')) { ?><td class=admin align=center>
-    <? if(有此权限($q, '修改权限')) { ?>
+    <? if(有此权限('查看用户')) { ?><td class=admin align=right><?=$d['lastip'] ?></a></td><? } ?>
+    <? if(有此权限('修改用户')) { ?><td class=admin align=center>
+    <? if(有此权限('修改权限')) { ?>
     <b><a href="../admin/privilege/add.php?uid=<?=$d['uid'] ?>">权限</a></b>
     <? } ?>
     <a href="../admin/user/edituser.php?uid=<?=$d['uid'] ?>">修改</a>

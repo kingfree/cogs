@@ -1,6 +1,6 @@
 <?php
 require_once("../../include/stdhead.php");
-gethead(1,"admin","修改分类");
+gethead(1,"分类管理","修改分类");
 ?>
 
 <?php

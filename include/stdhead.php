@@ -36,7 +36,7 @@ function gethead($head,$check,$title,$userid=0) {
 if($check=="sess") $check="普通用户";
 else if($check=="admin") $check="管理用户";
 else if($check=="advadmin") $check="超级用户";
-if(!有此权限($useracc,$check)) 异常("没有权限 $check !");
+if(!有此权限($check)) 异常("没有权限 $check !");
 /*if ($check=="sess") {
     if (!$_SESSION['ID'])
         echo '<script>document.location="../error.php?id=1"</script>';

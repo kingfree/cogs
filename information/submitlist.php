@@ -31,7 +31,7 @@ if ((int)$_GET['pid']==0) {
     if (!$cnt) exit;
     $d=$p->rtnrlt(0);
 ?>
-<? 是否通过($_GET['pid'], $q);?><a href="../problem/pdetail.php?pid=<?php echo $_GET['pid'] ?>" target="_blank"><?php echo $d['probname'] ?></a><?php } ?></b>的记录。
+<? 是否通过($_GET['pid'], $q);?><a href="../problem/problem.php?pid=<?php echo $_GET['pid'] ?>" target="_blank"><?php echo $d['probname'] ?></a><?php } ?></b>的记录。
 <a href="?pid=<?=$_GET['pid']?>&uid=<?=$_GET['uid']?>&display=all">全部显示</a>
 <a href="?pid=<?=$_GET['pid']?>&uid=<?=$_GET['uid']?>&display=ac">只显示通过的</a>
 <a href="?pid=<?=$_GET['pid']?>&uid=<?=$_GET['uid']?>&show=yes">显示所有记录</a>
@@ -74,7 +74,7 @@ if($_GET['show'])
 <th onclick="sortTable('submitlist', 6, 'int')">用时</th>
 <th onclick="sortTable('submitlist', 7, 'int')">内存</th>
 <th onclick="sortTable('submitlist', 8)">时间</th>
-<?php if(有此权限($q, '查看代码')) { ?>
+<?php if(有此权限('查看代码')) { ?>
 <th class=admin>IP</th>
 <th class=admin>姓名</th>
 <?php } ?>
@@ -88,18 +88,18 @@ for ($i=$st;$i<$cnt && $i<$st+$SET['style_pagesize'] ;$i++) {
 <td><?php if(!$_GET['pid']) {
     是否通过($d['pid'], $q);
     echo "<a href='?pid={$d['pid']}&uid={$_GET['uid']}'>{$d['probname']}</a>";
-    echo "<a href='../problem/pdetail.php?pid={$d['pid']}' target='_blank'><span class='icon-share'></span></a>";
+    echo "<a href='../problem/problem.php?pid={$d['pid']}' target='_blank'><span class='icon-share'></span></a>";
 } else
-    echo "<a href='../problem/pdetail.php?pid={$d['pid']}' target='_blank'>{$d['probname']}</a>";
+    echo "<a href='../problem/problem.php?pid={$d['pid']}' target='_blank'>{$d['probname']}</a>";
 ?></td>
 <td><a href='../user/detail.php?uid=<?=$d['uid']?>' target='_blank'><?=gravatar::showImage($d['email']);?></a><?php echo "<a href='?uid={$d[uid]}&pid={$_GET['pid']}'>{$d['nickname']}</a>"; ?></td>
 <td align=center><?=评测结果($d['result'])?></td>
 <td align=center><span class="<?=$d['accepted']?'ok':'no'?>"><?=$d['score'] ?></span></td>
-<td align=center><a href='../problem/submitdetail.php?id=<?=$d['sid']?>'><?=$STR['lang'][$d['lang']]?></a></td>
+<td align=center><a href='../problem/code.php?id=<?=$d['sid']?>'><?=$STR['lang'][$d['lang']]?></a></td>
 <td align=center><?php printf("%.3f",$d['runtime']/1000.0) ?> s </td>
 <td align=center><?php printf("%.2f",$d['memory']/1024) ?> MiB </td>
 <td align=center><?php echo date('Y-m-d H:i:s',$d['subtime']); ?></td>
-<?php if(有此权限($q, '查看代码')) { ?>
+<?php if(有此权限('查看代码')) { ?>
 <td class=admin><?php echo $d['IP'] ?></td>
 <td class=admin align=center><?php echo $d['realname'] ?></td>
 <?php } ?>

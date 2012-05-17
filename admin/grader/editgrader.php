@@ -1,6 +1,6 @@
 <?php
 require_once("../../include/stdhead.php");
-gethead(1,"admin","修改评测机");
+gethead(1,"管理评测","修改评测机");
 ?>
 
 <a href="../settings.php?settings=grader">评测机管理</a>

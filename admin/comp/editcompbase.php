@@ -1,6 +1,6 @@
 <?php
 require_once("../../include/stdhead.php");
-gethead(1,"admin","修改比赛");
+gethead(1,"修改比赛","修改比赛");
 ?>
 
 <body>
@@ -38,7 +38,7 @@ if ($_GET[action]=='edit') {
 		$d=$p->rtnrlt($i);
         if($i % 6 == 0) echo "</tr><tr>";
 ?>
-<td><input name="cons[<?=$d[pid]?>]" type="checkbox" id="cons[<?=$d[pid]?>]" value="<?=$d[pid]?>" <?php if (is_numeric($pbs[$d[pid]])) echo 'checked="checked"' ?> /><label for="cons[<?=$d[pid]?>]"><?=$d[pid]?>.<a href="../../problem/pdetail.php?pid=<?=$d[pid] ?>" target="_blank"><?=$d[probname] ?></a></label></td>
+<td><input name="cons[<?=$d[pid]?>]" type="checkbox" id="cons[<?=$d[pid]?>]" value="<?=$d[pid]?>" <?php if (is_numeric($pbs[$d[pid]])) echo 'checked="checked"' ?> /><label for="cons[<?=$d[pid]?>]"><?=$d[pid]?>.<a href="../../problem/problem.php?pid=<?=$d[pid] ?>" target="_blank"><?=$d[probname] ?></a></label></td>
 <?php
 	}
 ?>

@@ -1,6 +1,6 @@
 <?php
 require_once("../include/stdhead.php");
-gethead(1,"admin","后台管理");
+gethead(1,"管理用户","后台管理");
     $q=new DataAccess();
 ?>
 <table id="admin_index" align=center>
@@ -12,7 +12,7 @@ gethead(1,"admin","后台管理");
 <tr>
 <th width=20%>题目</th>
 <td width=40%><span>
-<a href="../problem/problist.php">题目列表</a>
+<a href="../problem/index.php">题目列表</a>
 </span></td>
 <td width=40%><span class="admin">
 <a href="problem/editprob.php?action=add">添加新题目</a>
@@ -68,10 +68,10 @@ gethead(1,"admin","后台管理");
 </tr>
 <tr>
 <th>系统</th>
-<td><? if(有此权限($q, '超级用户')) { ?><span class="admin"><a href="settings.php?settings=settings">参数设置</a></span><? } ?></td>
+<td><? if(有此权限('超级用户')) { ?><span class="admin"><a href="settings.php?settings=settings">参数设置</a></span><? } ?></td>
 <td><span class="admin"><a href="settings.php?settings=rank">排名管理</a></span></td>
 </tr>
-<? if(有此权限($q, '超级用户')) { ?><tr>
+<? if(有此权限('超级用户')) { ?><tr>
 <th rowspan=2>高级</th>
 <td><span><a href="settings.php?settings=dbctrl">数据库管理</a></span></td>
 <td><span><a href="settings.php?settings=terminal">PHP终端访问</a></span></td>

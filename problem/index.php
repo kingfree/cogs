@@ -26,7 +26,7 @@ if (restore) selObj.selectedIndex=0;
 
 <span id="cate_detail">当前分类：<span style="font-size:20px;"><?php echo $d['cname'] ?></span>（<?php echo nl2br(sp2n(htmlspecialchars($d['memo']))) ?>）</span>
 <?php } ?>
-<?php if(有此权限($p, '修改题目')) { ?>
+<?php if(有此权限('修改题目')) { ?>
 <span class="admin_big"><a href="../admin/problem/editprob.php?action=add">添加新题目</a></span>
 <?php } ?>
 
@@ -98,7 +98,7 @@ if(!$_GET['page']) {
   <input name="rank" type="submit" value="按空间限制排序" />
   <input name="rank" type="submit" value="按题目难度排序" />
   <input name="rank" type="submit" value="按通过次数排序" />
-  <?php if(有此权限($q, '查看题目')) { ?>
+  <?php if(有此权限('查看题目')) { ?>
   <input name="rank" type="submit" value="按可否提交排序" />
   <? } ?>
 </form>
@@ -114,11 +114,11 @@ if(!$_GET['page']) {
 <th onclick="sortTable('problist', 6, 'int')">通过</th>
 <th onclick="sortTable('problist', 7, 'int')">提交</th>
 <th onclick="sortTable('problist', 8, 'int')">通过率</th>
-<?php if(有此权限($q, '查看题目')) { ?>
+<?php if(有此权限('查看题目')) { ?>
 <th class=admin>标识</th>
 <th class=admin>权限</th>
 <?php } ?>
-<?php if(有此权限($q, '修改题目')) { ?>
+<?php if(有此权限('修改题目')) { ?>
 <th class=admin>编辑</th>
 <?php } ?>
 </tr></thead>
@@ -126,13 +126,13 @@ if(!$_GET['page']) {
 if (!$err) for ($i=$st;$i<$cnt && $i<$st+$SET['style_pagesize'] ;$i++) {
     $d=$p->rtnrlt($i);
     if($_GET['key'] && $cnt == 1)
-        echo "<script language='javascript'>location='pdetail.php?pid={$d['pid']}';</script>";
-    if (!$d['submitable'] && !$_SESSION['admin']>0) continue;
-    if ($d['readforce']>$_SESSION['readforce'] && !($_SESSION['admin']>0)) continue;
+        echo "<script language='javascript'>location='problem.php?pid={$d['pid']}';</script>";
+    if (!$d['submitable'] && !有此权限('查看题目')) continue;
+    if ($d['readforce']>$_SESSION['readforce'] && !有此权限('查看题目')) continue;
 ?>
 <tr>
 <td align=center><?php echo $d['pid'] ?></td>
-<td><? 是否通过($d['pid'], $q);?><b><a href="pdetail.php?pid=<?=$d['pid'] ?>"><?=$d['probname'] ?></a></b></td>
+<td><? 是否通过($d['pid'], $q);?><b><a href="problem.php?pid=<?=$d['pid'] ?>"><?=$d['probname'] ?></a></b></td>
 <td align=center><?php echo $d['filename']; ?></td>
 <td align=center><?php echo $d['timelimit']/1000 . " s"; ?></td>
 <td align=center><?php echo $d['memorylimit'] . " MiB"; ?></td>
@@ -140,13 +140,13 @@ if (!$err) for ($i=$st;$i<$cnt && $i<$st+$SET['style_pagesize'] ;$i++) {
 <td align=center><?php echo $d['acceptcnt']; ?></td>
 <td align=center><?php echo $d['submitcnt']; ?></td>
 <td align=center><?php echo @round($d['acceptcnt']/$d['submitcnt']*100,2); ?>%</td>
-<?php if(有此权限($q, '查看题目')) { ?>
+<?php if(有此权限('查看题目')) { ?>
 <td class=admin align=center>
 <?php if ($d['submitable']) echo "<span class=ok>可提交</span>"; else echo "<span class=no>不可提交</span>"; ?>
 </td>
 <td class=admin align=center><?=$d['readforce']?></td>
 <?php } ?>
-<?php if(有此权限($q, '修改题目')) { ?>
+<?php if(有此权限('修改题目')) { ?>
 <td class=admin align=center><a href="../admin/problem/editprob.php?action=edit&pid=<?= $d[pid]; ?>">修改</a></td>
 <?php } ?>
 </tr>

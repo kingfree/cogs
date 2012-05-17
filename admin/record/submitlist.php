@@ -44,8 +44,8 @@
 ?>
   <tr>
     <td><?php echo $d['sid'] ?></td>
-    <td><?php echo "<a href='../problem/submitdetail.php?id={$d['sid']}'>查看</a>" ?></td>
-    <td><?php echo "<a href='../problem/pdetail.php?pid={$d[pid]}' target='_blank'>{$d['probname']}</a>"; ?></td>
+    <td><?php echo "<a href='../problem/code.php?id={$d['sid']}'>查看</a>" ?></td>
+    <td><?php echo "<a href='../problem/problem.php?pid={$d[pid]}' target='_blank'>{$d['probname']}</a>"; ?></td>
     <td><?php echo "<a href='../user/detail.php?uid={$d[uid]}' target='_blank'>{$d['nickname']}</a>"; ?></td>
     <td><?php echo "<a href='../user/detail.php?uid={$d[uid]}' target='_blank'>{$d['realname']}</a>"; ?></td>
     <td><?php echo $d['score'] ?></td>

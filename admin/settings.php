@@ -4,49 +4,49 @@ require_once("../include/stdhead.php");
 switch ($_REQUEST['settings'])
 {
 	case "phpinfo":
-		gethead(0,"advadmin","phpinfo");
+		gethead(0,"超级用户","phpinfo");
 		break;
 	case "terminal":
-		gethead(1,"advadmin","PHP终端访问");
+		gethead(1,"超级用户","PHP终端访问");
 		break;
 	case "grader":
-		gethead(1,"advadmin","评测机管理");
+		gethead(1,"评测管理","评测机管理");
 		break;
 	case "dbctrl":
-		gethead(1,"advadmin","数据库管理");
+		gethead(1,"超级用户","数据库管理");
 		break;
 	case "serverinfo":
-		gethead(1,"advadmin","服务器信息");
+		gethead(1,"超级用户","服务器信息");
 		break;
 	case "settings":
-		gethead(1,"advadmin","参数设置");
+		gethead(1,"参数设置","参数设置");
 		break;
 	case "problist":
-		gethead(1,"admin","题目管理");
+		gethead(1,"","题目管理");
 		break;
 	case "submit":
-		gethead(1,"admin","提交管理");
+		gethead(1,"","提交管理");
 		break;
 	case "comments":
-		gethead(1,"admin","评论管理");
+		gethead(1,"管理评论","评论管理");
 		break;
 	case "category":
-		gethead(1,"admin","分类管理");
+		gethead(1,"","分类管理");
 		break;
 	case "userlist":
-		gethead(1,"admin","用户管理");
+		gethead(1,"修改用户","用户管理");
 		break;
 	case "grouplist":
-		gethead(1,"admin","用户组管理");
+		gethead(1,"修改分组","用户组管理");
 		break;
 	case "comp":
-		gethead(1,"admin","比赛管理");
+		gethead(1,"修改比赛","比赛管理");
 		break;
 	case "rank":
-		gethead(1,"admin","排名管理");
+		gethead(1,"生成等级","排名管理");
 		break;
 	case "privilege":
-		gethead(1,"admin","权限管理");
+		gethead(1,"修改权限","权限管理");
 		break;
 }
 ?>
@@ -76,7 +76,7 @@ switch ($_REQUEST['settings'])
 		require("settings/settings.php");
 		break;
 	case "problist":
-		require("problem/problist.php");
+		require("problem/index.php");
 		break;
 	case "submit":
 		require("record/submitlist.php");

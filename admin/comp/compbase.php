@@ -57,7 +57,7 @@ if(!$_GET['page']) {
 				$q->dosql($sql);
 				$e=$q->rtnrlt(0);
 		?>
-			<option value="../problem/pdetail.php?pid=<?php echo $v ?>">[<?php echo $e[probname] ?>]</option>
+			<option value="../problem/problem.php?pid=<?php echo $v ?>">[<?php echo $e[probname] ?>]</option>
 <?php		}
 	   }?>
 <option selected="selected">[<?php echo $c ?>个题目]</option>	

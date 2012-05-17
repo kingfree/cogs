@@ -39,7 +39,7 @@
 ?>
   <tr>
     <td><?php echo $d['cid'] ?></td>
-    <td><?php echo "<a href='../problem/pdetail.php?pid={$d[pid]}' target='_blank'>{$d['probname']}</a>"; ?></td>
+    <td><?php echo "<a href='../problem/problem.php?pid={$d[pid]}' target='_blank'>{$d['probname']}</a>"; ?></td>
     <td><?php echo "<a href='../user/detail.php?uid={$d[uid]}' target='_blank'>{$d['nickname']}</a>" ;?></td>
     <td><?php if ($d['showcode']) echo "是"; else echo "否"; ?></td>
     <td><?php echo date('Y-m-d H:i:s', $d[stime]) ?></td>

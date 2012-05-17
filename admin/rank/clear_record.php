@@ -1,6 +1,6 @@
 <?php
 require_once("../../include/stdhead.php");
-gethead(1,"admin","清除记录");
+gethead(1,"管理用户","清除记录");
 ?>
 
 <pre>

@@ -20,7 +20,7 @@ $pid = $d['pid'];
 <?=$d['title']?>
 </b></td>
 <td align=center colspan=3>
-<a href="../problem/pdetail.php?pid=<?=$pid?>"><?=$d['probname']?></a>
+<a href="../problem/problem.php?pid=<?=$pid?>"><?=$d['probname']?></a>
 </td>
 </tr>
 <?
@@ -32,7 +32,7 @@ $d=$p->rtnrlt($i);
 <td height=70px colspan=5 valign=top style="font-size:16px; padding:8px;"><?=$d['text']?></td>
 </tr>
 <tr border=0>
-<td><? if($d['code']) { ?><a href="../problem/submitdetail.php?id=<?=$d['code']?>">关联代码</a><? } ?>&nbsp;</td>
+<td><? if($d['code']) { ?><a href="../problem/code.php?id=<?=$d['code']?>">关联代码</a><? } ?>&nbsp;</td>
 <th width=50px><?=$i+1?>楼</td>
 <td width=160px align=center><?=date('Y-m-d H:i:s',$d['time'])?></td>
 <td width="60px" align=center>顶 <?=($d['up'])?></td>

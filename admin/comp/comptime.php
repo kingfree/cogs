@@ -1,6 +1,6 @@
 <?php
 require_once("../../include/stdhead.php");
-gethead(1,"admin","比赛场次管理");
+gethead(1,"修改比赛","比赛场次管理");
 ?>
 
 <a href="../settings.php?settings=comp">比赛基本管理</a>
@@ -27,7 +27,7 @@ if ($cnt)
   </tr>
   <tr>
     <td>开放分组</td>
-    <td><a href="../information/userlist.php?gid=<?php echo $d['gid'] ?>" target="_blank"><?php echo $d['gname'] ?></a></td>
+    <td><a href="../user/index.php?gid=<?php echo $d['gid'] ?>" target="_blank"><?php echo $d['gname'] ?></a></td>
     <td>公布成绩</td>
     <td><?php echo $d[showscore]?"是":"否" ?></td>
   </tr>
@@ -117,7 +117,7 @@ if ($cnt)
 		<td><input name="doit[]" type="checkbox" id="doit[]" value="<?php echo $e[csid] ?>" />
 		  <input name="doall[]" type="hidden" id="doall[]" value="<?php echo $e[csid] ?>" /></td>
 		<td><?php echo $e[csid] ?></td>
-		<td><a target="_blank" href="../../problem/pdetail.php?pid=<?php echo $e[pid] ?>"><?php echo $e[probname] ?></a></td>
+		<td><a target="_blank" href="../../problem/problem.php?pid=<?php echo $e[pid] ?>"><?php echo $e[probname] ?></a></td>
 		<td><a href="../../competition/code.php?csid=<?php echo $e[csid] ?>" target="_blank"><?php echo $STR[lang][$e[lang]] ?></a></td>
 		<td><?php echo date("Y年m月d日 H:i:s",$e[subtime]) ?></td>
 		<td><?php echo $e[score] ?></td>

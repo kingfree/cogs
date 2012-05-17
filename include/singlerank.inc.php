@@ -8,7 +8,7 @@ for ($i=0;$i<$cnt;$i++) {
 <td><a href="../user/detail.php?uid=<?=$d['uid'] ?>"><?=gravatar::showImage($d['email']);?><?=$d['nickname'] ?></a></td>
 <td align=center><span class="<?=$d['accepted']?'ok':'no'?>"><?=$d['score'] ?></span></td>
 <td align=right><?php printf("%.3f s",$d['runtime']/1000.0) ?></td>
-<td align=center><a href="submitdetail.php?id=<?=$d['sid'] ?>" target="_blank"><?=$STR['lang'][$d['lang']]?></a></td>
+<td align=center><a href="code.php?id=<?=$d['sid'] ?>" target="_blank"><?=$STR['lang'][$d['lang']]?></a></td>
 </tr>
 <?php 
 }

@@ -5,6 +5,7 @@ gethead(1,"","用户详细信息", $_GET['uid']);
 
 <?php
 $p=new DataAccess();
+$q=new DataAccess();
 $sql="select userinfo.*,groups.gname,groups.gid from userinfo,groups where userinfo.uid={$_GET['uid']} and userinfo.gbelong=groups.gid";
 $cnt=$p->dosql($sql);
 if ($cnt) {
@@ -12,12 +13,12 @@ if ($cnt) {
 ?>
 <table id="userdetail">
   <tr>
-<th>UID</th>
+<th width=100px>用户编号</th>
 <td><?=$d['uid'] ?></td>
 <th>头像</th>
   </tr>
 <tr>
-<th>用户名</th>
+<th>用户名称</th>
 <td><?=$d['usr'] ?></td>
 <th rowspan=9>
 <?=gravatar::showImage($d['email'], 200);?>
@@ -41,7 +42,7 @@ if ($cnt) {
   </tr>
   <tr>
     <th>所属分组</th>
-    <td><a href="../information/userlist.php?gid=<?=$d['gid'] ?>"><?=$d['gname'] ?></a></td>
+    <td><a href="../user/index.php?gid=<?=$d['gid'] ?>"><?=$d['gname'] ?></a></td>
   </tr>
   <tr>
     <th>等级</th>
@@ -55,10 +56,23 @@ if ($cnt) {
     <th>个人介绍</th>
     <td><?=nl2br(sp2n(htmlspecialchars($d['memo']))) ?></td>
   </tr>
-  <?php if ($_SESSION['admin']>0 || $_SESSION['ID']==$d['uid']){ ?>
+  <?php if(有此权限('查看用户') || $_SESSION['ID']==$d['uid']){ ?>
   <tr class=admin>
     <th>真实姓名</th>
     <td colspan=2><?=$d['realname'] ?></td>
+  </tr>
+  <tr class=admin>
+    <th>用户权限</th>
+    <td colspan=2>
+  <?
+    $sql="select privilege.* from privilege where uid={$d['uid']} order by pri asc";
+	$cnt=$q->dosql($sql);
+	for ($i=0;$i<$cnt;$i++) {
+		$e=$q->rtnrlt($i);
+        echo array_search($e['pri'],$pri) . " ";
+    }
+  ?>
+    </td>
   </tr>
   <tr class=admin>
     <th>登录IP</th>
@@ -94,7 +108,7 @@ if ($cnt) {
         $ppp[$d['pid']] = true;
 		$linecnt++;
 ?>
-<td><a href='../problem/submitdetail.php?id=<?=$d['sid']?>' target='_blank'><span class='icon-<?=($d['accepted']?"ok":"remove")?>'></span><?=$STR['lang'][$d['lang']]?></a><a href="../problem/pdetail.php?pid=<?=$d['pid'] ?>" target="_blank"><?=$d['probname'] ?></a></td>
+<td><a href='../problem/code.php?id=<?=$d['sid']?>' target='_blank'><span class='icon-<?=($d['accepted']?"ok":"remove")?>'></span><?=$STR['lang'][$d['lang']]?></a><a href="../problem/problem.php?pid=<?=$d['pid'] ?>" target="_blank"><?=$d['probname'] ?></a></td>
 <?php
 	}
 ?>

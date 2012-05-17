@@ -24,7 +24,7 @@ if ($cnt) {
             break;
         }
     }
-    if (!$promise && !有此权限($q, '查看比赛'))
+    if (!$promise && !有此权限('查看比赛'))
         异常("你没有权限访问该页面！");
     if (!$c)
         异常("比赛场次不存在！");
@@ -34,7 +34,7 @@ if ($cnt) {
         if ($v==$_GET['pid'])
             $pb=1;
     }
-    if (!有此权限($q, '查看比赛')) {
+    if (!有此权限('查看比赛')) {
         if (time()<$e[starttime])
             异常("比赛尚未开始！");
         if ($d[readforce]>$_SESSION[readforce])
@@ -88,7 +88,7 @@ echo "还未开始";
 <table id="probinfo">
 <tr><th width=60px>题目名称</th>
 <td><b><?php echo $d['probname']; ?></b>
-<? if(time() > $e['endtime']) { ?><a href="../problem/pdetail.php?pid=<?=$_GET['pid']?>">跳转</a><? } ?>
+<? if(time() > $e['endtime']) { ?><a href="../problem/problem.php?pid=<?=$_GET['pid']?>">跳转</a><? } ?>
 </td></tr>
 <tr><th>题目文件</th>
 <td><?php echo $d['filename']; ?>.cpp/pas/c</td></tr>

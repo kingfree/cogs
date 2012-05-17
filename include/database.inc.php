@@ -61,7 +61,7 @@ class DataAccess
 		if (!empty($this->result))
 			@mysql_free_result($this->result);
 		
-		$this->result=mysql_query($SQL) or die(mysql_error());
+		$this->result=mysql_query($SQL,$this->conn) or die(mysql_error());
 		$this->rows=@mysql_num_rows($this->result);
 		return $this->rows;
 	}

@@ -1,6 +1,6 @@
 <?php
 require_once("../../include/stdhead.php");
-gethead(1,"admin","生成排名");
+gethead(1,"生成等级","生成等级");
 
 $rand_gen_data_access=new DataAccess();
 

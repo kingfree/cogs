@@ -1,6 +1,6 @@
 <?php
 require_once("../../include/stdhead.php");
-gethead(1,"admin","删除权限");
+gethead(1,"修改权限","删除权限");
 ?>
 
 <?

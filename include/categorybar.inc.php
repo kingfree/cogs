@@ -1,5 +1,5 @@
 <?php
-$problist=$SET['base']."problem/problist.php";
+$problist=$SET['base']."problem/index.php";
 
 $sql="select * from category order by cname";
 $cnt=$p->dosql($sql);

@@ -8,7 +8,7 @@ if ($cnt) {
 	$d=$p->rtnrlt(0);
     $contains=$d['contains'];
 } else 异常("未查询到记录！");
-if (time()<$d['starttime'] && !有此权限($p, '查看比赛')) 
+if (time()<$d['starttime'] && !有此权限('查看比赛')) 
     异常("比赛还未开始，题目暂不公布。");
 else {
 	$pbs=explode(":",$contains);

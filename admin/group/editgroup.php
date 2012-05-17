@@ -1,6 +1,6 @@
 <?php
 require_once("../../include/stdhead.php");
-gethead(1,"admin","修改用户组");
+gethead(1,"分组管理","修改用户组");
 ?>
 
 <a href="../settings.php?settings=grouplist"><?php echo $STR[admin][group]; ?></a>

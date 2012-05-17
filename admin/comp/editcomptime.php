@@ -1,6 +1,6 @@
 <?php
 require_once("../../include/stdhead.php");
-gethead(1,"admin","修改比赛场次");
+gethead(1,"修改比赛","修改比赛场次");
 ?>
 
 <a href="../settings.php?settings=comp">比赛基本管理</a>

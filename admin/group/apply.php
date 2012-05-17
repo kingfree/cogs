@@ -121,7 +121,7 @@ for ($i=1;$i<=$totalpage;$i++)
   <tr>
     <td><?php echo $d['uid'] ?></td>
     <td><a href="../../user/detail.php?uid=<?php echo $d['uid'] ?>" target="_blank"><?php echo $d['nickname'] ?></a></td>
-    <td><a href="../../information/userlist.php?gid=<?php echo $d['gid'] ?>" target="_blank"><?php echo $d['gname'] ?></td>
+    <td><a href="../../user/index.php?gid=<?php echo $d['gid'] ?>" target="_blank"><?php echo $d['gname'] ?></td>
     <td><a href="#" onclick="switchhide('<?php echo $i ?>');">查看</a></td>
     <td><?php echo $d['realname'] ?></td>
     <td><a href="doapply.php?action=accept&uid=<?php echo $d['uid'] ?>&gid=<?php echo $d['gid'] ?>">接受</a> <a href="doapply.php?action=refuse&uid=<?php echo $d['uid'] ?>&gid=<?php echo $d['gid'] ?>">拒绝</a></td>
