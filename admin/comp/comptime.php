@@ -6,6 +6,7 @@ gethead(1,"修改比赛","比赛场次管理");
 <a href="../settings.php?settings=comp">比赛基本管理</a>
 <?php
 $p=new DataAccess();
+$q=new DataAccess();
 $sql="select comptime.*,compbase.cname,groups.* from comptime,compbase,groups where comptime.cbid=compbase.cbid and comptime.ctid={$_GET[ctid]} and groups.gid=comptime.group";
 $cnt=$p->dosql($sql);
 if ($cnt)
@@ -69,7 +70,17 @@ if ($cnt)
 {
 ?>
 <form id="form1" name="form1" method="post" action="../../competition/judge.php">
-<p>
+    选择评测机：<select name='judger' id='judger'>
+    <option value=0 selected=selected>自动选择</option>
+<?
+    $sql="select grid,address,memo from grader where enabled=1 order by priority desc";
+    $cnt1=$q->dosql($sql);
+    for ($i=0;$i<$cnt1;$i++) {
+        $e=$q->rtnrlt($i);
+        echo "<option value={$e['grid']} >{$e['memo']}</option>";
+    }
+?>       
+    </select>
   <input name="do" type="submit" id="do" value="评测选定" />
   <input name="do" type="submit" id="do" value="评测全部" />
   <input name="ctid" type="hidden" id="ctid" value="<?php echo $_GET['ctid'] ?>" />
@@ -81,7 +92,6 @@ if ($cnt)
     <th scope="col">提交记录</th>
   </tr>
 <?php
-	$q=new DataAccess();
 	$tu=0;
 	for ($i=0;$i<$cnt;$i++)
 	{

@@ -42,7 +42,7 @@ function doStart(csid) {
     document.getElementById("nowp").innerHTML=p+1;
     createHTTP();
     url="compile.php";
-    strA = "csid="+csid;
+    strA = "csid="+csid+"&judger="+"<?=$_POST['judger']?>";
     HTTP.open("POST",url);
     HTTP.setRequestHeader("CONTENT-TYPE","application/x-www-form-urlencoded");
     HTTP.send(strA);

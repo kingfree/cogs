@@ -30,7 +30,7 @@ $info['compiledir']=$cdir;
 
 $Cp=new Compiler($info);
 
-$free=$Cp->getgds();
+$free=$Cp->getgds($_POST['judger']);
 
 if (!$free) //非空闲
 {

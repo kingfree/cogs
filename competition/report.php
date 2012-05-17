@@ -131,7 +131,7 @@ function swap(a,b) {
     t=document.getElementById("nickname"+a).innerHTML;
     document.getElementById("nickname"+a).innerHTML=document.getElementById("nickname"+b).innerHTML;
     document.getElementById("nickname"+b).innerHTML=t;
-    <?php if ($_SESSION['admin']>0) { ?>
+    <?php if(有此权限('查看用户')) { ?>
     t=document.getElementById("realname"+a).innerHTML;
     document.getElementById("realname"+a).innerHTML=document.getElementById("realname"+b).innerHTML;
     document.getElementById("realname"+b).innerHTML=t;

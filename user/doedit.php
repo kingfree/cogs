@@ -18,7 +18,7 @@ if ($_POST[action]=="edit")
         pclose($hr);
     }
 	$p=new DataAccess();
-	$sql="update userinfo set nickname='{$_POST[nick]}',realname='{$_POST[realname]}',email='{$_POST[email]}',memo='{$_POST[memo]}' where uid={$_POST['uid']}";
+	$sql="update userinfo set nickname='{$_POST['nick']}',realname='{$_POST['realname']}',email='{$_POST['email']}',memo='{$_POST['memo']}' where uid={$_POST['uid']}";
 	$p->dosql($sql);
 	$LIB->get_userinfo($_GET['uid']);
 	echo '<script>document.location="../refresh.php?id=8"</script>';
