@@ -5,9 +5,6 @@ gethead(1,"管理用户","后台管理");
 ?>
 <table id="admin_index" align=center>
 <tr><th colspan=3>后台管理
-<span class="admin">
-<a href="settings.php?settings=privilege">权限管理</a>
-</span>
 </th></tr>
 <tr>
 <th width=20%>题目</th>
@@ -40,6 +37,16 @@ gethead(1,"管理用户","后台管理");
 </span></td>
 </tr>
 <tr>
+<th>用户</th>
+<td><span>
+<a href="../problem/index.php">用户列表</a>
+</span><span class="admin">
+<a href="settings.php?settings=privilege">权限管理</a>
+</span></td>
+<td>
+</td>
+</tr>
+<tr>
 <th>分组</th>
 <td><span>
 <a href="../information/grouplist.php">分组列表</a>
@@ -64,12 +71,22 @@ gethead(1,"管理用户","后台管理");
 <td><span>
 <a href="../information/grader.php">评测机列表</a>
 </span></td>
-<td><span class="admin"><a href="../admin/grader/editgrader.php?action=add">添加新评测机</a></span></td>
+<td><span class="admin"><a href="../admin/grader/editgrader.php?action=add">添加评测机</a></span></td>
+</tr>
+<tr>
+<th>信息</th>
+<td>
+<a href="user/loginlog.php">登录记录</a>
+<span class="admin"><a href="settings.php?settings=rank">排名管理</a></span>
+</td>
+<td>
+</td>
 </tr>
 <tr>
 <th>系统</th>
 <td><? if(有此权限('超级用户')) { ?><span class="admin"><a href="settings.php?settings=settings">参数设置</a></span><? } ?></td>
-<td><span class="admin"><a href="settings.php?settings=rank">排名管理</a></span></td>
+<td>
+</td>
 </tr>
 <? if(有此权限('超级用户')) { ?><tr>
 <th rowspan=2>高级</th>

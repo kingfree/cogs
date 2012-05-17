@@ -242,7 +242,7 @@ pre {
     text-align: center;
     color: Black;
     background-color: rgba(141,192,199,0);
-    text-shadow: 5px 1px 9px #fff;
+    text-shadow: 5px 1px 4px #fff;
 }
 
 #nagbar {
@@ -272,7 +272,7 @@ pre {
 #userinfo {
     font-family: 黑体;
     background-color: rgba(141,192,199,0);
-    text-shadow: 5px 2px 5px #ccf;
+    text-shadow: 1px 0px 2px #ccf;
 }
 
 #body {

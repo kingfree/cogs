@@ -1,7 +1,46 @@
-<a class='admin_big' href='privilege/add.php'>添加权限</a>
+<?
+$p=new DataAccess();
+
+$uid=(int) ($_POST['uid'] ? $_POST['uid'] : $_GET['uid']);
+$priv=(int) ($_POST['pri'] ? $_POST['pri'] : $_GET['pri']);
+$way=$_POST['way'] ? $_POST['way'] : $_GET['way'];
+
+if($way=='ins' && $uid) {
+    $sql="select def from `privilege` where uid=$uid and pri=$priv limit 1";
+    $cnt=$p->dosql($sql);
+    if(!$cnt) {
+        $sql="insert into `privilege` values('$uid','$priv','1')";
+        $cnt=$p->dosql($sql);
+    }
+    if($cnt)
+        echo "用户 $uid 已添加权限 ".array_search($priv, $pri)." ！";
+}
+
+if($way=='del' && $uid) {
+    $sql="delete from `privilege` where uid=$uid and pri=$priv";
+    $cnt=$p->dosql($sql);
+    echo "用户 $uid 已删除权限 ".array_search($priv, $pri)." ！";
+}
+?>
+<form method=post>
+	<b>为用户添加权限</b>
+	用户编号：<input type=text size=10 name="uid" value="<?=$uid?>" />
+    <input type=hidden name=way value="ins" />
+	用户权限：<select name="pri">
 <?php
-	$p=new DataAccess();
-	$sql="select privilege.*,userinfo.nickname from privilege,userinfo where userinfo.uid=privilege.uid order by uid,pri asc";
+while(list($key, $val)=each($pri)) {
+	if (isset($priv) && ($priv == $val)) {
+		echo '<option value="'.$val.'" selected>'.$key.'</option>';
+	} else {
+		echo '<option value="'.$val.'">'.$key.'</option>';
+	}
+}
+?></select>
+	<input type='hidden' name='do' value='do' />
+	<input type=submit value='添加权限' />
+</form>
+<?php
+	$sql="select privilege.*,userinfo.email,userinfo.nickname from privilege,userinfo where userinfo.uid=privilege.uid order by uid,pri asc";
 	
 	$cnt=$p->dosql($sql);
 	$totalpage=(int)(($cnt-1)/$SET['style_pagesize'])+1;
@@ -33,10 +72,13 @@
 		$d=$p->rtnrlt($i);
 ?>
   <tr>
-    <td><?php echo "<a href='../user/detail.php?uid={$d['uid']}' target='_blank'>{$d['nickname']}</a>" ;?></td>
+    <td><a href='../user/detail.php?uid=<?=$d['uid']?>' target='_blank'><?=gravatar::showImage($d['email']);?><?=$d['nickname']?></a></td>
     <td><?php echo array_search($d['pri'],$pri) ?></td>
     <td><?php if ($d['def']) echo "是"; else echo "否"; ?></td>
-    <td><a href='privilege/delete.php?uid=<?=$d['uid']?>&pri=<?=$d['pri']?>'>删除</a></td>
+    <td>
+    <a href='settings.php?settings=privilege&way=edit&uid=<?=$d['uid']?>'>编辑</a>
+    <a href='settings.php?settings=privilege&way=del&uid=<?=$d['uid']?>&pri=<?=$d['pri']?>'>删除</a>
+    </td>
 <?php
 	}
 ?>

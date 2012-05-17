@@ -1,5 +1,5 @@
 COGS评测机
-1.2
+1.3
 /home/syzx/grading_data/gradecompile
 /home/syzx/grading_data/testdata
-/home/tjf/cogs/judge
+/home/syzx/www/cogs/judge

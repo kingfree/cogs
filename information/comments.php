@@ -46,7 +46,7 @@ if ($cnt) {
 <td rowspan=2 width=30%><?=gravatar::showImage($d['email'], 64);?></td>
 <td style="font-size:120%;">
 <a href="<?=路径("mail/index.php")?>?toid=<?=$d['uid']?>" title="给<?=$d['nickname']?>发送信件"><span class="icon-envelope"></span></a>
-<a href="<?php echo 路径("user/detail.php?uid={$uid}");?>"><b><?php echo $d['nickname'];?></b></a>
+<a href="<?php echo 路径("user/detail.php?uid={$d['uid']}");?>"><b><?php echo $d['nickname'];?></b></a>
 </td>
 </tr>
 <tr>

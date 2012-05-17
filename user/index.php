@@ -155,7 +155,6 @@ function okdel(name) {
     <td align=center><?
     $sql="select privilege.* from privilege where uid={$d['uid']} order by pri asc";
 	$cnt1=$r->dosql($sql);
-    if(!$cnt1) echo array_search(0,$pri) . " ";
 	for($i1=0;$i1<$cnt1;$i1++) {
 		$e=$r->rtnrlt($i1);
         echo array_search($e['pri'],$pri) . " ";
@@ -165,10 +164,14 @@ function okdel(name) {
     <td align=center><?=$d['accepted'] ?></td>
     <td align=center><?=@round($d['accepted']/$d['submited']*100,2); ?>%</td>
     <td align=center><?=$d['grade'] ?></td>
-    <? if(有此权限('查看用户')) { ?><td class=admin align=right><?=$d['lastip'] ?></a></td><? } ?>
+    <? if(有此权限('查看用户')) { ?>
+    <td class=admin>
+    <a href="../admin/user/loginlog.php?uid=<?=$d['uid'] ?>">记录</a>
+    <?=$d['lastip'] ?>
+    </td><? } ?>
     <? if(有此权限('修改用户')) { ?><td class=admin align=center>
     <? if(有此权限('修改权限')) { ?>
-    <b><a href="../admin/privilege/add.php?uid=<?=$d['uid'] ?>">权限</a></b>
+    <a href='../admin/settings.php?settings=privilege&way=edit&uid=<?=$d['uid']?>'>权限</a>
     <? } ?>
     <a href="../admin/user/edituser.php?uid=<?=$d['uid'] ?>">修改</a>
     <a href="../admin/user/doedituser.php?uid=<?=$d['uid'] ?>&action=del" onclick="return okdel('<?=$d['nickname']?>')">删除</a>

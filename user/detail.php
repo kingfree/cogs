@@ -20,7 +20,7 @@ if ($cnt) {
 <tr>
 <th>用户名称</th>
 <td><?=$d['usr'] ?></td>
-<th rowspan=9>
+<th rowspan=8>
 <?=gravatar::showImage($d['email'], 200);?>
 </th>
 </tr>
@@ -35,10 +35,6 @@ if ($cnt) {
   <tr>
     <th>阅读权限</th>
     <td><?=$d['readforce'] ?></td>
-  </tr>
-  <tr>
-    <th>管理权限</th>
-    <td><?=$STR[adminn][$d['admin']] ?></td>
   </tr>
   <tr>
     <th>所属分组</th>
@@ -67,6 +63,7 @@ if ($cnt) {
   <?
     $sql="select privilege.* from privilege where uid={$d['uid']} order by pri asc";
 	$cnt=$q->dosql($sql);
+    if(!$cnt) echo array_search(0,$pri) . " ";
 	for ($i=0;$i<$cnt;$i++) {
 		$e=$q->rtnrlt($i);
         echo array_search($e['pri'],$pri) . " ";
