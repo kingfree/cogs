@@ -69,6 +69,10 @@ class lib {
         global $SET;
         require("dpshhl.inc.php");
     }
+    public function editor($edname) {
+        global $SET;
+        require("editor.inc.php");
+    }
     public function tradsimp() {
         global $SET;
         require("tradsimp.inc.php");

@@ -1,6 +1,7 @@
 <?php
 require_once("../../include/stdhead.php");
 gethead(1,"修改题目","修改题目");
+$LIB->editor("detail");
 ?>
 <script>
 function checkprobname(){
@@ -19,18 +20,6 @@ else {$("#msg2").html("<b><span style='color:red;'>NO</span></b>");}
 }
 </script>
 
-<script charset="utf-8" src="../../include/kindeditor/kindeditor-min.js"></script>
-<script charset="utf-8" src="../../include/kindeditor/lang/zh_CN.js"></script>
-<script>
-        var editor;
-        KindEditor.ready(function(K) {
-                editor = K.create('#detail', {
-                        themeType : 'simple'
-                });
-        });
-</script>
-
-<p>
 <?php
 if ($_GET[action]=='del')
 {

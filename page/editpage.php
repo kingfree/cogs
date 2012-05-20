@@ -1,16 +1,9 @@
 <?php
 require_once("../include/stdhead.php");
 gethead(1,"修改页面","修改页面");
+$LIB->editor("editor_id");
 ?>
 
-<script charset="utf-8" src="../include/kindeditor/kindeditor.js"></script>
-<script charset="utf-8" src="../include/kindeditor/lang/zh_CN.js"></script>
-<script>
-        var editor;
-        KindEditor.ready(function(K) {
-                editor = K.create('#editor_id');
-        });
-</script>
 <script type = "text/javascript">
 function checkprobname(){
 var probname = $("#probname").val();

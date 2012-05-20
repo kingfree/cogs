@@ -1,16 +1,8 @@
 <?php
 require_once("../../include/stdhead.php");
 gethead(1,"advadmin","修改参数");
+$LIB->editor("editor_id");
 ?>
-
-<script charset="utf-8" src="../../include/kindeditor/kindeditor.js"></script>
-<script charset="utf-8" src="../../include/kindeditor/lang/zh_CN.js"></script>
-<script>
-        var editor;
-        KindEditor.ready(function(K) {
-                editor = K.create('#editor_id');
-        });
-</script>
 
 <a href="../settings.php?settings=settings">参数设置</a>
 <?php

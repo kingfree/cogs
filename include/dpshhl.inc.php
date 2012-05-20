@@ -1,6 +1,4 @@
 <?php
-$commonjsfull=$SET['base']."include/common.js.php";
-$commonjs=pathconvert($SET['cur'],$commonjsfull);
 $SHfull=$SET['base']."include/syntaxhighlighter/";
 $SH=pathconvert($SET['cur'],$SHfull);
 ?>
