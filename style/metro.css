@@ -5,8 +5,8 @@
 /* 通用设置 */
 
 body {
+    font-family: 微软雅黑, Ubuntu, 文泉驿正黑, sans !important;
     color: Black;
-    font-family: monospace;
     background-size: 100%;
     background-attachment: fixed;
     font-size: 14px;
@@ -15,16 +15,17 @@ body {
 }
 
 table {
-    border: 0;
     width: 100%;
+    border: 0;
     color: Black;
-    background-color: rgba(223,234,245,0.4);
+    background-color: rgba(252,252,252,0.6);
 }
 
 th {
     border: 0;
     color: Black;
-    background-color: rgba(252,252,252,0.4);
+    background-color: rgba(212,212,212,0.5);
+    background-color: rgb(212,212,212) \9;
 }
 
 tr {
@@ -42,63 +43,62 @@ td {
 }
 
 tr:nth-child(even) {
-    background-color: rgba(252,252,252,0.2);
+    background-color: rgba(222,222,222,0.2);
 }
 
 p {
     margin: 2px 2px 2px 2px;
-    //text-indent: 2em;
+    margin: 0 0 0 0 \9;
 }
 
 a:link, a:visited {
     text-decoration: none;
-    color: MidnightBlue;
+    color: CornflowerBlue;
     border: 0;
 }
 
 a:hover {
-    text-decoration: underline;
-    color: Black;
-    //background-color: #f3f8ff;
+    text-decoration: none;
+    color: DarkBlue;
     border: 0;
 }
 
 a:active {
     text-decoration: none;
-    //background-color: #dae8fb;
+    color: DeepPink;
     border: 0;
 }
 
 input, textarea {
-    border: thin solid LightBlue;
-    background-color: rgba(255,255,255,0.7);
+    border: 1px solid LightBlue;
+    background-color: rgba(255,255,255,0.9);
+    background-color: rgb(255,255,255) \9;
 }
 
 input:hover, textarea:hover {
-    border: thin solid #2491b3;
+    border: 1px solid #2491b3;
     background-color: White;
 }
 
 input:active, textarea:active {
-    border: thin solid #eeea50;
+    border: 1px solid #eeea50;
     background-color: White;
 }
 
 input[type="submit"] {
-    border: thin solid LightBlue;
+    border: 1px solid LightBlue;
     padding: 2px 8px 2px 8px;
-    background-color: rgba(247,247,250,0.7);
+    padding: 0 0 0 0 \9;
+    background-color: WhiteSmoke;
 }
 
 input[type="submit"]:hover {
-    border: thin solid #0077ec;
-    padding: 2px 8px 2px 8px;
+    border: 1px solid #0077ec;
     background-color: White;
 }
 
 input[type="submit"]:active {
-    border: thin solid #0077ec;
-    padding: 2px 8px 2px 8px;
+    border: 1px solid #0077ec;
     background-color: LightBlue;
 }
 
@@ -136,38 +136,37 @@ pre {
 
 .admin {
     background-color: rgba(204,204,255,0.5);
+    background-color: rgb(204,204,255) \9;
 }
 
 .admin_big {
     font-size: 200%;
     background-color: rgba(204,204,255,0.5);
+    background-color: rgb(204,204,255) \9;
 }
 
 .page_slice {
     text-align: center;
     color: CornflowerBlue;
-    //background-color: Azure;
 }
 
 .page_slice table {
     text-align: center;
     width: auto;
+    background-color: WhiteSmoke \9;
 }
 
 .page_slice a:link, .page_slice a:visited {
     color: CornflowerBlue;
-    //background-color: Azure;
 }
 
 .page_slice a:hover, .page_slice a:active {
     color: Blue;
-    //background-color: Azure;
 }
 
 .current_page {
     font-weight: bold;
     color: Blue;
-    //background-color: Azure;
 }
 
 .Spliter {
@@ -227,20 +226,21 @@ pre {
 #alltext {
     margin: 0;
     padding: 0;
-    background-color: rgba(229,238,249,0.2);
+    background-color: rgba(255,255,255,0.15);
 }
 
 #globalbar {
     width: 100%;
     color: Lavender;
     background-color: rgba(141,192,199,0);
+    font-family: monospace !important;
 }
 
 #global_head {
-    font-family: Times New Roman;
+    font-family: Ubuntu, sans !important;
     font-size: 40px;
     text-align: center;
-    color: Black;
+    color: MidnightBlue;
     background-color: rgba(141,192,199,0);
     text-shadow: 5px 1px 4px #fff;
 }
@@ -249,7 +249,6 @@ pre {
     width: 100%;
     text-align: center;
     background-color: rgba(141,192,199,0);
-    font-family: 黑体;
 }
 
 #globalbar tr {
@@ -270,7 +269,6 @@ pre {
 }
 
 #userinfo {
-    font-family: 黑体;
     background-color: rgba(141,192,199,0);
     text-shadow: 1px 0px 2px #ccf;
 }
@@ -282,12 +280,12 @@ pre {
 #publicbar {
     margin: 0;
     background-color: rgba(250, 230, 230, 0.6);
-    border: thin solid #f96531;
+    border: 1px solid #f96531;
 }
 
 #publictail , #publictail a {
     margin: 0;
-    color: #f9fcff;
+    color: SteelBlue;
     background-color: rgba(77,147,120,0);
     text-shadow: 0px 2px 8px #fcf;
 }
@@ -298,14 +296,15 @@ pre {
     padding: 0;
     font-size: 90%;
     text-align: right;
-    color: #f9fcff;
-    background-color: rgba(77,99,102,0.1);
+    color: Teal;
+    background-color: rgba(177,199,202,0.1);
 }
 
 /* 首页 */
 
 #index {
-    background-color: rgba(223,234,245,0);
+    background-color: rgba(223,234,245,0.3);
+    background-color: WhiteSmoke \9;
 }
 
 #prob_short {
@@ -322,7 +321,7 @@ pre {
 
 #index_prob {
     margin: 0;
-    width: 20%;
+    width: 25%;
 }
 
 #index_text {
@@ -331,7 +330,7 @@ pre {
 
 #index_rank {
     margin: 0;
-    width: 20%;
+    width: 25%;
 }
 
 /* 题目 */
@@ -344,7 +343,7 @@ pre {
 }
 
 #problist {
-    width: 100%;
+    background-color: WhiteSmoke \9;
 }
 
 #prob_left {
@@ -352,15 +351,16 @@ pre {
 }
 
 #pdetail {
+    background-color: rgba(252,252,252,0.4);
 }
 
 #probinfo {
     margin: 2px 0;
-    //background-color: WhiteSmoke;
+    background-color: WhiteSmoke \9;
 }
 
 #singlerank {
-    //background-color: OldLace;
+    background-color: WhiteSmoke \9;
 }
 
 #probdetail {
@@ -369,6 +369,7 @@ pre {
     color: Black;
 	overflow: auto;
     background-color: rgba(255,255,255,0.5);
+    background-color: WhiteSmoke \9;
     font-size: 15px;
 }
 
@@ -376,7 +377,6 @@ pre {
     border-collapse: collapse;
     border: 1px solid black;
     width: auto;
-    //background-color: White;
 }
 
 /* 分类 */
@@ -389,6 +389,7 @@ pre {
 }
 
 #catelist {
+    background-color: WhiteSmoke \9;
 }
 
 /* 比赛 */
@@ -399,6 +400,7 @@ pre {
 }
 
 #contestlist {
+    background-color: WhiteSmoke \9;
 }
 
 #cprobinfo {
@@ -426,6 +428,7 @@ pre {
 }
 
 #contest_report {
+    background-color: WhiteSmoke \9;
 }
 
 /* 记录 */
@@ -439,6 +442,7 @@ pre {
 }
 
 #submitlist {
+    background-color: WhiteSmoke \9;
 }
 
 #submitdetail {
@@ -458,6 +462,7 @@ pre {
 }
 
 #userlist {
+    background-color: WhiteSmoke \9;
 }
 
 #userdetail {
@@ -473,6 +478,7 @@ pre {
 /* 分组 */
 
 #grouplist {
+    background-color: WhiteSmoke \9;
 }
 
 /* 信件 */
@@ -498,11 +504,13 @@ pre {
 .Comments {
     border: 0;
     background-color: rgba(255,255,255,0.1);
+    background-color: rgb(255,255,255) \9;
 }
 
 .CommentsK {
     height: 40px;
     background-color: rgba(252,253,254,0.8);
+    background-color: rgb(252,253,254) \9;
     border: 0;
     padding: 10px 10px 10px 10px;
 }
@@ -512,21 +520,24 @@ pre {
     text-align: center;
     width: 250px;
     background-color: rgba(252,223,200,0.8);
+    background-color: rgb(252,223,200) \9;
 }
 
 .CommentsTime {
     border: 0;
     text-align: right;
     background-color: rgba(252,253,184,0.8);
+    background-color: rgb(252,253,184) \9;
 }
 
 .CommentsU {
     width: 250px;
     background-color: rgba(197,248,252,0.4);
+    background-color: rgb(197,248,252) \9;
     border: 0;
 }
 
-.CommentsU tr{
+.CommentsU tr {
     background-color: rgba(255,255,255,0);
     border: 0;
 }
@@ -534,15 +545,9 @@ pre {
 /* 登录 */
 
 #login {
-    /*position: fixed;
-    width: 30%;
-    height: 30%;
-    top: 35%;
-    left: 35%;*/
-    border: thin solid LightBlue;
-    //z-index: 999;
-    width: 300px;
-    text-align: center;
+    border: 1px solid LightBlue;
+    width: 260px;
+    background-color: WhiteSmoke \9;
 }
 
 #login td, #login th, #login tr {
