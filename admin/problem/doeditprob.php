@@ -2,6 +2,15 @@
 require_once("../../include/stdhead.php");
 gethead(0,"修改题目","");
 
+
+if($_FILES['datafile']['size'] && !$_FILES['datafile']['error']) {
+    $cmd = "unzip -o {$_FILES['datafile']['tmp_name']} -d\"{$cfg['testdata']}\"";
+    $handle = popen($cmd, 'r');
+    pclose($handle);
+}
+
+$pid = 0;
+
 if ($_POST[submitable]==1) $sub=1; else $sub=0;
 if ($_REQUEST[action]=='add')
 {
@@ -54,9 +63,5 @@ if ($_REQUEST[action]=='del') {
 	$pid=0;
 }
 
-if(有此权限('修改题目') && $_FILES['datafile']['size']) {
-    $handle = popen("unzip -o {$_FILES['datafile']['tmp_name']} -d\"{$cfg['testdata']}\"", 'r');
-    pclose($handle);
-}
 echo "<script>document.location=\"../../refresh.php?id=7&pid={$pid}\"</script>";
 ?>

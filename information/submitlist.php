@@ -65,18 +65,17 @@ if($_GET['show'])
 
 <table id="submitlist">
 <thead><tr>
-<th>SID</th>
-<th onclick="sortTable('submitlist', 1, 'int')">题目</th>
-<th onclick="sortTable('submitlist', 2, 'int')">用户</th>
-<th onclick="sortTable('submitlist', 3)">结果</th>
-<th onclick="sortTable('submitlist', 4, 'int')">得分</th>
-<th>语言</th>
-<th onclick="sortTable('submitlist', 6, 'int')">用时</th>
-<th onclick="sortTable('submitlist', 7, 'int')">内存</th>
-<th onclick="sortTable('submitlist', 8)">时间</th>
+<th width="5%">SID</th>
+<th width="12%" onclick="sortTable('submitlist', 1, 'int')">题目</th>
+<th width="10%" onclick="sortTable('submitlist', 2, 'int')">用户</th>
+<th width="30%" onclick="sortTable('submitlist', 3)">结果</th>
+<th width="4%" onclick="sortTable('submitlist', 4, 'int')">得分</th>
+<th width="4%">语言</th>
+<th width="6%" onclick="sortTable('submitlist', 6, 'int')">用时</th>
+<th width="8%" onclick="sortTable('submitlist', 7, 'int')">内存</th>
+<th width="16%" onclick="sortTable('submitlist', 8)">时间</th>
 <?php if(有此权限('查看代码')) { ?>
-<th class=admin>IP</th>
-<th class=admin>姓名</th>
+<th width="6%" class=admin>姓名</th>
 <?php } ?>
 </tr></thead>
 <?php if (!$err)
@@ -100,7 +99,6 @@ for ($i=$st;$i<$cnt && $i<$st+$SET['style_pagesize'] ;$i++) {
 <td align=center><?php printf("%.2f",$d['memory']/1024) ?> MiB </td>
 <td align=center><?php echo date('Y-m-d H:i:s',$d['subtime']); ?></td>
 <?php if(有此权限('查看代码')) { ?>
-<td class=admin><?php echo $d['IP'] ?></td>
 <td class=admin align=center><?php echo $d['realname'] ?></td>
 <?php } ?>
 </tr>

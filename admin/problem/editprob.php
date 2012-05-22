@@ -166,7 +166,7 @@ $e=$q->rtnrlt($j);
 <tr><td>测试数据</td>
 <td colspan=2>
 <input type="file" name="datafile" id="datafile" />
-打包zip文件包含一个以该题目命名的文件夹，其中为*#.in和*#ans数据，*.cc为评测插件
+打包zip文件包含一个以该题目*命名的文件夹，其中为*#.in和*#.ans数据，*.cc为评测插件
 </td></tr>
 </tr>
 <tr>

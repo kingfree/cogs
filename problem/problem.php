@@ -48,7 +48,7 @@ if($cnt) {
 <table id="pdetail"><tr>
 <td id="prob_left">
 <table id="probinfo">
-<tr><th>题目编号</th>
+<tr><th width="70px">题目编号</th>
 <td><?=$d[pid]; ?></td></tr>
 <tr><th>题目名称</th>
 <td><b><?=$d[probname]; ?></b></td></tr>
