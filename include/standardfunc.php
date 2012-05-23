@@ -1,5 +1,9 @@
 <?php
 
+function HTML($htmltext) {
+    echo $htmltext . "\n";
+}
+
 function encode($str) {
     return md5(sha1($str)."hasyzxcmykrgb123");
 }

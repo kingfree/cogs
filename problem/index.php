@@ -37,6 +37,10 @@ $sql.=",tag where tag.pid=problem.pid and tag.caid={$_GET['caid']}";
 else
 $sql .= " where problem.readforce>=0";
 
+if ($_GET['key'] == "随机题目") {
+    echo '<script>document.location="'.路径("problem/random.php").'"</script>';
+    exit;
+}
 if ($_GET['key']!="")
 $sql.=" and (problem.probname like '%{$_GET[key]}%' or problem.pid ='{$_GET[key]}' or problem.filename like '%{$_GET[key]}%')";
 

@@ -45,7 +45,7 @@ function MM_jumpMenu(targ,selObj,restore){ //v3.0
 ?>
   <tr>
     <th>上级分组</th>
-    <td>[<a href="userlist.php?gid=<?=$e['gid'] ?>"><?=$e['gname'] ?></a>]</td>
+    <td>[<a href="index.php?gid=<?=$e['gid'] ?>"><?=$e['gname'] ?></a>]</td>
   </tr>
 <?php } ?>
 <?php 
@@ -59,7 +59,7 @@ if ($subgroup!=array()) {
         $q->dosql($sql2);
         $e=$q->rtnrlt(0);
 ?>
-        [<a href="userlist.php?gid=<?=$e['gid'] ?>"><?=$e['gname'] ?></a>]
+        [<a href="index.php?gid=<?=$e['gid'] ?>"><?=$e['gname'] ?></a>]
 <?php 
     }
 ?></td>

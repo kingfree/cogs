@@ -1,5 +1,6 @@
 </div>
 <div id="publictail">
+<a href="#" onclick="document.getElementById('trad').innerHTML='正';document.getElementById('alltext').innerHTML = TradSimp.getTrad(document.getElementById('alltext').innerHTML);" id="trad">繁</a>/<a href="#" onclick="document.getElementById('trad').innerHTML='繁';document.getElementById('alltext').innerHTML = TradSimp.getSimp(document.getElementById('alltext').innerHTML);" id="simp">简</a>
 <?php echo 输出文本($SET['global_tail']) ?>
 </div>
 <div id="global_tail">

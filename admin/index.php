@@ -1,6 +1,6 @@
 <?php
 require_once("../include/stdhead.php");
-gethead(1,"管理用户","后台管理");
+gethead(1,"可以管理","后台管理");
     $q=new DataAccess();
 ?>
 <table id="admin_index" align=center>

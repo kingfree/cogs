@@ -25,7 +25,6 @@ th {
     border: 0;
     color: Black;
     background-color: rgba(212,212,212,0.5);
-    background-color: rgb(212,212,212) \9;
 }
 
 tr {
@@ -46,9 +45,12 @@ tr:nth-child(even) {
     background-color: rgba(222,222,222,0.2);
 }
 
+li {
+    list-style: none;
+}
+
 p {
     margin: 2px 2px 2px 2px;
-    margin: 0 0 0 0 \9;
 }
 
 a:link, a:visited {
@@ -72,7 +74,6 @@ a:active {
 input, textarea {
     border: 1px solid LightBlue;
     background-color: rgba(255,255,255,0.9);
-    background-color: rgb(255,255,255) \9;
 }
 
 input:hover, textarea:hover {
@@ -88,7 +89,6 @@ input:active, textarea:active {
 input[type="submit"] {
     border: 1px solid LightBlue;
     padding: 2px 8px 2px 8px;
-    padding: 0 0 0 0 \9;
     background-color: WhiteSmoke;
 }
 
@@ -136,13 +136,11 @@ pre {
 
 .admin {
     background-color: rgba(204,204,255,0.5);
-    background-color: rgb(204,204,255) \9;
 }
 
 .admin_big {
     font-size: 200%;
     background-color: rgba(204,204,255,0.5);
-    background-color: rgb(204,204,255) \9;
 }
 
 .page_slice {
@@ -153,7 +151,6 @@ pre {
 .page_slice table {
     text-align: center;
     width: auto;
-    background-color: WhiteSmoke \9;
 }
 
 .page_slice a:link, .page_slice a:visited {
@@ -224,9 +221,108 @@ pre {
 /* 标题 尾部 */
 
 #alltext {
-    margin: 0;
+    margin: 0 0 0 0;
     padding: 0;
     background-color: rgba(255,255,255,0.15);
+}
+.global_header {
+vertical-align:middle;
+z-index:9998;
+width:100%;
+height:30px;
+background-color:rgba(240,248,255,0.9);
+background-color:AliceBlue \9;
+position:fixed;
+_position:absolute;
+margin:0 auto;
+left:0;
+top:0;
+}
+.global_header a:link, .global_header a:visited {
+color:Black;
+text-decoration:none;
+margin:0 0 0 0;
+}
+.global_header a:hover {
+background-color:PaleTurquoise;
+}
+.global_header a:active {
+background-color:MintCream;
+}
+.global_header .list {
+float:left;
+display:inline;
+margin:0 0 0 0;
+padding:0 0 0 0;
+}
+.global_header .list li,.global_header .search,.global_header .message,.global_header .person,.global_header .letter {
+float:left;
+position:relative;
+display:inline;
+}
+.global_header .list li {
+}
+.global_header .list li a {
+display:inline-block;
+height:24px;
+font-size:12px;
+margin:0 0 0 0;
+padding:6px 4px 0px 4px;
+vertical-align:middle;
+}
+.global_header .logo a {
+font-size:20px;
+font-weight:bold;
+text-align:center;
+}
+.global_header .search {
+display:block;
+vertical-align:middle;
+height:30px;
+margin:3px 0 0 10px;
+padding:0 0 0 0;
+}
+.global_header .person {
+float:right;
+margin:0 0 0 0;
+padding:0 0 0 0;
+}
+.global_header .person li {
+float:right;
+display:inline;
+position:relative;
+vertical-align:middle;
+}
+.global_header .person li a {
+display:inline-block;
+height:23px;
+font-size:12px;
+margin:0 0 0 0;
+padding:7px 4px 0px 4px;
+}
+.global_header .person li a:hover {
+}
+.global_header .person .user a {
+height:30px;
+margin:0 0 0 0;
+padding:0 0 0 0;
+}
+.global_header .person .user a:hover {
+}
+.global_header .person .user .username {
+display:inline-block;
+vertical-align:bottom;
+font-size:14px;
+font-weight:bold;
+margin:0 0 4px 0;
+padding:0 0 4px 0;
+}
+.global_header .person .user .avatar {
+display:inline-block;
+height:28px;
+width:28px;
+margin:0 0 0 0;
+padding:1px 1px 1px 1px;
 }
 
 #globalbar {
@@ -274,7 +370,7 @@ pre {
 }
 
 #body {
-    margin: 0;
+    margin: 30px 0 0 0;
 }
 
 #publicbar {
@@ -304,7 +400,6 @@ pre {
 
 #index {
     background-color: rgba(223,234,245,0.3);
-    background-color: WhiteSmoke \9;
 }
 
 #prob_short {
@@ -343,7 +438,6 @@ pre {
 }
 
 #problist {
-    background-color: WhiteSmoke \9;
 }
 
 #prob_left {
@@ -356,11 +450,9 @@ pre {
 
 #probinfo {
     margin: 2px 0;
-    background-color: WhiteSmoke \9;
 }
 
 #singlerank {
-    background-color: WhiteSmoke \9;
 }
 
 #probdetail {
@@ -369,7 +461,6 @@ pre {
     color: Black;
 	overflow: auto;
     background-color: rgba(255,255,255,0.5);
-    background-color: WhiteSmoke \9;
     font-size: 15px;
 }
 
@@ -389,7 +480,6 @@ pre {
 }
 
 #catelist {
-    background-color: WhiteSmoke \9;
 }
 
 /* 比赛 */
@@ -400,7 +490,6 @@ pre {
 }
 
 #contestlist {
-    background-color: WhiteSmoke \9;
 }
 
 #cprobinfo {
@@ -428,7 +517,6 @@ pre {
 }
 
 #contest_report {
-    background-color: WhiteSmoke \9;
 }
 
 /* 记录 */
@@ -442,7 +530,6 @@ pre {
 }
 
 #submitlist {
-    background-color: WhiteSmoke \9;
 }
 
 #submitdetail {
@@ -462,23 +549,6 @@ pre {
 }
 
 #userlist {
-    background-color: WhiteSmoke \9;
-}
-
-#userdetail {
-}
-
-#probstatics {
-    font-size: 90%;
-}
-
-#did_contests {
-}
-
-/* 分组 */
-
-#grouplist {
-    background-color: WhiteSmoke \9;
 }
 
 /* 信件 */
@@ -504,13 +574,11 @@ pre {
 .Comments {
     border: 0;
     background-color: rgba(255,255,255,0.1);
-    background-color: rgb(255,255,255) \9;
 }
 
 .CommentsK {
     height: 40px;
     background-color: rgba(252,253,254,0.8);
-    background-color: rgb(252,253,254) \9;
     border: 0;
     padding: 10px 10px 10px 10px;
 }
@@ -520,20 +588,17 @@ pre {
     text-align: center;
     width: 250px;
     background-color: rgba(252,223,200,0.8);
-    background-color: rgb(252,223,200) \9;
 }
 
 .CommentsTime {
     border: 0;
     text-align: right;
     background-color: rgba(252,253,184,0.8);
-    background-color: rgb(252,253,184) \9;
 }
 
 .CommentsU {
     width: 250px;
     background-color: rgba(197,248,252,0.4);
-    background-color: rgb(197,248,252) \9;
     border: 0;
 }
 
@@ -547,8 +612,6 @@ pre {
 #login {
     border: 1px solid LightBlue;
     width: 260px;
-    background-color: WhiteSmoke \9;
-}
 
 #login td, #login th, #login tr {
     border: 0;
