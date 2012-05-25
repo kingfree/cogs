@@ -27,7 +27,7 @@ if (restore) selObj.selectedIndex=0;
 <span id="cate_detail">当前分类：<span style="font-size:20px;"><?php echo $d['cname'] ?></span>（<?php echo nl2br(sp2n(htmlspecialchars($d['memo']))) ?>）</span>
 <?php } ?>
 <?php if(有此权限('修改题目')) { ?>
-<span class="admin_big"><a href="../admin/problem/editprob.php?action=add">添加新题目</a></span>
+<span class="admin big"><a href="../admin/problem/editprob.php?action=add">添加新题目</a></span>
 <?php } ?>
 
 <?php
@@ -47,26 +47,10 @@ $sql.=" and (problem.probname like '%{$_GET[key]}%' or problem.pid ='{$_GET[key]
 if ($_GET['diff']!="")
 $sql.=" and problem.difficulty='{$_GET['diff']}'";
 
-if($_GET['rank']=="按题目名称排序")
-    $sql.=" order by probname asc";
-else if($_GET['rank']=="按文件名称排序")
-    $sql.=" order by filename asc";
-else if($_GET['rank']=="按评测方式排序")
-    $sql.=" order by plugin asc";
-else if($_GET['rank']=="按时间限制排序")
-    $sql.=" order by timelimit asc";
-else if($_GET['rank']=="按空间限制排序")
-    $sql.=" order by memorylimit asc";
-else if($_GET['rank']=="按题目难度排序")
-    $sql.=" order by difficulty asc";
-else if($_GET['rank']=="按通过次数排序")
-    $sql.=" order by acceptcnt desc";
-else if($_GET['rank']=="按可否提交排序")
-    $sql.=" order by submitable asc";
-else if($_GET['rank']=="按阅读权限排序")
-    $sql.=" order by readforce desc";
+if($_GET['rank'])
+$sql.=" order by problem.".$_GET['rank']." asc";
 else
-    $sql.=" order by problem.pid asc";
+$sql.=" order by problem.pid asc";
 
 $cnt=$p->dosql($sql);
 $totalpage=(int)(($cnt-1)/$SET['style_pagesize'])+1;
@@ -80,34 +64,33 @@ if(!$_GET['page']) {
         $st=(($_GET[page]-1)*$SET['style_pagesize']);
 }
 ?>
-<form id="search_prob" name="search_prob" method="get" action="">
+<form method="get" action="" class='center'>
+<a href="random.php" title="随机选择一道你没有通过的题目" class='btn' >随机题目</a>
+<input name="caid" type="hidden" value="<?=$_GET['caid']?>" />
 难度 
-<select name="diff" id="diff" onchange="MM_jumpMenu_2('parent',this,0)">
+<select name="diff" onchange="MM_jumpMenu_2('parent',this,0)" class='input-medium'>
 <option value="" selected="selected" <?php if ($_GET['diff']=="") {?> selected="selected"<?php } ?> >全部</option>
 <?php for ($i=1;$i<=10;$i++) { ?>
 <option value="<?php echo $i;?>" <?php if ($_GET['diff']==$i) {?> selected="selected"<?php } ?> ><?php echo 难度($i);?></option>
 <?php } ?>
 </select>
 搜索题目
-<input name="key" type="text" id="key" value="<?php echo $_GET['key'] ?>" />
-<input name="sc" type="submit" id="sc" value="搜索"/>
-<input name="caid" type="hidden" id="caid" value="<?php echo $_GET['caid'] ?>" />
-<a href="random.php" title="随机选择一道你没有通过的题目">随机题目</a>
-</form>
-<form id="rank" action="" method="get" name="rank">
-  <input name="rank" type="submit" value="按题目名称排序" />
-  <input name="rank" type="submit" value="按文件名称排序" />
-  <input name="rank" type="submit" value="按评测方式排序" />
-  <input name="rank" type="submit" value="按时间限制排序" />
-  <input name="rank" type="submit" value="按空间限制排序" />
-  <input name="rank" type="submit" value="按题目难度排序" />
-  <input name="rank" type="submit" value="按通过次数排序" />
-  <?php if(有此权限('查看题目')) { ?>
-  <input name="rank" type="submit" value="按可否提交排序" />
-  <? } ?>
+<input name="key" type="text" class='search-query input-medium' value='<?=$_GET['key']?>' title='输入关键字按回车搜索题目，保持默认则为随机题目'/>
+<button type="submit" class='btn'>搜索</button>
+<p />
+<button name="rank" class='btn' value='probname'>按题目名称排序</button>
+<button name="rank" class='btn' value='filename'>按文件名称排序</button>
+<button name="rank" class='btn' value='plugin'>按评测方式排序</button>
+<button name="rank" class='btn' value='timelimit'>按时间限制排序</button>
+<button name="rank" class='btn' value='memorylimit'>按空间限制排序</button>
+<button name="rank" class='btn' value='difficulty'>按题目难度排序</button>
+<button name="rank" class='btn' value='acceptcnt'>按通过次数排序</button>
+<?php if(有此权限('查看题目')) { ?>
+<button name="rank" class='btn' value='submitable'>按可否提交排序</button>
+<? } ?>
 </form>
 <? 分页($cnt, $_GET['page'], '?caid='.$_GET['caid'].'&diff='.$_GET['diff'].'&key='.$_GET['key'].'&rank='.$_GET['rank'].'&'); ?>
-<table id="problist">
+<table id="problist" class='table table-condensed'>
 <thead><tr>
 <th>PID</th>
 <th onclick="sortTable('problist', 0, 'int')">题目名称</th>

@@ -63,19 +63,19 @@ if($_GET['show'])
     分页($cnt, $_GET['page'], '?pid='.$_GET['pid'].'&uid='.$_GET['uid'].'&display='.$_GET['display'].'&show='.$_GET['show'].'&');
 ?>
 
-<table id="submitlist">
+<table id="submitlist" class='table table-condensed fixed'>
 <thead><tr>
-<th width="5%">SID</th>
-<th width="12%" onclick="sortTable('submitlist', 1, 'int')">题目</th>
-<th width="10%" onclick="sortTable('submitlist', 2, 'int')">用户</th>
-<th width="30%" onclick="sortTable('submitlist', 3)">结果</th>
-<th width="4%" onclick="sortTable('submitlist', 4, 'int')">得分</th>
-<th width="4%">语言</th>
-<th width="6%" onclick="sortTable('submitlist', 6, 'int')">用时</th>
-<th width="8%" onclick="sortTable('submitlist', 7, 'int')">内存</th>
-<th width="16%" onclick="sortTable('submitlist', 8)">时间</th>
+<th width='40px'>SID</th>
+<th width='120px' onclick="sortTable('submitlist', 1, 'int')">题目</th>
+<th width='120px' onclick="sortTable('submitlist', 2, 'int')">用户</th>
+<th onclick="sortTable('submitlist', 3)">结果</th>
+<th width='40px' onclick="sortTable('submitlist', 4, 'int')">得分</th>
+<th width='40px'>语言</th>
+<th width='60px' onclick="sortTable('submitlist', 6, 'int')">用时</th>
+<th width='80px' onclick="sortTable('submitlist', 7, 'int')">内存</th>
+<th width='120px' onclick="sortTable('submitlist', 8)">时间</th>
 <?php if(有此权限('查看代码')) { ?>
-<th width="6%" class=admin>姓名</th>
+<th width='50px' class=admin>姓名</th>
 <?php } ?>
 </tr></thead>
 <?php if (!$err)
@@ -83,7 +83,7 @@ for ($i=$st;$i<$cnt && $i<$st+$SET['style_pagesize'] ;$i++) {
     $d=$p->rtnrlt($i);
 ?>
 <tr>
-<td align=center><?=$d['sid']?></td>
+<td><?=$d['sid']?></td>
 <td><?php if(!$_GET['pid']) {
     是否通过($d['pid'], $q);
     echo "<a href='?pid={$d['pid']}&uid={$_GET['uid']}'>{$d['probname']}</a>";
@@ -92,12 +92,12 @@ for ($i=$st;$i<$cnt && $i<$st+$SET['style_pagesize'] ;$i++) {
     echo "<a href='../problem/problem.php?pid={$d['pid']}' target='_blank'>{$d['probname']}</a>";
 ?></td>
 <td><a href='../user/detail.php?uid=<?=$d['uid']?>' target='_blank'><?=gravatar::showImage($d['email']);?></a><?php echo "<a href='?uid={$d[uid]}&pid={$_GET['pid']}'>{$d['nickname']}</a>"; ?></td>
-<td align=center><?=评测结果($d['result'])?></td>
-<td align=center><span class="<?=$d['accepted']?'ok':'no'?>"><?=$d['score'] ?></span></td>
-<td align=center><a href='../problem/code.php?id=<?=$d['sid']?>'><?=$STR['lang'][$d['lang']]?></a></td>
-<td align=center><?php printf("%.3f",$d['runtime']/1000.0) ?> s </td>
-<td align=center><?php printf("%.2f",$d['memory']/1024) ?> MiB </td>
-<td align=center><?php echo date('Y-m-d H:i:s',$d['subtime']); ?></td>
+<td style='word-wrap:break-word;'><?=评测结果($d['result'])?></td>
+<td><span class="<?=$d['accepted']?'ok':'no'?>"><?=$d['score'] ?></span></td>
+<td><a href='../problem/code.php?id=<?=$d['sid']?>'><?=$STR['lang'][$d['lang']]?></a></td>
+<td><?php printf("%.3f",$d['runtime']/1000.0) ?> s </td>
+<td><?php printf("%.2f",$d['memory']/1024) ?> MiB </td>
+<td><?php echo date('Y-m-d H:i:s',$d['subtime']); ?></td>
 <?php if(有此权限('查看代码')) { ?>
 <td class=admin align=center><?php echo $d['realname'] ?></td>
 <?php } ?>

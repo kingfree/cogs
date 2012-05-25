@@ -5,34 +5,32 @@ if (isset($_COOKIE['cojs_login']) && isset($_COOKIE['User'])) header("location: 
 gethead(1,"","用户登录");
 ?>
 
-<p><a href="../">返回首页</a></p>
-<center>
-<form id="Login" name="Login" method="post" action="dologin.php">
-  <table id=login>
-    <tr>
-      <th scope="row">用户名</th>
-      <td align=left><input name="username" type="text" id="username" /></td>
-    </tr>
-    <tr>
-      <th scope="row">密　码</th>
-      <td align=left><input name="password" type="password" id="password" /></td>
-    </tr>
-    <!--<tr>
-      <th scope="row">验证码</th>
-      <td align=left valign=center><input name="VerifyCode" type="text" class="InputBox" id="VerifyCode" size="8" maxlength="4" />
-      <img src="../include/verifycode.php" /></td>
-    </tr>-->
-    <tr><td>
+<form method="post" action="dologin.php" class='form-inline'>
+<table id='login' class='center'>
+<tr>
+<th scope="row">用户名</th>
+<td align=left><input name="username" type="text" id="username" /></td>
+</tr>
+<tr>
+<th scope="row">密　码</th>
+<td align=left><input name="password" type="password" id="password" /></td>
+</tr>
+<!--<tr>
+<th scope="row">验证码</th>
+<td align=left valign=center><input name="VerifyCode" type="text" class="InputBox" id="VerifyCode" size="8" maxlength="4" />
+<img src="../include/verifycode.php" /></td>
+</tr>-->
+<tr><td>
 <a href="lost.php">忘记密码</a><br />
 <a href="register.php">立即注册</a></td>
-<td><input type="submit" name="Login" value=" 登录 " style="font-size:25px;" />
-<input name="savepwd" type="checkbox" id="savepwd" value="1" /><label for="savepwd">自动登录<label></td>
+<td>
+<button class='btn btn-primary'>登录</button>
+<label class="checkbox"><input name="savepwd" type="checkbox" value="1" />自动登录<label></td>
 <input name="from" type="hidden" id="from" value="<?=$_GET['from'] ?>" />
-    </tr>
-  </table>
+</tr>
+</table>
 </form>
-</center>
 
 <?php
-	include_once("../include/stdtail.php");
+include_once("../include/stdtail.php");
 ?>

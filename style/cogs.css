@@ -1,0 +1,47 @@
+body {
+    background-size: 100%;
+    background-attachment: fixed;
+}
+
+#body {
+    padding-top: 45px;
+}
+
+.footer {
+    padding: 0;
+    border-top: 1px solid #e5e5e5;
+}
+
+.footer {
+    margin: 0;
+    padding: 0;
+    color: #555;
+}
+
+.admin {
+    background-color: #d9edf7;
+}
+
+.big {
+    font-size: 200%;
+}
+
+.center {
+    text-align: center;
+}
+
+th {
+    text-align: center;
+}
+
+.fixed {
+    table-layout: fixed;
+}
+
+.pagination {
+    text-align: center;
+}
+
+.pagination ul {
+    background-color: #fff;
+}

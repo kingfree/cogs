@@ -254,9 +254,11 @@ function 是否通过($pid, $q) {
         $ac=$q->dosql($sql);
         if ($ac) {
             $e=$q->rtnrlt(0);
-            echo "<a href='".路径("problem/code.php?id=").$e['sid']."' target='_blank'><span class=".
-                ($e['accepted']?"ok>√":"no>×")."</span></a>";
-        } else echo "<span class='did'>－</span>";
+            //echo "<a href='".路径("problem/code.php?id=").$e['sid']."' target='_blank'><span class=".
+            echo "<a href='".路径("problem/code.php?id=").$e['sid']."' target='_blank'><span class=icon-".
+                ($e['accepted']?"ok>":"remove>")."</span></a>";
+        //} else echo "<span class='did'>－</span>";
+        } else echo "<span class='icon-minus'>－</span>";
     }
 }
 
@@ -277,12 +279,12 @@ function 分页($total,$page,$url='',$page_size='',$max_length='') {
 
     $page_table = '';
     //aways in the pages
-    $page_table = '<div class="page_slice"><table align="center"><tr>';
+    $page_table = '<div class="pagination"><ul>';
     //显示第一页
     if($page == 1 )
-        $page_table .= '<td class="current_page">1</td>';
+        $page_table .= '<li class="active"><a>1</a></li>';
     else
-        $page_table .= '<td><a href="'.$url.'page=1">[首页]</a></td>';
+        $page_table .= '<li><a href="'.$url.'page=1">首页</a></li>';
 
     //循环中间页码
     if($total_page < $max_length*2) {
@@ -302,30 +304,30 @@ function 分页($total,$page,$url='',$page_size='',$max_length='') {
     $link_end = (($loop_end + $max_length) > $total_page) ? $total_page :$loop_end + $max_length;
 
     if($loop_start > 2)
-        $page_table .= '<td><a href="'.$url.'page='.$link_start.'">...</a></td>';
+        $page_table .= '<li><a href="'.$url.'page='.$link_start.'">...</a></li>';
 
     //中间链接
     for($i = $loop_start ; $i <= $loop_end ; $i++) {
         if($page == $i)
-            $page_table .= '<td class="current_page">'.$i.'</td>';
+            $page_table .= '<li class="active"><a>'.$i.'</a></li>';
         else if($page == $i + 1)
-            $page_table .= '<td><a href="'.$url.'page='.$i.'">[上一页]</a></td>';
+            $page_table .= '<li><a href="'.$url.'page='.$i.'">上一页</a></li>';
         else if($page == $i - 1)
-            $page_table .= '<td><a href="'.$url.'page='.$i.'">[下一页]</a></td>';
+            $page_table .= '<li><a href="'.$url.'page='.$i.'">下一页</a></li>';
         else
-            $page_table .= '<td><a href="'.$url.'page='.$i.'">['.$i.']</a></td>';
+            $page_table .= '<li><a href="'.$url.'page='.$i.'">'.$i.'</a></li>';
     }
     if($loop_end < $total_page-1)
-        $page_table .= '<td><a href="'.$url.'page='.$link_end.'">...</a></td>';
+        $page_table .= '<li><a href="'.$url.'page='.$link_end.'">...</a></li>';
 
     //末页链接
     if($total_page!=1) {
         if($page == $total_page)
-            $page_table .= '<td class="current_page">'.$total_page.'</td>';
+            $page_table .= '<li class="active"><a>'.$total_page.'</a></li>';
         else
-            $page_table .= '<td><a href="'.$url.'page='.$total_page.'">[末页]</a></td>';
+            $page_table .= '<li><a href="'.$url.'page='.$total_page.'">末页</a></li>';
     }
-    $page_table .= "</tr></table></div>";
+    $page_table .= "</ul></div>";
     //输出分页代码
     echo $page_table;
 }

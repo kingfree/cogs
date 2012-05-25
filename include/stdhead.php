@@ -15,19 +15,20 @@ function gethead($head,$check,$title,$userid=0) {
     if ($head==1) {
         $p=new DataAccess();
 ?>
-<!DOCTYPE HTML>
+<!DOCTYPE html>
 <head>
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <link rel="Shortcut Icon" href="<?=路径("style/favicon.ico")?>" />
-<link rel=stylesheet href="<?=路径("style/".$SET['style_profile'])?>" />
+<!--<link rel=stylesheet href="<?=路径("style/".$SET['style_profile'])?>" />-->
+<link rel=stylesheet href="<?=路径("style/cogs.css")?>" />
 <?背景图片($userid ? $userid : $_SESSION['ID']);?>
 <?php $LIB->tradsimp(); ?>
-<link rel=stylesheet type="text/css" href="<?=路径("style/icon.css")?>" />
+<link rel=stylesheet type="text/css" href="<?=路径("style/bootstrap/css/bootstrap.css")?>" />
 <script type="text/javascript" src="<?=路径("include/jquery.js")?>"></script>
 <script type="text/javascript" src="<?=路径("include/sortTable.js")?>"></script>
 <title><?php echo $title." - ".$SET['global_sitename'] ?></title>
 </head>
-<body>
+<body data-spy="scroll" data-target=".subnav" data-offset="50">
 <div id="alltext">
 <?
 if($check=="sess") $check="普通用户";

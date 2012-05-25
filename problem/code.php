@@ -77,7 +77,7 @@ if ($forcetocode) {
   </tr>
   <tr>
     <th>评测结果</th>
-    <td><pre style='margin:0;'><?php 评测结果($d['result']) ?></pre></td>
+    <td><?php 评测结果($d['result']) ?></td>
   </tr>
   <tr>
     <th>是否通过</th>
@@ -104,7 +104,7 @@ if ($forcetocode) {
         <input name="sid" type="hidden" id="sid" value="<?=$d['sid']; ?>" />
         <input type="hidden" name="rejudge" value="1">
         <input type="hidden" name="lang" value="<?php echo langnumtostr($d['lang']) ?>">
-    <select name='judger' id='judger'>
+    <select name='judger' id='judger' class='span2'>
     <option value=0 selected=selected>自动选择</option>
 <?
     $sql="select grid,address,memo from grader where enabled=1 order by priority desc";
