@@ -49,7 +49,7 @@ if($cnt) {
 <div class='span4'>
 <table id="probinfo" class='table table-condensed'>
 <tr><th width='80px'>题目名称</th>
-<td><?=$d[pid]; ?>. <b><?=$d[probname]; ?></b></td></tr>
+<td><?=$d[pid]; ?>. <b><?=$d['probname']; ?></b></td></tr>
 <tr><th>难度等级</th>
 <td><?=难度($d['difficulty']); ?></td></tr>
 <tr><th>文件名称</th>
@@ -104,7 +104,7 @@ for ($i=0;$i<=$cnt2-1;$i++) {
 <input type="file" name="file" title='选择程序源文件' />
 <?php if(有此权限('测试题目')) { ?>
 <label class='checkbox pull-right'>
-<input name="testmode" type="checkbox" value="1" />测试模式
+<input name="testmode" type="checkbox" value="1" />不写入数据库
 </label>
 <?php } ?>
 <select name='judger' class='input-medium'>
@@ -118,8 +118,8 @@ for ($i=0;$i<$cnt;$i++) {
 }
 ?>       
 </select>
-<button type='submit' class='btn btn-primary pull-right' >提交代码</button>
-<div class='btn-group' data-toggle='buttons-radio'>
+<button type='submit' class='btn btn-primary' >提交代码</button>
+<div class='btn-group pull-right' data-toggle='buttons-radio'>
 <button type='button' class='btn' name="lang" value="pas">Pascal</button>
 <button type='button' class='btn' name="lang" value="c">C</button>
 <button type='button' class='btn active' name="lang" value="cpp">C++</button>

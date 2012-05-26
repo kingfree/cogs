@@ -6,7 +6,7 @@ $q=new DataAccess();
 ?>
 
 <?php if(有此权限('修改页面')) { ?>
-<span class="admin_big"><a href="editpage.php?action=add">添加新页面</a></span>
+<a href="editpage.php?action=add" class="btn btn-info">添加新页面</a>
 <?php } ?>
 
 <?php
@@ -31,13 +31,13 @@ if(!$_GET['page']) {
         $st=(($_GET[page]-1)*$SET['style_pagesize']);
 }
 ?>
-<form id="search_page" name="search_page" method="get" action="">
+<form method="get" action="" class='center'>
 搜索页面
-<input name="key" type="text" id="key" value="<?php echo $_GET['key'] ?>" />
-<input name="sc" type="submit" id="sc" value="搜索"/>
+<input name="key" type="text" class='search-query input-medium' value='<?=$_GET['key']?>'/>
+<button type="submit" class='btn'>搜索</button>
 </form>
 <? 分页($cnt, $_GET['page'], '?key='.$_GET['key'].'&'); ?>
-<table id="pagelist">
+<table id="pagelist" class='table table-condensed fiexd'>
 <tr>
 <th>AID</th>
 <th width=50%>页面标题</th>

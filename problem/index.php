@@ -6,7 +6,6 @@ $q=new DataAccess();
 ?>
 
 <script type="text/JavaScript">
-<!--
 function MM_jumpMenu(targ,selObj,restore){
 eval(targ+".location='?diff=<?php echo $_GET['diff'] ?>&caid=<?php echo $_GET['caid'] ?>&key=<?php echo $_GET['key'] ?>&page="+selObj.options[selObj.selectedIndex].value+"'");
 if (restore) selObj.selectedIndex=0;
@@ -15,7 +14,6 @@ function MM_jumpMenu_2(targ,selObj,restore){
 eval(targ+".location='?caid=<?php echo $_GET['caid'] ?>&key=<?php echo $_GET['key'] ?>&diff="+selObj.options[selObj.selectedIndex].value+"'");
 if (restore) selObj.selectedIndex=0;
 }
-//-->
 </script>
 
 <?php if ($_GET['caid']!="") {
@@ -24,10 +22,10 @@ if (restore) selObj.selectedIndex=0;
     $d=$p->rtnrlt(0);
 ?>
 
-<span id="cate_detail">当前分类：<span style="font-size:20px;"><?php echo $d['cname'] ?></span>（<?php echo nl2br(sp2n(htmlspecialchars($d['memo']))) ?>）</span>
-<?php } ?>
 <?php if(有此权限('修改题目')) { ?>
-<span class="admin big"><a href="../admin/problem/editprob.php?action=add">添加新题目</a></span>
+<a href="../admin/problem/editprob.php?action=add" class="btn btn-info">添加新题目</a>
+<?php } ?>
+<span id="cate_detail">当前分类：<span class="big"><?php echo $d['cname'] ?></span>（<?php echo nl2br(sp2n(htmlspecialchars($d['memo']))) ?>）</span>
 <?php } ?>
 
 <?php
@@ -48,7 +46,7 @@ if ($_GET['diff']!="")
 $sql.=" and problem.difficulty='{$_GET['diff']}'";
 
 if($_GET['rank'])
-$sql.=" order by problem.".$_GET['rank']." asc";
+$sql.=" order by {$_GET['rank']} {$_GET['order']}";
 else
 $sql.=" order by problem.pid asc";
 
@@ -67,6 +65,7 @@ if(!$_GET['page']) {
 <form method="get" action="" class='center'>
 <a href="random.php" title="随机选择一道你没有通过的题目" class='btn' >随机题目</a>
 <input name="caid" type="hidden" value="<?=$_GET['caid']?>" />
+  <input name="order" type="hidden" value="<?=$_GET['order']=='asc'?'desc':'asc'?>" />
 难度 
 <select name="diff" onchange="MM_jumpMenu_2('parent',this,0)" class='input-medium'>
 <option value="" selected="selected" <?php if ($_GET['diff']=="") {?> selected="selected"<?php } ?> >全部</option>
@@ -90,9 +89,9 @@ if(!$_GET['page']) {
 <? } ?>
 </form>
 <? 分页($cnt, $_GET['page'], '?caid='.$_GET['caid'].'&diff='.$_GET['diff'].'&key='.$_GET['key'].'&rank='.$_GET['rank'].'&'); ?>
-<table id="problist" class='table table-condensed'>
+<table id="problist" class='table table-condensed fiexd'>
 <thead><tr>
-<th>PID</th>
+<th width='20px'>PID</th>
 <th onclick="sortTable('problist', 0, 'int')">题目名称</th>
 <th>文件名称</th>
 <th>时间限制</th>

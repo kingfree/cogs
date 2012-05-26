@@ -3,19 +3,23 @@ require_once("../include/stdhead.php");
 gethead(1,"可以管理","后台管理");
     $q=new DataAccess();
 ?>
-<table id="admin_index" align=center>
-<tr><th colspan=3>后台管理
-</th></tr>
-<tr>
-<th width=20%>题目</th>
-<td width=40%><span>
-<a href="../problem/index.php">题目列表</a>
-</span></td>
-<td width=40%><span class="admin">
-<a href="problem/editprob.php?action=add">添加新题目</a>
-</span></td>
-</tr>
-<tr>
+
+<div class='well span2 pull-right'>
+<ul class='nav nav-list'>
+<li class='nav-header'>题目</li>
+<li class=''><a href="../problem/index.php">题目列表</a></li>
+<li class=''><a href="problem/editprob.php?action=add">添加新题目</a></li>
+<li class='nav-header'>比赛</li>
+<li class=''><a href="../competition/index.php">比赛列表</a></li>
+<li class=''><a href="settings.php?settings=comp">比赛管理</a></li>
+<li class=''><a href="comp/editcompbase.php?action=add">添加新比赛</a></li>
+<li class='nav-header'></li>
+<li class=''></li>
+<li class=''></li>
+</ul>
+</div>
+
+<table id="admin_index">
 <th>比赛</th>
 <td><span>
 <a href="../competition/index.php">比赛列表</a>

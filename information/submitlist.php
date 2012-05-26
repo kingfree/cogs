@@ -5,14 +5,16 @@ gethead(1,"","提交记录");
 $p=new DataAccess();
 $q=new DataAccess();
 ?>
-<form id="search_submit" action="" method="get" >
-检索： 用户UID
-<input name="uid" type="text" id="uid" value="<?php echo $_GET['uid'] ?>" />
+<form id="search_submit" action="" method="get" class='center'>
+用户UID
+<input name="uid" type="text" value="<?=$_GET['uid']?>" />
 题目PID
-<input name="pid" type="text" id="pid" value="<?php echo $_GET['pid'] ?>" />
-<input name="sc" type="submit" id="sc" value="检索" />
-</form>
-<div id="sublist_now">
+<input name="pid" type="text" value="<?=$_GET['pid']?>" />
+<input name="show" type="hidden" value="<?=$_GET['show']?>" />
+<input name="display" type="hidden" value="<?=$_GET['display']?>" />
+<button type="submit" class='btn'>检索</button>
+<p>
+<button name='show' value='yes' class='btn'>显示所有记录</button>
 这里是 <b><?php
 if ((int)$_GET['uid']==0) {
     echo "所有人";
@@ -32,10 +34,9 @@ if ((int)$_GET['pid']==0) {
     $d=$p->rtnrlt(0);
 ?>
 <? 是否通过($_GET['pid'], $q);?><a href="../problem/problem.php?pid=<?php echo $_GET['pid'] ?>" target="_blank"><?php echo $d['probname'] ?></a><?php } ?></b>的记录。
-<a href="?pid=<?=$_GET['pid']?>&uid=<?=$_GET['uid']?>&display=all">全部显示</a>
-<a href="?pid=<?=$_GET['pid']?>&uid=<?=$_GET['uid']?>&display=ac">只显示通过的</a>
-<a href="?pid=<?=$_GET['pid']?>&uid=<?=$_GET['uid']?>&show=yes">显示所有记录</a>
-</div>
+<button name='display' value='all' class='btn'>全部显示</button>
+<button name='display' value='ac' class='btn'>只显示通过的</button>
+</form>
 <?php
 $sql="select submit.*,userinfo.nickname,userinfo.email,userinfo.realname,problem.probname from submit,userinfo,problem where submit.pid=problem.pid and submit.uid=userinfo.uid ";
 if ($_GET['display']=='ac')
@@ -92,7 +93,7 @@ for ($i=$st;$i<$cnt && $i<$st+$SET['style_pagesize'] ;$i++) {
     echo "<a href='../problem/problem.php?pid={$d['pid']}' target='_blank'>{$d['probname']}</a>";
 ?></td>
 <td><a href='../user/detail.php?uid=<?=$d['uid']?>' target='_blank'><?=gravatar::showImage($d['email']);?></a><?php echo "<a href='?uid={$d[uid]}&pid={$_GET['pid']}'>{$d['nickname']}</a>"; ?></td>
-<td style='word-wrap:break-word;'><?=评测结果($d['result'])?></td>
+<td class='wrap'><?=评测结果($d['result'])?></td>
 <td><span class="<?=$d['accepted']?'ok':'no'?>"><?=$d['score'] ?></span></td>
 <td><a href='../problem/code.php?id=<?=$d['sid']?>'><?=$STR['lang'][$d['lang']]?></a></td>
 <td><?php printf("%.3f",$d['runtime']/1000.0) ?> s </td>

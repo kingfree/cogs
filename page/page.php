@@ -32,32 +32,18 @@ if($cnt) {
 }
 ?>
 
-<table>
-<tr><th>页面名称</th>
-<th><b><?=$d[title]?></b></th>
+<div class='container'>
+<div class='page-header'>
+<h1><?=$d['title']?>
 <?php if(有此权限('修改页面')) { ?>
-<td><a class=admin href="editpage.php?action=edit&aid=<?= $d[aid]; ?>">修改该页</a></td>
-<?php } else { ?>
-<td></td>
+<a href="editpage.php?action=edit&aid=<?=$d[aid]?>" class="btn btn-info">编辑</a></h1>
 <? } ?>
-<td><?=$d['nickname']?></td>
-</tr>
-<tr><th>添加时间</th>
-<td><?=date('Y-m-d', $d['time']) ?></td>
-<th>开放分组</th>
-<td><a href="../user/index.php?gid=<?=$d['gid'] ?>" target="_blank"><?=$d['gname'] ?></a></td></tr>
-<tr><th>编辑时间</th>
-<td><?=date('Y-m-d', $d['etime']) ?></td>
-<th>阅读权限</th>
-<td><?=$d['force'] ?></td>
-</tr>
-</td>
-<tr>
-<td id="probdetail" colspan=4>
+由 <a href="user/detail.php?uid=<?=$d['uid']; ?>" target="_blank"><?=$d['nickname']?></a> 在 <?=date('Y-m-d', $d['time']) ?> 创建
+开放分组：<a href="../user/index.php?gid=<?=$d['gid'] ?>" target="_blank"><?=$d['gname'] ?></a>
+上次编辑时间：<?=date('Y-m-d', $d['etime'])?>
+</div>
 <?=$d['text'] ?>
-</td>
-</tr>
-</table>
+</div>
 
 <?php
 include_once("../include/stdtail.php");

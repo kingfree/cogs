@@ -5,22 +5,20 @@ gethead(1,"","评测机状态");
 ?>
 
 <?php if(有此权限('管理评测')) { ?>
-<a class="admin_big" href="../admin/grader/editgrader.php?action=add">添加新评测机</a>
+<a class="admin big" href="../admin/grader/editgrader.php?action=add">添加新评测机</a>
 <?php } ?>
-<p />
-<center>
-<table width="100%" border="1">
+<table class='table table-condensed fixed'>
   <tr>
-    <th scope="col">GRID</th>
-    <th scope="col">名称</th>
-    <th scope="col">评测次数</th>
-    <th scope="col">状态</th>
-    <th scope="col">版本</th>
-    <th scope="col">备注</th>
+    <th>GRID</th>
+    <th>名称</th>
+    <th>评测次数</th>
+    <th>状态</th>
+    <th>版本</th>
+    <th>备注</th>
 <?php if(有此权限('管理评测')) { ?>
-    <th bgcolor="#99FFCC"  scope="col">地址</th>
-    <th bgcolor="#99FFCC"  scope="col">优先级</th>
-    <th bgcolor="#99FFCC"  scope="col">操作</th>
+    <th class='admin'>地址</th>
+    <th class='admin'>优先级</th>
+    <th class='admin'>操作</th>
   </tr>
 <?php } ?>
 <?php
@@ -58,7 +56,6 @@ gethead(1,"","评测机状态");
     }
 ?>
 </table>
-</center>
 
 <?php
     include_once("../include/stdtail.php");

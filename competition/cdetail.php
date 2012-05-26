@@ -6,6 +6,7 @@ $uid = $_GET['uid'];
 
 <?php
 $p=new DataAccess();
+$r=new DataAccess();
 $sql="select * from problem where pid={$_GET[pid]}";
 $cnt=$p->dosql($sql);
 if ($cnt) {
@@ -45,10 +46,9 @@ if ($cnt) {
 } else 异常("未查询到记录！");
 ?>
 
-<table id="pdetail">
-<tr>
-<td id="prob_left">
-<table id="cprobinfo">
+<div class='container-fluid'>
+<div class='span4'>
+<table id="cprobinfo" class='table table-condensed'>
 <tr><th width=60px>当前比赛</th>
 <td><b><?php echo $e['cname']; ?></b></td></tr>
 <tr><th>比赛状态</th>
@@ -64,28 +64,7 @@ echo "还未开始";
 <tr><th>场次介绍</th>
 <td><?php echo nl2br(sp2n(htmlspecialchars($e[intro]))) ?></td></tr>
 </table>
-<div id="contest_prob">
-<ol><?
-    $r=new DataAccess();
-    $contains=$e['contains'];
-    $pbs=explode(":",$contains);
-    $ppid = 1;
-    foreach($pbs as $k=>$v) {
-        $sql="select probname from problem where pid={$v}";
-        $r->dosql($sql);
-        $f=$r->rtnrlt(0);
-        $pname=$f[probname];
-        $sql="select * from compscore where uid='{$uid}' and compscore.pid={$v} and compscore.ctid={$_GET[ctid]}";
-        $cnt=$r->dosql($sql);
-        if($cnt) $f=$r->rtnrlt(0);
-?>
-<li class="<?=($v == $_GET['pid'])?"cp_now":"cp_nnow"?>">
-<a href="cdetail.php?pid=<?=$v?>&ctid=<?=$_GET['ctid']?>&uid=<?=$uid?>">
-<? echo $ppid . ". "; $ppid++; echo $pname; ?></a>
-</li>
-<?  } ?></ol>
-</div>
-<table id="probinfo">
+<table id="probinfo" class='table table-condensed'>
 <tr><th width=60px>题目名称</th>
 <td><b><?php echo $d['probname']; ?></b>
 <? if(time() > $e['endtime']) { ?><a href="../problem/problem.php?pid=<?=$_GET['pid']?>">跳转</a><? } ?>
@@ -98,24 +77,24 @@ echo "还未开始";
 <td><?php echo $d['timelimit']; ?> ms (<?=$d['timelimit']/1000?> s)</td></tr>
 <tr><th>内存限制</th>
 <td><?php echo $d['memorylimit']; ?> MiB </td></tr>
-  <tr>
-  <td colspan=2 align=right>
-  <? if((time() < $e['endtime'] && time() > $e['starttime'])) { ?>
-<form action="submit.php" method="post" enctype="multipart/form-data" name="sub">
-<input type="file" name="file"/>
-<input type="radio" name="lang" id="pas" value="pas" /><label for="pas">Pascal</label>
-<input type="radio" name="lang" id="c" value="c" /><label for="c">C</label>
-<input type="radio" name="lang" id="cpp" value="cpp" checked=1/><label for="cpp">C++</label>
-<input type="submit" name="Submit" value="提交"/>
-<input name="filename" type="hidden" id="filename" value="<?php echo $d[filename]; ?>" />
+<? if((time() < $e['endtime'] && time() > $e['starttime'])) { ?>
+<tr class='well'><form action="../compile/" method="post" enctype="multipart/form-data" class='form-inline'>
+<td colspan=2>
+<input name="pid" type="hidden" id="pid" value="<?=$d['pid']?>" />
+<input type="hidden" name="MAX_FILE_SIZE" value="102400" />
+<input type="file" name="file" title='选择程序源文件' />
+<button type='submit' class='btn btn-primary' >提交代码</button>
+<div class='btn-group pull-right' data-toggle='buttons-radio'>
+<button type='button' class='btn' name="lang" value="pas">Pascal</button>
+<button type='button' class='btn' name="lang" value="c">C</button>
+<button type='button' class='btn active' name="lang" value="cpp">C++</button>
+<input name="filename" type="hidden" id="filename" value="<?=$d['filename']; ?>" />
 <input name="pid" type="hidden" id="pid" value="<?=$d['pid']?>" />
 <input name="ctid" type="hidden" id="pid" value="<?=$_GET['ctid']?>" />
 <input name="endtime" type="hidden" value="<?=$e['endtime']?>" />
-<input type="hidden" name="MAX_FILE_SIZE" value="102400">
-</form>
+</div>
+</td></form></tr>
 <? } ?>
-  </td>
-  </tr>
 </table>
 <? $v = $_GET['pid'];
 $sql="select * from compscore,userinfo where compscore.uid='{$uid}' and userinfo.uid='{$uid}' and compscore.pid={$v} and compscore.ctid={$_GET[ctid]}";
@@ -123,7 +102,7 @@ $cnt=$r->dosql($sql);
 if($cnt) {
     $f=$r->rtnrlt(0);
 ?>
-<table id="singlerank">
+<table id="singlerank" class='table table-condensed'>
 <tr><th width=60px><b><?php echo $f['realname']; ?></b></th>
 <td><a href="../user/detail.php?uid=<?=$uid?>"><?php echo $f['nickname']; ?></a></td></tr>
 <tr><th>提交时间</th>
@@ -137,12 +116,32 @@ if($cnt) {
 </table>
 <? } ?>
 </div>
-</td>
-<td id="probdetail">
-<?php echo $d[detail] ?>
-</td>
-</tr>
-</table>
+<div id="probdetail" class='span8'>
+<div class='tabbable'>
+<ul class='nav nav-tabs'>
+<?
+    $contains=$e['contains'];
+    $pbs=explode(":",$contains);
+    $ppid = 1;
+    foreach($pbs as $k=>$v) {
+        $sql="select probname from problem where pid={$v}";
+        $r->dosql($sql);
+        $f=$r->rtnrlt(0);
+        $pname=$f['probname'];
+        $sql="select * from compscore where uid='{$uid}' and compscore.pid={$v} and compscore.ctid={$_GET[ctid]}";
+        $cnt=$r->dosql($sql);
+        if($cnt) $f=$r->rtnrlt(0);
+?>
+<li class="<?=($v == $_GET['pid'])?"active":""?>">
+<a href="cdetail.php?pid=<?=$v?>&ctid=<?=$_GET['ctid']?>&uid=<?=$uid?>">
+<? echo $ppid . ". "; $ppid++; echo $pname; ?></a>
+</li>
+<?  } ?>
+</ul>
+</div>
+<?=$d['detail']?>
+</div>
+</div>
 <?php
     include_once("../include/stdtail.php");
 ?>

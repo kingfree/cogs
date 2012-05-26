@@ -45,23 +45,23 @@ if ($cnt) {
     else echo '<script>document.location="../error.php?id=12"</script>';
 }
 ?>
-<form action="doeditpage.php" method="post">
-<table border="1" bordercolor=#000000 cellspacing=0 cellpadding=4>
+<form action="doeditpage.php" method="post" class='form-inline'>
+<table class='table-form'>
 <tr>
-<td width="60px" valign="top" scope="col">AID</td>
-<td scope="col"><?=$d['aid'] ?>
+<td width="60px">AID</td>
+<td><?=$d['aid'] ?>
 <input name="aid" type="hidden" id="aid" value="<?php echo $d['aid'] ?>" />
 </td>
 <tr>
-<td valign="top">页面标题</td>
+<td>页面标题</td>
 <td><input name="title" type="text" id="title" value="<?=$d['title'] ?>" /></td>
 </tr>
 <tr>
-<td valign="top">阅读权限</td>
+<td>阅读权限</td>
 <td><input name="force" type="number" id="force" value="<?=$d['force'] ?>" /> </td>
 </tr>
 <tr>
-<td valign="top">开放分组</td>
+<td>开放分组</td>
 <td><select name="group" id="group">
 <?php
 $sql="select * from groups order by gname";
@@ -73,10 +73,10 @@ $e=$q->rtnrlt($j);
 <?php } ?>
 </select></td>
 </tr>
-<tr class=admin>
+<tr>
 <td>提交修改</td>
-<td><input type="submit" value="单击此处提交对该页面的修改">
-<input name="action" type="hidden" id="action" value="<?=$_GET[action]?>" />
+<td><button type="submit" class='btn btn-primary'>单击此处提交对该页面的修改</button>
+<input name="action" type="hidden" id="action" value="<?=$_GET['action']?>" />
 </td>
 </tr>
 <tr>

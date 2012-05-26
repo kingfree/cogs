@@ -5,39 +5,29 @@ $p=new DataAccess();
 $q=new DataAccess();
 ?>
 <?php if(有此权限('修改分类')) { ?>
-<a class="admin_big" href="../admin/category/editcate.php?action=add">添加新分类</a>
+<a href="../admin/category/editcate.php?action=add" class="btn btn-info">添加新分类</a>
 <?php } ?>
-<table id="cate_tags">
-<?$sql="select * from category order by cname";
-$cnt=$p->dosql($sql);
-for ($i=$st;$i<$cnt;$i++) {
-    $d=$p->rtnrlt($i);
-    if($i % 8 == 0 && $i) echo "<tr>";
-?>
-<td><a href="../problem/index.php?caid=<?=$d['caid']?>" title="<?=sp2n(htmlspecialchars($d['memo']))?>" target="_blank"><?=$d['cname']?></a></td>
-<? } ?>
-</table>
 <?
     $sql="select * from category order by cname";
     $cnt=$p->dosql($sql);
 ?>
-<table id="catelist">
+<table id="catelist" class='table table-condensed fixed'>
   <tr>
-    <th>分类</th>
-    <th>备注</th>
     <?php if(有此权限('修改分类')) { ?>
-    <th class=admin>操作</th>
+    <th class='admin' width='40px'>操作</th>
     <?php } ?>
+    <th width='240px'>分类</th>
+    <th>备注</th>
   </tr>
 <?php 
 for ($i=$st;$i<$cnt;$i++) {
     $d=$p->rtnrlt($i);
 ?>
   <tr>
-    <td><a href="../problem/index.php?caid=<?php echo $d['caid'] ?>"><?php echo $d['cname'] ?></a></td>
-    <td><?php echo sp2n(htmlspecialchars($d['memo'])) ?></td>
     <?php if(有此权限('修改分类')) { ?>
     <td class=admin><a href="../admin/category/editcate.php?action=edit&caid=<?php echo $d['caid'] ?>">修改</a></td><?php } ?>
+    <td><a href="../problem/index.php?caid=<?php echo $d['caid'] ?>"><?php echo $d['cname'] ?></a></td>
+    <td><?php echo sp2n(htmlspecialchars($d['memo'])) ?></td>
   </tr>
 <?php
     }

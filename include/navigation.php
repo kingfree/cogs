@@ -16,6 +16,19 @@ function Navigation($p) {
     HTML("<a href='".路径("index.php")."' class='brand'>COGS</a>");
     HTML("<div class='nav-collapse'>");
     HTML("<ul class='nav'>");
+    HTML("<li class='dropdown'>");
+    HTML("<a href='#' class='dropdown-toggle' data-toggle='dropdown'><b class='caret'></b>分类栏</a>");
+    HTML("<ul class='dropdown-menu span10'><li>");
+    HTML("<ul class='nav' id='catebar'>");
+    $sql="select * from category order by cname";
+    $cnt=$p->dosql($sql);
+    for ($i=$st;$i<$cnt;$i++) {
+        $d=$p->rtnrlt($i);
+        HTML("<li><a href='".路径("problem/index.php?caid={$d['caid']}")."' title='".sp2n(htmlspecialchars($d['memo']))."'>{$d['cname']}</a></li>");
+    }
+    HTML("</ul>");
+    HTML("</li></ul>");
+    HTML("</li>");
     列表("problem/index.php", "list", "题目");
     列表("information/submitlist.php", "align-justify", "记录");
     $context = "比赛";
@@ -31,10 +44,10 @@ function Navigation($p) {
     列表("information/catelist.php", "tags", "分类");
     列表("page/index.php", "file", "页面");
     //列表("information/about.php", "info-sign", "关于");
-    HTML("</ul>");
     HTML("<form class='navbar-search pull-left' method='get' action='".路径("problem/index.php")."'>");
     HTML("<input name='key' type='text' id='key' class='search-query span2'  placeholder='搜索题目' />");
     HTML("</form>");
+    HTML("</ul>");
     HTML("<ul class='nav pull-right'>");
     if(有此权限('可以管理')) {
         列表("admin/index.php", "asterisk", "后台");

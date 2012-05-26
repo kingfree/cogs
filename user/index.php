@@ -33,7 +33,7 @@ function MM_jumpMenu(targ,selObj,restore){ //v3.0
     $sql.=") ";
 
 ?>
-<table id="group_now">
+<table id="group_now" class='table table-condensed fixed'>
   <tr>
     <th width="80px">当前分组</th>
     <td>[<?=$d['gname'] ?>] <?=nl2br(sp2n(htmlspecialchars($d['memo']))) ?></td>
@@ -69,24 +69,10 @@ if ($subgroup!=array()) {
 <?php
     if ($_GET['key']!="")
         $sql.=" and (nickname like '%{$_GET[key]}%' or uid ='{$_GET[key]}' or usr like '%{$_GET[key]}%' or realname like '%{$_GET[key]}%')";
-    if($_GET['rank']=="按通过数量排序")
-        $sql.=" order by accepted desc";
-    else if($_GET['rank']=="按通过率排序")
-        $sql.=" order by accepted/submited desc";
-    else if($_GET['rank']=="按等级排序")
-        $sql.=" order by grade desc";
-    else if($_GET['rank']=="按昵称排序")
-        $sql.=" order by nickname asc";
-    else if($_GET['rank']=="按姓名排序")
-        $sql.=" order by realname asc";
-    else if($_GET['rank']=="按权限排序")
-        $sql.=" order by admin desc";
-    else if($_GET['rank']=="按阅读权限排序")
-        $sql.=" order by readforce desc";
-    else if($_GET['rank']=="按分组排序")
-        $sql.=" order by gbelong asc";
-    else
-        $sql.=" order by uid asc";
+if($_GET['rank'])
+$sql.=" order by {$_GET['rank']} {$_GET['order']}";
+else
+$sql.=" order by grade desc";
 
 $cnt=$p->dosql($sql);
 $totalpage=(int)(($cnt-1)/$SET['style_pagesize'])+1;
@@ -100,23 +86,23 @@ if(!$_GET['page']) {
         $st=(($_GET[page]-1)*$SET['style_pagesize']);
 }
 ?>
-<form id="search_user" name="form1" method="get" action="">
+<form method="get" action="" class='center'>
+  <input name="gid" type="hidden" value="<?=$_GET['gid'] ?>" />
+  <input name="order" type="hidden" value="<?=$_GET['order']=='asc'?'desc':'asc'?>" />
   搜索用户
-  <input name="key" type="text" id="key" value="<?=$_GET['key'] ?>" />
-  <input name="sc" type="submit" id="sc" value="搜索"  class="LinkButton" />
-  <input name="caid" type="hidden" id="caid" value="<?=$_GET['caid'] ?>" />
-</form>
-<form id="rank" action="" method="get" name="rank">
-  <input name="rank" type="submit" id="rank_us" value="按昵称排序" />
+<input name="key" type="text" class='search-query input-medium' value='<?=$_GET['key']?>' />
+<button type="submit" class='btn'>搜索</button>
+<p>
+  <button name="rank" type="submit" value='uid' class='btn'>按ID排序</button>
+  <button name="rank" type="submit" value='nickname' class='btn'>按昵称排序</button>
   <?php if(有此权限('查看用户')) { ?>
-  <input name="rank" type="submit" id="rank_rn" class="admin" value="按姓名排序" />
+  <button name="rank" type="submit" value='realname' class='btn'>按姓名排序</button>
   <? } ?>
-  <?//<input name="rank" type="submit" id="rank_ad" value="按权限排序" />?>
-  <input name="rank" type="submit" id="rank_rd" value="按阅读权限排序" />
-  <input name="rank" type="submit" id="rank_gr" value="按分组排序" />
-  <input name="rank" type="submit" id="rank_ac" value="按通过数量排序" />
-  <input name="rank" type="submit" id="rank_lv" value="按通过率排序" />
-  <input name="rank" type="submit" id="rank_gd" value="按等级排序" />
+  <button name="rank" type="submit" value='readforce' class='btn'>按阅读权限排序</button>
+  <button name="rank" type="submit" value='gbelong' class='btn'>按分组排序</button>
+  <button name="rank" type="submit" value='accepted' class='btn'>按通过数量排序</button>
+  <button name="rank" type="submit" value='accepted/submited' class='btn'>按通过率排序</button>
+  <button name="rank" type="submit" value='grade' class='btn'>按等级排序</button>
 </form>
 <? 分页($cnt, $_GET['page'], '?key='.$_GET['key'].'&sc'.$_GET['sc'].'&rank='.$_GET['rank'].'&caid='.$_GET['caid'].'&'); ?>
 <script language=javascript>
@@ -126,21 +112,21 @@ function okdel(name) {
     return false;
 }
 </script>
-<table id="userlist">
+<table id="userlist" class='table table-condensed fixed'>
 <thead>
   <tr>
-    <th>名次</th>
-    <th>UID</th>
-    <th>昵称</th>
-    <? if(有此权限('查看用户')) { ?><th class=admin>姓名</th><? } ?>
+    <th width='30px'></th>
+    <th width='35px'>UID</th>
+    <th width='120px'>昵称</th>
+    <? if(有此权限('查看用户')) { ?><th class='admin' width='50px'>姓名</th><? } ?>
     <th>权限</th>
-    <th>阅读</th>
-    <th>分组</th>
-    <th>通过</th>
-    <th>通过率</th>
-    <th>等级</th>
-    <? if(有此权限('查看用户')) { ?><th class=admin>IP</th><? } ?>
-    <? if(有此权限('修改用户')) { ?><th class=admin>操作</th><? } ?>
+    <th width='40px'>阅读</th>
+    <th width='120px'>分组</th>
+    <th width='40px'>通过</th>
+    <th width='40px'>通过率</th>
+    <th width='40px'>等级</th>
+    <? if(有此权限('查看用户')) { ?><th class='admin' width='100px'>IP</th><? } ?>
+    <? if(有此权限('修改用户')) { ?><th class='admin' width='100px'>操作</th><? } ?>
   </tr>
 </thead>
 <?php
@@ -148,11 +134,11 @@ function okdel(name) {
         $d=$p->rtnrlt($i);
 ?>
   <tr>
-    <th><?=$i+1; ?></th>
-    <td align=center><?=$d['uid'] ?></td>
+    <th class='center'><?=$i+1?></th>
+    <td><?=$d['uid'] ?></td>
     <td><a href="../user/detail.php?uid=<?=$d['uid'] ?>" target="_blank"><?=gravatar::showImage($d['email']);?><?=$d['nickname'] ?></a></td>
     <? if(有此权限('查看用户')) { ?><td class=admin align=center><?=$d['realname'] ?></td><? } ?>
-    <td align=center><?
+    <td><?
     $sql="select privilege.* from privilege where uid={$d['uid']} order by pri asc";
 	$cnt1=$r->dosql($sql);
 	for($i1=0;$i1<$cnt1;$i1++) {
@@ -160,14 +146,13 @@ function okdel(name) {
         echo array_search($e['pri'],$pri) . " ";
     } ?></td>
     <td align=center><?=$d['readforce'] ?></td>
-    <td align=center><?="<a href='?gid={$d[gbelong]}'>{$d['gname']}</a>"; ?></td>
+    <td align=center><?="<a href='?gid={$d['gbelong']}'>{$d['gname']}</a>"; ?></td>
     <td align=center><?=$d['accepted'] ?></td>
     <td align=center><?=@round($d['accepted']/$d['submited']*100,2); ?>%</td>
     <td align=center><?=$d['grade'] ?></td>
     <? if(有此权限('查看用户')) { ?>
     <td class=admin>
-    <a href="../admin/user/loginlog.php?uid=<?=$d['uid'] ?>">记录</a>
-    <?=$d['lastip'] ?>
+    <a href="../admin/user/loginlog.php?uid=<?=$d['uid'] ?>"><?=$d['lastip'] ?></a>
     </td><? } ?>
     <? if(有此权限('修改用户')) { ?><td class=admin align=center>
     <? if(有此权限('修改权限')) { ?>

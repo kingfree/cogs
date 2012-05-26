@@ -26,6 +26,27 @@ body {
     font-size: 200%;
 }
 
+.ok {
+    color: Green;
+}
+
+.no {
+    color: Red;
+}
+
+.todo {
+    color: Green;
+}
+
+.doing {
+    color: Red;
+}
+
+.did {
+    color: Indigo;
+}
+
+
 .center {
     text-align: center;
 }
@@ -44,4 +65,26 @@ th {
 
 .pagination ul {
     background-color: #fff;
+}
+
+.wrap {
+    word-break: break-all;
+    word-wrap: break-all;
+}
+
+.table-form {
+    width: 90%;
+    table-layout: fixed;
+}
+
+#catebar li {
+    height: 30px;
+}
+
+#catebar a {
+    color: #000000;
+}
+
+#catebar a:hover {
+    color: #008000;
 }
