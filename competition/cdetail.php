@@ -48,22 +48,19 @@ if ($cnt) {
 
 <div class='container-fluid'>
 <div class='span4'>
-<table id="cprobinfo" class='table table-condensed'>
-<tr><th width=60px>当前比赛</th>
-<td><b><?php echo $e['cname']; ?></b></td></tr>
-<tr><th>比赛状态</th>
-<td><?php
-if (time()>$e[endtime]) echo "已结束"; else
-if (time()<$e[endtime] && time()>$e[starttime]) echo "正在进行"; else
+<div class='well'>
+<ul class='nav nav-list'>
+<li class='nav-header'>比赛：<?=$e['cname']?></li>
+<li class=''><?php echo nl2br(sp2n(htmlspecialchars($e['intro']))) ?></li>
+<li class=''>比赛状态：<?php
+if (time()>$e['endtime']) echo "<span class='did'>已结束</span>"; else
+if (time()<$e['endtime'] && time()>$e['starttime']) echo "<span class='doing'>正在进行</span>"; else
 echo "还未开始"; 
-?></td></tr>
-<tr><th>开始时间</th>
-<td><?php echo date("Y-m-d H:i:s",$e[starttime]) ?></td></tr>
-<tr><th>结束时间</th>
-<td><?php echo date("Y-m-d H:i:s",$e[endtime]) ?></td></tr>
-<tr><th>场次介绍</th>
-<td><?php echo nl2br(sp2n(htmlspecialchars($e[intro]))) ?></td></tr>
-</table>
+?></li>
+<li class=''>开始时间：<?=date("Y-m-d H:i:s",$e['starttime']) ?></li>
+<li class=''>结束时间：<?=date("Y-m-d H:i:s",$e['endtime']) ?></li>
+</ul>
+</div>
 <table id="probinfo" class='table table-condensed'>
 <tr><th width=60px>题目名称</th>
 <td><b><?php echo $d['probname']; ?></b>
@@ -139,7 +136,9 @@ if($cnt) {
 <?  } ?>
 </ul>
 </div>
+<div class='meng'>
 <?=$d['detail']?>
+</div>
 </div>
 </div>
 <?php

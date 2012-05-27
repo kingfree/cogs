@@ -1,6 +1,9 @@
 <?php
 require_once("../include/stdhead.php");
 gethead(1,"sess","控制面板");
+
+include_once("editpwd.php");
+
 ?>
 
 <?php
@@ -9,26 +12,22 @@ $sql="select * from userinfo where uid={$_SESSION[ID]}";
 $cnt=$p->dosql($sql);
 $d=$p->rtnrlt(0);
 ?>
-<form method="post" action="doedit.php?uid=<?=$_SESSION[ID] ?>" enctype="multipart/form-data">
-<table id="userpanel">
+<form method="post" action="doedit.php?uid=<?=$_SESSION[ID] ?>" enctype="multipart/form-data" class='form-inline' >
+<input name="action" type="hidden" value="edit" />
+<input name="uid" type="hidden" value="<?=$d['uid']?>" />
+<table id="userpanel" class='table-form'>
   <tr>
-    <th>用户编号</th>
+    <th width='80px'>用户编号</th>
     <td><?=$d['uid'] ?></td>
-    <th>用户头像</th>
+    <th width='300px'>用户头像</th>
   </tr>
   <tr>
     <th>用户名称</th>
     <td><?=gravatar::showImage($d['email']);?><?=$d['usr'] ?></td>
-    <td rowspan=7 align=center>
+    <td rowspan='8' class='center'>
     <?=gravatar::showImage($d['email'], 200);?><br />
-    <a href="http://cn.gravatar.com" target=_blank >上传头像</a>
-    <a href="dodelimg.php?email=<?=md5($d['email'])?>">清空头像缓存</a><br />
     <div>
-      <input type="submit" name="Submit" style="font-size:200%;" value="修改" />
-      <input name="action" type="hidden" id="action" value="edit" />
-      <input name="uid" type="hidden" id="uid" value="<?=$d['uid']?>" />
     </div>
-    <a class=admin href="editpwd.php">修改密码</a>
     </td>
   </tr>
   <tr>
@@ -50,12 +49,21 @@ $d=$p->rtnrlt(0);
     </td>
   </tr>
   <tr>
-    <th>个人介绍</th>
-    <td><textarea name="memo" cols="60" rows="8" ><?=$d['memo'] ?> </textarea></td>
-</tr>
-  <tr>
     <th>背景图片</th>
-    <td><input type="file" name="file"/> 在此选择系统背景图片，请手动清除浏览器缓存</td>
+    <td><input type="file" name="file" /> 在此选择系统背景图片，请手动清除浏览器缓存</td>
+  </tr>
+  <tr>
+    <th>个人介绍</th>
+    <td><textarea name="memo" class='span8' ><?=$d['memo'] ?> </textarea></td>
+  </tr>
+  <tr>
+    <th></th>
+    <td>
+    <a class='btn' href="#editpwd" data-toggle='modal'>修改密码</a>
+    <button type="submit" class='btn btn-primary'>确认以上修改</button>
+    <a href="dodelimg.php?email=<?=md5($d['email'])?>" class='btn pull-right'>重建头像缓存</a>
+    <a href="http://cn.gravatar.com" target='_blank' class='btn pull-right' title='Gravatar - 全球公认的头像' rel='popover' data-content='<p class="alert"><span class="label label-warning">注意</span>此网站在中国大陆访问可能会出现问题，请自行想办法解决。</p><p>首先点此按钮进入 Gravatar 网站，点击上方下滑菜单中的注册，输入你的电子邮件地址（对，就是你在 COGS 使用的邮箱），点击注册后会想你邮箱中发送一封验证邮件，以此连接验证身份后可在网站注册用户。</p><p class="alert alert-info">上传头像并裁剪后会有评级系统，你只需要选择<span class="badge badge-info">G(普通级)</span>即可。</p>'>上传头像</a>
+    </td>
   </tr>
 </table>
 </form>

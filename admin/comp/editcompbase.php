@@ -15,7 +15,7 @@ if ($_GET[action]=='edit') {
 	$pbs=array_flip($pbs);
 }
 ?>
-<form id="form1" name="form1" method="post" action="doeditcompbase.php?action=<?=$_GET[action] ?>&cbid=<?=$_GET[cbid]; ?>">
+<form method="post" action="doeditcompbase.php?action=<?=$_GET[action] ?>&cbid=<?=$_GET[cbid]; ?>" class='form-inline'>
 <table>
   <tr>
     <td>CBID</td>
@@ -24,29 +24,28 @@ if ($_GET[action]=='edit') {
   <tr>
     <td>比赛名</td>
     <td>
-      <input name="cname" type="text" class="InputBox" id="cname" value="<?=$d[cname] ?>" /></td>
+      <input name="cname" type="text" value="<?=$d[cname] ?>" /></td>
   </tr>
   <tr>
     <td>关联题目</td>
     <td>
-	<table border="1">
-	<tr>
+	<ul class='nav nav-pills'>
 	<?php
 	$sql="select pid,probname from problem order by pid";
 	$cnt=$p->dosql($sql);
 	for ($i=0;$i<$cnt;$i++) {
 		$d=$p->rtnrlt($i);
-        if($i % 6 == 0) echo "</tr><tr>";
 ?>
-<td><input name="cons[<?=$d[pid]?>]" type="checkbox" id="cons[<?=$d[pid]?>]" value="<?=$d[pid]?>" <?php if (is_numeric($pbs[$d[pid]])) echo 'checked="checked"' ?> /><label for="cons[<?=$d[pid]?>]"><?=$d[pid]?>.<a href="../../problem/problem.php?pid=<?=$d[pid] ?>" target="_blank"><?=$d[probname] ?></a></label></td>
+<li><input name="cons[<?=$d[pid]?>]" type="checkbox" id="cons[<?=$d[pid]?>]" value="<?=$d[pid]?>" <?php if (is_numeric($pbs[$d[pid]])) echo 'checked="checked"' ?> /><label for="cons[<?=$d[pid]?>]"><?=$d[pid]?>.<a href="../../problem/problem.php?pid=<?=$d[pid] ?>" target="_blank"><?=$d['probname'] ?></a></label></li>
 <?php
 	}
 ?>
-	</tr>
-</table></td>
+</ul></td>
   </tr>
+<tr><td></td><td>
+<button type="submit" class='btn btn-primary'>提交修改</button>
+</td></tr>
 </table>
-  <input type="submit" name="Submit" value="提交修改" />
 </form>
 
 <?php

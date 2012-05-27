@@ -24,43 +24,50 @@ if(time() < $d['endtime'] && !$_SESSION['admin'])
 } else 异常("提交记录不存在");
 
 ?>
-<table id="submitdetail">
+<div class='container-fluid'>
+<div class='span3'>
+<table id="submitdetail" class='fixed'>
   <tr>
-    <th width="60px">CSID</th>
-    <td width="100px"><?=$_GET['csid']; ?></td>
-    <th valign="top">代码语言：<?=$STR[lang][$d['lang']] ?> </th>
-  </tr>
+    <th width="60px">比赛</th>
+    <td><?=$_GET['csid']?></td>
   <tr>
     <th>题目名称</th>
-    <td><?=$d[probname]; ?></td>
-<?  if($d['lang']==0) $langstr="pascal";
-else if($d['lang']==1) $langstr="c";
-else if($d['lang']==2) $langstr="cpp"; ?>
-<td rowspan=7>
-<pre class="brush: <?=$langstr?>;"><?=htmlspecialchars($code)?></pre>
-</td>
-  </tr>
+    <td><a href="problem.php?pid=<?php echo $d['pid']; ?>" target="_blank"><?php echo $d['probname']; ?></a></td>
+</tr>
   <tr>
     <th>用户昵称</th>
-    <td><?="<a href='../user/detail.php?uid={$d[uid]}' target='_blank'>{$d['nickname']}</a>"; ?></td>
-  </tr>
-  <tr>
-    <th>真实姓名</th>
-    <td><?="<a href='../user/detail.php?uid={$d[uid]}' target='_blank'>{$d['realname']}</a>"; ?></td>
+    <td><a href="../user/detail.php?uid=<?php echo $d['uid']; ?>" target="_blank"><?php echo $d['nickname']; ?></a></td>
   </tr>
   <tr>
     <th>最终得分</th>
-    <td><?=$d['score'] ?></td>
+    <td><?php echo $d['score'] ?></td>
   </tr>
   <tr>
     <th>评测结果</th>
-    <td><pre style='margin:0;'><?php 评测结果($d['result']) ?></pre></td>
+    <td class='wrap'><?php 评测结果($d['result']) ?></td>
   </tr>
-  <tr valign=top>
+  <tr>
+    <th>代码语言</th>
+    <td><?=$STR['lang'][$d['lang']]?></td>
+  </tr>
+  <tr>
+    <th>是否通过</th>
+    <td><?php echo $d['accepted']?"<span class='ok'>通过":"<span class='no'>未通过"; ?></span></td>
+  </tr>
+  <tr>
     <th>提交时间</th>
-    <td><?=date('Y-m-d H:i:s',$d[subtime]); ?></td>
+    <td><?php echo date('Y-m-d H:i:s',$d[subtime]); ?></td>
   </tr>
 </table>
+</div>
+<div class='span9'>
+<?    if($d['lang']==0) $langstr="pascal";
+    else if($d['lang']==1) $langstr="c";
+    else if($d['lang']==2) $langstr="cpp";
+?>
+<pre class="brush: <?=$langstr?>;"><?=htmlspecialchars($code)?></pre>
+</div>
+</div>
 
 <script type="text/javascript">SyntaxHighlighter.all();</script>
 

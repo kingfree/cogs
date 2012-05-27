@@ -4,7 +4,6 @@ gethead(1,"advadmin","修改参数");
 $LIB->editor("editor_id");
 ?>
 
-<a href="../settings.php?settings=settings">参数设置</a>
 <?php
 $p=new DataAccess();
 
@@ -18,29 +17,32 @@ $ssid=$d['ssid'];
 $sname=$d['name'];
 
 ?>
-<p><a href="editkey.php?sname=<?php echo $sname ?>&method=html">HTML视图</a>
-<a href="editkey.php?sname=<?php echo $sname ?>&method=text">文本视图</a></p>
-<form id="form1" name="form1" method="post" action="doeditkey.php?ssid=<?php echo $ssid ?>">
+<ul class='nav nav-tabs' id='view'>
+<li class='<?if($_GET['method']=='html') echo "active";?>'><a href="editkey.php?sname=<?php echo $sname ?>&method=html">HTML视图</a></li>
+<li class='<?if($_GET['method']=='text') echo "active";?>'><a href="editkey.php?sname=<?php echo $sname ?>&method=text">文本视图</a></li>
+</ul>
+<form method="post" action="doeditkey.php?ssid=<?=$ssid?>" class='form-inline'>
 <table>
-  <tr>
-    <th width="60px">参数</th>
-    <td><b><?php echo $sname; ?></b></td>
-  </tr>
-  <tr>
-    <th>值</th>
-    <td>
+<tr>
+<th width="60px">参数</th>
+<td><code><?php echo $sname; ?></code></td>
+</tr>
+<tr>
+<th>值</th>
+<td>
 <?php if ($_GET['method']=='text') { ?>
-<textarea name="value" style="width:90%; height:200px;"><?php echo $d['value'] ?></textarea>
+<textarea name="value" class='span10'><?php echo $d['value'] ?></textarea>
 <?php } else if($_GET['method']=='html') { ?>
-<textarea id="editor_id" name="value" style="width:90%; height:200px;"><?=$d['value']?></textarea>
+<textarea id="editor_id" name="value" class='span10'><?=$d['value']?></textarea>
 <?php } ?>
-
 </td>
-  </tr>
+</tr>
+<tr><td></td><td>
+<button type="submit" class='btn btn-primary'>提交修改</button>
+</td></tr>
 </table>
-  <input type="submit" name="Submit" value="提交修改"  class="Button" />
 </form>
 
 <?php
-	include_once("../../include/stdtail.php");
+include_once("../../include/stdtail.php");
 ?>

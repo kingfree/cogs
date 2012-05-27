@@ -17,11 +17,11 @@ $q=new DataAccess();
 $pbs=explode(":",$d['contains']);
 ?>
 
-<table id="contest_report">
+<table id="contest_report" class='table table-condensed fiexd'>
   <tr>
-    <th width="40px"><a href="javascript:qsort('rank')">名次</a></th>
+    <th width="30px"><a href="javascript:qsort('rank')">名次</a></th>
     <th width="100px">用户</th>
-    <? if(有此权限('查看用户')) { ?><th width="50px" class=admin>姓名</th><? } ?>
+    <? if(有此权限('查看用户')) { ?><th width="40px" class=admin>姓名</th><? } ?>
 <?php
     $cnt_prob=0;
     foreach($pbs as $k=>$v) {

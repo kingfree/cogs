@@ -16,15 +16,15 @@ if (restore) selObj.selectedIndex=0;
 }
 </script>
 
+<?php if(有此权限('修改题目')) { ?>
+<a href="../admin/problem/editprob.php?action=add" class="btn btn-info pull-left">添加新题目</a>
+<?php } ?>
 <?php if ($_GET['caid']!="") {
     $sql="select * from category where caid={$_GET['caid']}";
     $cnt=$p->dosql($sql);
     $d=$p->rtnrlt(0);
 ?>
 
-<?php if(有此权限('修改题目')) { ?>
-<a href="../admin/problem/editprob.php?action=add" class="btn btn-info">添加新题目</a>
-<?php } ?>
 <span id="cate_detail">当前分类：<span class="big"><?php echo $d['cname'] ?></span>（<?php echo nl2br(sp2n(htmlspecialchars($d['memo']))) ?>）</span>
 <?php } ?>
 
@@ -35,10 +35,6 @@ $sql.=",tag where tag.pid=problem.pid and tag.caid={$_GET['caid']}";
 else
 $sql .= " where problem.readforce>=0";
 
-if ($_GET['key'] == "随机题目") {
-    echo '<script>document.location="'.路径("problem/random.php").'"</script>';
-    exit;
-}
 if ($_GET['key']!="")
 $sql.=" and (problem.probname like '%{$_GET[key]}%' or problem.pid ='{$_GET[key]}' or problem.filename like '%{$_GET[key]}%')";
 
@@ -65,7 +61,7 @@ if(!$_GET['page']) {
 <form method="get" action="" class='center'>
 <a href="random.php" title="随机选择一道你没有通过的题目" class='btn' >随机题目</a>
 <input name="caid" type="hidden" value="<?=$_GET['caid']?>" />
-  <input name="order" type="hidden" value="<?=$_GET['order']=='asc'?'desc':'asc'?>" />
+<input name="order" type="hidden" value="<?=$_GET['order']=='asc'?'desc':'asc'?>" />
 难度 
 <select name="diff" onchange="MM_jumpMenu_2('parent',this,0)" class='input-medium'>
 <option value="" selected="selected" <?php if ($_GET['diff']=="") {?> selected="selected"<?php } ?> >全部</option>
@@ -117,23 +113,23 @@ if (!$err) for ($i=$st;$i<$cnt && $i<$st+$SET['style_pagesize'] ;$i++) {
     if ($d['readforce']>$_SESSION['readforce'] && !有此权限('查看题目')) continue;
 ?>
 <tr>
-<td align=center><?php echo $d['pid'] ?></td>
+<td><?php echo $d['pid'] ?></td>
 <td><? 是否通过($d['pid'], $q);?><b><a href="problem.php?pid=<?=$d['pid'] ?>"><?=$d['probname'] ?></a></b></td>
-<td align=center><?php echo $d['filename']; ?></td>
-<td align=center><?php echo $d['timelimit']/1000 . " s"; ?></td>
-<td align=center><?php echo $d['memorylimit'] . " MiB"; ?></td>
+<td><code><?php echo $d['filename']; ?></code></td>
+<td><?php echo $d['timelimit']/1000 . " s"; ?></td>
+<td><?php echo $d['memorylimit'] . " MiB"; ?></td>
 <td><?php echo 难度($d['difficulty']); ?></td>
-<td align=center><?php echo $d['acceptcnt']; ?></td>
-<td align=center><?php echo $d['submitcnt']; ?></td>
-<td align=center><?php echo @round($d['acceptcnt']/$d['submitcnt']*100,2); ?>%</td>
+<td><?php echo $d['acceptcnt']; ?></td>
+<td><?php echo $d['submitcnt']; ?></td>
+<td><?php echo @round($d['acceptcnt']/$d['submitcnt']*100,2); ?>%</td>
 <?php if(有此权限('查看题目')) { ?>
-<td class=admin align=center>
-<?php if ($d['submitable']) echo "<span class=ok>可提交</span>"; else echo "<span class=no>不可提交</span>"; ?>
+<td class=admin>
+<?php if ($d['submitable']) echo "<span class='label label-success'>可提交</span>"; else echo "<span class='label label-important'>不可提交</span>"; ?>
 </td>
-<td class=admin align=center><?=$d['readforce']?></td>
+<td class=admin><?=$d['readforce']?></td>
 <?php } ?>
 <?php if(有此权限('修改题目')) { ?>
-<td class=admin align=center><a href="../admin/problem/editprob.php?action=edit&pid=<?=$d['pid']; ?>">修改</a></td>
+<td class=admin><a href="../admin/problem/editprob.php?action=edit&pid=<?=$d['pid']; ?>">修改</a></td>
 <?php } ?>
 </tr>
 <?php } ?>

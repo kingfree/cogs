@@ -50,30 +50,6 @@ $STR[err][pwdans]="密码提示问题答案错误";
 $STR[err][unsubmitable]="该题不可提交";
 $STR[err][comptime]="场次不存在";
 
-$STR[admin][env]="环境变量SET";
-$STR[admin][user]="用户列表";
-$STR[admin][group]="用户组列表";
-$STR[admin][prob]="题目列表";
-$STR[admin][cate]="分类列表";
-$STR[admin][expe]="实验列表";
-$STR[admin][submit]="提交记录列表";
-$STR[admin][comments]="评论列表";
-$STR[admin][backindex]="返回管理首页";
-$STR[admin][data]="数据库管理";
-$STR[admin][resetdata]="重置数据库";
-$STR[admin]['phpinfo']="PHP信息";
-$STR[admin][backupdata]="备份数据库";
-$STR[admin][restoredata]="恢复数据库";
-$STR[admin][backupingdata]="备份数据库";
-$STR[admin][terminal]="PHP终端访问";
-$STR[admin][testdata]="测试数据管理";
-$STR[admin][serverinfo]="服务器信息";
-
-$STR[adminn][-1]="未验证用户";
-$STR[adminn][0]="注册用户";
-$STR[adminn][1]="<span style='color:#66FFFF; background-color:#990000'>管理员</span>";
-$STR[adminn][2]="<span style='color:#FFFF00; background-color:#000000'>高级管理员</span>";
-
 $STR[reg][reginfo]="不得提交有害代码，不得以任何形式对系统进行破坏！";
 $STR[reg][user]="用户名(4-24位数字或英文字母)";
 $STR[reg][password]="密码(4-24位数字或英文字母)";

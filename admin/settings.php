@@ -51,9 +51,6 @@ switch ($_REQUEST['settings'])
 }
 ?>
 
-<div align=center style="background : #9fd7ff;">
-<a href="./"><?php echo $STR[admin][backindex]; ?></a>
-</div>
 <?php
 switch ($_REQUEST['settings'])
 {

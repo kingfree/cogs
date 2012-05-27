@@ -6,7 +6,7 @@ $q=new DataAccess();
 ?>
 
 <?php if(有此权限('修改页面')) { ?>
-<a href="editpage.php?action=add" class="btn btn-info">添加新页面</a>
+<a href="editpage.php?action=add" class="btn btn-info pull-left">添加新页面</a>
 <?php } ?>
 
 <?php

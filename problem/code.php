@@ -33,10 +33,6 @@ if($cnt) {
     <th width="60px">记录编号</th>
     <td><?=$d['sid']?></td>
   <tr>
-    <th>代码语言</th>
-    <td><?=$STR['lang'][$d['lang']]?></td>
-  </tr>
-  <tr>
     <th>题目名称</th>
     <td><a href="problem.php?pid=<?php echo $d['pid']; ?>" target="_blank"><?php echo $d['probname']; ?></a></td>
 </tr>
@@ -55,6 +51,10 @@ if($cnt) {
   <tr>
     <th>是否通过</th>
     <td><?php echo $d['accepted']?"<span class='ok'>通过":"<span class='no'>未通过"; ?></span></td>
+  </tr>
+  <tr>
+    <th>代码语言</th>
+    <td><?=$STR['lang'][$d['lang']]?></td>
   </tr>
   <tr>
     <th>运行时间</th>

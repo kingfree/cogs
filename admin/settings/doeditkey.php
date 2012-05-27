@@ -1,9 +1,11 @@
 <?php
 require_once("../../include/stdhead.php");
-gethead(0,"admin","");
+gethead(8,"admin","");
 
 $p=new DataAccess();
 $sql="update settings set value='{$_POST[value]}' where ssid={$_REQUEST[ssid]}";
 $p->dosql($sql);
-echo '<script>document.location="../../refresh.php?id=18"</script>';
+
+提示("修改参数<code>{$_REQUEST[ssid]}</code>成功！",取路径("admin/settings.php?settings=rank"));
+
 ?>

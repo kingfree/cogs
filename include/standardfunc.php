@@ -231,7 +231,7 @@ function 评测信息($str) {
         else if($str[$i] == 'D') $res .= "<span style='color:#fff;background-color:#000'>没有测试点数据</span>";
         else if($str[$i] == 'N') $res .= "<span style='color:#FFFFFF;'>没有源代码</span>";
         else if($str[$i] == 'P') $res .= "<span style='color:#B8860B;'>答案部分正确</span>";
-    echo $res;
+    echo "<span class='judge'>".$res."</span>";
 }
 function 评测信息a($str) {
     $res = "";
@@ -332,27 +332,50 @@ function 分页($total,$page,$url='',$page_size='',$max_length='') {
     echo $page_table;
 }
 
+function i异常($msg = "错误", $id = "") {
+    gethead(8,"","");
+    异常($msg, $id);
+}
+
 function 异常($msg = "错误", $id = "") {
     global $SET;
     if($id == "") $id = base64_encode("/".$SET['global_root']);
     $id = base64_decode($id);
-    echo '<div id="dialog"><div id="error_title">错误</div>';
-    echo '<div id="dialog_text">'.$msg.'</div>';
-    echo '<div id="dialog_button" onclick="url.go('.$id.');">确定</div></div>';
-    echo '<meta http-equiv="refresh" content="'.$SET['style_jumptime'].'; URL='.$id.'" >';
+    HTML("<div id='dialog' class='modal fade in'>");
+    HTML("<div id='dialog_title' class='modal-header'>");
+    HTML("<span class='label label-important'>错误</span>");
+    HTML("</div>");
+    HTML("<div id='dialog_text' class='modal-body alert alert-error'>");
+    HTML($msg);
+    HTML("</div>");
+    HTML("</div>");
+    HTML("<meta http-equiv='refresh' content='{$SET['style_jumptime']}; URL={$id}'>");
     exit;
+}
+
+function i提示($msg = "提示", $id = "") {
+    gethead(8,"","");
+    提示($msg, $id);
+}
+
+function 取路径($path) {
+    global $SET;
+    return base64_encode("/{$SET['global_root']}$path");
 }
 
 function 提示($msg = "提示", $id = "") {
     global $SET;
     if($id == "") $id = base64_encode("/".$SET['global_root']);
-    else $id = base64_decode($id);
-    echo $id;
-    echo '<div id="dialog"><div id="dialog_title">提示</div>';
-    echo '<div id="dialog_text">'.$msg.'</div>';
-    echo '<div id="dialog_button" onclick="url.go('.$id.');">确定</div></div>';
-    //echo '<meta http-equiv="refresh" content="'.$SET['style_jumptime'].'; URL='.$id.'" >';
-    exit;
+    $id = base64_decode($id);
+    HTML("<div id='dialog' class='modal fade in'>");
+    HTML("<div id='dialog_title' class='modal-header'>");
+    HTML("<span class='label label-success'>提示</span>");
+    HTML("</div>");
+    HTML("<div id='dialog_text' class='modal-body alert alert-success'>");
+    HTML($msg);
+    HTML("</div>");
+    HTML("</div>");
+    HTML("<meta http-equiv='refresh' content='{$SET['style_jumptime']}; URL={$id}'>");
 }
 
 function 背景图片($uid=0) {

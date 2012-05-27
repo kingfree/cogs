@@ -11,9 +11,9 @@ $cnt=$p->dosql($sql);
 if ($cnt) {
 	$d=$p->rtnrlt(0);
 ?>
-<table id="userdetail">
+<table id="userdetail" class='table table-condensed'>
   <tr>
-<th width=100px>用户编号</th>
+<th>用户编号</th>
 <td><?=$d['uid'] ?></td>
 <th>头像</th>
   </tr>

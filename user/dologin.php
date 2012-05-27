@@ -8,7 +8,7 @@ if ($pwd == "") $pwd = $_COOKIE['cojs_login'];
 $sql="select * from userinfo where usr='".$uid."'";
 $cnt=$p->dosql($sql);
 if ($cnt==0)
-    header("location: ../error.php?id=2");
+    i异常("用户不存在！");
 else {
     $d=$p->rtnrlt(0);
     if ($pwd==$d['pwdhash'] || (encode($_REQUEST['password'])==$d['pwdhash'])) {
@@ -24,9 +24,8 @@ else {
         }
         if (!$_REQUEST['from'])
             $_REQUEST['from']=base64_encode("/".$SET['global_root']);
-        header("location: ../refresh.php?id=2&go={$_REQUEST['from']}");
-    } else {
-        header("location: ../error.php?id=3");
-    }
+        i提示("用户 {$d['nickname']} 登录成功！", $_REQUEST['from']);
+    } else
+        i异常("密码错误，登录失败！");
 }
 ?>

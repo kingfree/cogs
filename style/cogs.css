@@ -73,7 +73,7 @@ th {
 }
 
 .table-form {
-    width: 90%;
+    width: 95%;
     table-layout: fixed;
 }
 
@@ -87,4 +87,12 @@ th {
 
 #catebar a:hover {
     color: #008000;
+}
+
+.judge {
+    font-family: monospace;
+}
+
+.meng {
+    background-color: rgba(255,255,255,0.6);
 }

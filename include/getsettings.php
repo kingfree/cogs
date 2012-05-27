@@ -12,5 +12,5 @@ $SET['global_root']=$cfg['dir_root'];
 $SET['base']=$_SERVER['DOCUMENT_ROOT'].$SET['global_root'];
 $SET['URI']=base64_encode($_SERVER['REQUEST_URI']);
 
-$cfg['Version']='2.2.0.1';
+$cfg['Version']='2.4.0.4';
 ?>

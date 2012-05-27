@@ -52,77 +52,60 @@ $d['detail']="请在此键入题目内容";
 else echo '<script>document.location="../../error.php?id=12"</script>';
 }
 ?>
-<form id="form1" name="form1" action="doeditprob.php" method="post" enctype="multipart/form-data">
-<table width="100%" border="1" bordercolor=#000000 cellspacing=0 cellpadding=4>
+<form action="doeditprob.php" method="post" enctype="multipart/form-data" class='form-inline'>
+<table class='table-form fixed'>
 <tr>
-<td width="80px" valign="top" scope="col">PID</td>
-<td scope="col"><?php echo $d[pid] ?>
+<th width="80px">PID</th>
+<td width="280px"><?php echo $d['pid'] ?>
 <input name="pid" type="hidden" id="pid" value="<?php echo $d['pid'] ?>" /></td>
-<th valign="top" scope="col">题目分类</th>
+<th>题目分类</th>
 </tr>
 <tr>
-<td valign="top">题目名称</td>
-<td><input name="probname" type="text" id="probname" onchange="checkprobname()" value="<?php echo $d[probname] ?>" /><span id="msg1"></span></td>
-<td rowspan=9 valign="top">
+<th>题目名称</th>
+<td><input name="probname" type="text" id="probname" onchange="checkprobname()" value="<?php echo $d['probname'] ?>" /><span id="msg1"></span></td>
+<td rowspan='9' valign="top">
 <?php
-if ($_GET[pid]) {
+if ($_GET['pid']) {
     $sql="select caid from tag where pid={$_GET[pid]}";
     $cnt=$p->dosql($sql);
     for ($i=0;$i<=$cnt-1;$i++) {
         $f=$p->rtnrlt($i);
-        $hash[$f[caid]]=true;
+        $hash[$f['caid']]=true;
     }
 }
 $sql="select * from category order by cname";
 $cnt=$p->dosql($sql);
-if ($cnt) {
-    $table_width=5;
+if($cnt) {
 ?>
-    <table border="1" id="bc">
-    <tr>
-    <?php
-    $last=0;
+<ul class='nav nav-pills well'>
+<?php
+$last=0;
 $linecnt=0;
 $line=1;
 for ($i=0;$i<$cnt;$i++) {
 $f=$p->rtnrlt($i);
 $last=$f['pid'];
-$linecnt++;
 ?>
-<td><input name="cate[<?php echo $f[caid] ?>]" type="hidden" value="0" />
-<input name="cate[<?php echo $f[caid] ?>]" type="checkbox" id="cate[<?=$f[caid]?>]" value="1" 
-<?php if ($hash[$f[caid]]) echo 'checked="checked"';?>  /><label for="cate[<?=$f[caid]?>]"> <?php echo $f['cname'] ?></label></td>
-<?php
-if ($linecnt==$table_width) {
-    $linecnt=0;
-    $line++;
-    echo "</tr></tr>";
-}
-}
-if ($linecnt>0 && $line>1)
-    for ($i=$linecnt;$i<$table_width;$i++)
-    echo "<td>&nbsp;</td>";
-?>
-</tr>
-</table>
-<?php
-}
-?>
+<li><input name="cate[<?=$f['caid']?>]" type="hidden" value="0" />
+<input name="cate[<?=$f['caid']?>]" type="checkbox" id="cate[<?=$f[caid]?>]" value="1" <?php if ($hash[$f['caid']]) echo 'checked="checked"';?> /><label for="cate[<?=$f['caid']?>]"> <?=$f['cname']?>&nbsp;</label></li>
+<? } ?>
+</ul>
+<? } ?>
 </td></tr>
 <tr>
-<td valign="top">文件名称</td>
+<th>文件名称</th>
 <td><input name="filename" type="text" id="filename" onchange="checkfilename()" value="<?php echo $d[filename] ?>" /><span id="msg2"></span></td>
 </tr>
 <tr>
-<td valign="top">阅读权限</td>
+<th>阅读权限</th>
 <td><input name="readforce" type="number" id="readforce" value="<?php echo $d['readforce'] ?>" /></td>
 </tr>
 <tr>
-<td valign="top">可提交</td>
+<th>可否提交</th>
 <td><input name="submitable" type="checkbox" id="submitable" value="1" <?php if ($d['submitable']) echo 'checked="checked"'; ?> /></td>
 </tr>
 <tr>
-<td valign="top">对比方式</td>
+<th>对比方式</th>
 <td><select name="plugin" id="plugin">
 <option value="-1"<?php if ($d['plugin']==-1){ ?> selected="selected"<?php } ?>>交互式</option>
 <option value="1"<?php if ($d['plugin']==1){ ?> selected="selected"<?php } ?>>简单对比</option>
@@ -131,19 +114,19 @@ if ($linecnt>0 && $line>1)
 </select>                </td>
 </tr>
 <tr>
-<td valign="top">时间限制</td>
+<th>时间限制</th>
 <td><input name="timelimit" type="number" id="timelimit" value="<?php echo $d[timelimit] ?>" /> ms</td>
 </tr>
 <tr>
-<td valign="top">内存限制</td>
+<th>内存限制</th>
 <td><input name="memorylimit" type="number" id="memorylimit" value="<?php echo $d['memorylimit'] ?>" /> MiB</td>
 </tr>
 <tr>
-<td valign="top">难度等级</td>
+<th>难度等级</th>
 <td><input name="difficulty" type="number" id="difficulty" value="<?php echo $d['difficulty'] ?>" /></td>
 </tr>
 <tr>
-<td valign="top">开放分组</td>
+<th>开放分组</th>
 <td><select name="group" id="group">
 <?php
 $sql="select * from groups order by gname";
@@ -157,21 +140,21 @@ $e=$q->rtnrlt($j);
 </select></td>
 </tr>
 <tr>
-<td valign="top">测试点数</td>
+<th>测试点数</th>
 <td><input name="datacnt" type="number" id="datacnt" value="<?php echo $d[datacnt] ?>" /></td>
-<td class=admin>提交修改：
-<input type="submit" value="单击此处提交对该题目的修改" />
+<td>
+<button type="submit" class='btn btn-primary'>单击此处提交对该题目的修改</button>
 <input name="action" type="hidden" id="action" value="<?php echo $_GET[action] ?>" />
 </td>
-<tr><td>测试数据</td>
-<td colspan=2>
+<tr><th>测试数据</th>
+<td colspan='2'>
 <input type="file" name="datafile" id="datafile" />
 打包zip文件包含一个以该题目*命名的文件夹，其中为*#.in和*#.ans数据，*.cc为评测插件
 </td></tr>
 </tr>
 <tr>
-<td valign="top">题目内容</td>
-<td colspan=2>
+<th valign="top">题目内容</th>
+<td colspan='2'>
 <textarea id="detail" name="detail" style="width:100%; height:400px;"><?=$d['detail']?></textarea>
 </td>
 </tr>

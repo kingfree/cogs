@@ -20,14 +20,10 @@ $cnt=$p->dosql($sql);
 $d=$p->rtnrlt(0);
 
 if($cnt) {
-    if ($d[readforce]>$_SESSION[readforce]) {
-        echo '<script>document.location="../error.php?id=17"</script>';
-        exit;
-    }
-    if (!$d[submitable] && !有此权限('查看题目')) {
-        echo '<script>document.location="../error.php?id=18"</script>';
-        exit;
-    }
+    if ($d[readforce]>$_SESSION[readforce]) 
+        异常("没有阅读权限！", 取路径("problem/index.php"));
+    if (!$d[submitable] && !有此权限('查看题目')) 
+        异常("该题目不可提交！", 取路径("problem/index.php"));
     $subgroup=$LIB->getsubgroup($q,$d['gid']);
     $subgroup[0]=$d['gid'];
     $promise=false;
@@ -38,10 +34,10 @@ if($cnt) {
         }
     }
     if (!$promise && !有此权限('查看题目'))
-        exit;
+        异常("没有阅读权限！", 取路径("problem/index.php"));
     $pid=$d[pid];
 } else {
-    echo '<script>document.location="../error.php?id=11"</script>';
+    异常("无此题目！！", 取路径("problem/index.php"));
 }
 ?>
 
@@ -63,14 +59,14 @@ if($cnt) {
 <tr><th>对比方式</th>
 <td><?=$STR['plugin'][$d['plugin']]; ?></td></tr>
 <tr><th>测试点数</th>
-<td><?=$d['datacnt']; ?> <?=$d['submitable']?"<span class=ok>可提交":"<span class=no>不可提交"?></span></td></tr>
+<td><span class='badge badge-<?=$d['submitable']?"success":"important"?>'><?=$d['datacnt']?></span></td></tr>
 <tr>
 <th>添加时间</th>
 <td>
-<?php if(有此权限('修改题目')) { ?>
-<a class=admin href="../admin/problem/editprob.php?action=edit&pid=<?= $d[pid]; ?>">[修改该题]</a>
-<? } ?>
 <?=date('Y-m-d', $d['addtime']) ?>
+<?php if(有此权限('修改题目')) { ?>
+<a href="../admin/problem/editprob.php?action=edit&pid=<?=$d['pid']?>" class='btn btn-info btn-mini pull-right' >修改该题</a>
+<? } ?>
 </td></tr>
 <tr><th>开放分组</th>
 <td><a href="../user/index.php?gid=<?=$d['gid'] ?>" target="_blank">[<?=$d['gname'] ?>]</a></td></tr>
@@ -156,7 +152,7 @@ for ($i=0;$i<$cnt;$i++) {
 ?>
 </table>
 </div>
-<div id="probdetail" class='span8'>
+<div id="probdetail" class='span8 meng'>
 <?=$d['detail']?>
 </div>
 </div>

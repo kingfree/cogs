@@ -6,7 +6,7 @@ $q=new DataAccess();
 ?>
 
 <?php if(有此权限('修改比赛')) { ?>
-<a href="../admin/comp/editcompbase.php?action=add" class="btn btn-info">添加新比赛</a>
+<a href="../admin/comp/editcompbase.php?action=add" class="btn btn-info pull-left">添加新比赛</a>
 <?php } ?>
 <?
 $sql="select comptime.*,compbase.*,userinfo.realname,groups.* from comptime,compbase,userinfo,groups where comptime.cbid=compbase.cbid and userinfo.uid=compbase.ouid and comptime.group=groups.gid order by starttime desc";
