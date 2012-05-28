@@ -77,6 +77,10 @@ class lib {
         global $SET;
         require("tradsimp.inc.php");
     }
+    public function htmldom() {
+        global $SET;
+        require("simple_html_dom.php");
+    }
 }
 
 $Query_Times=0;

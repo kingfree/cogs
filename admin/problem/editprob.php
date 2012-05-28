@@ -2,6 +2,7 @@
 require_once("../../include/stdhead.php");
 gethead(1,"修改题目","修改题目");
 $LIB->editor("detail");
+$LIB->htmldom();
 ?>
 <script>
 function checkprobname(){
@@ -37,7 +38,7 @@ if ($cnt) {
 $d=$p->rtnrlt(0);
 $d['detail'];
 } else {
-if ($_GET[action]=='add') {
+if ($_GET['action']=='add') {
 $d=array();
 $d['submitable']=1;
 $d['datacnt']=10;
@@ -49,9 +50,65 @@ $d['plugin']=1;
 $d['group']=0;
 $d['detail']="请在此键入题目内容";
 }
-else echo '<script>document.location="../../error.php?id=12"</script>';
+if($_GET['oj']=='poj' && $_GET['id']>=1000) {
+    $d=array();
+    $url="http://www.poj.org/problem?id=".$_GET['id']."&lang=zh-CN&change=true";
+    if(get_magic_quotes_gpc()) {
+        $url=stripslashes($url);
+    }
+    $baseurl=substr($url,0,strrpos($url,"/")+1);
+    $html=file_get_html($url);
+    foreach($html->find('img') as $element)
+        $element->src=$baseurl.$element->src;
+
+    $element=$html->find('div[class=ptt]',0);
+    $d['probname']=$element->plaintext;
+    $d['filename']="poj_".$_GET['id'];
+    $d['submitable']=1;
+
+    $element=$html->find('div[class=plm]',0);
+    $tlimit=$element->find('td',0);
+    $tlimit=substr($tlimit->plaintext,11);
+    $tlimit=substr($tlimit,0,strlen($tlimit)-2);
+    $d['timelimit']=(int)$tlimit;
+    $mlimit=$element->find('td',2);
+    $mlimit=substr($mlimit->plaintext,13);
+    $mlimit=substr($mlimit,0,strlen($mlimit)-1);
+    $d['memorylimit']=(int)($mlimit/1024);
+
+    $d['datacnt']=10;
+    $d['difficulty']=2;
+    $d['readforce']=0;
+    $d['plugin']=1;
+    $d['group']=0;
+
+    $d['detail']="";
+    $element=$html->find('div[class=ptx]',0);
+    $d['detail'].="<h3>【题目描述】</h3>".$element->outertext;
+    $element=$html->find('div[class=ptx]',1);
+    $d['detail'].="<h3>【输入格式】</h3>".$element->outertext;
+    $element=$html->find('div[class=ptx]',2);
+    $d['detail'].="<h3>【输出格式】</h3>".$element->outertext;
+    $element=$html->find('pre[class=sio]',0);
+    $d['detail'].="<h3>【样例输入】</h3><pre>".$element->outertext."</pre>";
+    $element=$html->find('pre[class=sio]',1);
+    $d['detail'].="<h3>【样例输出】</h3><pre>".$element->outertext."</pre>";
+    $element=$html->find('div[class=ptx]',3);
+    $d['detail'].="<h3>【提示】</h3>".$element->outertext;
+    $element=$html->find('div[class=ptx]',4);
+    $d['detail'].="<h3>【来源】</h3>".$element->outertext;
+}
+
 }
 ?>
+<form action='' method='get' class='form-inline'>
+从POJ抄题：
+<input name='action' type='hidden' value='add' />
+<input name='oj' type='hidden' value='poj' />
+<input name='id' type='number' value='<?=$_GET['id']?$_GET['id']:1000?>' />
+<button type='submit' class='btn'>载入</button>
+</form>
+
 <form action="doeditprob.php" method="post" enctype="multipart/form-data" class='form-inline'>
 <table class='table-form fixed'>
 <tr>
