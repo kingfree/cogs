@@ -97,6 +97,51 @@ if($_GET['oj']=='poj' && $_GET['id']>=1000) {
     $d['detail'].="<h3>【提示】</h3>".$element->outertext;
     $element=$html->find('div[class=ptx]',4);
     $d['detail'].="<h3>【来源】</h3>".$element->outertext;
+} else if($_GET['oj']=='soj' && $_GET['id']>=1000) {
+    $d=array();
+    $url="http://www.soj.me/show_problem.php?pid=".$_GET['id'];
+    if(get_magic_quotes_gpc()) {
+        $url=stripslashes($url);
+    }
+    $baseurl=substr($url,0,strrpos($url,"/")+1);
+    $html=file_get_html($url);
+    foreach($html->find('img') as $element)
+        $element->src=$baseurl.$element->src;
+
+    $element=$html->find('div[class=cent]',0);
+    $pname=ltrim($element->plaintext);
+    $pname=rtrim($pname);
+    $pname=substr($pname,6);
+    $d['probname']=$pname;
+    $d['filename']="soj_".$_GET['id'];
+    $d['submitable']=1;
+
+    $element=$html->find('div[class=rtbar]',0);
+    $limit=ltrim($element->plaintext);
+    $tlimit=substr($limit,stripos($limit,"Time Limit:")+11);
+    $mlimit=substr($limit,stripos($limit,"Memory Limit:")+13);
+    $tlimit=substr($tlimit,0,stripos($tlimit,"sec"));
+    $mlimit=substr($mlimit,0,stripos($mlimit,"MB"));
+    $d['timelimit']=(int)($tlimit) * 1000;
+    $d['memorylimit']=(int)($mlimit);
+
+    $d['datacnt']=10;
+    $d['difficulty']=2;
+    $d['readforce']=0;
+    $d['plugin']=1;
+    $d['group']=0;
+
+    $d['detail']="";
+    $element=$html->find('div[class=description]',0);
+    $d['detail'].="<h3>【题目描述】</h3>".$element->outertext;
+    $element=$html->find('div[class=description]',1);
+    $d['detail'].="<h3>【输入格式】</h3>".$element->outertext;
+    $element=$html->find('div[class=description]',2);
+    $d['detail'].="<h3>【输出格式】</h3>".$element->outertext;
+    $element=$html->find('pre',0);
+    $d['detail'].="<h3>【样例输入】</h3>".str_replace("  ","\n",$element->outertext)."";
+    $element=$html->find('pre',1);
+    $d['detail'].="<h3>【样例输出】</h3>".str_replace("  ","\n",$element->outertext)."";
 }
 
 }
@@ -108,6 +153,14 @@ if($_GET['oj']=='poj' && $_GET['id']>=1000) {
 <input name='id' type='number' value='<?=$_GET['id']?$_GET['id']:1000?>' />
 <button type='submit' class='btn'>载入</button>
 </form>
+<form action='' method='get' class='form-inline'>
+从SOJ抄题：
+<input name='action' type='hidden' value='add' />
+<input name='oj' type='hidden' value='soj' />
+<input name='id' type='number' value='<?=$_GET['id']?$_GET['id']:1000?>' />
+<button type='submit' class='btn'>载入</button>
+</form>
+
 
 <form action="doeditprob.php" method="post" enctype="multipart/form-data" class='form-inline'>
 <table class='table-form fixed'>
@@ -134,7 +187,7 @@ $sql="select * from category order by cname";
 $cnt=$p->dosql($sql);
 if($cnt) {
 ?>
-<ul class='nav nav-pills well'>
+<table>
 <?php
 $last=0;
 $linecnt=0;
@@ -142,11 +195,12 @@ $line=1;
 for ($i=0;$i<$cnt;$i++) {
 $f=$p->rtnrlt($i);
 $last=$f['pid'];
+if($i % 5 == 0) echo "<tr>";
 ?>
-<li><input name="cate[<?=$f['caid']?>]" type="hidden" value="0" />
-<input name="cate[<?=$f['caid']?>]" type="checkbox" id="cate[<?=$f[caid]?>]" value="1" <?php if ($hash[$f['caid']]) echo 'checked="checked"';?> /><label for="cate[<?=$f['caid']?>]"> <?=$f['cname']?>&nbsp;</label></li>
+<td><input name="cate[<?=$f['caid']?>]" type="hidden" value="0" />
+<input name="cate[<?=$f['caid']?>]" type="checkbox" id="cate[<?=$f[caid]?>]" value="1" <?php if ($hash[$f['caid']]) echo 'checked="checked"';?> /><label for="cate[<?=$f['caid']?>]"> <?=$f['cname']?>&nbsp;</label></td>
 <? } ?>
-</ul>
+</table>
 <? } ?>
 </td></tr>
 <tr>
