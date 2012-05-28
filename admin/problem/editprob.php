@@ -22,33 +22,32 @@ else {$("#msg2").html("<b><span style='color:red;'>NO</span></b>");}
 </script>
 
 <?php
-if ($_GET[action]=='del')
-{
-echo "确认要删除该题目及与该题目相关所有内容吗(无法恢复)？<p><a href='doeditprob.php?action=del&pid={$_GET[pid]}'>确认删除</a>";
-exit;
+if ($_GET[action]=='del') {
+    echo "确认要删除该题目及与该题目相关所有内容吗(无法恢复)？<p><a href='doeditprob.php?action=del&pid={$_GET[pid]}'>确认删除</a>";
+    exit;
 }
 $p=new DataAccess();
 $q=new DataAccess();
-if ($_GET[action]=='edit')
-{
-$sql="select * from problem where pid={$_GET[pid]}";
-$cnt=$p->dosql($sql);
+if ($_GET['action']=='edit') {
+    $sql="select * from problem where pid={$_GET['pid']}";
+    $cnt=$p->dosql($sql);
 }
 if ($cnt) {
-$d=$p->rtnrlt(0);
-$d['detail'];
+    $d=$p->rtnrlt(0);
+    $d['detail'];
 } else {
-if ($_GET['action']=='add') {
-$d=array();
-$d['submitable']=1;
-$d['datacnt']=10;
-$d['timelimit']=1000;
-$d['memorylimit']=128;
-$d['difficulty']=2;
-$d['readforce']=0;
-$d['plugin']=1;
-$d['group']=0;
-$d['detail']="请在此键入题目内容";
+    if ($_GET['action']=='add') {
+        $d=array();
+        $d['submitable']=1;
+        $d['datacnt']=10;
+        $d['timelimit']=1000;
+        $d['memorylimit']=128;
+        $d['difficulty']=2;
+        $d['readforce']=0;
+        $d['plugin']=1;
+        $d['group']=0;
+        $d['detail']="请在此键入题目内容";
+    }
 }
 if($_GET['oj']=='poj' && $_GET['id']>=1000) {
     $d=array();
@@ -90,9 +89,9 @@ if($_GET['oj']=='poj' && $_GET['id']>=1000) {
     $element=$html->find('div[class=ptx]',2);
     $d['detail'].="<h3>【输出格式】</h3>".$element->outertext;
     $element=$html->find('pre[class=sio]',0);
-    $d['detail'].="<h3>【样例输入】</h3><pre>".$element->outertext."</pre>";
+    $d['detail'].="<h3>【样例输入】</h3>".str_replace("  ","\n",$element->outertext)."";
     $element=$html->find('pre[class=sio]',1);
-    $d['detail'].="<h3>【样例输出】</h3><pre>".$element->outertext."</pre>";
+    $d['detail'].="<h3>【样例输出】</h3>".str_replace("  ","\n",$element->outertext)."";
     $element=$html->find('div[class=ptx]',3);
     $d['detail'].="<h3>【提示】</h3>".$element->outertext;
     $element=$html->find('div[class=ptx]',4);
@@ -142,25 +141,111 @@ if($_GET['oj']=='poj' && $_GET['id']>=1000) {
     $d['detail'].="<h3>【样例输入】</h3>".str_replace("  ","\n",$element->outertext)."";
     $element=$html->find('pre',1);
     $d['detail'].="<h3>【样例输出】</h3>".str_replace("  ","\n",$element->outertext)."";
+} else if($_GET['oj']=='lydsy' && $_GET['id']>=1000) {
+    $d=array();
+    $url="http://www.lydsy.com/JudgeOnline/problem.php?id=".$_GET['id'];
+    if(get_magic_quotes_gpc()) {
+        $url=stripslashes($url);
+    }
+    $baseurl=substr($url,0,strrpos($url,"/")+1);
+    $html=file_get_html($url);
+    foreach($html->find('img') as $element)
+        $element->src=$baseurl.$element->src;
+
+    $element=$html->find('h2',0);
+    $pname=ltrim($element->plaintext);
+    $pname=rtrim($pname);
+    $pname=substr($pname,6);
+    $d['probname']=$pname;
+    $d['filename']="bzoj_".$_GET['id'];
+    $d['submitable']=1;
+
+    $element=$html->find('center',2);
+    $limit=ltrim($element->plaintext);
+    $tlimit=substr($limit,stripos($limit,"Time Limit:")+11);
+    $mlimit=substr($limit,stripos($limit,"Memory Limit:")+13);
+    $tlimit=substr($tlimit,0,stripos($tlimit,"Sec"));
+    $mlimit=substr($mlimit,0,stripos($mlimit,"MB"));
+    $d['timelimit']=(int)($tlimit) * 1000;
+    $d['memorylimit']=(int)($mlimit);
+
+    $d['datacnt']=10;
+    $d['difficulty']=2;
+    $d['readforce']=0;
+    $d['plugin']=1;
+    $d['group']=0;
+
+    $d['detail']="";
+    $element=$html->find('div[class=content]',0);
+    $d['detail'].="<h3>【题目描述】</h3>".$element->outertext;
+    $element=$html->find('div[class=content]',1);
+    $d['detail'].="<h3>【输入格式】</h3>".$element->outertext;
+    $element=$html->find('div[class=content]',2);
+    $d['detail'].="<h3>【输出格式】</h3>".$element->outertext;
+    $element=$html->find('span[class=sampledata]',0);
+    $d['detail'].="<h3>【样例输入】</h3><pre>".$element->plaintext."</pre>";
+    $element=$html->find('span[class=sampledata]',1);
+    $d['detail'].="<h3>【样例输出】</h3><pre>".$element->plaintext."</pre>";
+    $element=$html->find('div[class=content]',5);
+    $d['detail'].="<h3>【提示】</h3>".$element->outertext;
+    $element=$html->find('div[class=content]',6);
+    $d['detail'].="<h3>【来源】</h3>".$element->outertext;
+} else if($_GET['oj']=='uva' && $_GET['id']) {
+    $d=array();
+    $url="http://uva.onlinejudge.org/external/".(int)($_GET['id']/100)."/".$_GET['id'].".html";
+    echo $url;
+    if(get_magic_quotes_gpc()) {
+        $url=stripslashes($url);
+    }
+    $baseurl=substr($url,0,strrpos($url,"/")+1);
+    $html=file_get_html($url);
+    foreach($html->find('img') as $element)
+        $element->src=$baseurl.$element->src;
+
+    $element=$html->find('H1',0);
+    $pname=ltrim($element->plaintext);
+    $pname=rtrim($pname);
+    $d['probname']=$pname;
+    $d['filename']="uva_".$_GET['id'];
+    $d['submitable']=1;
+
+    $d['timelimit']=1000;
+    $d['memorylimit']=128;
+
+    $d['datacnt']=10;
+    $d['difficulty']=2;
+    $d['readforce']=0;
+    $d['plugin']=1;
+    $d['group']=0;
+
+    $d['detail']="";
+    $element=$html->find('div[class=content]',0);
+    $d['detail'].="<h3>【题目描述】</h3>".$element->outertext;
+    $element=$html->find('div[class=content]',1);
+    $d['detail'].="<h3>【输入格式】</h3>".$element->outertext;
+    $element=$html->find('div[class=content]',2);
+    $d['detail'].="<h3>【输出格式】</h3>".$element->outertext;
+    $element=$html->find('pre',0);
+    $d['detail'].="<h3>【样例输入】</h3>".str_replace("  ","\n",$element->outertext)."";
+    $element=$html->find('pre',1);
+    $d['detail'].="<h3>【样例输出】</h3>".nl2br($element->outertext)."";
 }
 
-}
+
 ?>
-<form action='' method='get' class='form-inline'>
-从POJ抄题：
-<input name='action' type='hidden' value='add' />
-<input name='oj' type='hidden' value='poj' />
-<input name='id' type='number' value='<?=$_GET['id']?$_GET['id']:1000?>' />
+<form action='' method='get' class='form-inline pull-right'>
+抄题：
+<input name='action' type='hidden' value='<?=$_GET['action']?>' />
+<input name='pid' type='hidden' value='<?=$_GET['pid']?>' />
+<select name='oj' class='input-medium'>
+<option value='poj' <?if($_GET['oj']=='poj') echo "selected=selected";?> >POJ</option>
+<option value='soj' <?if($_GET['oj']=='soj') echo "selected=selected";?> >SOJ</option>
+<option value='lydsy' <?if($_GET['oj']=='lydsy') echo "selected=selected";?> >耒阳大视野</option>
+<!--<option value='uva' <?if($_GET['oj']=='uva') echo "selected=selected";?> >UVa</option>-->
+</select>
+<input name='id' type='number' class='input-medium' value='<?=$_GET['id']?$_GET['id']:1000?>' />
 <button type='submit' class='btn'>载入</button>
 </form>
-<form action='' method='get' class='form-inline'>
-从SOJ抄题：
-<input name='action' type='hidden' value='add' />
-<input name='oj' type='hidden' value='soj' />
-<input name='id' type='number' value='<?=$_GET['id']?$_GET['id']:1000?>' />
-<button type='submit' class='btn'>载入</button>
-</form>
-
 
 <form action="doeditprob.php" method="post" enctype="multipart/form-data" class='form-inline'>
 <table class='table-form fixed'>

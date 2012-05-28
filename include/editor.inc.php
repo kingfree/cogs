@@ -1,6 +1,6 @@
 <?php
-$SHfull=$SET['base']."include/kindeditor/";
-$SH=pathconvert($SET['cur'],$SHfull);
+$SH=路径("include/kindeditor/");
+$CSSH=路径("style/bootstrap/css/bootstrap.css");
 ?>
 <script charset="utf-8" src="<?=$SH?>kindeditor-min.js"></script>
 <script charset="utf-8" src="<?=$SH?>lang/zh_CN.js"></script>
@@ -8,7 +8,8 @@ $SH=pathconvert($SET['cur'],$SHfull);
         var editor;
         KindEditor.ready(function(K) {
                 editor = K.create('#<?=$edname?>', {
-                        themeType : 'simple'
+                        themeType : 'simple',
+                        cssPath : '<?=$CSSH?>'
                 });
         });
 </script>
