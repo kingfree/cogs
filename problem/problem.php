@@ -115,12 +115,20 @@ for ($i=0;$i<$cnt;$i++) {
 ?>       
 </select>
 <button type='submit' class='btn btn-primary' >提交代码</button>
-<div class='btn-group pull-right' data-toggle='buttons-radio'>
-<button type='button' class='btn' name="lang" value="pas">Pascal</button>
-<button type='button' class='btn' name="lang" value="c">C</button>
-<button type='button' class='btn active' name="lang" value="cpp">C++</button>
+<!--<div class='btn-group pull-right' data-toggle-name='lang' data-toggle='buttons-radio'>
+<button type='button' class='btn' data-toggle='button' value="pas">Pascal</button>
+<button type='button' class='btn' data-toggle='button' value="c">C</button>
+<button type='button' class='btn active' data-toggle='button' value="cpp">C++</button>
 </div>
-</td></form></tr>
+<input name="lang" type='hidden' value='cpp' />-->
+<select class='span2 pull-right' name='lang'>
+<option value="pas">Pascal</option>
+<option value="c">C</option>
+<option value="cpp" selected='1'>C++</option>
+</select>
+</td>
+</form>
+</tr>
 <? } ?>
 </table>
 <table id="singlerank" class='table table-condensed'>

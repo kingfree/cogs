@@ -26,7 +26,7 @@ function gethead($head,$check,$title,$userid=0) {
 <link rel=stylesheet type="text/css" href="<?=路径("style/bootstrap/css/bootstrap.css")?>" />
 <title><?php echo $title." - ".$SET['global_sitename'] ?></title>
 </head>
-<body data-spy="scroll" data-target=".subnav" data-offset="50">
+<body>
 <div id="alltext">
 <?
 $p=new DataAccess();

@@ -6,7 +6,7 @@ gethead(1,"","帮助");
 <tr><td colspan=2>评测结果说明</td></tr>
 <? $s="AWTMREDCNP";
 for($i=0; $i<strlen($s); $i++) {?>
-<tr><td><pre style='margin:0;'><?=评测结果($s[$i])?></pre></td>
+<tr><td><?=评测结果($s[$i])?></td>
 <td><?=评测信息($s[$i])?></td></tr>
 <? } ?>
 </table>

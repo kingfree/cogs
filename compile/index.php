@@ -2,26 +2,17 @@
 require_once("../include/stdhead.php");
 gethead(1,"sess","编译执行");
 $LIB->dpshhl();
-
 if (!$_POST['pid']) 异常("你来错地方了！");
-
 $LIB->cls_compile(); 
 $LIB->func_socket();
-?>
-
-<?php
 $p=new DataAccess();
 $q=new DataAccess();
 $sql="select * from problem where pid={$_POST['pid']}";
 $p->dosql($sql);
 $d=$p->rtnrlt(0);
-if (!$d['submitable'] && !有此权限('查看题目')) {
-	echo '<script>document.location="../error.php?id=18"</script>';
-	exit;
-}
-
+if(!$d['submitable'] && !有此权限('查看题目'))
+    异常("不可提交！",取路径("problem/index.php"));
 $lang=langstrtonum($_POST['lang']);
-
 $info=array();
 $info['pid']=$_POST['pid'];
 $info['sid']=$_POST['sid'];
@@ -48,15 +39,15 @@ if ($_POST['rejudge']==1) {
 $Cp=new Compiler($info);
 
 ?>
-<table border="0"><tr>
-<td width=60%>
+<div class='container-fluid'>
+<div class='row'>
+<div class='span6'>
+<div class='alert alert-info'>
 正在连接评测机...
 <?php
 flush();
 $free=$Cp->getgds($_POST['judger']);
-
 if (!$free) 异常("当前没有空闲的评测机，请稍后重新提交。");
-
 $Cp->lock();
 $Cp->getdir();
 if ($_POST['rejudge']==1) {
@@ -65,39 +56,27 @@ if ($_POST['rejudge']==1) {
 	异常("源代码上传失败。请检查文件大小 [ 1 Byte , 100 KB ]。");
 }
 ?>
-<table border="1">
-  <tr>
-    <td>GRID</td>
-    <td><?=$Cp->state['grid']; ?></td>
-  </tr>
-  <tr>
-    <td>名称</td>
-    <td><?=$Cp->state['name']; ?></td>
-  </tr>
-  <tr>
-    <td>系统版本</td>
-    <td><?=$Cp->state['ver']; ?></td>
-  </tr>
-  <tr>
-    <td>备注</td>
-    <td><?=$Cp->state['memo']; ?></td>
-  </tr>
-</table>
+<span class='badge badge-info'><?=$Cp->state['grid']?></span>
+<span class='label label-info'><?=$Cp->state['name']?>
+ <?=$Cp->state['ver']?></span>
+<?=$Cp->state['memo']?>
+</div>
+<div class='alert alert-success'>
 正在编译...
 <?php
 flush();
 $csucc=$Cp->compile();
 flush();
 if ($csucc) {
-?>
+?>开始运行
 <table border='1'>
 <tr>
-	<td>测试点</td>
-	<td>结果</td>
-	<td>得分</td>
-	<td>运行时间</td>
-	<td>内存使用</td>
-	<td>退出代码</td>
+<td>测试点</td>
+<td>结果</td>
+<td>得分</td>
+<td>运行时间</td>
+<td>内存使用</td>
+<td>退出代码</td>
 </tr>
 <tr>
 <?php
@@ -117,8 +96,10 @@ if ($csucc) {
     }
 ?>
 </table>
-</td>
-<td width=40%>
+</div>
+</div>
+<div class='span6'>
+<div class='alert'>
 <p>运行时间 <?php printf ("%.3f",$Cp->gettotaltime()/1000.0) ?> s</p>
 <p>平均内存 <?php printf("%.2f",$Cp->getmemory()/1024) ?> MiB</p>
 <p>测试点通过状况 <a href="../problem/code.php?id=<?=$info['sid']?>"><?=评测结果($Cp->s_detail) ?></a></p>
@@ -144,18 +125,26 @@ if($nodata == false && ($_POST['testmode'] != 1 || !有此权限('测试题目')
 	$Cp->writedb_single();
 else echo "<p class=no>没有写入数据库</p>";
 ?>
-</td>
-</tr></table>
+</div>
+</div>
+</div>
 <?php if($AC == -1) { ?>
-<p class="no">你在第<?=$Cp->wrongpoint?>个测试点出现了爆零的情况，下面是该题的输入数据：
+<div class='alert'>
+<p class="no">你在<span class='badge'>第<?=$Cp->wrongpoint?>个</span>测试点出现了爆零的情况，下面是该题的输入数据：
 <pre class="brush: text;"><?=htmlspecialchars($Cp->inputtext)?></pre>
 <p>下面是你的输出与标准答案不同的地方（上面带减号“-”的是你的输出，下面带加号“+”的是答案输出，“@@”之间的数字表示行号）：
 <pre class="brush: diff;"><?=htmlspecialchars($Cp->difftext)?></pre>
 <p><a href="../problem/problem.php?pid=<?=$_POST['pid'] ?>">返回原题 “<?=$ptitle?>”</a></p>
+</div>
 <?php } ?>
 <?php } else { ?>
+</div>
+</div>
+</div>
+<div class='alert'>
 <p>编译失败：</p>
 <pre class="brush: bash;"><?=htmlspecialchars($Cp->compilemessage)?></pre>
+</div>
 <?php 
 }
 $Cp->unlock();
@@ -163,8 +152,9 @@ $Cp->unlock();
 $Dir=pathinfo($_SERVER['SCRIPT_FILENAME']);
 chdir($Dir['dirname']."/../include");
 ?>
-<script type="text/javascript">SyntaxHighlighter.all();</script>
+</div>
 
+<script type="text/javascript">SyntaxHighlighter.all();</script>
 <?php
 	include_once("../include/stdtail.php");
 ?>
