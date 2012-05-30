@@ -4,10 +4,11 @@ gethead(1,"","比赛");
 $p=new DataAccess();
 $q=new DataAccess();
 ?>
-
+<div class='container'>
 <?php if(有此权限('修改比赛')) { ?>
 <a href="../admin/comp/editcompbase.php?action=add" class="btn btn-info pull-left">添加新比赛</a>
 <?php } ?>
+<a href="recent.php" class='btn btn-success'><i class="icon-list-alt icon-white"></i>最近在线竞赛</a>
 <?
 $sql="select comptime.*,compbase.*,userinfo.realname,groups.* from comptime,compbase,userinfo,groups where comptime.cbid=compbase.cbid and userinfo.uid=compbase.ouid and comptime.group=groups.gid order by starttime desc";
 $cnt=$p->dosql($sql);
@@ -25,16 +26,15 @@ if(!$_GET['page']) {
 <div id="nowtime" class='alert alert-success pull-right'>
 现在时间：<?=date('Y-m-d H:i:s', time());?>
 </div>
-<? 分页($cnt, $_GET['page']); ?>
-<table id="contestlist" class='table table-condensed fixed'>
+<table id="contestlist" class='table table-striped table-condensed table-bordered fiexd'>
 <tr>
-    <th width='140px'>比赛</th>
+    <th width='110px'>比赛</th>
     <th>场次介绍</th>
     <th width='40px'>状态</th>
     <th width='40px'>成绩</th>
-    <th width='100px'>开始时间</th>
-    <th width='100px'>结束时间</th>
-    <th width='140px'>开放分组</th>
+    <th width='120px'>开始时间</th>
+    <th width='120px'>结束时间</th>
+    <th width='120px'>开放分组</th>
 <?php if(有此权限('查看比赛')) { ?>
     <th class=admin width='40px'>评测</th>
     <th class=admin width='60px'>组织者</th>
@@ -77,6 +77,8 @@ for ($i=$st;$i<$cnt && $i<$st+$SET['style_pagesize'] ;$i++) {
 </tr>
 <? } ?>
 </table>
+<? 分页($cnt, $_GET['page']); ?>
+</div>
 <?php
 	include_once("../include/stdtail.php");
 ?>

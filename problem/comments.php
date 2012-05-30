@@ -25,12 +25,13 @@ if ($cnt)
 			$sc=$d['showcode'];
 		}
 ?>
+<div class='container'>
 <table class="Comments">
   <tr>
-    <td class="CommentsU" rowspan=2><table>
+    <td class="CommentsU" rowspan=2 valign='top'><table>
 <tr>
-<td rowspan=2 width=30%><?=gravatar::showImage($d['email'], 64);?></td>
-<td style="font-size:120%;">
+<td rowspan=2 width='65px'><?=gravatar::showImage($d['email'], 64);?></td>
+<td>
 <a href="<?=路径("mail/index.php")?>?toid=<?=$d['uid']?>" title="给<?=$d['nickname']?>发送信件"><span class="icon-envelope"></span></a>
 <a href="<?php echo 路径("user/detail.php?uid={$uid}");?>"><b><?php echo $d['nickname'];?></b></a>
 </td>
@@ -64,13 +65,12 @@ if ($cnt)
 <?php
 if ($cnter) {
 ?>
-<form id="formcomm" name="formcomm" method="post" action="sendcomments.php">
-<textarea name="detail" cols="100" rows="8" id="detail" class="TextArea"><?php echo $detail ?></textarea>
+<form method="post" action="sendcomments.php" class='form-inline'>
+<textarea name="detail"><?php echo $detail ?></textarea>
 <br />
 <a href="problem.php?pid=<?php echo $pid ?>">[返回原题]</a>
-<input name="showcode" type="checkbox" id="showcode" value="1" <?php if ($sc){ ?> checked="checked" <?php } ?> />
-<label for="showcode">显示你的代码</label>
-<input name="Submit" type="submit" id="Submit" value="发表" />
+<label name="showcode"><input id="showcode" type="checkbox" value="1" <?php if ($sc){ ?> checked="checked" <?php } ?> />显示你的代码</label>
+<button type="submit" class='btn btn-primary'>发表</button>
 <input name="pid" type="hidden" id="pid" value="<?php echo $pid ?>" />
 </form>
 <?php
@@ -80,7 +80,7 @@ if ($cnter) {
 <?php 
 }
 ?>
-
+</div>
 <?php
 	include_once("../include/stdtail.php");
 ?>

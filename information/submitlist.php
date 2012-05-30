@@ -5,6 +5,7 @@ gethead(1,"","提交记录");
 $p=new DataAccess();
 $q=new DataAccess();
 ?>
+<div class='container'>
 <form id="search_submit" action="" method="get" class='center'>
 用户UID
 <input name="uid" type="text" value="<?=$_GET['uid']?>" />
@@ -59,12 +60,7 @@ if(!$_GET['page']) {
         $st=(($_GET[page]-1)*$SET['style_pagesize']);
 }
 ?>
-<?
-if($_GET['show'])
-    分页($cnt, $_GET['page'], '?pid='.$_GET['pid'].'&uid='.$_GET['uid'].'&display='.$_GET['display'].'&show='.$_GET['show'].'&');
-?>
-
-<table id="submitlist" class='table table-condensed fixed'>
+<table id="submitlist" class='table table-striped table-condensed table-bordered fiexd'>
 <thead><tr>
 <th width='40px'>SID</th>
 <th width='120px' onclick="sortTable('submitlist', 1, 'int')">题目</th>
@@ -107,7 +103,11 @@ for ($i=$st;$i<$cnt && $i<$st+$SET['style_pagesize'] ;$i++) {
 }
 ?>
 </table>
-
+<?
+if($_GET['show'])
+    分页($cnt, $_GET['page'], '?pid='.$_GET['pid'].'&uid='.$_GET['uid'].'&display='.$_GET['display'].'&show='.$_GET['show'].'&');
+?>
+</div>
 <?php
 include_once("../include/stdtail.php");
 ?>

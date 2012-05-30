@@ -2,9 +2,7 @@
 require_once("../../include/stdhead.php");
 gethead(1,"修改比赛","修改比赛");
 ?>
-
-<body>
-<a href="../settings.php?settings=comp">比赛基本管理</a>
+<div class='container'>
 <?php
 $p=new DataAccess();
 if ($_GET[action]=='edit') {
@@ -16,9 +14,9 @@ if ($_GET[action]=='edit') {
 }
 ?>
 <form method="post" action="doeditcompbase.php?action=<?=$_GET[action] ?>&cbid=<?=$_GET[cbid]; ?>" class='form-inline'>
-<table>
+<table class='table table-striped table-condensed table-bordered fiexd'>
   <tr>
-    <td>CBID</td>
+    <td width='80px'>CBID</td>
     <td><?=$d[cbid] ?></td>
   </tr>
   <tr>
@@ -36,7 +34,7 @@ if ($_GET[action]=='edit') {
 	for ($i=0;$i<$cnt;$i++) {
 		$d=$p->rtnrlt($i);
 ?>
-<li><input name="cons[<?=$d[pid]?>]" type="checkbox" id="cons[<?=$d[pid]?>]" value="<?=$d[pid]?>" <?php if (is_numeric($pbs[$d[pid]])) echo 'checked="checked"' ?> /><label for="cons[<?=$d[pid]?>]"><?=$d[pid]?>.<a href="../../problem/problem.php?pid=<?=$d[pid] ?>" target="_blank"><?=$d['probname'] ?></a></label></li>
+<li><input name="cons[<?=$d[pid]?>]" type="checkbox" id="cons[<?=$d[pid]?>]" value="<?=$d[pid]?>" <?php if (is_numeric($pbs[$d[pid]])) echo 'checked="checked"' ?> /><label for="cons[<?=$d[pid]?>]"><?=$d[pid]?>.<?=$d['probname'] ?></label></li>
 <?php
 	}
 ?>
@@ -47,7 +45,7 @@ if ($_GET[action]=='edit') {
 </td></tr>
 </table>
 </form>
-
+</div>
 <?php
 	include_once("../../include/stdtail.php");
 ?>

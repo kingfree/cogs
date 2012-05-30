@@ -43,7 +43,7 @@ if($cnt) {
 
 <div class='container-fluid'>
 <div class='span4'>
-<table id="probinfo" class='table table-condensed'>
+<table class='table table-striped table-condensed table-bordered fiexd'>
 <tr><th width='80px'>题目名称</th>
 <td><?=$d[pid]; ?>. <b><?=$d['probname']; ?></b></td></tr>
 <tr><th>难度等级</th>
@@ -93,7 +93,7 @@ for ($i=0;$i<=$cnt2-1;$i++) {
 }
 ?></td></tr>
 <? if($_SESSION['ID']) { ?>
-<tr class='well'><form action="../compile/" method="post" enctype="multipart/form-data" class='form-inline'>
+<tr><form action="../compile/" method="post" enctype="multipart/form-data" class='form-inline'>
 <td colspan=2>
 <input name="pid" type="hidden" id="pid" value="<?=$d['pid']?>" />
 <input type="hidden" name="MAX_FILE_SIZE" value="102400" />
@@ -114,28 +114,28 @@ for ($i=0;$i<$cnt;$i++) {
 }
 ?>       
 </select>
-<button type='submit' class='btn btn-primary' >提交代码</button>
 <!--<div class='btn-group pull-right' data-toggle-name='lang' data-toggle='buttons-radio'>
 <button type='button' class='btn' data-toggle='button' value="pas">Pascal</button>
 <button type='button' class='btn' data-toggle='button' value="c">C</button>
 <button type='button' class='btn active' data-toggle='button' value="cpp">C++</button>
 </div>
 <input name="lang" type='hidden' value='cpp' />-->
-<select class='span2 pull-right' name='lang'>
+<select class='input-medium pull-left' name='lang'>
 <option value="pas">Pascal</option>
 <option value="c">C</option>
 <option value="cpp" selected='1'>C++</option>
 </select>
+<button type='submit' class='btn btn-primary pull-right' >提交代码</button>
 </td>
 </form>
 </tr>
 <? } ?>
 </table>
-<table id="singlerank" class='table table-condensed'>
+<table id="singlerank" class='table table-striped table-condensed table-bordered fiexd'>
 <tr><th colspan=4>综合排行前 <?=$SET['style_single_ranksize']; ?> 名</th><tr>
 <?php $LIB->singlerank($q,$pid) ?>
 </table>
-<table id="Comments" class='table table-condensed'>
+<table id="Comments" class='table table-striped table-condensed table-bordered fiexd'>
 <tr><th colspan=3>最新讨论
 <a href="comments.php?pid=<?=$pid?>"><b>[发表看法]</b></a>
 </th></tr>
@@ -160,7 +160,7 @@ for ($i=0;$i<$cnt;$i++) {
 ?>
 </table>
 </div>
-<div id="probdetail" class='span8 meng'>
+<div id="probdetail" class='span8 page'>
 <?=$d['detail']?>
 </div>
 </div>

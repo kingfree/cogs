@@ -5,6 +5,7 @@ $p=new DataAccess();
 $q=new DataAccess();
 ?>
 
+<div class='container'>
 <script type="text/JavaScript">
 function MM_jumpMenu(targ,selObj,restore){
 eval(targ+".location='?diff=<?php echo $_GET['diff'] ?>&caid=<?php echo $_GET['caid'] ?>&key=<?php echo $_GET['key'] ?>&page="+selObj.options[selObj.selectedIndex].value+"'");
@@ -19,6 +20,7 @@ if (restore) selObj.selectedIndex=0;
 <?php if(有此权限('修改题目')) { ?>
 <a href="../admin/problem/editprob.php?action=add" class="btn btn-info pull-left">添加新题目</a>
 <?php } ?>
+<a href="../information/catelist.php" class='btn btn-success pull-left'><i class="icon-tags icon-white"></i>题目分类列表</a>
 <?php if ($_GET['caid']!="") {
     $sql="select * from category where caid={$_GET['caid']}";
     $cnt=$p->dosql($sql);
@@ -84,8 +86,7 @@ if(!$_GET['page']) {
 <button name="rank" class='btn' value='submitable'>按可否提交排序</button>
 <? } ?>
 </form>
-<? 分页($cnt, $_GET['page'], '?caid='.$_GET['caid'].'&diff='.$_GET['diff'].'&key='.$_GET['key'].'&rank='.$_GET['rank'].'&'); ?>
-<table id="problist" class='table table-condensed fiexd'>
+<table id="problist" class='table table-striped table-condensed table-bordered fiexd'>
 <thead><tr>
 <th width='20px'>PID</th>
 <th onclick="sortTable('problist', 0, 'int')">题目名称</th>
@@ -134,6 +135,8 @@ if (!$err) for ($i=$st;$i<$cnt && $i<$st+$SET['style_pagesize'] ;$i++) {
 </tr>
 <?php } ?>
 </table>
+<? 分页($cnt, $_GET['page'], '?caid='.$_GET['caid'].'&diff='.$_GET['diff'].'&key='.$_GET['key'].'&rank='.$_GET['rank'].'&'); ?>
+</div>
 
 <?php
 include_once("../include/stdtail.php");

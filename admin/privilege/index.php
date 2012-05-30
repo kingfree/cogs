@@ -1,3 +1,20 @@
+<form method=post>
+	<b>为用户添加权限</b>
+	用户编号：<input type=text size=10 name="uid" value="<?=$uid?>" />
+    <input type=hidden name=way value="ins" />
+	用户权限：<select name="pri">
+<?php
+while(list($key, $val)=each($pri)) {
+	if (isset($priv) && ($priv == $val)) {
+		echo '<option value="'.$val.'" selected>'.$key.'</option>';
+	} else {
+		echo '<option value="'.$val.'">'.$key.'</option>';
+	}
+}
+?></select>
+<input type='hidden' name='do' value='do' />
+<button type=submit class='btn btn-primary' >添加权限</button>
+</form>
 <?
 $p=new DataAccess();
 
@@ -13,32 +30,15 @@ if($way=='ins' && $uid) {
         $cnt=$p->dosql($sql);
     }
     if($cnt)
-        echo "用户 $uid 已添加权限 ".array_search($priv, $pri)." ！";
+        HTML("<div class='alert alert-success'>用户 $uid 已添加权限 ".array_search($priv, $pri)." ！</div>");
 }
 
 if($way=='del' && $uid) {
     $sql="delete from `privilege` where uid=$uid and pri=$priv";
     $cnt=$p->dosql($sql);
-    echo "用户 $uid 已删除权限 ".array_search($priv, $pri)." ！";
+    HTML("<div class='alert alert-success'>用户 $uid 已删除权限 ".array_search($priv, $pri)." ！</div>");
 }
 ?>
-<form method=post>
-	<b>为用户添加权限</b>
-	用户编号：<input type=text size=10 name="uid" value="<?=$uid?>" />
-    <input type=hidden name=way value="ins" />
-	用户权限：<select name="pri">
-<?php
-while(list($key, $val)=each($pri)) {
-	if (isset($priv) && ($priv == $val)) {
-		echo '<option value="'.$val.'" selected>'.$key.'</option>';
-	} else {
-		echo '<option value="'.$val.'">'.$key.'</option>';
-	}
-}
-?></select>
-	<input type='hidden' name='do' value='do' />
-	<input type=submit value='添加权限' />
-</form>
 <?php
 	$sql="select privilege.*,userinfo.email,userinfo.nickname from privilege,userinfo where userinfo.uid=privilege.uid order by uid,pri asc";
 	
@@ -57,9 +57,8 @@ while(list($key, $val)=each($pri)) {
 		else
 		$st=(($_GET[page]-1)*$SET['style_pagesize']);
 	}
-    分页($cnt, $_GET['page'], '?settings=privilege&');
 ?>
-<table cellspacing=0 cellpadding=4>
+<table class='table table-striped table-condensed table-bordered fiexd'>
   <tr>
     <th>用户</th>
     <th>权限</th>
@@ -83,3 +82,6 @@ while(list($key, $val)=each($pri)) {
 	}
 ?>
 </table>
+<?
+分页($cnt, $_GET['page'], '?settings=privilege&');
+?>

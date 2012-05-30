@@ -16,8 +16,8 @@ if(time() < $d['starttime'] && !有此权限('查看比赛'))
 $q=new DataAccess();
 $pbs=explode(":",$d['contains']);
 ?>
-
-<table id="contest_report" class='table table-condensed fiexd'>
+<div class='container'>
+<table id="contest_report" class='table table-striped table-condensed table-bordered fiexd'>
   <tr>
     <th width="30px"><a href="javascript:qsort('rank')">名次</a></th>
     <th width="100px">用户</th>
@@ -56,7 +56,7 @@ $pbs=explode(":",$d['contains']);
 <?=gravatar::showImage($d['email'], 14);?>
 <?=$d['nickname'] ?></a></td>
     <?php if(有此权限('查看用户')) { ?>
-    <td id="realname<?=$rowcnt ?>" class=admin align=center><a href="../user/detail.php?uid=<?=$d['uid'] ?>" target="_blank"><?=$d['realname'] ?></a></td><?php } ?>
+    <td id="realname<?=$rowcnt ?>" class=admin ><a href="../user/detail.php?uid=<?=$d['uid'] ?>" target="_blank"><?=$d['realname'] ?></a></td><?php } ?>
 <?php
         $sql="select pid,result,score,csid from compscore where uid='{$d['uid']}' and ctid={$_GET[ctid]} order by pid asc";
         $cnt_sub=$q->dosql($sql);
@@ -71,24 +71,25 @@ $pbs=explode(":",$d['contains']);
         }
         foreach($pbs as $k=>$v) {
 ?>
-    <td id="result<?=$v?>_<?=$rowcnt?>" align=center>
+    <td id="result<?=$v?>_<?=$rowcnt?>" >
     <?php
     if ($rank[$v][result] =="") echo "未评测";
     else if ($rank[$v][result] =="N") echo 评测信息($rank[$v][result]);
     else { ?>
     <a href="code.php?csid=<?=$rank[$v]['csid']?>" target="_blank"><?=评测结果($rank[$v][result])?></a></td>
     <? } ?>
-    <td id="score<?=$v ?>_<?=$rowcnt ?>" align=center><?=$rank[$v][score]; ?></td>
+    <td id="score<?=$v ?>_<?=$rowcnt ?>" ><?=$rank[$v][score]; ?></td>
 <?php
         }
 ?>
-    <td id="sum<?=$rowcnt ?>" align=center><?=$sum ?></td>
+    <td id="sum<?=$rowcnt ?>" ><?=$sum ?></td>
   </tr>
 <?php 
     }
 ?>
 </table>
-  <script language="javascript">
+</div>
+<script language="javascript">
 var sortsx=true;
 var rowcnt=<?=$rowcnt ?>;
 

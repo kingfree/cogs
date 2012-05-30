@@ -61,7 +61,7 @@ echo "还未开始";
 <li class=''>结束时间：<?=date("Y-m-d H:i:s",$e['endtime']) ?></li>
 </ul>
 </div>
-<table id="probinfo" class='table table-condensed'>
+<table id="probinfo" class='table table-striped table-condensed table-bordered fiexd'>
 <tr><th width=60px>题目名称</th>
 <td><b><?php echo $d['probname']; ?></b>
 <? if(time() > $e['endtime']) { ?><a href="../problem/problem.php?pid=<?=$_GET['pid']?>">跳转</a><? } ?>
@@ -75,7 +75,7 @@ echo "还未开始";
 <tr><th>内存限制</th>
 <td><?php echo $d['memorylimit']; ?> MiB </td></tr>
 <? if((time() < $e['endtime'] && time() > $e['starttime'])) { ?>
-<tr class='well'><form action="../compile/" method="post" enctype="multipart/form-data" class='form-inline'>
+<tr><form action="../compile/" method="post" enctype="multipart/form-data" class='form-inline'>
 <td colspan=2>
 <input name="pid" type="hidden" id="pid" value="<?=$d['pid']?>" />
 <input type="hidden" name="MAX_FILE_SIZE" value="102400" />
@@ -99,7 +99,7 @@ $cnt=$r->dosql($sql);
 if($cnt) {
     $f=$r->rtnrlt(0);
 ?>
-<table id="singlerank" class='table table-condensed'>
+<table id="probinfo" class='table table-striped table-condensed table-bordered fiexd'>
 <tr><th width=60px><b><?php echo $f['realname']; ?></b></th>
 <td><a href="../user/detail.php?uid=<?=$uid?>"><?php echo $f['nickname']; ?></a></td></tr>
 <tr><th>提交时间</th>
@@ -113,7 +113,7 @@ if($cnt) {
 </table>
 <? } ?>
 </div>
-<div id="probdetail" class='span8'>
+<div id="probdetail" class='span8 page'>
 <div class='tabbable'>
 <ul class='nav nav-tabs'>
 <?
@@ -136,9 +136,7 @@ if($cnt) {
 <?  } ?>
 </ul>
 </div>
-<div class='meng'>
 <?=$d['detail']?>
-</div>
 </div>
 </div>
 <?php

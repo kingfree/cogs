@@ -17,7 +17,7 @@ function Navigation($p) {
     HTML("<div class='nav-collapse'>");
     HTML("<ul class='nav'>");
     HTML("<li class='dropdown'>");
-    HTML("<a href='#' class='dropdown-toggle' data-toggle='dropdown'><b class='caret'></b>分类栏</a>");
+    HTML("<a href='#' class='dropdown-toggle' data-toggle='dropdown'><b class='caret'></b></a>");
     HTML("<ul class='dropdown-menu span10'><li>");
     HTML("<ul class='nav' id='catebar'>");
     $sql="select * from category order by cname";
@@ -38,13 +38,9 @@ function Navigation($p) {
     $cnt1 = $p->dosql("select ctid from comptime where starttime > $now and endtime > $now");
     if($cnt1) $context .= "<span class='todo'>($cnt1)</span>";
     列表("competition/index.php", "list-alt", $context);
-    列表("competition/recent.php", "list-alt", "竞赛");
-    列表("user/index.php", "user", "用户");
-    列表("information/grouplist.php", "th-large", "分组");
-    列表("information/comments.php", "comment", "讨论");
-    列表("information/catelist.php", "tags", "分类");
     列表("page/index.php", "file", "页面");
-    //列表("information/about.php", "info-sign", "关于");
+    列表("user/index.php", "user", "用户");
+    列表("information/comments.php", "comment", "讨论");
     HTML("<form class='navbar-search pull-left' method='get' action='".路径("problem/index.php")."'>");
     HTML("<input name='key' type='text' id='key' class='search-query span2'  placeholder='搜索题目' />");
     HTML("</form>");
@@ -75,18 +71,18 @@ function Navigation($p) {
         列表("user/dologout.php", "off", "退出");
     } else {
         ?>
-<li><form method="post" action="<?=路径("user/dologin.php")?>" class='form-inline center'>
-<input name="from" type="hidden" id="from" value="<?=$SET['URI']?>" />
-<input name="username" type="text" class='input-small' placeholder='用户名' /><br />
-<input name="password" type="password" class='input-small' placeholder='密码' /><br />
-<!--<label class="checkbox">
-<input name="savepwd" type="checkbox" value="1" />记住
-<label>-->
-<button class='btn btn-primary'>登录</button>
-</form></li>
-<li class='divider'></li>
-        <?
-        列表("user/register.php", "", "注册");
+            <li><form method="post" action="<?=路径("user/dologin.php")?>" class='form-inline center'>
+            <input name="from" type="hidden" id="from" value="<?=$SET['URI']?>" />
+            <input name="username" type="text" class='input-small' placeholder='用户名' /><br />
+            <input name="password" type="password" class='input-small' placeholder='密码' /><br />
+            <!--<label class="checkbox">
+            <input name="savepwd" type="checkbox" value="1" />记住
+            <label>-->
+            <button class='btn btn-primary'>登录</button>
+            </form></li>
+            <li class='divider'></li>
+            <?
+            列表("user/register.php", "", "注册");
         列表("user/lost.php", "", "忘记密码");
     }
     HTML("</ul>");

@@ -2,8 +2,7 @@
 require_once("../../include/stdhead.php");
 gethead(1,"修改比赛","修改比赛场次");
 ?>
-
-<a href="../settings.php?settings=comp">比赛基本管理</a>
+<div class='container'>
 <?php
 	$q=new DataAccess();
 if ($_GET[action]=='edit')
@@ -23,15 +22,15 @@ else
     $d[showscore]=1;
 }
 ?>
-<form id="form1" name="form1" method="post" action="doeditcomptime.php?action=<?php echo $_GET[action] ?>&ctid=<?php echo $_GET[ctid]; ?>">
-<table width="100%" border="1"  bordercolor=#000000  cellspacing=0 cellpadding=4>
+<form method="post" action="doeditcomptime.php?action=<?php echo $_GET[action] ?>&ctid=<?php echo $_GET[ctid]; ?>">
+<table class='table table-striped table-condensed table-bordered fiexd'>
   <tr>
-    <td>CTID</td>
+    <td width='80px'>CTID</td>
     <td><?php echo $d[ctid] ?></td>
   </tr>
   <tr>
     <td>关联比赛</td>
-    <td><select name="cbid" id="cbid" class="InputBox">
+    <td><select name="cbid" id="cbid">
         <?php
 		$sql="select cname,cbid from compbase";
 		$c=$q->dosql($sql);
@@ -46,7 +45,7 @@ else
   </tr>
   <tr>
     <td>开放分组</td>
-    <td><select name="group" id="group" class="InputBox">
+    <td><select name="group" id="group" >
         <?php
 		$sql="select * from groups order by gname";
 		$c=$q->dosql($sql);
@@ -61,32 +60,34 @@ else
   </tr>
   <tr>
     <td>开始时间</td>
-    <td><input name="st_y" type="text" class="InputBox" id="st_y" value="<?php echo date('Y',$d[starttime]) ?>" size="4" />
+    <td>
+    <input name="st_y" type="text" class="span1" id="st_y" value="<?php echo date('Y',$d[starttime]) ?>" size="4" />
       年
-        <input name="st_m" type="text" class="InputBox" id="st_m" value="<?php echo date('m',$d[starttime]) ?>" size="2" />
+        <input name="st_m" type="text" class="span1" id="st_m" value="<?php echo date('m',$d[starttime]) ?>" size="2" />
         月
-        <input name="st_d" type="text" class="InputBox" id="st_d" value="<?php echo date('d',$d[starttime]) ?>" size="2" />
+        <input name="st_d" type="text" class="span1" id="st_d" value="<?php echo date('d',$d[starttime]) ?>" size="2" />
         日
-        <input name="st_h" type="text" class="InputBox" id="st_h" value="<?php echo date('H',$d[starttime]) ?>" size="2" />
+        <input name="st_h" type="text" class="span1" id="st_h" value="<?php echo date('H',$d[starttime]) ?>" size="2" />
         时
-        <input name="st_i" type="text" class="InputBox" id="st_i" value="<?php echo date('i',$d[starttime]) ?>" size="2" />
+        <input name="st_i" type="text" class="span1" id="st_i" value="<?php echo date('i',$d[starttime]) ?>" size="2" />
         分
-        <input name="st_s" type="text" class="InputBox" id="st_s" value="<?php echo date('s',$d[starttime]) ?>" size="2" />
-      秒</td>
+        <input name="st_s" type="text" class="span1" id="st_s" value="<?php echo date('s',$d[starttime]) ?>" size="2" />
+      秒
+    </td>
   </tr>
   <tr>
     <td>结束时间</td>
-    <td><input name="et_y" type="text" class="InputBox" id="et_y" value="<?php echo date('Y',$d[endtime]) ?>" size="4" />
+    <td><input name="et_y" type="text" class="span1" id="et_y" value="<?php echo date('Y',$d[endtime]) ?>" size="4" />
 年
-  <input name="et_m" type="text" class="InputBox" id="et_m" value="<?php echo date('m',$d[endtime]) ?>" size="2" />
+  <input name="et_m" type="text" class="span1" id="et_m" value="<?php echo date('m',$d[endtime]) ?>" size="2" />
 月
-<input name="et_d" type="text" class="InputBox" id="et_d" value="<?php echo date('d',$d[endtime]) ?>" size="2" />
+<input name="et_d" type="text" class="span1" id="et_d" value="<?php echo date('d',$d[endtime]) ?>" size="2" />
 日
-<input name="et_h" type="text" class="InputBox" id="et_h" value="<?php echo date('H',$d[endtime]) ?>" size="2" />
+<input name="et_h" type="text" class="span1" id="et_h" value="<?php echo date('H',$d[endtime]) ?>" size="2" />
 时
-<input name="et_i" type="text" class="InputBox" id="et_i" value="<?php echo date('i',$d[endtime]) ?>" size="2" />
+<input name="et_i" type="text" class="span1" id="et_i" value="<?php echo date('i',$d[endtime]) ?>" size="2" />
 分
-<input name="et_s" type="text" class="InputBox" id="et_s" value="<?php echo date('s',$d[endtime]) ?>" size="2" />
+<input name="et_s" type="text" class="span1" id="et_s" value="<?php echo date('s',$d[endtime]) ?>" size="2" />
 秒</td>
   </tr>
   <tr>
@@ -96,12 +97,17 @@ else
   </tr>
   <tr>
     <td>介绍</td>
-    <td><textarea name="intro" cols="80" rows="10" class="TextArea" id="intro"><?php echo $d[intro] ?></textarea></td>
+    <td><textarea name="intro" class='textarea'><?php echo $d[intro] ?></textarea></td>
+  </tr>
+  <tr>
+    <td></td>
+    <td>
+<button type="submit" class='btn btn-primary'>提交修改</button>
+    </td>
   </tr>
 </table>
-<p>
-  <input type="submit" name="Submit" value="提交修改"  class="Button" />
 </form>
+</div>
 
 <?php
 	include_once("../../include/stdtail.php");

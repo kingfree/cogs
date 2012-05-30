@@ -1,6 +1,5 @@
 <?php
 require_once("../include/stdhead.php");
-
 switch ($_REQUEST['settings'])
 {
 	case "phpinfo":
@@ -50,7 +49,7 @@ switch ($_REQUEST['settings'])
 		break;
 }
 ?>
-
+<div class='container'>
 <?php
 switch ($_REQUEST['settings'])
 {
@@ -101,7 +100,7 @@ switch ($_REQUEST['settings'])
 		break;
 }
 ?>
-
+</div>
 <?php
 	include_once("../include/stdtail.php");
 ?>

@@ -9,11 +9,11 @@
 <p>由 CmYkRgB123 在线评测系统强力驱动，版本 <?php echo $cfg['Version']; ?> ，由<a href=<?=路径("user/detail.php?uid=524")?> target="_blank">王者自由</a>维护。版权所有 &copy; <a href="http://www.byvoid.com" target="_blank">BYVoid</a>，保留部分权利。</p>
 </div>
 </div>
-<script type="text/javascript" src="<?=路径("include/jquery.js")?>"></script>
-<script type="text/javascript" src="<?=路径("include/sortTable.js")?>"></script>
-<script type="text/javascript" src="<?=路径("style/bootstrap/js/bootstrap.js")?>"></script>
 <script type="text/javascript">
-$("a[rel=popover]").popover()
+$(document).ready(function() {
+  $("a[rel=popover]").popover();
+  $("input[rel=date]").datepicker();
+});
 </script>
 <script type="text/javascript">
 jQuery(function($)) {

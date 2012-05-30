@@ -4,8 +4,7 @@ function MM_jumpMenu(targ,selObj,restore){ //v3.0
   if (restore) selObj.selectedIndex=0;
 }
 </script>
-
-<a href="comp/editcompbase.php?action=add" class="admin_big">添加新比赛</a>
+<a href="comp/editcompbase.php?action=add" class="btn btn-info pull-left">添加新比赛</a>
 <?php
 	$p=new DataAccess();
 	$q=new DataAccess();
@@ -24,15 +23,14 @@ if(!$_GET['page']) {
 }
 ?>
 
-<? 分页($cnt, $_GET['page'], '?settings=comp&'); ?>
-<table width="100%" border="1"  bordercolor=#000000  cellspacing=0 cellpadding=4>
+<table class='table table-striped table-condensed table-bordered fiexd'>
   <tr>
-    <th width="11%" scope="col">CBID</th>
-    <th width="18%" scope="col">比赛名</th>
-    <th width="20%" scope="col">包含题目</th>
-    <th width="27%" scope="col">关联场次</th>
-    <th width="12%" scope="col">组织者</th>
-    <th width="12%" scope="col">操作</th>
+    <th width="80px">CBID</th>
+    <th width="140px">比赛名</th>
+    <th>包含题目</th>
+    <th>关联场次</th>
+    <th width="80px">组织者</th>
+    <th width="60px">操作</th>
   </tr>
 <?
 	if (!$err)
@@ -84,3 +82,4 @@ if(!$_GET['page']) {
 	}
 ?>
 </table>
+<? 分页($cnt, $_GET['page'], '?settings=comp&'); ?>

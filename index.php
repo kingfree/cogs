@@ -4,7 +4,6 @@ gethead(1,"","首页");
 $p=new DataAccess();
 $q=new DataAccess();
 ?>
-
 <div class='container-fluid'>
 <div class='span3'>
 <div class='row'>
@@ -15,7 +14,7 @@ if($cnt) {
 for($i=0; $i<$cnt; $i++) {
 $d=$p->rtnrlt($i);
 ?>
-<table class='table table-condensed'>
+<table class='table table-striped table-condensed table-bordered fiexd'>
 <tr>
 <th width="40px">比赛</th>
 <th><?php echo $d[cname] ?></th>
@@ -48,17 +47,17 @@ echo "<span class='todo'>还未开始</span>";
 <?php } ?>
 <br />
 <? } else { ?>
-<ul class='nav nav-pills'>
+<table class='table table-striped table-condensed table-bordered fiexd'>
 <?php 
-$cnt=$p->dosql("select * from page order by etime desc limit 6");
+$cnt=$p->dosql("select * from page order by etime desc limit 8");
 for($i=0;$i<$cnt;$i++) {
 $d=$p->rtnrlt($i);
 ?>
-<li><a href="page/page.php?aid=<?=$d['aid']?>" target="_blank"><?=$d['title']?></a></li>
+<tr><td><a href="page/page.php?aid=<?=$d['aid']?>" target="_blank"><?=$d['title']?></a></td></td>
 <?php } ?>
-</ul>
+</table>
 <? } ?>
-<table class='table table-condensed'>
+<table class='table table-striped table-condensed table-bordered fiexd'>
 <thead>
 <tr>
 <th width="40px">PID</th>
@@ -66,7 +65,7 @@ $d=$p->rtnrlt($i);
 </thead>
 </tr>
 <?php 
-$cnt=$p->dosql("select * from problem where submitable=1 order by pid desc limit 6");
+$cnt=$p->dosql("select * from problem where submitable=1 order by pid desc limit 8");
 for($i=0;$i<$cnt;$i++) {
 $d=$p->rtnrlt($i);
 ?>
@@ -89,9 +88,9 @@ $d=$p->rtnrlt($i);
 </div>
 <div class='span3'>
 <div class='row'>
-<table class='table table-condensed'>
+<table class='table table-striped table-condensed table-bordered'>
 <thead>
-<tr><th colspan='5' style='text-align: center;'>等级前 <?=$SET['style_ranksize'];?> 名</th></tr>
+<tr><th colspan='5' class='center'>等级前 <?=$SET['style_ranksize'];?> 名</th></tr>
 </thead>
 <?php 
 $cnt=$p->dosql("select * from userinfo order by grade desc limit 0, {$SET['style_ranksize']}");
@@ -100,7 +99,7 @@ $d=$p->rtnrlt($i);
 ?>
 <tr>
 <td><i><?=$i+1 ?></i></td>
-<td style="font-size:26px; padding:0; margin:0;"><a href="user/detail.php?uid=<?php echo $d['uid']; ?>" target="_blank"><?=gravatar::showImage($d['email'], 28);?></a></td>
+<td width='28' class='jin'><a href="user/detail.php?uid=<?php echo $d['uid']; ?>" target="_blank"><?=gravatar::showImage($d['email'], 28);?></a></td>
 <td><a href="user/detail.php?uid=<?php echo $d['uid']; ?>" target="_blank"><?=$d['nickname']?></a></td>
 <td align=center><b><?php echo $d['grade'] ?></b></td>
 <td align=center><b><?php echo $d['accepted'] ?></b></td>

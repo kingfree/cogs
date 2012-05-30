@@ -1,12 +1,20 @@
 <?php
 require_once("../../include/stdhead.php");
-gethead(0,"修改题目","");
+gethead(8,"修改题目","");
 
 
 if($_FILES['datafile']['size'] && !$_FILES['datafile']['error']) {
     $cmd = "unzip -o {$_FILES['datafile']['tmp_name']} -d\"{$cfg['testdata']}\"";
     $handle = popen($cmd, 'r');
     pclose($handle);
+    $ff="<p>正在上传测试数据：<ul>";
+    for($i=1; $i<=(int)$_POST['datacnt']; $i++) {
+        if(file_exists("{$cfg['testdata']}/{$_POST['filename']}/{$_POST['filename']}{$i}.in") && file_exists("{$cfg['testdata']}/{$_POST['filename']}/{$_POST['filename']}{$i}.ans"))
+            $ff.="<li><span class='label label-success'>第 $i 个</span>测试点上传成功！</li>";
+        else
+            $ff.="<li><span class='label label-important'>第 $i 个</span>测试点上传失败！！</li>";
+            }
+    $ff.="</ul></p>";
 }
 
 $pid = 0;
@@ -30,10 +38,10 @@ if ($_REQUEST[action]=='add')
 			$p->dosql($sql);
 		}
 	}
+    提示("$ff 添加题目 $pid 成功！", 取路径("problem/problem.php?pid=$pid"));
 }
 
-if ($_REQUEST[action]=='edit')
-{
+if ($_REQUEST[action]=='edit') {
 	$p=new DataAccess();
 	$sql="update problem set probname='{$_POST[probname]}',filename='{$_POST[filename]}',readforce={$_POST[readforce]},submitable={$sub},datacnt={$_POST[datacnt]},timelimit={$_POST[timelimit]},memorylimit={$_POST[memorylimit]},detail='".mysql_escape_string($_POST['detail'])."',difficulty={$_POST[difficulty]},plugin='{$_POST['plugin']}',`group`='{$_POST['group']}' where pid={$_REQUEST[pid]}";
 	$p->dosql($sql);
@@ -54,14 +62,16 @@ if ($_REQUEST[action]=='edit')
 		$p->dosql($sql);
 	}
 	$pid=$_REQUEST[pid];
+    提示("$ff 修改题目 $pid 成功！", 取路径("problem/problem.php?pid=$pid"));
 }
 
 if ($_REQUEST[action]=='del') {
 	$p=new DataAccess();
-	$sql="delete from problem where pid={$_REQUEST[pid]}";
+	$sql="delete from problem where pid={$_REQUEST['pid']}";
 	$p->dosql($sql);
 	$pid=0;
+    提示("删除题目 $pid 成功！", 取路径("problem/index.php"));
 }
 
-echo "<script>document.location=\"../../refresh.php?id=7&pid={$pid}\"</script>";
+
 ?>

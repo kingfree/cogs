@@ -4,7 +4,7 @@ gethead(1,"","页面列表");
 $p=new DataAccess();
 $q=new DataAccess();
 ?>
-
+<div class='container'>
 <?php if(有此权限('修改页面')) { ?>
 <a href="editpage.php?action=add" class="btn btn-info pull-left">添加新页面</a>
 <?php } ?>
@@ -36,8 +36,7 @@ if(!$_GET['page']) {
 <input name="key" type="text" class='search-query input-medium' value='<?=$_GET['key']?>'/>
 <button type="submit" class='btn'>搜索</button>
 </form>
-<? 分页($cnt, $_GET['page'], '?key='.$_GET['key'].'&'); ?>
-<table id="pagelist" class='table table-condensed fiexd'>
+<table id="pagelist" class='table table-striped table-condensed table-bordered fiexd'>
 <tr>
 <th>AID</th>
 <th width=50%>页面标题</th>
@@ -75,6 +74,8 @@ for ($i=$st;$i<$cnt && $i<$st+$SET['style_pagesize'] ;$i++) {
 </tr>
 <?php } ?>
 </table>
+<? 分页($cnt, $_GET['page'], '?key='.$_GET['key'].'&'); ?>
+</div>
 
 <?php
 include_once("../include/stdtail.php");

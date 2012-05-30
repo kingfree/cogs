@@ -2,7 +2,8 @@
 require_once("../include/stdhead.php");
 gethead(1,"","在线竞赛");
 ?>
-<table id="contestlist" class='table table-condensed fixed'>
+<div class='container'>
+<table class='table table-striped table-condensed table-bordered fiexd'>
 <thead>
 <tr>
 <th width='160px'>评测系统</th>
@@ -26,6 +27,7 @@ foreach($rows as $row) {
 <?php } ?>
 </tbody>
 </table>
+</div>
 <?php
 	include_once("../include/stdtail.php");
 ?>

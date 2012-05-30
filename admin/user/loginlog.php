@@ -4,10 +4,10 @@ gethead(1,"查看用户","用户登录日志");
 $p=new DataAccess();
 ?>
 
-<form id="search_submit" action="" method="get" >
+<form action="" method="get" class='form-inline center'>
 检索： 用户UID
 <input name="uid" type="text" id="uid" value="<?=$_GET['uid'] ?>" />
-<input name="sc" type="submit" id="sc" value="检索" />
+<button type="submit" class='btn'>检索</button>
 </form>
 <?php
 $sql="select login.*,userinfo.email,userinfo.realname from login,userinfo where login.uid=userinfo.uid";
@@ -24,10 +24,8 @@ if(!$_GET['page']) {
     else
         $st=(($_GET[page]-1)*$SET['style_pagesize']);
 }
-//if($_GET['show'])
-分页($cnt, $_GET['page'], '?uid='.$_GET['uid']."&");
 ?>
-<table id="loginlog">
+<table class='table table-striped table-condensed table-bordered fiexd'>
 <thead><tr>
 <th width=40px>编号</th>
 <th width=60px>用户</th>
@@ -50,5 +48,7 @@ for ($i=$st;$i<$cnt && $i<$st+$SET['style_pagesize'] ;$i++) {
 <? } ?>
 </table>
 <?php
+//if($_GET['show'])
+分页($cnt, $_GET['page'], '?uid='.$_GET['uid']."&");
 	include_once("../../include/stdtail.php");
 ?>

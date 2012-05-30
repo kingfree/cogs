@@ -6,8 +6,8 @@ gethead(1,"可以管理","后台管理");
 
 <div class='row meng'>
 <div class='span2 center'>
-<h1>后台<br/>管理</h1>
-<p class='well'>
+<h1 class='well'>后台<br/>管理</h1>
+<p>
 <a href="rank/gen_acrank.php" class="btn"><i class='icon-retweet'></i>生成等级</a><br />
 <a href="rank/clear_record.php" class="btn"><i class='icon-repeat'></i>清理垃圾</a>
 </p>
@@ -31,7 +31,7 @@ gethead(1,"可以管理","后台管理");
 </ul>
 <ul class='nav nav-list span2'>
 <li class='nav-header'>用户</li>
-<li class=''><a href="../problem/index.php"><i class='icon-user'></i>用户列表</a></li>
+<li class=''><a href="../user/index.php"><i class='icon-user'></i>用户列表</a></li>
 <li class=''><a href="user/loginlog.php"><i class='icon-bookmark'></i>登录记录</a></li>
 <li class=''><a href="settings.php?settings=privilege"><i class='icon-book'></i>权限管理</a></li>
 <li class='nav-header'>分组</li>

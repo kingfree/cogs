@@ -3,8 +3,17 @@ body {
     background-attachment: fixed;
 }
 
+.textarea {
+    width: 90%;
+    height: 100px;
+}
+
 #body {
     padding-top: 45px;
+}
+
+.table {
+    background-color: #fff;
 }
 
 .footer {
@@ -16,6 +25,11 @@ body {
     margin: 0;
     padding: 0;
     color: #555;
+}
+
+.jin {
+    margin: 0 0 0 0;
+    padding: 0 0 0 0;
 }
 
 .admin {
@@ -94,5 +108,13 @@ th {
 }
 
 .meng {
-    background-color: rgba(255,255,255,0.6);
+    background-color: #fff;
+}
+
+.page {
+    background-color: #fff;
+  border: 1px solid #dddddd;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  border-radius: 4px;
 }

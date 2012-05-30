@@ -2,15 +2,7 @@
 require_once("../include/stdhead.php");
 gethead(1,"","用户列表");
 ?>
-
-<script type="text/JavaScript">
-<!--
-function MM_jumpMenu(targ,selObj,restore){ //v3.0
-  eval(targ+".location='?key=<?=$_GET['key'] ?>&rank=<?=$_GET['rank'] ?>&page="+selObj.options[selObj.selectedIndex].value+"'");
-  if (restore) selObj.selectedIndex=0;
-}
-//-->
-</script>
+<div class='container'>
 <?php
     $p=new DataAccess();
     $q=new DataAccess();
@@ -33,39 +25,39 @@ function MM_jumpMenu(targ,selObj,restore){ //v3.0
     $sql.=") ";
 
 ?>
-<table id="group_now" class='table table-condensed fixed'>
-  <tr>
-    <th width="80px">当前分组</th>
-    <td>[<?=$d['gname'] ?>] <?=nl2br(sp2n(htmlspecialchars($d['memo']))) ?></td>
-  </tr>
+<div class='btn-group pull-left'>
+<a href="../information/grouplist.php" class='btn btn-success pull-left'><i class='icon-th-large icon-white'></i>用户分组列表</a>
+<button class='btn btn-success dropdown-toggle' data-toggle='dropdown'><span class='caret'></span></button>
+<ul id="group_now" class='dropdown-menu span4'>
+<li>当前分组</li>
+<li><a href=""><span class='label'><?=$d['gname'] ?></span><?=nl2br(sp2n(htmlspecialchars($d['memo']))) ?></a></li>
 <?php if ($d['parent']) {
-    $sql2="select * from groups where gid={$d['parent']}";
-    $q->dosql($sql2);
-    $e=$q->rtnrlt(0);
+$sql2="select * from groups where gid={$d['parent']}";
+$q->dosql($sql2);
+$e=$q->rtnrlt(0);
 ?>
-  <tr>
-    <th>上级分组</th>
-    <td>[<a href="index.php?gid=<?=$e['gid'] ?>"><?=$e['gname'] ?></a>]</td>
-  </tr>
+<li class='divider'></li>
+<li>上级分组</li>
+<li><a href="index.php?gid=<?=$e['gid'] ?>"><?=$e['gname'] ?></a></li>
 <?php } ?>
 <?php 
 if ($subgroup!=array()) {
 ?>
-  <tr>
-    <th>下级分组</th>
-    <td><?php
-    foreach($subgroup as $value) {
-        $sql2="select * from groups where gid={$value}";
-        $q->dosql($sql2);
-        $e=$q->rtnrlt(0);
+<li class='divider'></li>
+<li>下级分组</li>
+<li><?php
+foreach($subgroup as $value) {
+$sql2="select * from groups where gid={$value}";
+$q->dosql($sql2);
+$e=$q->rtnrlt(0);
 ?>
-        [<a href="index.php?gid=<?=$e['gid'] ?>"><?=$e['gname'] ?></a>]
+<a href="index.php?gid=<?=$e['gid'] ?>"><?=$e['gname'] ?></a>
 <?php 
-    }
-?></td>
-  </tr>
+}
+?></li>
 <?php } ?>
-</table>
+</ul>
+</div>
 <?php
     if ($_GET['key']!="")
         $sql.=" and (nickname like '%{$_GET[key]}%' or uid ='{$_GET[key]}' or usr like '%{$_GET[key]}%' or realname like '%{$_GET[key]}%')";
@@ -104,7 +96,6 @@ if(!$_GET['page']) {
   <button name="rank" type="submit" value='accepted/submited' class='btn'>按通过率排序</button>
   <button name="rank" type="submit" value='grade' class='btn'>按等级排序</button>
 </form>
-<? 分页($cnt, $_GET['page'], '?key='.$_GET['key'].'&sc'.$_GET['sc'].'&rank='.$_GET['rank'].'&caid='.$_GET['caid'].'&'); ?>
 <script language=javascript>
 function okdel(name) {
     if(confirm("你确定要删除 "+name+" 的所有信息吗？\n删除之后将不可恢复！"))
@@ -112,7 +103,7 @@ function okdel(name) {
     return false;
 }
 </script>
-<table id="userlist" class='table table-condensed fixed'>
+<table id="userlist" class='table table-striped table-condensed table-bordered fiexd'>
 <thead>
   <tr>
     <th width='30px'></th>
@@ -166,6 +157,8 @@ function okdel(name) {
     }
 ?>
 </table>
+<? 分页($cnt, $_GET['page'], '?key='.$_GET['key'].'&sc'.$_GET['sc'].'&rank='.$_GET['rank'].'&caid='.$_GET['caid'].'&'); ?>
+</div>
 <?php
     include_once("../include/stdtail.php");
 ?>

@@ -4,11 +4,11 @@ gethead(1,"","分组列表");
 $p=new DataAccess();
 $q=new DataAccess();
 ?>
+<div class='container'>
 <?php if(有此权限('分组管理')) { ?>
 <a href="../admin/group/editgroup.php?action=add" class="btn btn-info">添加新分组</a>
 <?php } ?>
-<p />
-<table id="grouplist" class='table table-condensed fixed'>
+<table class='table table-striped table-condensed table-bordered fiexd'>
   <tr>
     <th width='160px'>分组名</th>
     <th width='160px'>上级分组</th>
@@ -61,6 +61,7 @@ if ($d['parent']!=-1)
 <?php
     }
 ?>
+</table>
 </table>
 <?php
     include_once("../include/stdtail.php");

@@ -21,12 +21,12 @@ if(!$_GET['page']) {
         $st=(($_GET[page]-1)*$SET['style_pagesize']);
 }
 ?>
-<form id="search_prob" name="search_prob" method="get" action="">
+<div class='container'>
+<form method="get" action="" class='center'>
 搜索帖子全文
-<input name="key" type="text" id="key" value="<?php echo $_GET['key'] ?>" />
-<input name="sc" type="submit" id="sc" value="搜索"/>
+<input name="key" type="text" class='search-query input-medium' value='<?=$_GET['key']?>'/>
+<button type="submit" class='btn'>搜索</button>
 </form>
-<? 分页($cnt, $_GET['page'], '?key='.$_GET['key'].'&'); ?>
 <?
 if ($cnt) {
 	for ($i=$st;$i<$cnt && $i<$st+$SET['style_pagesize'];$i++) {
@@ -43,7 +43,7 @@ if ($cnt) {
     <td class="CommentsU" rowspan=2>
 <table>
 <tr>
-<td rowspan=2 width=30%><?=gravatar::showImage($d['email'], 64);?></td>
+<td rowspan=2 width='65px' width=30><?=gravatar::showImage($d['email'], 64);?></td>
 <td style="font-size:120%;">
 <a href="<?=路径("mail/index.php")?>?toid=<?=$d['uid']?>" title="给<?=$d['nickname']?>发送信件"><span class="icon-envelope"></span></a>
 <a href="<?php echo 路径("user/detail.php?uid={$d['uid']}");?>"><b><?php echo $d['nickname'];?></b></a>
@@ -74,6 +74,10 @@ if ($cnt) {
 } else {
 	echo "还没有人发表评论！";
 }
+?>
+<? 分页($cnt, $_GET['page'], '?key='.$_GET['key'].'&'); ?>
+</div>
+<?
 	include_once("../include/stdtail.php");
 ?>
 
