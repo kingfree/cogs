@@ -38,6 +38,7 @@ function Navigation($p) {
     $cnt1 = $p->dosql("select ctid from comptime where starttime > $now and endtime > $now");
     if($cnt1) $context .= "<span class='todo'>($cnt1)</span>";
     列表("competition/index.php", "list-alt", $context);
+    列表("competition/recent.php", "list-alt", "竞赛");
     列表("user/index.php", "user", "用户");
     列表("information/grouplist.php", "th-large", "分组");
     列表("information/comments.php", "comment", "讨论");
