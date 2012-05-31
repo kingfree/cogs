@@ -67,16 +67,7 @@ else
 $sql.=" order by grade desc";
 
 $cnt=$p->dosql($sql);
-$totalpage=(int)(($cnt-1)/$SET['style_pagesize'])+1;
-if(!$_GET['page']) {
-    $_GET['page']=1;
-    $st=0;
-} else {
-    if ($_GET[page]<1 || $_GET[page]>$totalpage)
-        异常("页面错误！");
-    else
-        $st=(($_GET[page]-1)*$SET['style_pagesize']);
-}
+$st=检测页面($cnt, $_GET['page']);
 ?>
 <form method="get" action="" class='center'>
   <input name="gid" type="hidden" value="<?=$_GET['gid'] ?>" />
@@ -128,7 +119,7 @@ function okdel(name) {
     <th class='center'><?=$i+1?></th>
     <td><?=$d['uid'] ?></td>
     <td><a href="../user/detail.php?uid=<?=$d['uid'] ?>" target="_blank"><?=gravatar::showImage($d['email']);?><?=$d['nickname'] ?></a></td>
-    <? if(有此权限('查看用户')) { ?><td class=admin align=center><?=$d['realname'] ?></td><? } ?>
+    <? if(有此权限('查看用户')) { ?><td ><?=$d['realname'] ?></td><? } ?>
     <td><?
     $sql="select privilege.* from privilege where uid={$d['uid']} order by pri asc";
 	$cnt1=$r->dosql($sql);
@@ -136,16 +127,16 @@ function okdel(name) {
 		$e=$r->rtnrlt($i1);
         echo array_search($e['pri'],$pri) . " ";
     } ?></td>
-    <td align=center><?=$d['readforce'] ?></td>
-    <td align=center><?="<a href='?gid={$d['gbelong']}'>{$d['gname']}</a>"; ?></td>
-    <td align=center><?=$d['accepted'] ?></td>
-    <td align=center><?=@round($d['accepted']/$d['submited']*100,2); ?>%</td>
-    <td align=center><?=$d['grade'] ?></td>
+    <td ><?=$d['readforce'] ?></td>
+    <td ><?="<a href='?gid={$d['gbelong']}'>{$d['gname']}</a>"; ?></td>
+    <td ><?=$d['accepted'] ?></td>
+    <td ><?=@round($d['accepted']/$d['submited']*100,2); ?>%</td>
+    <td ><?=$d['grade'] ?></td>
     <? if(有此权限('查看用户')) { ?>
-    <td class=admin>
+    <td>
     <a href="../admin/user/loginlog.php?uid=<?=$d['uid'] ?>"><?=$d['lastip'] ?></a>
     </td><? } ?>
-    <? if(有此权限('修改用户')) { ?><td class=admin align=center>
+    <? if(有此权限('修改用户')) { ?><td>
     <? if(有此权限('修改权限')) { ?>
     <a href='../admin/settings.php?settings=privilege&way=edit&uid=<?=$d['uid']?>'>权限</a>
     <? } ?>

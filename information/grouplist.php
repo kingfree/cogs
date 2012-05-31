@@ -31,7 +31,7 @@ $q=new DataAccess();
             $groupadmin=true;
 ?>
   <tr>
-    <td><b><a href="userlist.php?gid=<?=$d['gid']?>"><?=$d['gname']?></a></b></td>
+    <td><b><a href="../user/index.php?gid=<?=$d['gid']?>"><?=$d['gname']?></a></b></td>
     <td><?php
 if ($d['parent']!=-1)
 {

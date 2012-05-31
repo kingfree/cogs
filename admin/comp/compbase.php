@@ -11,18 +11,8 @@ function MM_jumpMenu(targ,selObj,restore){ //v3.0
 	$sql="select compbase.*,userinfo.nickname from compbase,userinfo where userinfo.uid=compbase.ouid order by compbase.cbid desc";
 	
 $cnt=$p->dosql($sql);
-$totalpage=(int)(($cnt-1)/$SET['style_pagesize'])+1;
-if(!$_GET['page']) {
-    $_GET['page']=1;
-    $st=0;
-} else {
-    if ($_GET[page]<1 || $_GET[page]>$totalpage)
-        异常("页面错误！");
-    else
-        $st=(($_GET[page]-1)*$SET['style_pagesize']);
-}
+$st=检测页面($cnt, $_GET['page']);
 ?>
-
 <table class='table table-striped table-condensed table-bordered fiexd'>
   <tr>
     <th width="80px">CBID</th>
@@ -33,9 +23,7 @@ if(!$_GET['page']) {
     <th width="60px">操作</th>
   </tr>
 <?
-	if (!$err)
-	for ($i=$st;$i<$cnt && $i<$st+$SET['style_pagesize'] ;$i++)
-	{
+for ($i=$st;$i<$cnt && $i<$st+$SET['style_pagesize'] ;$i++) {
 		$d=$p->rtnrlt($i);
 ?>
   <tr>

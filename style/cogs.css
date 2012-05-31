@@ -112,6 +112,7 @@ th {
 }
 
 .page {
+padding: 10px;
     background-color: #fff;
   border: 1px solid #dddddd;
   -webkit-border-radius: 4px;

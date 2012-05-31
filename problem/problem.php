@@ -69,7 +69,7 @@ if($cnt) {
 <? } ?>
 </td></tr>
 <tr><th>开放分组</th>
-<td><a href="../user/index.php?gid=<?=$d['gid'] ?>" target="_blank">[<?=$d['gname'] ?>]</a></td></tr>
+<td><a href="../user/index.php?gid=<?=$d['gid'] ?>" target="_blank" class='btn btn-mini btn-warning'><?=$d['gname']?></a></td></tr>
 <tr><th><a href="../information/submitlist.php?pid=<?=$pid; ?>">提交状态</a></th>
 <td><?php
 if($_SESSION['ID']) {
@@ -89,7 +89,7 @@ $sql="select category.cname,category.caid from category,tag where tag.pid={$_GET
 $cnt2=$r->dosql($sql);
 for ($i=0;$i<=$cnt2-1;$i++) {
     $e=$r->rtnrlt($i);
-    echo " <a href='index.php?caid={$e[caid]}'>{$e[cname]}</a> ";
+    HTML(" <a href='index.php?caid={$e['caid']}' target='_blank' class='btn btn-mini'>{$e['cname']}</a> ");
 }
 ?></td></tr>
 <? if($_SESSION['ID']) { ?>
@@ -160,8 +160,10 @@ for ($i=0;$i<$cnt;$i++) {
 ?>
 </table>
 </div>
-<div id="probdetail" class='span8 page'>
+<div class='span8'>
+<div id="probdetail" class='page'>
 <?=$d['detail']?>
+</div>
 </div>
 </div>
 

@@ -14,16 +14,7 @@ $sql="select login.*,userinfo.email,userinfo.realname from login,userinfo where 
 if($_GET['uid']) $sql .= " and login.uid={$_GET['uid']}";
 $sql .= " order by ltime desc";
 $cnt=$p->dosql($sql);
-$totalpage=(int)(($cnt-1)/$SET['style_pagesize'])+1;
-if(!$_GET['page']) {
-    $_GET['page']=1;
-    $st=0;
-} else {
-    if ($_GET[page]<1 || $_GET[page]>$totalpage)
-        异常("页面错误！");
-    else
-        $st=(($_GET[page]-1)*$SET['style_pagesize']);
-}
+$st=检测页面($cnt, $_GET['page']);
 ?>
 <table class='table table-striped table-condensed table-bordered fiexd'>
 <thead><tr>
@@ -34,7 +25,6 @@ if(!$_GET['page']) {
 <th width=180px>时间</th>
 </tr></thead>
 <?
-if ($cnt) 
 for ($i=$st;$i<$cnt && $i<$st+$SET['style_pagesize'] ;$i++) {
 	$d=$p->rtnrlt($i);
 ?>

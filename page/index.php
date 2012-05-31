@@ -20,16 +20,7 @@ $sql.=" and (page.text like '%{$_GET[key]}%' or page.title like '%{$_GET[key]}%'
 $sql .= " order by title asc";
 
 $cnt=$p->dosql($sql);
-$totalpage=(int)(($cnt-1)/$SET['style_pagesize'])+1;
-if(!$_GET['page']) {
-    $_GET['page']=1;
-    $st=0;
-} else {
-    if ($_GET[page]<1 || $_GET[page]>$totalpage)
-        异常("页面错误！");
-    else
-        $st=(($_GET[page]-1)*$SET['style_pagesize']);
-}
+$st=检测页面($cnt, $_GET['page']);
 ?>
 <form method="get" action="" class='center'>
 搜索页面

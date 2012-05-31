@@ -166,23 +166,23 @@ function 输出文本($S) {
 
 function langstrtonum($str) {
     switch ($str) {
-    case 'pas':
-        return 0;
-    case 'c':
-        return 1;
-    case 'cpp':
-        return 2;
+        case 'pas':
+            return 0;
+        case 'c':
+            return 1;
+        case 'cpp':
+            return 2;
     }
 }
 
 function langnumtostr($num) {
     switch ($num) {
-    case 0:
-        return 'pas';
-    case 1:
-        return 'c';
-    case 2:
-        return 'cpp';
+        case 0:
+            return 'pas';
+        case 1:
+            return 'c';
+        case 2:
+            return 'cpp';
     }
 }
 
@@ -257,9 +257,19 @@ function 是否通过($pid, $q) {
             //echo "<a href='".路径("problem/code.php?id=").$e['sid']."' target='_blank'><span class=".
             echo "<a href='".路径("problem/code.php?id=").$e['sid']."' target='_blank'><span class=icon-".
                 ($e['accepted']?"ok>":"remove>")."</span></a>";
-        //} else echo "<span class='did'>－</span>";
-        } else echo "<span class='icon-minus'>－</span>";
-    }
+            //} else echo "<span class='did'>－</span>";
+    } else echo "<span class='icon-minus'>－</span>";
+}
+}
+
+function 检测页面($total,$page,$page_size='') {
+    $page = (int) $page;
+    $page_size = (int) ($page_size ? $page_size : $SET['style_pagesize']);
+    $total_page = ceil($total/$page_size);
+    if($page < 1) return 0;
+    if($total_page < 1) return 0;
+    if($page > $total_page) $page = $total_page;
+    return (($page-1)*$page_size);
 }
 
 function 分页($total,$page,$url='',$page_size='',$max_length='') {
@@ -276,6 +286,7 @@ function 分页($total,$page,$url='',$page_size='',$max_length='') {
     $max_length = $max_length ? $max_length : 5 ;
     $start = $page ? ($page - 1) * $page_size : 0;
     $total_page = ceil($total/$page_size);
+    if($page > $total_page) $page = $total_page;
 
     $page_table = '';
     //aways in the pages
@@ -386,5 +397,41 @@ function 背景图片($uid=0) {
     if(!file_exists($backfile) || filesize($backfile) < 1)
         $backfile = $path . "0.png";
     echo "<style type='text/css'>body {background-image: url($backfile);}</style>";
+}
+
+/* 过滤函数 */ 
+//整型过滤函数 
+function get_int($number) 
+{ 
+    return intval($number); 
+} 
+//字符串型过滤函数 
+function get_str($string) 
+{ 
+    if (!get_magic_quotes_gpc()) { 
+        return addslashes($string); 
+    } 
+    return $string; 
+}
+function 过滤() {
+    /* 过滤所有GET过来变量 */ 
+    /*foreach ($_GET as $get_key=>$get_var) 
+    { 
+        if (is_numeric($get_var)) { 
+            $get[strtolower($get_key)] = get_int($get_var); 
+        } else { 
+            $get[strtolower($get_key)] = get_str($get_var); 
+        } 
+    } */
+    /* 过滤所有POST过来的变量 */ 
+    foreach ($_POST as $post_key=>$post_var) 
+    { 
+       /* if (is_numeric($post_var)) { 
+            $post[strtolower($post_key)] = get_int($post_var); 
+        } else { 
+            $post[strtolower($post_key)] = get_str($post_var); 
+        } */
+        $_POST[$post_key] = mysql_real_escape_string($post_var);
+    } 
 }
 ?>

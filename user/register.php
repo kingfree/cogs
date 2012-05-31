@@ -72,7 +72,7 @@ function formsubmit() {
 	return ;
 }
 </script>
-
+<div class='container'>
 <?php
 if ($_GET[accept]==1) {
 ?>
@@ -112,7 +112,7 @@ if ($_GET[accept]==1) {
 </tr>
 <tr>
 <th>个人介绍</th>
-<td><textarea name="memo" class='span8' id="memo">这家伙很懒，什么都没写</textarea> 4～200位可显示字符</td>
+<td><textarea name="memo" class='textarea' id="memo">这家伙很懒，什么都没写</textarea> 4～200位可显示字符</td>
 </tr>
 <tr>
 <th>验证码</th>
@@ -131,14 +131,16 @@ if ($_GET[accept]==1) {
 } else {
 ?>
 <div align="center">
+<div class='page'>
 <?php echo $STR[reg][reginfo]; ?>
+</div>
 <a href="register.php?accept=1" class='btn btn-primary'>同意</a>
 <a href="../" class='btn'>拒绝</a>
 </div>
 <?php
 }
 ?>
-
+</div>
 <?php
 include_once("../include/stdtail.php");
 ?>
