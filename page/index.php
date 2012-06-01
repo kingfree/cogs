@@ -1,5 +1,5 @@
 <?php
-require_once("../include/stdhead.php");
+require_once("../include/header.php");
 gethead(1,"","页面列表");
 $p=new DataAccess();
 $q=new DataAccess();
@@ -69,5 +69,5 @@ for ($i=$st;$i<$cnt && $i<$st+$SET['style_pagesize'] ;$i++) {
 </div>
 
 <?php
-include_once("../include/stdtail.php");
+include_once("../include/footer.php");
 ?>

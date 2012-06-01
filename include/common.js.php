@@ -1,5 +1,5 @@
 <?php
-require_once("stdhead.php");
+require_once("header.php");
 gethead(0,"","");
 global $SET;
 echo $cur;

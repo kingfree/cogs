@@ -1,5 +1,5 @@
 <?php
-require_once("../include/stdhead.php");
+require_once("../include/header.php");
 //date_default_timezone_set("Asia/Shanghai");
 if ($_REQUEST[action]=='add') {
 	$p=new DataAccess();

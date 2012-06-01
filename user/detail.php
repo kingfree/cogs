@@ -1,5 +1,5 @@
 <?php
-require_once("../include/stdhead.php");
+require_once("../include/header.php");
 gethead(1,"","用户详细信息", $_GET['uid']);
 ?>
 
@@ -80,7 +80,7 @@ if ($cnt) {
 <?php
 } else 异常("无此用户！");
 ?>
-<a href="../information/submitlist.php?uid=<?=$_GET['uid']?>" target="_blank">查看全部提交记录</a>
+<a href="../submit/submitlist.php?uid=<?=$_GET['uid']?>" target="_blank">查看全部提交记录</a>
 <?php
 $accnt=0;
 $sql="select problem.pid,problem.probname,submit.accepted,submit.lang,submit.sid from submit,problem where submit.uid={$_GET['uid']} and submit.pid=problem.pid order by submit.lang asc, problem.pid asc, submit.score desc ";
@@ -153,5 +153,5 @@ if ($cnt) {
 ?>
 
 <?php
-	include_once("../include/stdtail.php");
+	include_once("../include/footer.php");
 ?>

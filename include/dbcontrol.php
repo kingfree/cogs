@@ -32,7 +32,7 @@ class DBControl
 	
 	public function createtable()
 	{
-		chdir("../../include/sql");
+		chdir("../include/sql");
 		$p=new DataAccess();
 		$fp=fopen("c_SET.sql","r");
 		$sql=rfile($fp);

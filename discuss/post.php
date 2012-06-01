@@ -1,5 +1,5 @@
 <?php
-require_once("../include/stdhead.php");
+require_once("../include/header.php");
 
 if (strlen($_POST['title'])>60) {
     异常("Your title is too long!");

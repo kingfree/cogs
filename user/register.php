@@ -1,5 +1,5 @@
 <?php
-require_once("../include/stdhead.php");
+require_once("../include/header.php");
 gethead(1,"","用户注册");
 ?>
 
@@ -92,7 +92,7 @@ if ($_GET[accept]==1) {
 </tr>
 <tr>
 <th>密码</th>
-<td><input name="pwd" type="password" id="pwd" /></td>
+<td><input name="pwd" type="password" id="pwd"></td>
 </tr>
 <tr>
 <th>重复密码</th>
@@ -142,5 +142,5 @@ if ($_GET[accept]==1) {
 ?>
 </div>
 <?php
-include_once("../include/stdtail.php");
+include_once("../include/footer.php");
 ?>

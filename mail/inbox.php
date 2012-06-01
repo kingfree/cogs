@@ -1,5 +1,5 @@
 <?php
-require_once("../include/stdhead.php");
+require_once("../include/header.php");
 gethead(1,"","邮件");
 
 $uid = $_SESSION[ID];
@@ -50,6 +50,6 @@ $p->dosql($sql);
 
 
 <?
-include_once("../include/stdtail.php");
+include_once("../include/footer.php");
 ?>
 

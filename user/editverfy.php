@@ -1,5 +1,5 @@
 <?php
-require_once("../include/stdhead.php");
+require_once("../include/header.php");
 gethead(0,"verfy","");
 $LIB->get_userinfo($_SESSION['ID']);
 if ($_SESSION['admin']!=-1)

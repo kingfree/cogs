@@ -1,5 +1,5 @@
 <?php
-require_once("../include/stdhead.php");
+require_once("../include/header.php");
 gethead(1,"","题目评论");
 
 $p=new DataAccess();
@@ -82,5 +82,5 @@ if ($cnter) {
 ?>
 </div>
 <?php
-	include_once("../include/stdtail.php");
+	include_once("../include/footer.php");
 ?>

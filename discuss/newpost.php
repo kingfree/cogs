@@ -1,5 +1,5 @@
 <?php
-require_once("../include/stdhead.php");
+require_once("../include/header.php");
 gethead(1,"sess","发表新帖");
 $p = new DataAccess();
 $q = new DataAccess();
@@ -36,5 +36,5 @@ $cid = $_REQUEST['cid'];
 </table>
 </form>
 <?
-require_once("../include/stdtail.php");
+require_once("../include/footer.php");
 ?>

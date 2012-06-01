@@ -9,15 +9,15 @@
 <table class='table-form'>
 <tr>
 <td width='100px'>原密码</td>
-<td><input name="opwd" type="password" /></td>
+<td><input name="opwd" type="password"></td>
 </tr>
 <tr>
 <td>新密码</td>
-<td><input name="npwd1" type="password" /></td>
+<td><input name="npwd1" type="password"></td>
 </tr>
 <tr>
 <td>重复输入新密码</td>
-<td><input name="npwd2" type="password" /></td>
+<td><input name="npwd2" type="password"></td>
 </tr>
 </table>
 </div>

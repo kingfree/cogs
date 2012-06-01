@@ -1,5 +1,5 @@
 <?php
-require_once("../include/stdhead.php");
+require_once("../include/header.php");
 gethead(8,"sess","");
 $p=new DataAccess();
 过滤();

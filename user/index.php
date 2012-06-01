@@ -1,5 +1,5 @@
 <?php
-require_once("../include/stdhead.php");
+require_once("../include/header.php");
 gethead(1,"","用户列表");
 ?>
 <div class='container'>
@@ -26,7 +26,7 @@ gethead(1,"","用户列表");
 
 ?>
 <div class='btn-group pull-left'>
-<a href="../information/grouplist.php" class='btn btn-success pull-left'><i class='icon-th-large icon-white'></i>用户分组列表</a>
+<a href="grouplist.php" class='btn btn-success pull-left'><i class='icon-th-large icon-white'></i>用户分组列表</a>
 <button class='btn btn-success dropdown-toggle' data-toggle='dropdown'><span class='caret'></span></button>
 <ul id="group_now" class='dropdown-menu span4'>
 <li>当前分组</li>
@@ -134,14 +134,14 @@ function okdel(name) {
     <td ><?=$d['grade'] ?></td>
     <? if(有此权限('查看用户')) { ?>
     <td>
-    <a href="../admin/user/loginlog.php?uid=<?=$d['uid'] ?>"><?=$d['lastip'] ?></a>
+    <a href="loginlog.php?uid=<?=$d['uid'] ?>"><?=$d['lastip'] ?></a>
     </td><? } ?>
     <? if(有此权限('修改用户')) { ?><td>
     <? if(有此权限('修改权限')) { ?>
     <a href='../admin/settings.php?settings=privilege&way=edit&uid=<?=$d['uid']?>'>权限</a>
     <? } ?>
-    <a href="../admin/user/edituser.php?uid=<?=$d['uid'] ?>">修改</a>
-    <a href="../admin/user/doedituser.php?uid=<?=$d['uid'] ?>&action=del" onclick="return okdel('<?=$d['nickname']?>')">删除</a>
+    <a href="edituser.php?uid=<?=$d['uid'] ?>">修改</a>
+    <a href="doedituser.php?uid=<?=$d['uid'] ?>&action=del" onclick="return okdel('<?=$d['nickname']?>')">删除</a>
     </td><? } ?>
   </tr>
 <?php
@@ -151,5 +151,5 @@ function okdel(name) {
 <? 分页($cnt, $_GET['page'], '?key='.$_GET['key'].'&sc'.$_GET['sc'].'&rank='.$_GET['rank'].'&caid='.$_GET['caid'].'&'); ?>
 </div>
 <?php
-    include_once("../include/stdtail.php");
+    include_once("../include/footer.php");
 ?>

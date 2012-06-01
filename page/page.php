@@ -1,5 +1,5 @@
 <?php
-require_once("../include/stdhead.php");
+require_once("../include/header.php");
 gethead(1,"","页面");
 
 $p=new DataAccess();
@@ -47,6 +47,6 @@ if($cnt) {
 </div>
 
 <?php
-include_once("../include/stdtail.php");
+include_once("../include/footer.php");
 ?>
 

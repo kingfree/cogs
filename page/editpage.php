@@ -1,5 +1,5 @@
 <?php
-require_once("../include/stdhead.php");
+require_once("../include/header.php");
 gethead(1,"修改页面","修改页面");
 $LIB->editor("editor_id");
 ?>
@@ -54,7 +54,7 @@ if ($cnt) {
 </td>
 <tr>
 <td>页面标题</td>
-<td><input name="title" type="text" id="title" value="<?=$d['title'] ?>" /></td>
+<td><input name="title" type="text" id="title" value="<?=$d['title'] ?>"></td>
 </tr>
 <tr>
 <td>阅读权限</td>
@@ -89,6 +89,6 @@ $e=$q->rtnrlt($j);
 </form>
 
 <?php
-include_once("../include/stdtail.php");
+include_once("../include/footer.php");
 ?>
 

@@ -81,7 +81,7 @@ void dp(void)
 ?>
 <pre>
 <?php
-require("stdlib.php");
+require("lib.php");
 echo addpauser_c($str);
 ?>
 </pre>

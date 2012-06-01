@@ -1,5 +1,5 @@
 <?php
-require_once("../include/stdhead.php");
+require_once("../include/header.php");
 gethead(1,"","找回密码");
 $p=new DataAccess();
 if (empty($_POST[User])&&empty($_POST[ans])) {
@@ -53,5 +53,5 @@ else
 异常("密码提示问题的答案不正确！", 取路径("user/lost.php"));
 }
 }
-include_once("../include/stdtail.php");
+include_once("../include/footer.php");
 ?>

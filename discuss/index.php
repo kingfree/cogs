@@ -1,5 +1,5 @@
 <?php
-require_once("../include/stdhead.php");
+require_once("../include/header.php");
 gethead(1,"","讨论版");
 $p = new DataAccess();
 $q = new DataAccess();
@@ -51,5 +51,5 @@ $d=$p->rtnrlt($i);
 ?>
 </table>
 <?
-require_once("../include/stdtail.php");
+require_once("../include/footer.php");
 ?>

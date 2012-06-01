@@ -1,5 +1,5 @@
 <?php
-require_once("../include/stdhead.php");
+require_once("../include/header.php");
 $p=new DataAccess();
 $uid = $_REQUEST['username'];
 $pwd = $_REQUEST['pwdhash'];

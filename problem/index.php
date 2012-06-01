@@ -1,5 +1,5 @@
 <?php
-require_once("../include/stdhead.php");
+require_once("../include/header.php");
 gethead(1,"","题目列表");
 $p=new DataAccess();
 $q=new DataAccess();
@@ -18,9 +18,9 @@ if (restore) selObj.selectedIndex=0;
 </script>
 
 <?php if(有此权限('修改题目')) { ?>
-<a href="../admin/problem/editprob.php?action=add" class="btn btn-info pull-left">添加新题目</a>
+<a href="editprob.php?action=add" class="btn btn-info pull-left">添加新题目</a>
 <?php } ?>
-<a href="../information/catelist.php" class='btn btn-success pull-left'><i class="icon-tags icon-white"></i>题目分类列表</a>
+<a href="catelist.php" class='btn btn-success pull-left'><i class="icon-tags icon-white"></i>题目分类列表</a>
 <?php if ($_GET['caid']!="") {
     $sql="select * from category where caid={$_GET['caid']}";
     $cnt=$p->dosql($sql);
@@ -121,7 +121,7 @@ if (!$err) for ($i=$st;$i<$cnt && $i<$st+$SET['style_pagesize'] ;$i++) {
 <td class=admin><?=$d['readforce']?></td>
 <?php } ?>
 <?php if(有此权限('修改题目')) { ?>
-<td class=admin><a href="../admin/problem/editprob.php?action=edit&pid=<?=$d['pid']; ?>">修改</a></td>
+<td class=admin><a href="editprob.php?action=edit&pid=<?=$d['pid']; ?>">修改</a></td>
 <?php } ?>
 </tr>
 <?php } ?>
@@ -130,5 +130,5 @@ if (!$err) for ($i=$st;$i<$cnt && $i<$st+$SET['style_pagesize'] ;$i++) {
 </div>
 
 <?php
-include_once("../include/stdtail.php");
+include_once("../include/footer.php");
 ?>

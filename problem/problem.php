@@ -1,5 +1,5 @@
 <?php
-require_once("../include/stdhead.php");
+require_once("../include/header.php");
 
 $pid = (int)$_GET['pid'];
 $db = @mysql_connect($cfg['data_server'],$cfg['data_uid'],$cfg['data_pwd']);
@@ -64,12 +64,12 @@ if($cnt) {
 <td>
 <?=date('Y-m-d', $d['addtime']) ?>
 <?php if(有此权限('修改题目')) { ?>
-<a href="../admin/problem/editprob.php?action=edit&pid=<?=$d['pid']?>" class='btn btn-info btn-mini pull-right' >修改该题</a>
+<a href="editprob.php?action=edit&pid=<?=$d['pid']?>" class='btn btn-info btn-mini pull-right' >修改该题</a>
 <? } ?>
 </td></tr>
 <tr><th>开放分组</th>
 <td><a href="../user/index.php?gid=<?=$d['gid'] ?>" target="_blank" class='btn btn-mini btn-warning'><?=$d['gname']?></a></td></tr>
-<tr><th><a href="../information/submitlist.php?pid=<?=$pid; ?>">提交状态</a></th>
+<tr><th><a href="../submit/index.php?pid=<?=$pid; ?>">提交状态</a></th>
 <td><?php
 if($_SESSION['ID']) {
     $sql="SELECT * FROM submit WHERE pid ={$pid} AND uid ={$_SESSION['ID']} order by score desc limit 1";
@@ -92,7 +92,7 @@ for ($i=0;$i<=$cnt2-1;$i++) {
 }
 ?></td></tr>
 <? if($_SESSION['ID']) { ?>
-<tr><form action="../compile/" method="post" enctype="multipart/form-data" class='form-inline'>
+<tr><form action="../submit/run.php" method="post" enctype="multipart/form-data" class='form-inline'>
 <td colspan=2>
 <input name="pid" type="hidden" id="pid" value="<?=$d['pid']?>" />
 <input type="hidden" name="MAX_FILE_SIZE" value="102400" />
@@ -134,9 +134,22 @@ for ($i=0;$i<$cnt;$i++) {
 <? } ?>
 </table>
 <table id="singlerank" class='table table-striped table-condensed table-bordered fiexd'>
-<tr><th colspan=4>综合排行前 <?=$SET['style_single_ranksize']; ?> 名</th><tr>
-<?php $LIB->singlerank($q,$pid) ?>
-</table>
+<tr><th colspan=4>综合排行前 <?=$SET['style_single_ranksize']?> 名</th><tr>
+<?php
+$sql2="select submit.*,userinfo.nickname,userinfo.uid,userinfo.email from submit,userinfo where submit.pid={$pid} and submit.uid=userinfo.uid order by score desc, runtime asc, memory asc limit {$SET['style_single_ranksize']}";
+$cnt=$q->dosql($sql2);
+for ($i=0;$i<$cnt;$i++) {
+    $f=$q->rtnrlt($i);
+?>
+<tr>
+<td><a href="../user/detail.php?uid=<?=$f['uid'] ?>"><?=gravatar::showImage($f['email']);?><?=$f['nickname'] ?></a></td>
+<td align=center><span class="<?=$f['accepted']?'ok':'no'?>"><?=$f['score'] ?></span></td>
+<td align=right><?php printf("%.3f s",$f['runtime']/1000.0) ?></td>
+<td align=center><a href="../submit/submit.php?id=<?=$f['sid'] ?>" target="_blank"><?=$STR['lang'][$f['lang']]?></a></td>
+</tr>
+<?php 
+}
+?></table>
 <table id="Comments" class='table table-striped table-condensed table-bordered fiexd'>
 <tr><th colspan=3>最新讨论
 <a href="comments.php?pid=<?=$pid?>"><b>[发表看法]</b></a>
@@ -170,5 +183,5 @@ for ($i=0;$i<$cnt;$i++) {
 </div>
 
 <?php
-include_once("../include/stdtail.php");
+include_once("../include/footer.php");
 ?>

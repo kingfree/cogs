@@ -1,5 +1,5 @@
 <?php
-require_once("./include/stdhead.php");
+require_once("./include/header.php");
 gethead(1,"","首页");
 $p=new DataAccess();
 $q=new DataAccess();
@@ -101,8 +101,8 @@ $d=$p->rtnrlt($i);
 <td><i><?=$i+1 ?></i></td>
 <td width='28' class='jin'><a href="user/detail.php?uid=<?php echo $d['uid']; ?>" target="_blank"><?=gravatar::showImage($d['email'], 28);?></a></td>
 <td><a href="user/detail.php?uid=<?php echo $d['uid']; ?>" target="_blank"><?=$d['nickname']?></a></td>
-<td align=center><b><?php echo $d['grade'] ?></b></td>
-<td align=center><b><?php echo $d['accepted'] ?></b></td>
+<td ><b><?php echo $d['grade'] ?></b></td>
+<td ><b><?php echo $d['accepted'] ?></b></td>
 </tr>
 <?php } ?>
 </table>
@@ -111,5 +111,5 @@ $d=$p->rtnrlt($i);
 </div>
 
 <?php
-require_once("./include/stdtail.php");
+require_once("./include/footer.php");
 ?>

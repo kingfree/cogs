@@ -1,7 +1,7 @@
 <?php
 if ($_GET['action']=='verfy')
 {
-	require_once("../include/stdhead.php");
+	require_once("../include/header.php");
 	gethead(0,"","");
 	$p=new DataAccess();
 	$sql="select * from userinfo where uid='{$_GET['uid']}'";
@@ -14,7 +14,7 @@ if ($_GET['action']=='verfy')
 	}
 	header("location: /{$SET['global_root']}");
 }
-require_once("../include/stdhead.php");
+require_once("../include/header.php");
 gethead(1,"verfy","用户验证");
 $LIB->get_userinfo($_SESSION['ID']);
 ?>
@@ -32,5 +32,5 @@ $LIB->get_userinfo($_SESSION['ID']);
 </form>
 
 <?php
-	include_once("../include/stdtail.php");
+	include_once("../include/footer.php");
 ?>

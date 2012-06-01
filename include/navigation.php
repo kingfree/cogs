@@ -18,29 +18,29 @@ function Navigation($p) {
     HTML("<ul class='nav'>");
     HTML("<li class='dropdown'>");
     HTML("<a href='#' class='dropdown-toggle' data-toggle='dropdown'><b class='caret'></b></a>");
-    HTML("<ul class='dropdown-menu span10'><li>");
+    HTML("<ul class='dropdown-menu span11'><li>");
     HTML("<ul class='nav' id='catebar'>");
     $sql="select * from category order by cname";
     $cnt=$p->dosql($sql);
     for ($i=$st;$i<$cnt;$i++) {
         $d=$p->rtnrlt($i);
-        HTML("<li><a href='".路径("problem/index.php?caid={$d['caid']}")."' title='".sp2n(htmlspecialchars($d['memo']))."'>{$d['cname']}</a></li>");
+        HTML("<li class='span2'><a href='".路径("problem/index.php?caid={$d['caid']}")."' title='".sp2n(htmlspecialchars($d['memo']))."'>{$d['cname']}</a></li>");
     }
     HTML("</ul>");
     HTML("</li></ul>");
     HTML("</li>");
     列表("problem/index.php", "list", "题目");
-    列表("information/submitlist.php", "align-justify", "记录");
+    列表("submit/index.php", "align-justify", "记录");
     $context = "比赛";
     $now = time();
     $cnt2 = $p->dosql("select ctid from comptime where starttime < $now and endtime > $now");
     if($cnt2) $context .= "<span class='doing'>($cnt2)</span>";
     $cnt1 = $p->dosql("select ctid from comptime where starttime > $now and endtime > $now");
     if($cnt1) $context .= "<span class='todo'>($cnt1)</span>";
-    列表("competition/index.php", "list-alt", $context);
+    列表("contest/index.php", "list-alt", $context);
     列表("page/index.php", "file", "页面");
     列表("user/index.php", "user", "用户");
-    列表("information/comments.php", "comment", "讨论");
+    列表("discuss/index.php", "comment", "讨论");
     HTML("<form class='navbar-search pull-left' method='get' action='".路径("problem/index.php")."'>");
     HTML("<input name='key' type='text' id='key' class='search-query span2'  placeholder='搜索题目' />");
     HTML("</form>");
