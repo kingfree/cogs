@@ -231,37 +231,49 @@ if($_GET['oj']=='poj' && $_GET['id']>=1000) {
     $d['detail'].="<h3>【样例输出】</h3>".nl2br($element->outertext)."";
 }
 
-
 ?>
-<form action='' method='get' class='form-inline pull-right'>
-抄题：
+
+
+<div id='copy' class='modal hide fade in'>
+<div class='modal-header'>
+<button class='close' data-dismiss='modal'>×</button>
+<h2>抄袭题目</h2>
+</div>
+<div class='modal-body'>
+<form action='' method='get' class='form-horizontal'>
 <input name='action' type='hidden' value='<?=$_GET['action']?>' />
 <input name='pid' type='hidden' value='<?=$_GET['pid']?>' />
-<select name='oj' class='input-medium'>
+<div class='control-group'>
+<label class='control-label' for='oj'>在线系统</label>
+<div class='controls'>
+<select id='oj' name='oj' class='input-medium'>
 <option value='poj' <?if($_GET['oj']=='poj') echo "selected=selected";?> >POJ</option>
 <option value='soj' <?if($_GET['oj']=='soj') echo "selected=selected";?> >SOJ</option>
 <option value='lydsy' <?if($_GET['oj']=='lydsy') echo "selected=selected";?> >耒阳大视野</option>
 <!--<option value='uva' <?if($_GET['oj']=='uva') echo "selected=selected";?> >UVa</option>-->
 </select>
-<input name='id' type='number' class='input-medium' value='<?=$_GET['id']?$_GET['id']:1000?>' />
-<button type='submit' class='btn'>载入</button>
+</div>
+</div>
+<div class='control-group'>
+<label class='control-label' for='id'>题目编号</label>
+<div class='controls'>
+<input id='id' name='id' type='number' class='input-medium' value='<?=$_GET['id']?$_GET['id']:1000?>' />
+</div>
+</div>
+<div class='modal-footer'>
+<button data-dismiss='modal' class='btn'>取消</button>
+<button type="submit" class='btn btn-primary'>载入</button>
+</div>
+</div>
 </form>
+</div>
 
-<form action="doeditprob.php" method="post" enctype="multipart/form-data" class='form-inline'>
-<table class='table-form fixed'>
-<tr>
-<th width="80px">PID</th>
-<td width="280px"><?php echo $d['pid'] ?>
-<input name="pid" type="hidden" id="pid" value="<?php echo $d['pid'] ?>" /></td>
-<th>题目分类</th>
-</tr>
-<tr>
-<th>题目名称</th>
-<td><input name="probname" type="text" id="probname" onchange="checkprobname()" value="<?php echo $d['probname'] ?>" /><span id="msg1"></span></td>
-<td rowspan='9' valign="top">
+<div class='container-fluid'>
+<form action="doeditprob.php" method="post" enctype="multipart/form-data" class='form-horizontal'>
+<div id='cates' class='modal hide fade in' style='width:940px; margin-left:-470px;'>
 <?php
 if ($_GET['pid']) {
-    $sql="select caid from tag where pid={$_GET[pid]}";
+    $sql="select caid from tag where pid={$_GET['pid']}";
     $cnt=$p->dosql($sql);
     for ($i=0;$i<=$cnt-1;$i++) {
         $f=$p->rtnrlt($i);
@@ -272,90 +284,142 @@ $sql="select * from category order by cname";
 $cnt=$p->dosql($sql);
 if($cnt) {
 ?>
-<table>
+<div class='modal-header'>
+<button class='close' data-dismiss='modal'>×</button>
+<h2>题目分类</h2>
+</div>
+<div class='modal-body'>
 <?php
-$last=0;
-$linecnt=0;
-$line=1;
 for ($i=0;$i<$cnt;$i++) {
 $f=$p->rtnrlt($i);
-$last=$f['pid'];
-if($i % 5 == 0) echo "<tr>";
 ?>
-<td><input name="cate[<?=$f['caid']?>]" type="hidden" value="0" />
-<input name="cate[<?=$f['caid']?>]" type="checkbox" id="cate[<?=$f[caid]?>]" value="1" <?php if ($hash[$f['caid']]) echo 'checked="checked"';?> /><label for="cate[<?=$f['caid']?>]"> <?=$f['cname']?>&nbsp;</label></td>
+<span class='span2'>
+<input name="cate[<?=$f['caid']?>]" type="hidden" value="0" />
+<label class='checkbox inline'>
+<input name="cate[<?=$f['caid']?>]" type="checkbox" id="cate[<?=$f[caid]?>]" value="1" <?php if ($hash[$f['caid']]) echo 'checked="checked"';?>/><?=$f['cname']?>
+</label>
+</span>
 <? } ?>
-</table>
+</div>
 <? } ?>
-</td></tr>
-<tr>
-<th>文件名称</th>
-<td><input name="filename" type="text" id="filename" onchange="checkfilename()" value="<?php echo $d[filename] ?>" /><span id="msg2"></span></td>
-</tr>
-<tr>
-<th>阅读权限</th>
-<td><input name="readforce" type="number" id="readforce" value="<?php echo $d['readforce'] ?>" /></td>
-</tr>
-<tr>
-<th>可否提交</th>
-<td><input name="submitable" type="checkbox" id="submitable" value="1" <?php if ($d['submitable']) echo 'checked="checked"'; ?> /></td>
-</tr>
-<tr>
-<th>对比方式</th>
-<td><select name="plugin" id="plugin">
-<option value="-1"<?php if ($d['plugin']==-1){ ?> selected="selected"<?php } ?>>交互式</option>
-<option value="1"<?php if ($d['plugin']==1){ ?> selected="selected"<?php } ?>>简单对比</option>
-<option value="2"<?php if ($d['plugin']==2){ ?> selected="selected"<?php } ?>>逐字节对比</option>
-<option value="0"<?php if ($d['plugin']==0){ ?> selected="selected"<?php } ?>>评测插件</option>
-</select>                </td>
-</tr>
-<tr>
-<th>时间限制</th>
-<td><input name="timelimit" type="number" id="timelimit" value="<?php echo $d[timelimit] ?>" /> ms</td>
-</tr>
-<tr>
-<th>内存限制</th>
-<td><input name="memorylimit" type="number" id="memorylimit" value="<?php echo $d['memorylimit'] ?>" /> MiB</td>
-</tr>
-<tr>
-<th>难度等级</th>
-<td><input name="difficulty" type="number" id="difficulty" value="<?php echo $d['difficulty'] ?>" /></td>
-</tr>
-<tr>
-<th>开放分组</th>
-<td><select name="group" id="group">
+</div>
+<div class='row'>
+<div class='span6'>
+<div class='control-group'>
+<label class='control-label' for='pid'>PID</label>
+<div class='controls'>
+<span id='pid' class='uneditable-input' ><?=$_GET['pid'] ? $_GET['pid'] : "新建题目"?></span>
+<input name='pid' type='hidden' value='<?=$_GET['pid'] ? $_GET['pid'] : "0"?>' />
+<input name="action" type="hidden" id="action" value="<?=$_GET['action'] ?>" />
+</div>
+</div>
+<div class='control-group'>
+<label class='control-label' for='probname'>题目名称</label>
+<div class='controls'>
+<input name="probname" type="text" id="probname" onchange="checkprobname()" value="<?=$d['probname'] ?>" />
+<span class='help-inline' id="msg1"></span>
+</div>
+</div>
+<div class='control-group'>
+<label class='control-label' for='filename'>文件名称</label>
+<div class='controls'>
+<input name="filename" type="text" id="filename" onchange="checkfilename()" value="<?=$d['filename'] ?>" />
+<span class='help-inline' id="msg2"></span>
+</div>
+</div>
+<div class='control-group'>
+<label class='control-label' for='timelimit'>时间限制</label>
+<div class='controls'>
+<div class='input-append'>
+<input name="timelimit" type="number" id="timelimit" value="<?=$d['timelimit'] ?>" /><span class='add-on'>ms</span>
+</div>
+</div>
+</div>
+<div class='control-group'>
+<label class='control-label' for='memorylimit'>内存限制</label>
+<div class='controls'>
+<div class='input-append'>
+<input name="memorylimit" type="number" id="memorylimit" value="<?=$d['memorylimit'] ?>" /><span class='add-on'>MiB</span>
+</div>
+</div>
+</div>
+<div class='control-group'>
+<div class='controls'>
+<a class='btn btn-success' href="#cates" data-toggle='modal'><i class='icon-tags icon-white'></i>编辑分类</a>
+<button type="submit" class='btn btn-primary'>提交题目修改</button>
+<a class='btn pull-right' href="#copy" data-toggle='modal'><i class='icon-barcode'></i>抄袭题目</a>
+</div>
+</div>
+</div>
+<div class='span6'>
+<div class='control-group'>
+<label class='control-label' for='difficulty'>难度等级</label>
+<div class='controls'>
+<input name="difficulty" type="number" id="difficulty" value="<?=$d['difficulty'] ?>" />
+</div>
+</div>
+<div class='control-group'>
+<label class='control-label' for='readforce'>阅读权限</label>
+<div class='controls'>
+<input name="readforce" type="number" id="readforce" value="<?=$d['readforce'] ?>" />
+<span class='help-inline'><label class='checkbox inline'>
+<input name="submitable" type="checkbox" id="submitable" value="1" <?php if ($d['submitable']) echo 'checked="checked"'; ?> />
+可否提交</label></span>
+</div>
+</div>
+<div class='control-group'>
+<label class='control-label' for='plugin'>评测方式</label>
+<div class='controls'>
+<select name="plugin" id="plugin">
+<? for($i=-1; $i<=2; $i++) {
+    echo "<option value='$i' ";
+    if($d['plugin']==$i) echo "selected='selected'";
+    echo " >{$STR['plugin'][$i]}</option>";
+} ?>
+</select>
+</div>
+</div>
+<div class='control-group'>
+<label class='control-label' for='group'>开放分组</label>
+<div class='controls'>
+<select name="group" id="group">
 <?php
 $sql="select * from groups order by gname";
 $c=$q->dosql($sql);
-for ($j=0;$j<$c;$j++)
-{
-$e=$q->rtnrlt($j);
+for ($j=0;$j<$c;$j++) {
+    $e=$q->rtnrlt($j);
+    echo "<option value='{$e['gid']}' ";
+    if($d['group']==$e['gid']) echo "selected='selected'";
+    echo " >{$e['gname']}</option>";
+}
 ?>
-<option value="<?php echo $e['gid'] ?>" <?php if($e['gid']==$d['group']) echo 'selected="selected"' ?>>[<?php echo $e['gname'] ?>]</option>
-<?php }?>
-</select></td>
-</tr>
-<tr>
-<th>测试点数</th>
-<td><input name="datacnt" type="number" id="datacnt" value="<?php echo $d[datacnt] ?>" /></td>
-<td>
-<button type="submit" class='btn btn-primary'>单击此处提交对该题目的修改</button>
-<input name="action" type="hidden" id="action" value="<?php echo $_GET[action] ?>" />
-</td>
-<tr><th>测试数据</th>
-<td colspan='2'>
+</select>
+</div>
+</div>
+<div class='control-group'>
+<label class='control-label' for='datacnt'>测试数据</label>
+<div class='controls'>
+<input name="datacnt" type="number" id="datacnt" value="<?=$d['datacnt'] ?>" class='span2' />
 <input type="file" name="datafile" id="datafile" />
+<span class='help-inline'>
 打包zip文件包含一个以该题目*命名的文件夹，其中为*#.in和*#.ans数据，*.cc为评测插件
-</td></tr>
-</tr>
-<tr>
-<th valign="top">题目内容</th>
-<td colspan='2'>
-<textarea id="detail" name="detail" style="width:100%; height:400px;"><?=$d['detail']?></textarea>
-</td>
-</tr>
-</table>
+</span>
+</div>
+</div>
+</div>
+</div>
+<div class='row'>
+<div class='span12'>
+<div class='control-group'>
+<label class='control-label' for='detail'>题目内容</label>
+<div class='controls'>
+<textarea id="detail" name="detail" class='pagearea'><?=$d['detail']?></textarea>
+</div>
+</div>
+</div>
 </form>
+</div>
+</div>
 
 <?php
 include_once("../../include/stdtail.php");

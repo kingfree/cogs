@@ -263,13 +263,15 @@ function 是否通过($pid, $q) {
 }
 
 function 检测页面($total,$page,$page_size='') {
+    global $SET;
     $page = (int) $page;
     $page_size = (int) ($page_size ? $page_size : $SET['style_pagesize']);
     $total_page = ceil($total/$page_size);
     if($page < 1) return 0;
     if($total_page < 1) return 0;
     if($page > $total_page) $page = $total_page;
-    return (($page-1)*$page_size);
+    $start = ($page - 1) * $page_size;
+    return $start;
 }
 
 function 分页($total,$page,$url='',$page_size='',$max_length='') {

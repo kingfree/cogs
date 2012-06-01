@@ -8,6 +8,11 @@ body {
     height: 100px;
 }
 
+.pagearea {
+    width: 95%;
+    height: 400px;
+}
+
 #body {
     padding-top: 45px;
 }

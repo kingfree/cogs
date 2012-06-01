@@ -46,20 +46,19 @@ if($cnt) {
 <table class='table table-striped table-condensed table-bordered fiexd'>
 <tr><th width='80px'>题目名称</th>
 <td><?=$d[pid]; ?>. <b><?=$d['probname']; ?></b></td></tr>
-<tr><th>难度等级</th>
-<td><?=难度($d['difficulty']); ?></td></tr>
-<tr><th>文件名称</th>
-<td><code><?=$d['filename']?>.pas/c/cpp</code></td></tr>
 <tr><th>输入输出</th>
 <td><code><?=$d['filename']?>.in/out</code></td></tr>
+<tr><th>难度等级</th>
+<td><?=难度($d['difficulty']); ?></td></tr>
 <tr><th>时间限制</th>
 <td><?=$d['timelimit']; ?> ms (<?=$d['timelimit']/1000?> s)</td></tr>
 <tr><th>内存限制</th>
 <td><?=$d['memorylimit']; ?> MB </td></tr>
-<tr><th>对比方式</th>
-<td><?=$STR['plugin'][$d['plugin']]; ?></td></tr>
-<tr><th>测试点数</th>
-<td><span class='badge badge-<?=$d['submitable']?"success":"important"?>'><?=$d['datacnt']?></span></td></tr>
+<tr><th>测试方式</th>
+<td>
+<span class='badge badge-<?=$d['submitable']?"success":"important"?>'><?=$d['datacnt']?></span>
+<span class='pull-right'><?=$STR['plugin'][$d['plugin']]?></span>
+</td></tr>
 <tr>
 <th>添加时间</th>
 <td>
@@ -99,7 +98,7 @@ for ($i=0;$i<=$cnt2-1;$i++) {
 <input type="hidden" name="MAX_FILE_SIZE" value="102400" />
 <input type="file" name="file" title='选择程序源文件' />
 <?php if(有此权限('测试题目')) { ?>
-<label class='checkbox pull-right'>
+<label class='checkbox inline pull-right'>
 <input name="testmode" type="checkbox" value="1" />不写入数据库
 </label>
 <?php } ?>
@@ -120,11 +119,14 @@ for ($i=0;$i<$cnt;$i++) {
 <button type='button' class='btn active' data-toggle='button' value="cpp">C++</button>
 </div>
 <input name="lang" type='hidden' value='cpp' />-->
-<select class='input-medium pull-left' name='lang'>
+<!--<select class='input-medium pull-left' name='lang'>
 <option value="pas">Pascal</option>
 <option value="c">C</option>
 <option value="cpp" selected='1'>C++</option>
-</select>
+</select>-->
+<label class='radio inline'><input type='radio' name='lang' value='pas' />Pascal</label>
+<label class='radio inline'><input type='radio' name='lang' value='c' />C</label>
+<label class='radio inline'><input type='radio' name='lang' value='cpp' checked='checked'/>C++</label>
 <button type='submit' class='btn btn-primary pull-right' >提交代码</button>
 </td>
 </form>
