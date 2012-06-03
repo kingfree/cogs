@@ -124,3 +124,50 @@ padding: 10px;
   -moz-border-radius: 4px;
   border-radius: 4px;
 }
+
+.form-horizontal {
+padding: 10px;
+    background-color: #fff;
+  border: 1px solid #dddddd;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  border-radius: 4px;
+}
+
+.Comments {
+    width: 100%;
+    border: 0;
+    background-color: rgba(255,255,255,0.1);
+}
+
+.CommentsK {
+    height: 40px;
+    background-color: rgba(252,253,254,0.8);
+    border: 0;
+    padding: 10px 10px 10px 10px;
+}
+
+.CommentsCode {
+    border: 0;
+    text-align: center;
+    width: 250px;
+    background-color: rgba(252,223,200,0.8);
+}
+
+.CommentsTime {
+    border: 0;
+    text-align: right;
+    background-color: rgba(252,253,184,0.8);
+}
+
+.CommentsU {
+    width: 250px;
+    background-color: rgba(197,248,252,0.4);
+    border: 0;
+}
+
+.CommentsU tr {
+    background-color: rgba(255,255,255,0);
+    border: 0;
+}
+

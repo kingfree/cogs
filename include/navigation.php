@@ -40,7 +40,8 @@ function Navigation($p) {
     列表("contest/index.php", "list-alt", $context);
     列表("page/index.php", "file", "页面");
     列表("user/index.php", "user", "用户");
-    列表("discuss/index.php", "comment", "讨论");
+    //列表("discuss/index.php", "comment", "讨论");
+    列表("problem/commentlist.php", "comment", "讨论");
     HTML("<form class='navbar-search pull-left' method='get' action='".路径("problem/index.php")."'>");
     HTML("<input name='key' type='text' id='key' class='search-query span2'  placeholder='搜索题目' />");
     HTML("</form>");

@@ -185,50 +185,50 @@ switch ($query['action'])
 {
     case "state":
         $tmp['state']=$now;
-    $tmp['name']=$cfg['Name'];
-    $tmp['ver']=$cfg['Ver'];
-    $tmp['cnt']=read_cnt();
-    $run=getrunning();
-    if ($run<0)
-    {
-        running(0,'abs');
-        $run=0;
-    }
-    if ($run==0)
-    {
-        write("free");
-        $tmp['state']="free";
-    }
-    echo array_encode($tmp);
-    break;
+        $tmp['name']=$cfg['Name'];
+        $tmp['ver']=$cfg['Ver'];
+        $tmp['cnt']=read_cnt();
+        $run=getrunning();
+        if ($run<0)
+        {
+            running(0,'abs');
+            $run=0;
+        }
+        if ($run==0)
+        {
+            write("free");
+            $tmp['state']="free";
+        }
+        echo array_encode($tmp);
+        break;
     case "lock":
         write("locked");
-    $tmp['state']="successful";
-    echo array_encode($tmp);
-    break;
+        $tmp['state']="successful";
+        echo array_encode($tmp);
+        break;
     case "unlock":
         write("free");
-    write_cnt();
-    chdir($compiledir);
-    deldir($query['uid']);
-    $tmp['state']="successful";
-    echo array_encode($tmp);
-    break;
+        write_cnt();
+        chdir($compiledir);
+        deldir($query['uid']);
+        $tmp['state']="successful";
+        echo array_encode($tmp);
+        break;
     case "start":
         write("free");
-    $tmp['state']="successful";
-    echo array_encode($tmp);
-    break;
+        $tmp['state']="successful";
+        echo array_encode($tmp);
+        break;
     case "shutdown":
         write("closed");
-    $tmp['state']="successful";
-    echo array_encode($tmp);
-    break;
+        $tmp['state']="successful";
+        echo array_encode($tmp);
+        break;
     case "compile":
         compile($query);
-    break;
+        break;
     case "grade":
         grade($query);
-    break;
+        break;
 }
 ?>

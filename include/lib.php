@@ -18,35 +18,19 @@ class lib {
         require_once("db.php");
     }
     public function stdfunc() {
-        global $pri, $cfg;
-        require_once("standardfunc.php");
+        global $SET, $pri, $cfg;
+        require_once("func.php");
         require_once("gravatar.php");
         require_once("privilege.inc.php");
     }
     public function cls_compile() {
         require_once("compobj.php");
     }
-    public function cls_dbctrl() {
-        require_once("dbcontrol.php");
-    }
-    public function cls_sendmail() {
-        require_once("sendmail.inc.php");
-    }
-    public function cls_usersquare() {
-        require_once("usersquare.inc.php");
-    }
     public function func_socket() {
         require_once("socket.php");
     }
     public function get_userinfo($uid) {
         require_once("getuserinfo.php");
-    }
-    public function usersquare($uid) {
-        require_once("usersquare.inc.php");
-    }
-    public function sendverfymail($uid) {
-        global $SET;
-        require_once("sendverfy.inc.php");
     }
     public function getsubgroup($p,$gid) {
         global $SET;
@@ -75,14 +59,7 @@ $Query_Times=0;
 
 $LIB=new lib;
 $LIB->stdfunc();
-if ($DBT==1) {
-    $LIB->cls_database();
-} else {
-    $LIB->cls_dbaccess();
-}
-$LIB->cls_usersquare();
-
-
+$LIB->cls_dbaccess();
 $time_Ls=gettime();
 
 require_once("string.inc.php");

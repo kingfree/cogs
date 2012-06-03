@@ -18,7 +18,7 @@ if ($_REQUEST['action']=='edit')
 	$p=new DataAccess();
 	$sql="update grader set address='{$_POST['address']}',priority='{$_POST['priority']}',enabled='{$enabled}',memo='{$_POST['memo']}' where grid={$_REQUEST[grid]}";
 	$p->dosql($sql);
-    提示("修改评测机 {$_POST['address']} 成功！", 取路径("submit/grader.php"));
+    提示("修改评测机 {$_POST['address']} 成功！", 取路径("submit/graderlist.php"));
 }
 
 if ($_REQUEST['action']=='start')
@@ -29,7 +29,7 @@ if ($_REQUEST['action']=='start')
 	$d=$p->rtnrlt(0);
 	$s['action']="start";
 	httpsocket($d['address'],$s);
-    提示("启动评测机 {$_GET[grid]} 成功！", 取路径("submit/grader.php"));
+    提示("启动评测机 {$_GET[grid]} 成功！", 取路径("submit/graderlist.php"));
 }
 
 if ($_REQUEST['action']=='stop')
@@ -40,6 +40,6 @@ if ($_REQUEST['action']=='stop')
 	$d=$p->rtnrlt(0);
 	$s['action']="shutdown";
 	httpsocket($d['address'],$s);
-    提示("关闭评测机 {$_GET[grid]} 成功！", 取路径("submit/grader.php"));
+    提示("关闭评测机 {$_GET[grid]} 成功！", 取路径("submit/graderlist.php"));
 }
 ?>

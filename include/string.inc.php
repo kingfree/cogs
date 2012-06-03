@@ -56,6 +56,10 @@ $STR[lang][0]="Pascal";
 $STR[lang][1]="C";
 $STR[lang][2]="C++";
 
+$STR[lng][0]="P";
+$STR[lng][1]="C";
+$STR[lng][2]="+";
+
 $STR['plugin'][-1]="<span class='label label-warning'>交互式</span>";
 $STR['plugin'][0]="<span class='label label-success'>评测插件</span>";
 $STR['plugin'][1]="<span class='label label-default'>简单对比</span>";

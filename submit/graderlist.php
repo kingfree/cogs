@@ -5,7 +5,7 @@ gethead(1,"","评测机状态");
 ?>
 <div class='container'>
 <?php if(有此权限('管理评测')) { ?>
-<a class="btn btn-info pull-left" href="../admin/grader/editgrader.php?action=add">添加新评测机</a>
+<a class="btn btn-info pull-left" href="editgrader.php?action=add">添加新评测机</a>
 <?php } ?>
 <table class='table table-striped table-condensed table-bordered fiexd'>
   <tr>
@@ -49,7 +49,7 @@ gethead(1,"","评测机状态");
 <?php if(有此权限('管理评测')) { ?>
     <td><a href='<?=$d['address']?>'><?php echo $d['address'] ?></a></td>
     <td><?php echo $d['priority'] ?></td>
-    <td><a href="../admin/grader/editgrader.php?action=edit&amp;grid=<?php echo $d['grid'] ?>">修改</a> <a href="../admin/grader/doeditgrader.php?action=start&amp;grid=<?php echo $d['grid'] ?>">启动</a> <a href="../admin/grader/doeditgrader.php?action=stop&amp;grid=<?php echo $d['grid'] ?>">关闭</a></td>
+    <td><a href="editgrader.php?action=edit&amp;grid=<?php echo $d['grid'] ?>">修改</a> <a href="doeditgrader.php?action=start&amp;grid=<?php echo $d['grid'] ?>">启动</a> <a href="doeditgrader.php?action=stop&amp;grid=<?php echo $d['grid'] ?>">关闭</a></td>
 <?php } ?>
   </tr>
 <?php

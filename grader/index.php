@@ -1,5 +1,5 @@
 <?php
-require_once("lib.php");
+require_once("stdlib.php");
 
 $query=array_decode($_POST['query']);
 

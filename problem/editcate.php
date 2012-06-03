@@ -2,7 +2,7 @@
 require_once("../include/header.php");
 gethead(1,"分类管理","修改分类");
 ?>
-
+<div class='container'>
 <?php
 if ($_GET[action]=='edit') {
 	$p=new DataAccess();
@@ -34,7 +34,7 @@ if ($_GET[action]=='edit') {
 <button type="submit" class='btn btn-primary'>提交</button>
 </div>
 </form>
-
+</div>
 <?php
 include_once("../include/footer.php");
 ?>

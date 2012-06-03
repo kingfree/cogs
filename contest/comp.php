@@ -1,6 +1,7 @@
 <?php
 require_once("../include/header.php");
 gethead(0,"","比赛详细信息");
+$uid = (int) ($_GET['uid'] ? $_GET['uid'] : $_SESSION['ID']);
 $p=new DataAccess();
 $sql="select compbase.cname,compbase.contains,comptime.starttime,comptime.endtime,comptime.showscore,comptime.intro,groups.* from comptime,compbase,groups where comptime.cbid=compbase.cbid and comptime.ctid={$_GET[ctid]} and comptime.group=groups.gid";
 $cnt=$p->dosql($sql);
@@ -17,7 +18,7 @@ else {
 		$p->dosql($sql);
 		$d=$p->rtnrlt(0);
 		$pname=$d[probname];
-		echo '<script>document.location="cdetail.php?pid='.$v.'&ctid='.$_GET[ctid].'" </script>';
+		echo "<script>document.location='cdetail.php?pid={$v}&ctid={$_GET['ctid']}&uid={$uid}' </script>";
         exit;
 	}
 }

@@ -5,7 +5,11 @@ gethead(1,"","题目评论");
 $p=new DataAccess();
 $q=new DataAccess();
 $pid=$_GET['pid'];
+?>
+<div class='container'>
+<a class='btn btn-success' href="#com" data-toggle='modal'>发表评论</a>
 
+<?php
 $sql="select comments.*,userinfo.nickname,userinfo.email,userinfo.uid,problem.pid,problem.probname from comments,userinfo,problem where userinfo.uid=comments.uid and problem.pid=comments.pid and comments.pid='{$_GET[pid]}'";
 $sql.=" order by comments.stime asc";
 $cnt=$p->dosql($sql);
@@ -25,7 +29,6 @@ if ($cnt)
 			$sc=$d['showcode'];
 		}
 ?>
-<div class='container'>
 <table class="Comments">
   <tr>
     <td class="CommentsU" rowspan=2 valign='top'><table>
@@ -49,7 +52,7 @@ if ($cnt)
 	$q->dosql($sql);
 	$e=$q->rtnrlt(0);
 	?>
-	<a href="code.php?id=<?php echo $e['sid'] ?>">查看该用户最后一次提交的代码</a>
+	<a href="../submit/submit.php?id=<?php echo $e['sid'] ?>">查看该用户最后一次提交的代码</a>
 	<?php } ?>
 	</div>
     </td>
@@ -62,25 +65,26 @@ if ($cnt)
 	echo "还没有人发表评论！";
 }
 ?>
-<?php
-if ($cnter) {
-?>
-<form method="post" action="sendcomments.php" class='form-inline'>
-<textarea name="detail"><?php echo $detail ?></textarea>
+</div>
+<div id='com' class='modal hide fade in'>
+
+<form method="post" action="sendcomments.php" class='form-horizontal'>
+<div class='modal-header'>
+<button class='close' data-dismiss='modal'>×</button>
+<h2>发表评论</h2>
+</div>
+<div class='modal-body'>
+<textarea name="detail" class='textarea'><?php echo $detail ?></textarea>
 <br />
-<a href="problem.php?pid=<?php echo $pid ?>">[返回原题]</a>
 <label name="showcode"><input id="showcode" type="checkbox" value="1" <?php if ($sc){ ?> checked="checked" <?php } ?> />显示你的代码</label>
-<button type="submit" class='btn btn-primary'>发表</button>
+</div>
+<div class='modal-footer'>
 <input name="pid" type="hidden" id="pid" value="<?php echo $pid ?>" />
+<button data-dismiss='modal' class='btn'>取消</button>
+<button type="submit" class='btn btn-primary'>发表评论</button>
+</div>
 </form>
-<?php
-} else {
-?>
-	您还没有提交过这道题。
-<?php 
-}
-?>
 </div>
 <?php
-	include_once("../include/footer.php");
+include_once("../include/footer.php");
 ?>

@@ -31,7 +31,7 @@ $q=new DataAccess();
             $groupadmin=true;
 ?>
   <tr>
-    <td><b><a href="../user/index.php?gid=<?=$d['gid']?>"><?=$d['gname']?></a></b></td>
+    <td><b><a href="index.php?gid=<?=$d['gid']?>"><?=$d['gname']?></a></b></td>
     <td><?php
 if ($d['parent']!=-1)
 {
@@ -55,14 +55,14 @@ if ($d['parent']!=-1)
     </td>
     <?php } ?>
     <?php if(有此权限('分组管理')) { ?>
-    <td class='admin'><a href="../admin/group/editgroup.php?action=edit&gid=<?=$d['gid'] ?>">修改</a></td>
+    <td class='admin'><a href="editgroup.php?action=edit&gid=<?=$d['gid'] ?>">修改</a></td>
     <?php } ?>
   </tr>
 <?php
     }
 ?>
 </table>
-</table>
+</div>
 <?php
     include_once("../include/footer.php");
 ?>

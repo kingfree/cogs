@@ -25,9 +25,9 @@ class Compiler
     {
         $p=new DataAccess();
         if($judger)
-        $sql="select grid,address,memo from grader where enabled=1 and grid=$judger";
+            $sql="select grid,address,memo from grader where enabled=1 and grid=$judger";
         else
-        $sql="select grid,address,memo from grader where enabled=1 order by priority desc";
+            $sql="select grid,address,memo from grader where enabled=1 order by priority desc";
         $cnt=$p->dosql($sql);
         for ($i=0;$i<$cnt;$i++)
         {
@@ -231,11 +231,6 @@ class Compiler
             $sql="insert into submit(pid,uid,lang,result,score,memory,accepted,subtime,IP,runtime,srcname) values({$this->info['pid']},{$this->info['uid']},{$this->info['language']},'{$this->s_detail}',{$this->s_score},{$this->avgmemory},{$ac},".time().",'{$_SERVER['REMOTE_ADDR']}',{$this->totaltime},'{$this->srcname}')";
             $p->dosql($sql);
         }
-        /*if (mt_rand(0,10)==1)
-        {
-            echo "<p>已完成数据库校验。</p>";
-            require("gen_rank.php");
-        }*/
     }
 
     public function writedb_comp($csid)

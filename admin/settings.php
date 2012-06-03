@@ -19,8 +19,8 @@ $p=new DataAccess();
 ?>
   <tr>
     <td>
-    <a href="settings/editkey.php?sname=<?php echo $d['name'] ?>&method=html">富文本</a>
-    <a href="settings/editkey.php?sname=<?php echo $d['name'] ?>&method=text">纯文本</a>
+    <a href="editkey.php?sname=<?php echo $d['name'] ?>&method=html">富文本</a>
+    <a href="editkey.php?sname=<?php echo $d['name'] ?>&method=text">纯文本</a>
     </td>
     <td><code><?php echo $d['name'] ?></code></td>
     <td><?php echo $d['value'] ?></td>
