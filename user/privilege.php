@@ -1,3 +1,14 @@
+<?php
+require_once("../include/header.php");
+gethead(1,"","用户列表");
+$p=new DataAccess();
+
+$uid=(int) ($_POST['uid'] ? $_POST['uid'] : $_GET['uid']);
+$priv=(int) ($_POST['pri'] ? $_POST['pri'] : $_GET['pri']);
+$way=$_POST['way'] ? $_POST['way'] : $_GET['way'];
+
+?>
+<div class='container'>
 <form method=post>
 	<b>为用户添加权限</b>
 	用户编号：<input type=text size=10 name="uid" value="<?=$uid?>" />
@@ -16,21 +27,14 @@ while(list($key, $val)=each($pri)) {
 <button type=submit class='btn btn-primary' >添加权限</button>
 </form>
 <?
-$p=new DataAccess();
-
-$uid=(int) ($_POST['uid'] ? $_POST['uid'] : $_GET['uid']);
-$priv=(int) ($_POST['pri'] ? $_POST['pri'] : $_GET['pri']);
-$way=$_POST['way'] ? $_POST['way'] : $_GET['way'];
-
 if($way=='ins' && $uid) {
     $sql="select def from `privilege` where uid=$uid and pri=$priv limit 1";
     $cnt=$p->dosql($sql);
     if(!$cnt) {
         $sql="insert into `privilege` values('$uid','$priv','1')";
         $cnt=$p->dosql($sql);
-    }
-    if($cnt)
         HTML("<div class='alert alert-success'>用户 $uid 已添加权限 ".array_search($priv, $pri)." ！</div>");
+    }
 }
 
 if($way=='del' && $uid) {
@@ -84,4 +88,8 @@ if($way=='del' && $uid) {
 </table>
 <?
 分页($cnt, $_GET['page'], '?settings=privilege&');
+?>
+</div>
+<?php
+include_once("../include/footer.php");
 ?>

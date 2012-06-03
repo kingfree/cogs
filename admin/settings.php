@@ -1,3 +1,9 @@
+<?php
+require_once("../include/header.php");
+gethead(1,"参数设置","参数设置");
+$p=new DataAccess();
+?>
+<div class='container'>
 <table class='table table-striped table-condensed table-bordered fiexd'>
   <tr>
     <th width=10%>修改</th>
@@ -5,7 +11,6 @@
     <th>值</th>
   </tr>
 <?php
-	$p=new DataAccess();
 	$sql="select * from settings";
 	$cnt=$p->dosql($sql);
 	for ($i=0;$i<$cnt;$i++)
@@ -24,3 +29,7 @@
 	}
 ?>
 </table>
+</div>
+<?php
+require_once("../include/footer.php");
+?>

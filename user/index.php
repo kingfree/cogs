@@ -138,7 +138,7 @@ function okdel(name) {
     </td><? } ?>
     <? if(有此权限('修改用户')) { ?><td>
     <? if(有此权限('修改权限')) { ?>
-    <a href='../admin/settings.php?settings=privilege&way=edit&uid=<?=$d['uid']?>'>权限</a>
+    <a href='privilege.php?way=edit&uid=<?=$d['uid']?>'>权限</a>
     <? } ?>
     <a href="edituser.php?uid=<?=$d['uid'] ?>">修改</a>
     <a href="doedituser.php?uid=<?=$d['uid'] ?>&action=del" onclick="return okdel('<?=$d['nickname']?>')">删除</a>
@@ -151,5 +151,5 @@ function okdel(name) {
 <? 分页($cnt, $_GET['page'], '?key='.$_GET['key'].'&sc'.$_GET['sc'].'&rank='.$_GET['rank'].'&caid='.$_GET['caid'].'&'); ?>
 </div>
 <?php
-    include_once("../include/footer.php");
+include_once("../include/footer.php");
 ?>
