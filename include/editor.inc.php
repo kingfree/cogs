@@ -8,7 +8,6 @@ $CSSH=路径("style/bootstrap/css/bootstrap.css");
         var editor;
         KindEditor.ready(function(K) {
                 editor = K.create('#<?=$edname?>', {
-                        themeType : 'simple',
                         cssPath : '<?=$CSSH?>'
                 });
         });
