@@ -1,7 +1,7 @@
 <?php
 require_once("../include/header.php");
 gethead(1,"sess","代码");
-$LIB->dpshhl();
+$LIB->hlighter();
 ?>
 
 <?php

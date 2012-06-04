@@ -19,9 +19,8 @@ $pbs=explode(":",$d['contains']);
 <div class='container'>
 <table id="contest_report" class='table table-striped table-condensed table-bordered fiexd'>
   <tr>
-    <th width="30px"><a href="javascript:qsort('rank')">名次</a></th>
+    <th width="40px"><a href="javascript:qsort('rank')">名次</a></th>
     <th width="100px">用户</th>
-    <? if(有此权限('查看用户')) { ?><th width="40px" class=admin>姓名</th><? } ?>
 <?php
     $cnt_prob=0;
     foreach($pbs as $k=>$v) {
@@ -54,9 +53,8 @@ $pbs=explode(":",$d['contains']);
     <th id="rank<?=$rowcnt ?>">&nbsp;</th>
     <td id="nickname<?=$rowcnt ?>"><a href="comp.php?ctid=<?=$_GET['ctid'] ?>&uid=<?=$d['uid'] ?>" target="_blank">
 <?=gravatar::showImage($d['email'], 14);?>
-<?=$d['nickname'] ?></a></td>
-    <?php if(有此权限('查看用户')) { ?>
-    <td id="realname<?=$rowcnt ?>" class=admin ><a href="../user/detail.php?uid=<?=$d['uid'] ?>" target="_blank"><?=$d['realname'] ?></a></td><?php } ?>
+<?=有此权限('查看用户') ? $d['realname'] : $d['nickname'] ?>
+</a></td>
 <?php
         $sql="select pid,result,score,csid from compscore where uid='{$d['uid']}' and ctid={$_GET[ctid]} order by pid asc";
         $cnt_sub=$q->dosql($sql);
@@ -132,11 +130,6 @@ function swap(a,b) {
     t=document.getElementById("nickname"+a).innerHTML;
     document.getElementById("nickname"+a).innerHTML=document.getElementById("nickname"+b).innerHTML;
     document.getElementById("nickname"+b).innerHTML=t;
-    <?php if(有此权限('查看用户')) { ?>
-    t=document.getElementById("realname"+a).innerHTML;
-    document.getElementById("realname"+a).innerHTML=document.getElementById("realname"+b).innerHTML;
-    document.getElementById("realname"+b).innerHTML=t;
-    <?php } ?>
     t=document.getElementById("sum"+a).innerHTML;
     document.getElementById("sum"+a).innerHTML=document.getElementById("sum"+b).innerHTML;
     document.getElementById("sum"+b).innerHTML=t;

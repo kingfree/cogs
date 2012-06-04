@@ -91,6 +91,7 @@ $st=检测页面($cnt, $_GET['page']);
 <?php if(有此权限('查看题目')) { ?>
 <th class=admin>标识</th>
 <th class=admin>权限</th>
+<th class=admin>addid</th>
 <?php } ?>
 <?php if(有此权限('修改题目')) { ?>
 <th class=admin>编辑</th>
@@ -119,6 +120,7 @@ if (!$err) for ($i=$st;$i<$cnt && $i<$st+$SET['style_pagesize'] ;$i++) {
 <?php if ($d['submitable']) echo "<span class='label label-success'>可提交</span>"; else echo "<span class='label label-important'>不可提交</span>"; ?>
 </td>
 <td class=admin><?=$d['readforce']?></td>
+<td class=admin><a href="../user/detail.php?uid=<?=$d['addid']; ?>"><?=$d['addid']?></a></td>
 <?php } ?>
 <?php if(有此权限('修改题目')) { ?>
 <td class=admin><a href="editprob.php?action=edit&pid=<?=$d['pid']; ?>">修改</a></td>

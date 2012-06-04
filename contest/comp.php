@@ -18,7 +18,7 @@ else {
 		$p->dosql($sql);
 		$d=$p->rtnrlt(0);
 		$pname=$d[probname];
-		echo "<script>document.location='cdetail.php?pid={$v}&ctid={$_GET['ctid']}&uid={$uid}' </script>";
+		echo "<script>document.location='problem.php?pid={$v}&ctid={$_GET['ctid']}&uid={$uid}' </script>";
         exit;
 	}
 }

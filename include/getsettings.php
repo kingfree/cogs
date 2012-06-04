@@ -9,6 +9,7 @@ for ($i=0;$i<$cnt;$i++) {
 
 $SET['cur']=$_SERVER['SCRIPT_FILENAME'];
 $SET['global_root']=$cfg['dir_root'];
+$SET['global_sitename']="COGS";
 $SET['base']=$_SERVER['DOCUMENT_ROOT'].$SET['global_root'];
 $SET['URI']=base64_encode($_SERVER['REQUEST_URI']);
 

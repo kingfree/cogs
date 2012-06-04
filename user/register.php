@@ -83,20 +83,20 @@ if ($_GET[accept]==1) {
 <td><input name="usr" type="text" id="usr" /> 4～24位数字或字母</td>
 </tr>
 <tr>
-<th>用户昵称</th>
-<td><input name="nickname" type="text" id="nickname" /> 2～10位可显示字符</td>
-</tr>
-<tr>
-<th>电子邮件</th>
-<td><input name="email" type="text" id="email" /> 用于显示 Gravatar 头像</td>
-</tr>
-<tr>
 <th>密码</th>
 <td><input name="pwd" type="password" id="pwd"></td>
 </tr>
 <tr>
 <th>重复密码</th>
 <td><input name="repwd" type="password" id="password" /> 验证你没有输错</td>
+</tr>
+<tr>
+<th>用户昵称</th>
+<td><input name="nickname" type="text" id="nickname" /> 2～10位可显示字符</td>
+</tr>
+<tr>
+<th>电子邮件</th>
+<td><input name="email" type="text" id="email" /> 用于显示 Gravatar 头像</td>
 </tr>
 <tr>
 <th>提示问题</th>

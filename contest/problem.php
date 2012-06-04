@@ -129,7 +129,7 @@ if($cnt) {
         if($cnt) $f=$r->rtnrlt(0);
 ?>
 <li class="<?=($v == $_GET['pid'])?"active":""?>">
-<a href="cdetail.php?pid=<?=$v?>&ctid=<?=$_GET['ctid']?>&uid=<?=$uid?>">
+<a href="problem.php?pid=<?=$v?>&ctid=<?=$_GET['ctid']?>&uid=<?=$uid?>">
 <? echo $ppid . ". "; $ppid++; echo $pname; ?></a>
 </li>
 <?  } ?>

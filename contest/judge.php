@@ -2,7 +2,7 @@
 require_once("../include/header.php");
 gethead(1,"查看比赛","比赛评测");
 ?>
-
+<div class='container'>
 <?php
 if ($_POST['do']=="评测选定") {
     echo "<h2>评测选定</h2>";
@@ -81,23 +81,20 @@ function Finish() {
 
 </script>
 
-<p>
-  <input name="st" type="button" id="st" value="开始评测" onclick="StartJudge()" />
-</p>
-<p>
+
+<input name="st" type="button" id="st" value="开始评测" class='btn btn-primary'  onclick="StartJudge()" />
 进度
   <input readonly="readonly" type="text" id="progress" style="background-color:#6699CC; color:#FFFF00" value="0%" size="6" />
 当前第<span id="nowp">0</span>个 共<?=$cnt ?>个 </p>
-<table width="100%" border="1">
+<table class='table table-striped table-condensed table-bordered fiexd'>
   <tr>
-    <th width="7%">CSID</th>
-    <th width="17%">用户昵称</th>
-    <th width="14%">真实姓名</th>
-    <th width="17%">题目名</th>
-    <th width="14%">文件名</th>
-    <th width="8%">代码</th>
-    <th width="10%">得分</th>
-    <th width="13%">测试点</th>
+    <th width="60px">CSID</th>
+    <th width="60px">真实姓名</th>
+    <th width="120px">题目名</th>
+    <th width="120px">文件名</th>
+    <th width="50px">代码</th>
+    <th width="50px">得分</th>
+    <th>测试点</th>
   </tr>
 <?php 
     $p=new DataAccess();
@@ -111,9 +108,8 @@ function Finish() {
 ?>
   <tr>
     <td><?=$d[csid] ?></td>
-    <td><a href="../user/detail.php?uid=<?=$d[uid] ?>" target="_blank"><?=$d[nickname] ?></a></td>
     <td><a href="../user/detail.php?uid=<?=$d[uid] ?>" target="_blank"><?=$d[realname] ?></a></td>
-    <td><a href="cdetail.php?pid=<?=$d[pid] ?>&ctid=<?=$d[ctid] ?>" target="_blank"><?=$d[probname] ?></a></td>
+    <td><a href="problem.php?pid=<?=$d[pid] ?>&ctid=<?=$d[ctid] ?>" target="_blank"><?=$d[probname] ?></a></td>
     <td><?=$d[filename] ?></td>
     <td><a href="code.php?csid=<?=$d[csid] ?>" target="_blank"><?=$STR[lang][$d[lang]] ?></a></td>
     <td id="score<?=$d[csid] ?>"><?=$d[score] ?></td>
@@ -123,8 +119,7 @@ function Finish() {
     }
 ?>
 </table>
-<a href="../admin/comp/comptime.php?ctid=<?=$_POST['ctid'] ?>">返回比赛场次管理</a>
-
+</div>
 <?php
     include_once("../include/footer.php");
 ?>

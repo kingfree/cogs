@@ -105,7 +105,7 @@ function okdel(name) {
     <th width='40px'>阅读</th>
     <th width='120px'>分组</th>
     <th width='40px'>通过</th>
-    <th width='40px'>通过率</th>
+    <th width='50px'>通过率</th>
     <th width='40px'>等级</th>
     <? if(有此权限('查看用户')) { ?><th class='admin' width='100px'>IP</th><? } ?>
     <? if(有此权限('修改用户')) { ?><th class='admin' width='100px'>操作</th><? } ?>

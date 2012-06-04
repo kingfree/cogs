@@ -1,5 +1,6 @@
 <?php
 require_once("../include/header.php");
+gethead(8,"修改页面","");
 //date_default_timezone_set("Asia/Shanghai");
 if ($_REQUEST[action]=='add') {
 	$p=new DataAccess();
@@ -7,21 +8,19 @@ if ($_REQUEST[action]=='add') {
 	$p->dosql($sql);
 	$d=$p->rtnrlt(0);
 	$aid=$d['aid'];
-}
-
-if ($_REQUEST[action]=='edit') {
+    提示("新建页面 {$_POST[title]} 成功",取路径("page/page.php?aid=$aid"));
+} else if ($_REQUEST[action]=='edit') {
 	$p=new DataAccess();
 	$sql="update page set title='{$_POST[title]}',`force`={$_POST[force]}, etime=".time().",`text`='".mysql_real_escape_string($_POST[text])."',`group`='{$_POST['group']}' where aid={$_REQUEST[aid]}";
 	$p->dosql($sql);
 	$aid=$_REQUEST[aid];
-}
-
-if ($_REQUEST[action]=='del') {
+    提示("修改页面 {$_POST[title]} 成功",取路径("page/page.php?aid=$aid"));
+} else if ($_REQUEST[action]=='del') {
 	$p=new DataAccess();
 	$sql="delete from page where aid={$_REQUEST[aid]}";
 	$p->dosql($sql);
 	$aid=0;
+    异常("删除页面 {$_REQUEST[aid]} 成功",取路径("page/index.php"));
 }
-echo "<script>document.location=\"../refresh.php?id=23&aid={$aid}\"</script>";
 ?>
 

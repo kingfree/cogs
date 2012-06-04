@@ -62,14 +62,14 @@ for ($i=$st;$i<$cnt && $i<$st+$SET['style_pagesize'] ;$i++) {
 		{
 			$e=$q->rtnrlt($j);
 		?>
-			<option value="comp/comptime.php?ctid=<?php echo $e[ctid] ?>"><?php echo date("在 Y-m-d H:i:s 的开始比赛",$e[starttime]) ?></option>
+			<option value="comptime.php?ctid=<?php echo $e[ctid] ?>"><?php echo date("在 Y-m-d H:i:s 的开始比赛",$e[starttime]) ?></option>
 <?php }?>
 <option selected="selected">[<?php echo $c ?>个场次]</option>
-<option value="comp/editcomptime.php?action=add&cbid=<?php echo $d['cbid'] ?>">[添加新场次]</option>
+<option value="editcomptime.php?action=add&cbid=<?php echo $d['cbid'] ?>">[添加新场次]</option>
 		</select>
 	</td>
     <td><?php echo "<a href='../user/detail.php?uid={$d['ouid']}' target='_blank'>{$d['nickname']}</a>" ?></td>
-    <td><a href="comp/editcompbase.php?action=edit&cbid=<?php echo $d['cbid'] ?>">修改比赛</a></td>
+    <td><a href="editcompbase.php?action=edit&cbid=<?php echo $d['cbid'] ?>">修改比赛</a></td>
   </tr>
 <?php
 	}

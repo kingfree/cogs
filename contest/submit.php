@@ -2,7 +2,7 @@
 require_once("../include/header.php");
 
 if(time() > $_POST['endtime'])
-异常i("比赛已经结束，不可再提交！",取路径("contest/cdetail.php?pid={$_POST['pid']}&ctid={$_POST['ctpid']}"));
+异常i("比赛已经结束，不可再提交！",取路径("contest/problem.php?pid={$_POST['pid']}&ctid={$_POST['ctpid']}"));
 
 $fname=$_POST[filename];
 switch ($_POST[lang]) {
@@ -51,5 +51,5 @@ if ($cnt) {
     $p->dosql($sql);
 }
 
-提示i("提交代码成功！",取路径("contest/cdetail.php?pid={$_POST['pid']}&ctid={$_POST['ctpid']}"));
+提示i("提交代码成功！",取路径("contest/problem.php?pid={$_POST['pid']}&ctid={$_POST['ctpid']}"));
 ?>
