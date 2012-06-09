@@ -9,7 +9,7 @@ $res = @mysql_query("select probname from problem where pid=$pid");
 $ress = @mysql_fetch_object($res);
 $title = $ress->probname;
 @mysql_close($db);
-gethead(1,"",$pid.": ".$title);
+gethead(1,"",$pid.". ".$title);
 
 $p=new DataAccess();
 $q=new DataAccess();
@@ -76,7 +76,7 @@ if($_SESSION['ID']) {
     $ac=$q->dosql($sql);
     if ($ac) {
         $e=$q->rtnrlt(0);
-        echo "<a href='code.php?id={$e['sid']}'>";
+        echo "<a href='../submit/code.php?id={$e['sid']}'>";
         echo $STR['lang'][$e['lang']];
         echo "</a> ";
         评测结果($e['result']);
@@ -145,7 +145,7 @@ for ($i=0;$i<$cnt;$i++) {
 <td><a href="../user/detail.php?uid=<?=$f['uid'] ?>"><?=gravatar::showImage($f['email']);?><?=$f['nickname'] ?></a></td>
 <td align=center><span class="<?=$f['accepted']?'ok':'no'?>"><?=$f['score'] ?></span></td>
 <td align=right><?php printf("%.3f s",$f['runtime']/1000.0) ?></td>
-<td align=center><a href="../submit/submit.php?id=<?=$f['sid'] ?>" target="_blank"><?=$STR['lang'][$f['lang']]?></a></td>
+<td align=center><a href="../submit/code.php?id=<?=$f['sid'] ?>" target="_blank"><?=$STR['lang'][$f['lang']]?></a></td>
 </tr>
 <?php 
 }

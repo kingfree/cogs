@@ -1,10 +1,7 @@
 <?php
 require_once("../include/header.php");
-gethead(1,"","题目信息");
+gethead(1,"","比赛题目");
 $uid = (int) ($_GET['uid'] ? $_GET['uid'] : $_SESSION['ID']);
-?>
-
-<?php
 $p=new DataAccess();
 $r=new DataAccess();
 $sql="select * from problem where pid={$_GET[pid]}";

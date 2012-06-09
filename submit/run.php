@@ -1,8 +1,7 @@
 <?php
 require_once("../include/header.php");
-gethead(1,"sess","编译执行");
+gethead(1,"sess","评测");
 $LIB->hlighter();
-
 if (!$_POST['pid']) 异常("你来错地方了！");
 $LIB->cls_compile(); 
 $LIB->func_socket();
@@ -103,7 +102,7 @@ if ($csucc) {
 <div class='alert'>
 <p>运行时间 <?php printf ("%.3f",$Cp->gettotaltime()/1000.0) ?> s</p>
 <p>平均内存 <?php printf("%.2f",$Cp->getmemory()/1024) ?> MiB</p>
-<p>测试点通过状况 <a href="../submit/submit.php?id=<?=$info['sid']?>"><?=评测结果($Cp->s_detail) ?></a></p>
+<p>测试点通过状况 <a href="../submit/code.php?id=<?=$info['sid']?>"><?=评测结果($Cp->s_detail) ?></a></p>
 <p>得分：<?=$Cp->getscore(); ?></p>
 <p><a href="../problem/problem.php?pid=<?=$_POST['pid'] ?>">返回原题 “<?=$ptitle?>”</a></p>
 <?php if ($Cp->ac==$d['datacnt']) {

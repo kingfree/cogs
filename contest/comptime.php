@@ -1,6 +1,6 @@
 <?php
 require_once("../include/header.php");
-gethead(1,"修改比赛","比赛场次评测");
+gethead(1,"查看比赛","比赛场次评测");
 $p=new DataAccess();
 $q=new DataAccess();
 $sql="select comptime.*,compbase.cname,groups.* from comptime,compbase,groups where comptime.cbid=compbase.cbid and comptime.ctid={$_GET[ctid]} and groups.gid=comptime.group";

@@ -1,6 +1,6 @@
 <?php
 require_once("../include/header.php");
-gethead(1,"sess","站内邮件");
+gethead(1,"sess","邮件列表");
 
 $uid = $_SESSION['ID'];
 

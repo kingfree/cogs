@@ -1,6 +1,6 @@
 <?php
 require_once("../include/header.php");
-gethead(1,"","评测机状态");
+gethead(1,"","评测机列表");
     $q=new DataAccess();
 ?>
 <div class='container'>

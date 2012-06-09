@@ -118,7 +118,7 @@ function okdel(name) {
   <tr>
     <th class='center'><?=$i+1?></th>
     <td><?=$d['uid'] ?></td>
-    <td><a href="../user/detail.php?uid=<?=$d['uid'] ?>" target="_blank"><?=gravatar::showImage($d['email']);?><?=$d['nickname'] ?></a></td>
+    <td><a href="detail.php?uid=<?=$d['uid'] ?>"><?=gravatar::showImage($d['email']);?><?=$d['nickname'] ?></a></td>
     <? if(有此权限('查看用户')) { ?><td ><?=$d['realname'] ?></td><? } ?>
     <td><?
     $sql="select privilege.* from privilege where uid={$d['uid']} order by pri asc";

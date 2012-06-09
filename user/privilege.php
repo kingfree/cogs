@@ -1,6 +1,6 @@
 <?php
 require_once("../include/header.php");
-gethead(1,"","用户列表");
+gethead(1,"","权限列表");
 $p=new DataAccess();
 
 $uid=(int) ($_POST['uid'] ? $_POST['uid'] : $_GET['uid']);

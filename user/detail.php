@@ -1,6 +1,6 @@
 <?php
 require_once("../include/header.php");
-gethead(1,"","用户详细信息", $_GET['uid']);
+gethead(1,"","用户信息", $_GET['uid']);
 $p=new DataAccess();
 $q=new DataAccess();
 ?>
@@ -129,7 +129,7 @@ for ($i=0;$i<$cnt;$i++) {
     $j++;
 ?>
 <td>
-<a href='../submit/submit.php?id=<?=$d['sid']?>' target='_blank'>
+<a href='../submit/code.php?id=<?=$d['sid']?>' target='_blank'>
 <?=$STR[lng][$d['lang']]?>
 <i class='icon-<?=($d['accepted']?"ok":"remove")?>'></i>
 </a>

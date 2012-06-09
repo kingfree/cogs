@@ -53,7 +53,7 @@ if ($cnt) {
 	$q->dosql($sql);
 	$e=$q->rtnrlt(0);
 	?>
-	<a href="../submit/submit.php?id=<?php echo $e['sid'] ?>">查看该用户最后一次提交的代码</a>
+	<a href="../submit/code.php?id=<?php echo $e['sid'] ?>">查看该用户最后一次提交的代码</a>
 	<?php } ?>
 	</div>
     </td>

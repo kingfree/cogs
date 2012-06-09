@@ -255,7 +255,7 @@ function 是否通过($pid, $q) {
         if ($ac) {
             $e=$q->rtnrlt(0);
             //echo "<a href='".路径("problem/code.php?id=").$e['sid']."' target='_blank'><span class=".
-            echo "<a href='".路径("submit/submit.php?id=").$e['sid']."' target='_blank'><span class=icon-".
+            echo "<a href='".路径("submit/code.php?id=").$e['sid']."' target='_blank'><span class=icon-".
                 ($e['accepted']?"ok>":"remove>")."</span></a>";
             //} else echo "<span class='did'>－</span>";
     } else echo "<span class='icon-minus'>－</span>";

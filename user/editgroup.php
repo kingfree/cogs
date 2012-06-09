@@ -1,6 +1,6 @@
 <?php
 require_once("../include/header.php");
-gethead(1,"分组管理","修改用户组");
+gethead(1,"分组管理","修改分组");
 $p=new DataAccess();
 $q=new DataAccess();
 $d['adminuid']=$_SESSION['ID'];

@@ -1,6 +1,6 @@
 <?php
 require_once("../include/header.php");
-gethead(1,"","成绩公布");
+gethead(1,"","比赛成绩");
 
 $p=new DataAccess();
 $r=new DataAccess();

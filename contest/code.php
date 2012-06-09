@@ -1,6 +1,6 @@
 <?php
 require_once("../include/header.php");
-gethead(1,"sess","代码");
+gethead(1,"sess","比赛代码");
 $LIB->hlighter();
 ?>
 

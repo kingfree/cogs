@@ -1,6 +1,6 @@
 <?php
 require_once("../include/header.php");
-gethead(1,"查看用户","用户登录日志");
+gethead(1,"查看用户","登录日志");
 $p=new DataAccess();
 ?>
 

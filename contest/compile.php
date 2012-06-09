@@ -7,12 +7,9 @@ $LIB->func_socket();
 $p=new DataAccess();
 $sql="select compscore.lang,compscore.uid,problem.filename,compscore.ctid,problem.pid,problem.datacnt,problem.timelimit,problem.memorylimit,problem.plugin from compscore,problem where compscore.pid=problem.pid and compscore.csid={$_POST['csid']}";
 $cnt=$p->dosql($sql);
-if ($cnt)
-{
+if ($cnt) {
 	$d=$p->rtnrlt(0);
-}
-else
-{
+} else {
 	exit;
 }
 $cdir="{$SET['dir_competition']}/{$d[ctid]}";

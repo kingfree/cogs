@@ -1,6 +1,6 @@
 <?php
 require_once("../include/header.php");
-gethead(0,"","比赛详细信息");
+gethead(0,"","");
 $uid = (int) ($_GET['uid'] ? $_GET['uid'] : $_SESSION['ID']);
 $p=new DataAccess();
 $sql="select compbase.cname,compbase.contains,comptime.starttime,comptime.endtime,comptime.showscore,comptime.intro,groups.* from comptime,compbase,groups where comptime.cbid=compbase.cbid and comptime.ctid={$_GET[ctid]} and comptime.group=groups.gid";

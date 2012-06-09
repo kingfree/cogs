@@ -1,6 +1,6 @@
 <?php
 require_once("../include/header.php");
-gethead(1,"","提交记录");
+gethead(1,"","记录列表");
 
 $p=new DataAccess();
 $q=new DataAccess();
@@ -91,7 +91,7 @@ for ($i=$st;$i<$cnt && $i<$st+$SET['style_pagesize'] ;$i++) {
 <td><a href='../user/detail.php?uid=<?=$d['uid']?>' target='_blank'><?=gravatar::showImage($d['email']);?></a><?php echo "<a href='?uid={$d[uid]}&pid={$_GET['pid']}'>{$d['nickname']}</a>"; ?></td>
 <td class='wrap'><?=评测结果($d['result'])?></td>
 <td><span class="<?=$d['accepted']?'ok':'no'?>"><?=$d['score'] ?></span></td>
-<td><a href='submit.php?id=<?=$d['sid']?>'><?=$STR['lang'][$d['lang']]?></a></td>
+<td><a href='code.php?id=<?=$d['sid']?>'><?=$STR['lang'][$d['lang']]?></a></td>
 <td><?php printf("%.3f",$d['runtime']/1000.0) ?> s </td>
 <td><?php printf("%.2f",$d['memory']/1024) ?> MiB </td>
 <td><?php echo date('Y-m-d H:i:s',$d['subtime']); ?></td>
