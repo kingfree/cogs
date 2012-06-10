@@ -71,7 +71,7 @@ if($cnt) {
     <td><?php echo $d['IP'] ?></td>
   </tr>
   <?php } ?>
-<? if(有此权限('测试题目')) { ?>
+<? if($_SESSION['ID'] == $d['uid'] || 有此权限('测试题目')) { ?>
   <tr class='admin'>
     <th>重新评测</th>
     <td>
