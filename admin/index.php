@@ -13,6 +13,7 @@ gethead(1,"可以管理","后台管理");
 <li class='nav-header'>题目</li>
 <li class=''><a href="../problem/index.php"><i class='icon-list'></i>题目列表</a></li>
 <li class=''><a href="../problem/editprob.php?action=add"><i class='icon-glass'></i>添加新题目</a></li>
+<li class=''><a href="../problem/testdata.php"><i class='icon-tasks'></i>查看数据</a></li>
 <li class='nav-header'>分类</li>
 <li class=''><a href="../problem/catelist.php"><i class='icon-tags'></i>分类列表</a></li>
 <li class=''><a href="../problem/editcate.php?action=add"><i class='icon-tag'></i>添加新分类</a></li>

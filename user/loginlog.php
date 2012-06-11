@@ -22,6 +22,7 @@ $st=检测页面($cnt, $_GET['page']);
 <th width=60px>用户</th>
 <th width=120px>IP</th>
 <th>UA</th>
+<th width=80px>版本</th>
 <th width=180px>时间</th>
 </tr></thead>
 <?
@@ -33,6 +34,7 @@ for ($i=$st;$i<$cnt && $i<$st+$SET['style_pagesize'] ;$i++) {
 <td><a href="detail.php?uid=<?=$d['uid']?>" target=_blank><?=gravatar::showImage($d['email']);?><?=$d['realname']?></a></td>
 <td><?=$d['ip']?></td>
 <td><?=$d['ua']?></td>
+<td><?=$d['version']?></td>
 <td><?=$d['ltime']?></td>
 </tr>
 <? } ?>
