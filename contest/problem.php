@@ -70,7 +70,7 @@ echo "还未开始";
 <tr><th>内存限制</th>
 <td><?php echo $d['memorylimit']; ?> MiB </td></tr>
 <? if($_SESSION['ID'] && (time() < $e['endtime'] && time() > $e['starttime'])) { ?>
-<tr><form action="../compile/" method="post" enctype="multipart/form-data" class='form-inline'>
+<tr><form action="submit.php" method="post" enctype="multipart/form-data" class='form-inline'>
 <td colspan=2>
 <input name="pid" type="hidden" id="pid" value="<?=$d['pid']?>" />
 <input type="hidden" name="MAX_FILE_SIZE" value="102400" />
