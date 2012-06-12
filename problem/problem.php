@@ -57,6 +57,9 @@ if($cnt) {
 <tr><th>测试方式</th>
 <td>
 <span class='badge badge-<?=$d['submitable']?"success":"important"?>'><?=$d['datacnt']?></span>
+<?php if(有此权限('查看数据')) { ?>
+<a href='testdata.php?problem=<?=$d['filename']?>'>查看数据</a>
+<? } ?>
 <span class='pull-right'><?=$STR['plugin'][$d['plugin']]?></span>
 </td></tr>
 <tr>
