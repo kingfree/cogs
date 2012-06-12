@@ -73,7 +73,7 @@ for ($i=0;$i<=$cnt2-1;$i++)
 }
 else
 {
-	echo '<script>document.location="../error.php?id=9"</script>';
+    异常("无此用户！",取路径("user/index.php"));
 }
 ?>
 

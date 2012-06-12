@@ -11,7 +11,7 @@ if ($_REQUEST[action]=='add')
 	if ($_POST[showscore]) $sc=1;
 	$sql="insert into comptime(cbid,intro,starttime,endtime,showscore,`group`) values('{$_POST[cbid]}','{$_POST[intro]}',{$starttime},{$endtime},{$sc},'{$_POST['group']}')";
 	$p->dosql($sql);
-	echo '<script>document.location="../refresh.php?id=15"</script>';
+    提示("添加比赛场次 {$_POST[cbid]} - {$_POST[intro]} 成功！",取路径("contest/compbase.php"));
 }
 
 if ($_REQUEST[action]=='edit')
@@ -23,6 +23,6 @@ if ($_REQUEST[action]=='edit')
 	if ($_POST[showscore]) $sc=1;
 	$sql="update comptime set cbid='{$_POST[cbid]}',intro='{$_POST[intro]}',starttime={$starttime},endtime={$endtime},showscore={$sc},`group`={$_POST['group']} where ctid={$_REQUEST[ctid]}";
 	$p->dosql($sql);
-	echo '<script>document.location="../refresh.php?id=15"</script>';
+    提示("修改比赛场次 {$_POST[cbid]} - {$_POST[intro]} 成功！",取路径("contest/compbase.php"));
 }
 ?>
