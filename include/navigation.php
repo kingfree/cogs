@@ -63,18 +63,17 @@ function Navigation($p) {
         $p->dosql($sql);
         $d=$p->rtnrlt(0);
         $nickname = $d['nickname'];
+        $cnt1 = $p->dosql("select mid from mail where readed = 0 and toid = {$uid}");
+        if($cnt1 > 0) $mails .= "<span class='doing'>($cnt1)</span>";
+        $cnt1 = $p->dosql("select mid from mail where readed = 0 and fromid = {$uid}");
+        if($cnt1 > 0) $mails .= "<span class='todo'>($cnt1)</span>";
     } else $nickname = "来宾用户";
-    HTML("<a href='#' class='dropdown-toggle' data-toggle='dropdown'>{$nickname}<b class='caret'></b></a>");
+    HTML("<a href='#' class='dropdown-toggle' data-toggle='dropdown'>{$nickname}{$mails}<b class='caret'></b></a>");
     HTML("<ul class='dropdown-menu'>");
     if($uid = (int) $_SESSION['ID']) {
         HTML("<li><a href='".路径("user/detail.php?uid={$uid}")."'><span class='username'>".$d['nickname']."</span><span class='avatar'>".gravatar::showImage($d['email'],28)."</span></a></li>");
         列表("user/panel.php", "cog", "设置");
-        $mailtext = "信件";
-        $cnt1 = $p->dosql("select mid from mail where readed = 0 and toid = {$uid}");
-        if($cnt1 > 0) $mailtext .= "<span class='doing'>($cnt1)</span>";
-        $cnt1 = $p->dosql("select mid from mail where readed = 0 and fromid = {$uid}");
-        if($cnt1 > 0) $mailtext .= "<span class='todo'>($cnt1)</span>";
-        列表("mail/index.php", "envelope", $mailtext);
+        列表("mail/index.php", "envelope", "信件".$mails);
         列表("user/dologout.php", "off", "退出");
     } else {
         ?>

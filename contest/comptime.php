@@ -46,9 +46,9 @@ $d=$p->rtnrlt(0);
   </tr>
   <tr>
     <td>查看成绩</td>
-    <td><a href="report.php?ctid=<?php echo $d['ctid'] ?>" target="_blank">查看</a></td>
-    <td></td>
-    <td></td>
+    <td><a href="report.php?ctid=<?=$d['ctid']?>" target="_blank">查看</a></td>
+    <td>导出代码</td>
+    <td><a href="export.php?ctid=<?=$d['ctid']?>" class='btn btn-mini'>单击此处导出选手比赛代码</a></td>
   </tr>
 </table>
 <?php
