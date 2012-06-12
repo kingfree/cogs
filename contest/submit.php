@@ -1,8 +1,9 @@
 <?php
 require_once("../include/header.php");
+gethead(8,"普通用户","");
 
 if(time() > $_POST['endtime'])
-异常i("比赛已经结束，不可再提交！",取路径("contest/problem.php?pid={$_POST['pid']}&ctid={$_POST['ctpid']}"));
+异常("比赛已经结束，不可再提交！",取路径("contest/problem.php?pid={$_POST['pid']}&ctid={$_POST['ctid']}"));
 
 $fname=$_POST[filename];
 switch ($_POST[lang]) {
@@ -38,7 +39,8 @@ chdir($_SESSION[ID]);
 if (file_exists("{$_POST[filename]}.pas")) unlink("{$_POST[filename]}.pas");
 if (file_exists("{$_POST[filename]}.c"  )) unlink("{$_POST[filename]}.c");
 if (file_exists("{$_POST[filename]}.cpp")) unlink("{$_POST[filename]}.cpp");
-move_uploaded_file($_FILES['file']['tmp_name'],$fname);chmod($fname,0775);
+move_uploaded_file($_FILES['file']['tmp_name'],$fname);
+chmod($fname,0775);
 
 $p=new DataAccess();
 $sql="select csid from compscore where uid={$_SESSION[ID]} and pid={$_POST[pid]} and ctid={$_POST[ctid]}";
@@ -51,5 +53,5 @@ if ($cnt) {
     $p->dosql($sql);
 }
 
-提示i("提交代码成功！",取路径("contest/problem.php?pid={$_POST['pid']}&ctid={$_POST['ctpid']}"));
+提示("提交代码成功！",取路径("contest/problem.php?pid={$_POST['pid']}&ctid={$_POST['ctid']}"));
 ?>
