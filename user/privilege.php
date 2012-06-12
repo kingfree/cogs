@@ -79,15 +79,15 @@ if($way=='del' && $uid) {
     <td><?php echo array_search($d['pri'],$pri) ?></td>
     <td><?php if ($d['def']) echo "是"; else echo "否"; ?></td>
     <td>
-    <a href='settings.php?settings=privilege&way=edit&uid=<?=$d['uid']?>'>编辑</a>
-    <a href='settings.php?settings=privilege&way=del&uid=<?=$d['uid']?>&pri=<?=$d['pri']?>'>删除</a>
+    <a href='privilege.php?way=edit&uid=<?=$d['uid']?>'>编辑</a>
+    <a href='privilege.php?way=del&uid=<?=$d['uid']?>&pri=<?=$d['pri']?>'>删除</a>
     </td>
 <?php
 	}
 ?>
 </table>
 <?
-分页($cnt, $_GET['page'], '?settings=privilege&');
+分页($cnt, $_GET['page']);
 ?>
 </div>
 <?php
