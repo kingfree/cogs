@@ -69,22 +69,19 @@ echo "还未开始";
 <td><?php echo $d['timelimit']; ?> ms (<?=$d['timelimit']/1000?> s)</td></tr>
 <tr><th>内存限制</th>
 <td><?php echo $d['memorylimit']; ?> MiB </td></tr>
-<? if((time() < $e['endtime'] && time() > $e['starttime'])) { ?>
+<? if($_SESSION['ID'] && (time() < $e['endtime'] && time() > $e['starttime'])) { ?>
 <tr><form action="../compile/" method="post" enctype="multipart/form-data" class='form-inline'>
 <td colspan=2>
 <input name="pid" type="hidden" id="pid" value="<?=$d['pid']?>" />
 <input type="hidden" name="MAX_FILE_SIZE" value="102400" />
 <input type="file" name="file" title='选择程序源文件' />
-<button type='submit' class='btn btn-primary' >提交代码</button>
-<div class='btn-group pull-right' data-toggle='buttons-radio'>
-<button type='button' class='btn' name="lang" value="pas">Pascal</button>
-<button type='button' class='btn' name="lang" value="c">C</button>
-<button type='button' class='btn active' name="lang" value="cpp">C++</button>
-<input name="filename" type="hidden" id="filename" value="<?=$d['filename']; ?>" />
+<label class='radio inline'><input type='radio' name='lang' value='pas' />Pascal</label>
+<label class='radio inline'><input type='radio' name='lang' value='c' />C</label>
+<label class='radio inline'><input type='radio' name='lang' value='cpp' checked='checked'/>C++</label>
+<button type='submit' class='btn btn-primary pull-right' >提交代码</button>
 <input name="pid" type="hidden" id="pid" value="<?=$d['pid']?>" />
 <input name="ctid" type="hidden" id="pid" value="<?=$_GET['ctid']?>" />
 <input name="endtime" type="hidden" value="<?=$e['endtime']?>" />
-</div>
 </td></form></tr>
 <? } ?>
 </table>

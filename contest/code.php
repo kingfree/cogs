@@ -10,8 +10,8 @@ $sql="select problem.filename,problem.probname,userinfo.uid,userinfo.nickname,us
 $cnt=$p->dosql($sql);
 if ($cnt) {
 	$d=$p->rtnrlt(0);
-if(time() < $d['endtime'] && !$_SESSION['admin'])
-异常("比赛未结束！");
+    if(!有此权限("查看比赛") && (time() < $d['endtime'] && !$_SESSION['admin']))
+        异常("比赛未结束！");
 	if ($d[lang]==0) $ext="pas"; else
 	if ($d[lang]==1) $ext="c"; else
 	if ($d[lang]==2) $ext="cpp"; 
