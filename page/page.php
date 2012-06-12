@@ -12,7 +12,7 @@ $d=$p->rtnrlt(0);
 
 if($cnt) {
     if ($d[force]>$_SESSION[readforce]) {
-        echo '<script>document.location="../error.php?id=17"</script>';
+        异常("你没有该页面阅读权限！",取路径("page/index.php"));
         exit;
     }
     $subgroup=$LIB->getsubgroup($q,$d['gid']);
@@ -28,7 +28,7 @@ if($cnt) {
         exit;
     $aid=$d[aid];
 } else {
-    echo '<script>document.location="../error.php?id=11"</script>';
+    异常("页面不存在！",取路径("page/index.php"));
 }
 ?>
 

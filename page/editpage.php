@@ -42,7 +42,6 @@ if ($cnt) {
         $d['group']=0;
         $dtext="请在此键入页面内容";
     }
-    else echo '<script>document.location="../error.php?id=12"</script>';
 }
 ?>
 <form action="doeditpage.php" method="post" class='form-inline'>

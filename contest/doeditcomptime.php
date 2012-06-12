@@ -1,6 +1,6 @@
 <?php
 require_once("../include/header.php");
-gethead(0,"修改比赛","");
+gethead(8,"修改比赛","");
 
 if ($_REQUEST[action]=='add')
 {

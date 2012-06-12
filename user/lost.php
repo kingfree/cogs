@@ -24,7 +24,7 @@ if (empty($_POST[ans])) {
 $sql="select pwdtipques from userinfo where usr='".$_POST['User']."'";
 $cnt=$p->dosql($sql);
 if ($cnt==0)
-echo '<script>document.location="../error.php?id=2"</script>';
+    异常("用户不存在！",取路径("user/lost.php"));
 else
 {
 $d=$p->rtnrlt(0);
