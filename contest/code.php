@@ -6,11 +6,11 @@ $LIB->hlighter();
 
 <?php
 $p=new DataAccess();
-$sql="select problem.filename,problem.probname,userinfo.uid,userinfo.nickname,userinfo.realname,compscore.ctid,compscore.subtime,comptime.endtime,compscore.score,compscore.result,compscore.lang from problem,compscore,comptime,userinfo where compscore.pid=problem.pid and comptime.ctid=compscore.ctid and userinfo.uid=compscore.uid and compscore.csid={$_GET[csid]}";
+$sql="select problem.pid,problem.filename,problem.probname,userinfo.uid,userinfo.nickname,userinfo.realname,compscore.ctid,compscore.subtime,comptime.endtime,compscore.score,compscore.result,compscore.lang from problem,compscore,comptime,userinfo where compscore.pid=problem.pid and comptime.ctid=compscore.ctid and userinfo.uid=compscore.uid and compscore.csid={$_GET[csid]}";
 $cnt=$p->dosql($sql);
 if ($cnt) {
 	$d=$p->rtnrlt(0);
-    if(!有此权限("查看比赛") && (time() < $d['endtime'] && !$_SESSION['admin']))
+    if(!有此权限("查看比赛") && (time() < $d['endtime'] && $_SESSION['ID'] != $d['uid']))
         异常("比赛未结束！");
 	if ($d[lang]==0) $ext="pas"; else
 	if ($d[lang]==1) $ext="c"; else
@@ -32,11 +32,11 @@ if ($cnt) {
     <td><?=$_GET['csid']?></td>
   <tr>
     <th>题目名称</th>
-    <td><a href="problem.php?pid=<?php echo $d['pid']; ?>" target="_blank"><?php echo $d['probname']; ?></a></td>
+    <td><a href="problem.php?pid=<?=$d['pid']?>&uid=<?=$d['uid']?>&ctid=<?=$d['ctid']?>" target="_blank"><?php echo $d['probname']; ?></a></td>
 </tr>
   <tr>
     <th>用户昵称</th>
-    <td><a href="../user/detail.php?uid=<?php echo $d['uid']; ?>" target="_blank"><?php echo $d['nickname']; ?></a></td>
+    <td><a href="../user/detail.php?uid=<?=$d['uid']?>" target="_blank"><?php echo $d['nickname']; ?></a></td>
   </tr>
   <tr>
     <th>最终得分</th>

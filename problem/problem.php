@@ -99,7 +99,7 @@ for ($i=0;$i<=$cnt2-1;$i++) {
 <td colspan=2>
 <input name="pid" type="hidden" id="pid" value="<?=$d['pid']?>" />
 <input type="hidden" name="MAX_FILE_SIZE" value="102400" />
-<input type="file" name="file" title='选择程序源文件' />
+<input type="file" name="file" title='选择程序源文件' /><br />
 <?php if(有此权限('测试题目')) { ?>
 <label class='checkbox inline pull-right'>
 <input name="testmode" type="checkbox" value="1" />不写入数据库
@@ -126,7 +126,7 @@ for ($i=0;$i<$cnt;$i++) {
 <option value="pas">Pascal</option>
 <option value="c">C</option>
 <option value="cpp" selected='1'>C++</option>
-</select>-->
+</select>--><br />
 <label class='radio inline'><input type='radio' name='lang' value='pas' />Pascal</label>
 <label class='radio inline'><input type='radio' name='lang' value='c' />C</label>
 <label class='radio inline'><input type='radio' name='lang' value='cpp' checked='checked'/>C++</label>

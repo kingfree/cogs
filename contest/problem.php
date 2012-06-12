@@ -61,7 +61,7 @@ echo "还未开始";
 <table id="probinfo" class='table table-striped table-condensed table-bordered fiexd'>
 <tr><th width=60px>题目名称</th>
 <td><b><?php echo $d['probname']; ?></b>
-<? if(time() > $e['endtime']) { ?><a href="../problem/problem.php?pid=<?=$_GET['pid']?>">跳转</a><? } ?>
+<? if(time() > $e['endtime'] || 有此权限('查看比赛')) { ?><a href="../problem/problem.php?pid=<?=$_GET['pid']?>">跳转</a><? } ?>
 </td></tr>
 <tr><th>输入输出</th>
 <td><code><?php echo $d['filename']; ?>.in/out</code></td></tr>
@@ -69,18 +69,17 @@ echo "还未开始";
 <td><?php echo $d['timelimit']; ?> ms (<?=$d['timelimit']/1000?> s)</td></tr>
 <tr><th>内存限制</th>
 <td><?php echo $d['memorylimit']; ?> MiB </td></tr>
-<? if($_SESSION['ID'] && (time() < $e['endtime'] && time() > $e['starttime'])) { ?>
+<? if(有此权限('查看比赛') || ($_SESSION['ID'] && time() < $e['endtime'] && time() > $e['starttime'])) { ?>
 <tr><form action="submit.php" method="post" enctype="multipart/form-data" class='form-inline'>
 <td colspan=2>
-<input name="pid" type="hidden" id="pid" value="<?=$d['pid']?>" />
-<input type="hidden" name="MAX_FILE_SIZE" value="102400" />
-<input type="file" name="file" title='选择程序源文件' />
+<input type="file" name="file" title='选择程序源文件' /><br />
 <label class='radio inline'><input type='radio' name='lang' value='pas' />Pascal</label>
 <label class='radio inline'><input type='radio' name='lang' value='c' />C</label>
 <label class='radio inline'><input type='radio' name='lang' value='cpp' checked='checked'/>C++</label>
 <button type='submit' class='btn btn-primary pull-right' >提交代码</button>
-<input name="pid" type="hidden" id="pid" value="<?=$d['pid']?>" />
-<input name="ctid" type="hidden" id="pid" value="<?=$_GET['ctid']?>" />
+<input name="pid" type="hidden" value="<?=$d['pid']?>" />
+<input name="filename" type="hidden" value="<?=$d['filename']?>" />
+<input name="ctid" type="hidden" value="<?=$_GET['ctid']?>" />
 <input name="endtime" type="hidden" value="<?=$e['endtime']?>" />
 </td></form></tr>
 <? } ?>
