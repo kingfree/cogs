@@ -12,7 +12,7 @@ $sql.=" order by comments.stime desc";
 $cnt=$p->dosql($sql);
 $st=检测页面($cnt, $_GET['page']);
 ?>
-<div class='container'>
+<div class='container-fluid'>
 <form method="get" action="" class='center'>
 搜索帖子全文
 <input name="key" type="text" class='search-query input-medium' value='<?=$_GET['key']?>'/>

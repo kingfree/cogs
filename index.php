@@ -6,7 +6,6 @@ $q=new DataAccess();
 ?>
 <div class='container-fluid'>
 <div class='span3'>
-<div class='row'>
 <?php 
 $now = time();
 $cnt = $p->dosql("select comptime.*,compbase.*,userinfo.nickname,groups.* from comptime,compbase,userinfo,groups where comptime.cbid=compbase.cbid and userinfo.uid=compbase.ouid and comptime.group=groups.gid and endtime > $now order by starttime asc");
@@ -78,7 +77,6 @@ $d=$p->rtnrlt($i);
 <?php } ?>
 </table>
 </div>
-</div>
 <div class='span6'>
 <div class='alert alert-info'>
 <?php if(有此权限('参数设置')) { ?>[<a href="<?=路径("admin/settings/editkey.php?sname=global_bulletin&method=html")?>">修改</a>]<?php } ?><font color="#003366"><b>公告 &gt;&gt;</b></font><br />
@@ -89,10 +87,15 @@ $d=$p->rtnrlt($i);
 </div>
 </div>
 <div class='span3'>
-<div class='row'>
-<table class='table table-striped table-condensed table-bordered'>
+<table class='table table-striped table-condensed table-bordered fixed'>
 <thead>
-<tr><th colspan='5' class='center'>等级前 <?=$SET['style_ranksize'];?> 名</th></tr>
+<tr>
+<td width='12px'></td>
+<td width='28px'>头像</td>
+<td>用户</td>
+<td width='30px'>等级</td>
+<td width='30px'>题目</td>
+</tr>
 </thead>
 <?php 
 $cnt=$p->dosql("select * from userinfo order by grade desc limit 0, {$SET['style_ranksize']}");
@@ -101,14 +104,13 @@ $d=$p->rtnrlt($i);
 ?>
 <tr>
 <td><i><?=$i+1 ?></i></td>
-<td width='28' class='jin'><a href="user/detail.php?uid=<?php echo $d['uid']; ?>" target="_blank"><?=gravatar::showImage($d['email'], 28);?></a></td>
+<td class='jin'><a href="user/detail.php?uid=<?php echo $d['uid']; ?>" target="_blank"><?=gravatar::showImage($d['email'], 28);?></a></td>
 <td><a href="user/detail.php?uid=<?php echo $d['uid']; ?>" target="_blank"><?=$d['nickname']?></a></td>
 <td ><b><?php echo $d['grade'] ?></b></td>
 <td ><b><?php echo $d['accepted'] ?></b></td>
 </tr>
 <?php } ?>
 </table>
-</div>
 </div>
 </div>
 <?php

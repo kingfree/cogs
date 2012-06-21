@@ -32,7 +32,7 @@ if($cnt) {
 }
 ?>
 
-<div class='container'>
+<div class='container-fluid'>
 <div class='page-header'>
 <h1><?=$d['title']?>
 <?php if(有此权限('修改页面')) { ?>
@@ -43,7 +43,9 @@ if($cnt) {
 开放分组：<a href="../user/index.php?gid=<?=$d['gid'] ?>" target="_blank"><?=$d['gname'] ?></a>
 上次编辑时间：<?=date('Y-m-d', $d['etime'])?>
 </div>
+<div class='page'>
 <?=$d['text'] ?>
+</div>
 </div>
 
 <?php

@@ -5,7 +5,7 @@ $p=new DataAccess();
 $q=new DataAccess();
 ?>
 
-<div class='container'>
+<div class='container-fluid'>
 <script type="text/JavaScript">
 function MM_jumpMenu(targ,selObj,restore){
 eval(targ+".location='?diff=<?php echo $_GET['diff'] ?>&caid=<?php echo $_GET['caid'] ?>&key=<?php echo $_GET['key'] ?>&page="+selObj.options[selObj.selectedIndex].value+"'");

@@ -5,7 +5,7 @@ gethead(1,"","记录列表");
 $p=new DataAccess();
 $q=new DataAccess();
 ?>
-<div class='container'>
+<div class='container-fluid'>
 <form id="search_submit" action="" method="get" class='center'>
 用户UID
 <input name="uid" type="text" value="<?=$_GET['uid']?>" />

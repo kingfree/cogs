@@ -15,8 +15,8 @@ $sql = "update mail set readed = 1 where mid = {$_GET['mid']} and toid = $uid";
 $p->dosql($sql);
 ?>
 
-<center>
-<table width=60% border=2>
+<div class='container-fluid'>
+<table border=2>
 <tr>
 <th>邮件主题</th>
 <td width="80%"><?=$d['title']?></td>
@@ -43,11 +43,10 @@ $p->dosql($sql);
 <input name="fromid" type="hidden" value=<?=$uid?> />
 <input name="toid" type="hidden" value=<?=$d['fromid']?> />
 <input name="title" type="hidden" value="回(<?=$d['mid']?>)：<?=$d['title']?>" />
-<input type="submit" name="Submit" value="回复该邮件" class="LinkButton"/>
+<input type="submit" name="Submit" value="回复该邮件" class="btn"/>
 </form>
 
-</center>
-
+</div>
 
 <?
 include_once("../include/footer.php");

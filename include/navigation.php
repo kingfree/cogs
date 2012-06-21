@@ -12,8 +12,9 @@ function Navigation($p) {
     global $SET;
     HTML("<div class='navbar navbar-fixed-top'>");
     HTML("<div class='navbar-inner'>");
-    HTML("<div class='container'>");
+    HTML("<div class='container-fluid'>");
     HTML("<a href='".路径("index.php")."' class='brand'>COGS</a>");
+    HTML("<a class='btn btn-navbar' data-toggle='collapse' data-target='.nav-collapse'><span class='icon-bar'></span><span class='icon-bar'></span><span class='icon-bar'></span></a>");
     HTML("<div class='nav-collapse'>");
     HTML("<ul class='nav'>");
     HTML("<li class='dropdown'>");

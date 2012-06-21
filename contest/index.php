@@ -4,7 +4,7 @@ gethead(1,"","比赛列表");
 $p=new DataAccess();
 $q=new DataAccess();
 ?>
-<div class='container'>
+<div class='container-fluid'>
 <?php if(有此权限('修改比赛')) { ?>
 <a href="editcompbase.php?action=add" class="btn btn-info pull-left">添加新比赛</a>
 <a href="compbase.php?action=add" class="btn btn-info pull-left">比赛场次管理</a>

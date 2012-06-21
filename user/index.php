@@ -2,7 +2,7 @@
 require_once("../include/header.php");
 gethead(1,"","用户列表");
 ?>
-<div class='container'>
+<div class='container-fluid'>
 <?php
     $p=new DataAccess();
     $q=new DataAccess();

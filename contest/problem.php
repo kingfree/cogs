@@ -23,9 +23,9 @@ if ($cnt) {
         }
     }
     if (!$promise && !有此权限('查看比赛'))
-        异常("你没有权限访问该页面！");
+        异常("你没有权限访问该页面！",取路径("contest/index.php"));
     if (!$c)
-        异常("比赛场次不存在！");
+        异常("比赛场次不存在！",取路径("contest/index.php"));
     $pbs=explode(":",$e['contains']);
     $pb=0;
     foreach($pbs as $k=>$v) {
@@ -34,13 +34,13 @@ if ($cnt) {
     }
     if (!有此权限('查看比赛')) {
         if (time()<$e[starttime])
-            异常("比赛尚未开始！");
+            异常("比赛尚未开始！",取路径("contest/index.php"));
         if ($d[readforce]>$_SESSION[readforce])
-            异常("你没有该场比赛的参与权限！");
+            异常("你没有该场比赛的参与权限！",取路径("contest/index.php"));
         if($_SESSION['ID'] != $_GET['uid'] && time()<$e[endtime])
             $uid = $_SESSION['ID'];
     }
-} else 异常("未查询到记录！");
+} else 异常("未查询到记录！",取路径("contest/index.php"));
 ?>
 
 <div class='container-fluid'>

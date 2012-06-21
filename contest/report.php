@@ -16,7 +16,7 @@ if(time() < $d['starttime'] && !有此权限('查看比赛'))
 $q=new DataAccess();
 $pbs=explode(":",$d['contains']);
 ?>
-<div class='container'>
+<div class='container-fluid'>
 <table id="contest_report" class='table table-striped table-condensed table-bordered fiexd'>
   <tr>
     <th width="40px"><a href="javascript:qsort('rank')">名次</a></th>

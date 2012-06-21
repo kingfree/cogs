@@ -40,6 +40,13 @@ $q = new DataAccess();
 </fieldset>
 </form>
 </div>
+
+<script>
+function markread(id) {
+  $.get("markread.php",{mid: id},function(txt){});
+}
+</script>
+
 <div class='span6'>
 <table class='table table-striped table-condensed table-bordered fiexd'>
 <tr>
@@ -53,12 +60,31 @@ $cnt = $p->dosql($sql);
 for($i=0; $i<$cnt; $i++) {
 	$d=$p->rtnrlt($i);
 	echo "<tr>";
-	echo "<td width=30px>{$d['mid']}</td> <td width=80px>";
+	echo "<td>{$d['mid']}</td> <td>";
 	if($d['readed'] ==  0) echo "❤";
 	echo "<a href='../user/detail.php?uid={$d['toid']}' target='_blank'>".gravatar::showImage($d['email'])."{$d['nickname']}</a></td>";
-	$url = "inbox.php?mid={$d['mid']}";
-	echo "<td><a href='$url' target='_blank'>".$d['title']."</a></td>";
+    echo "<td><a href='#mail{$d['mid']}' data-toggle='modal'>{$d['title']}</a></td>";
 	echo "</tr>";
+?>
+<div id='mail<?=$d['mid']?>' class='modal hide fade in'>
+<div class='modal-header'>
+<button class='close' data-dismiss='modal'>×</button>
+<h3><?=$d['title']?></h3>
+</div>
+<div class='modal-body'>
+<?=nl2br(sp2n(htmlspecialchars($d['msg'])))?>
+</div>
+<div class='modal-footer'>
+<span class='pull-left'>
+<a href='../user/detail.php?uid=<?=$d['toid']?>' target='_blank'>
+<?=gravatar::showImage($d['email'])?>
+<?=$d['nickname']?></a>
+<?=date('Y-m-d h:i:s',$d['time'])?>
+</span>
+<button data-dismiss='modal' class='btn'>关闭</button>
+</div>
+</div>
+<?
 }
 ?>
 </table>
@@ -77,15 +103,35 @@ $cnt = $p->dosql($sql);
 for($i=0; $i<$cnt; $i++) {
 	$d=$p->rtnrlt($i);
 	echo "<tr>";
-	echo "<td width=30px>{$d['mid']}</td> <td width=80px>";
-	echo "<a href='../user/detail.php?uid={$d['toid']}' target='_blank'>".gravatar::showImage($d['email'])."{$d['nickname']}</a></td>";
-	$url = "inbox.php?mid={$d['mid']}";
+	echo "<td>{$d['mid']}</td> <td>";
+	echo "<a href='../user/detail.php?uid={$d['formid']}' target='_blank'>".gravatar::showImage($d['email'])."{$d['nickname']}</a></td>";
+    $url="<a href='#mail{$d['mid']}' data-toggle='modal' onclick='markread({$d['mid']})'>{$d['title']}</a>";
 	if($d['readed'] ==  0)
-	echo "<td style='background-color:#FF0000;'><b><a href='$url' target='_blank'>".$d['title']."</a></b></td>";
+	echo "<td><span class='label label-warning'>$url</span></td>";
 	else
-	echo "<td><a href='$url' target='_blank'>".$d['title']."</a></td>";
+	echo "<td>$url</td>";
 	echo "<td>".date('Y-m-d',$d['time'])."</td>";
 	echo "</tr>";
+?>
+<div id='mail<?=$d['mid']?>' class='modal hide fade in'>
+<div class='modal-header'>
+<button class='close' data-dismiss='modal'>×</button>
+<h3><?=$d['title']?></h3>
+</div>
+<div class='modal-body'>
+<?=nl2br(sp2n(htmlspecialchars($d['msg'])))?>
+</div>
+<div class='modal-footer'>
+<span class='pull-left'>
+<a href='../user/detail.php?uid=<?=$d['formid']?>' target='_blank'>
+<?=gravatar::showImage($d['email'])?>
+<?=$d['nickname']?></a>
+<?=date('Y-m-d h:i:s',$d['time'])?>
+</span>
+<button data-dismiss='modal' class='btn'>关闭</button>
+</div>
+</div>
+<?
 }
 ?>
 </table>
