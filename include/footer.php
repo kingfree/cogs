@@ -1,5 +1,4 @@
 </div>
-<!--<p class='alert alert-success'><?php echo 输出文本($SET['global_tail']) ?></p>-->
 <div class='footer'>
 <p class='pull-right'><a href="#" onclick="document.getElementById('trad').innerHTML='中文正體';document.getElementById('alltext').innerHTML = TradSimp.getTrad(document.getElementById('alltext').innerHTML);" id="trad">中文繁體</a>/<a href="#" onclick="document.getElementById('trad').innerHTML='中文繁體';document.getElementById('alltext').innerHTML = TradSimp.getSimp(document.getElementById('alltext').innerHTML);" id="simp">中文简体</a></p>
 <p>

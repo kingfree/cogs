@@ -20,14 +20,18 @@ function Navigation($p) {
     HTML("<li class='dropdown'>");
     HTML("<a href='#' class='dropdown-toggle' data-toggle='dropdown'><b class='caret'></b></a>");
     HTML("<ul class='dropdown-menu span11'><li>");
-    HTML("<ul class='nav' id='catebar'>");
+    //HTML("<ul class='nav' id='catebar'>");
+    HTML("<table id='catebar'>");
     $sql="select * from category order by cname";
     $cnt=$p->dosql($sql);
     for ($i=$st;$i<$cnt;$i++) {
         $d=$p->rtnrlt($i);
-        HTML("<li class='span2'><a href='".路径("problem/index.php?caid={$d['caid']}")."' title='".sp2n(htmlspecialchars($d['memo']))."'>{$d['cname']}</a></li>");
+        if($i%8==0) HTML("<tr>");
+        //HTML("<li class='span2'><a href='".路径("problem/index.php?caid={$d['caid']}")."' title='".sp2n(htmlspecialchars($d['memo']))."'>{$d['cname']}</a></li>");
+        HTML("<td><a href='".路径("problem/index.php?caid={$d['caid']}")."' title='".sp2n(htmlspecialchars($d['memo']))."'>{$d['cname']}</a></td>");
     }
-    HTML("</ul>");
+    //HTML("</ul>");
+    HTML("</table>");
     HTML("</li></ul>");
     HTML("</li>");
     if(strpos($SET['cur'],"comment")) $active['comment']='active';

@@ -79,11 +79,13 @@ $d=$p->rtnrlt($i);
 </div>
 <div class='span6'>
 <div class='alert alert-info'>
-<?php if(有此权限('参数设置')) { ?>[<a href="<?=路径("admin/settings/editkey.php?sname=global_bulletin&method=html")?>">修改</a>]<?php } ?><font color="#003366"><b>公告 &gt;&gt;</b></font><br />
 <?=输出文本($SET['global_bulletin']); ?>
 </div>
 <div style="margin-right:16px;">
 <?php echo 输出文本($SET['global_index']); ?>
+</div>
+<div class='alert alert-success'>
+<?php echo 输出文本($SET['global_tail']) ?>
 </div>
 </div>
 <div class='span3'>

@@ -5,7 +5,7 @@ gethead(8,"普通用户","");
 $txt="";
 $path = 路径("images/gravatar").'/';
 $email = $_GET['email'];
-for($i=16; $i<=200; $i++) {
+for($i=0; $i<=200; $i++) {
 	$file = $path.$email."s{$i}";
 	if(file_exists($file)) {
 		unlink($file);

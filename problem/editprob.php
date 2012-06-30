@@ -402,7 +402,7 @@ for ($j=0;$j<$c;$j++) {
 <input name="datacnt" type="number" id="datacnt" value="<?=$d['datacnt'] ?>" class='span2' />
 <input type="file" name="datafile" id="datafile" />
 <span class='help-inline'>
-打包zip文件包含一个以该题目*命名的文件夹，其中为*#.in和*#.ans数据，*.cc为评测插件
+打包zip文件包含一个以该题目*命名的文件夹，其中为*#.in和*#.ans数据，spj.c/cpp/cc/pas/pp为评测插件
 </span>
 </div>
 </div>
