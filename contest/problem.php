@@ -50,7 +50,7 @@ if ($cnt) {
 <li class='nav-header'>比赛：<?=$e['cname']?></li>
 <li class=''><?php echo nl2br(sp2n(htmlspecialchars($e['intro']))) ?></li>
 <li class=''>比赛状态：<?php
-if (time()>$e['endtime']) echo "<span class='did'>已结束</span>"; else
+if (time()>$e['endtime']) echo "<span class='did'>已结束</span> <a href='report.php?ctid={$_GET['ctid']}'>查看比赛成绩列表</a>"; else
 if (time()<$e['endtime'] && time()>$e['starttime']) echo "<span class='doing'>正在进行</span>"; else
 echo "还未开始"; 
 ?></li>
@@ -84,7 +84,33 @@ echo "还未开始";
 </td></form></tr>
 <? } ?>
 </table>
+<? if (time()>$e['endtime']) { ?>
+<table class='table table-striped table-condensed table-bordered fiexd'>
+<tr>
+<th>用户</th>
+<th>结果</th>
+<th>得分</th>
+</tr>
 <? $v = $_GET['pid'];
+$sql="select * from compscore,userinfo where userinfo.uid=compscore.uid and compscore.pid={$v} and compscore.ctid={$_GET[ctid]} order by compscore.score desc";
+$cnt=$r->dosql($sql);
+for ($i=0;$i<$cnt;$i++) {
+    $f=$r->rtnrlt($i);
+    ?>
+<tr>
+<td><a href="comp.php?ctid=<?=$_GET['ctid'] ?>&uid=<?=$f['uid'] ?>" target="_blank">
+<?=gravatar::showImage($f['email'], 14);?>
+<?=有此权限('查看用户') ? $f['realname'] : $f['nickname'] ?>
+</a></td>
+<td><a href="code.php?csid=<?=$f['csid']?>" target="_blank"><?=评测结果($f['result'])?></a></td>
+<td><span class="<?=$f['score']>=100?'ok':'no'?>"><?=$f['score'] ?></span></td>
+</tr>
+    <?
+}
+?>
+</table>
+<? } else { ?>
+<?
 $sql="select * from compscore,userinfo where compscore.uid='{$uid}' and userinfo.uid='{$uid}' and compscore.pid={$v} and compscore.ctid={$_GET[ctid]}";
 $cnt=$r->dosql($sql);
 if($cnt) {
@@ -102,6 +128,7 @@ if($cnt) {
 <tr><th>代码</th>
 <td><a href="code.php?csid=<?=$f[csid] ?>" target="_blank"><?=$STR[lang][$f[lang]] ?></a></td></tr>
 </table>
+<? } ?>
 <? } ?>
 </div>
 <div class='span8'>
