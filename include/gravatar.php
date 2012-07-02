@@ -51,7 +51,7 @@ class gravatar
 		if (file_exists($path.$filenama) && filesize($path.$filenama) > 0)
 			$url = $path.$filenama;
 		else {
-			$web = "http://www.gravatar.com/avatar/".$filename;
+			$web = $SET['gravatar_server'].$filename;
 			$url = $path.$filenama;
 			file_put_contents($url, file_get_contents($web));
         }
