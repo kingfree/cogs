@@ -132,10 +132,10 @@ if ($_GET[accept]==1) {
 ?>
 <div align="center">
 <div class='page'>
-<?php echo $STR[reg][reginfo]; ?>
-</div>
+<?php echo $SET[reg_eula]; ?>
 <a href="register.php?accept=1" class='btn btn-primary'>同意</a>
 <a href="../" class='btn'>拒绝</a>
+</div>
 </div>
 <?php
 }
