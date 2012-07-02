@@ -4,12 +4,13 @@ gethead(8,"","");
 $p=new DataAccess();
 $LIB->cls_reg();
 $rc=new RegisterCheck;
-if (!$rc->check_reg($_POST,$_SESSION["IMGCODE"]))
-    异常("注册信息有误，请重新填写！",取路径("user/register.php"));
+//if (!$rc->check_reg($_POST,$_SESSION["IMGCODE"]))
+//    异常("注册信息有误，请重新填写！",取路径("user/register.php"));
+过滤();
 $sql="select * from userinfo where usr='".$_POST['usr']."'";
 $cnt=$p->dosql($sql);
 if ($cnt==0) {
-	$sql="insert into userinfo(uid,usr,nickname,readforce,admin,regtime,pwdhash,pwdtipques,pwdtipanshash,memo,realname,email) values (0, '{$_POST[usr]}','{$_POST[nickname]}',2,0, ". time() .",'". encode($_POST[pwd]) ."' ,'{$_POST[passwordtip]}' , '". encode($_POST[passwordtipans]) ."', '{$_POST[memo]}',". ",'{$_POST['realname']}','{$_POST['email']}')";
+	$sql="insert into userinfo(uid,usr,nickname,readforce,admin,regtime,pwdhash,pwdtipques,pwdtipanshash,memo,realname,email) values (0, '{$_POST[usr]}','{$_POST[nickname]}',2,0, ". time() .",'". encode($_POST[pwd]) ."' ,'{$_POST[passwordtip]}' , '". encode($_POST[passwordtipans]) ."', '{$_POST[memo]}','{$_POST['realname']}','{$_POST['email']}')";
 	$p->dosql($sql);
 	$sql="select * from userinfo where usr='".$_POST['usr']."'";
 	$cnt2=$p->dosql($sql);

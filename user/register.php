@@ -123,7 +123,7 @@ if ($_GET[accept]==1) {
 </td>
 </tr>
 <tr><td></td><td>
-<input type="button" onclick="formsubmit()" class="btn btn-primary" value="注册" />
+<input type="submit" onclick="formsubmit()" class="btn btn-primary" value="注册" />
 </td></tr>
 </table>
 </form>
