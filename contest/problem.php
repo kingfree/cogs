@@ -91,8 +91,8 @@ echo "还未开始";
 <th>结果</th>
 <th>得分</th>
 </tr>
-<? $v = $_GET['pid'];
-$sql="select * from compscore,userinfo where userinfo.uid=compscore.uid and compscore.pid={$v} and compscore.ctid={$_GET[ctid]} order by compscore.score desc";
+<?
+$sql="select * from compscore,userinfo where userinfo.uid=compscore.uid and compscore.pid={$_GET['pid']} and compscore.ctid={$_GET[ctid]} order by compscore.score desc";
 $cnt=$r->dosql($sql);
 for ($i=0;$i<$cnt;$i++) {
     $f=$r->rtnrlt($i);
@@ -111,7 +111,7 @@ for ($i=0;$i<$cnt;$i++) {
 </table>
 <? } else { ?>
 <?
-$sql="select * from compscore,userinfo where compscore.uid='{$uid}' and userinfo.uid='{$uid}' and compscore.pid={$v} and compscore.ctid={$_GET[ctid]}";
+$sql="select * from compscore,userinfo where compscore.uid='{$uid}' and userinfo.uid='{$uid}' and compscore.pid={$_GET[pid]} and compscore.ctid={$_GET[ctid]}";
 $cnt=$r->dosql($sql);
 if($cnt) {
     $f=$r->rtnrlt(0);
