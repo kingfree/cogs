@@ -4,7 +4,7 @@ gethead(1,"","比赛成绩");
 
 $p=new DataAccess();
 $r=new DataAccess();
-$sql="select comptime.starttime,compbase.contains,comptime.showscore from compbase,comptime where comptime.cbid=compbase.cbid and comptime.ctid={$_GET[ctid]}";
+$sql="select comptime.starttime,comptime.endtime,compbase.contains,comptime.showscore from compbase,comptime where comptime.cbid=compbase.cbid and comptime.ctid={$_GET[ctid]}";
 $cnt=$p->dosql($sql);
 if (!$cnt)
     异常("未查询到记录！");
@@ -13,6 +13,7 @@ if (!$d['showscore'] && !有此权限('查看比赛'))
     异常("成绩还未公布！");
 if(time() < $d['starttime'] && !有此权限('查看比赛'))
     异常("比赛尚未开始，不能查看关于题目的任何信息！");
+$end = time() > $d['endtime'];
 $q=new DataAccess();
 $pbs=explode(":",$d['contains']);
 ?>
@@ -56,7 +57,7 @@ $pbs=explode(":",$d['contains']);
 <?=有此权限('查看用户') ? $d['realname'] : $d['nickname'] ?>
 </a></td>
 <?php
-        $sql="select pid,result,score,csid from compscore where uid='{$d['uid']}' and ctid={$_GET[ctid]} order by pid asc";
+        $sql="select pid,result,score,csid,lang from compscore where uid='{$d['uid']}' and ctid={$_GET[ctid]} order by pid asc";
         $cnt_sub=$q->dosql($sql);
         $sum=0;
         $rank=$mbarray;
@@ -71,12 +72,18 @@ $pbs=explode(":",$d['contains']);
 ?>
     <td id="result<?=$v?>_<?=$rowcnt?>" >
     <?php
-    if ($rank[$v][result] =="" && 有此权限('查看比赛')) echo "<a href='code.php?csid={$rank[$v]['csid']}'>未评测</a>";
-    else if ($rank[$v][result] =="") echo "未评测";
-    else if ($rank[$v][result] =="N") echo 评测信息($rank[$v][result]);
-    else { ?>
-    <a href="code.php?csid=<?=$rank[$v]['csid']?>" target="_blank"><?=评测结果($rank[$v][result])?></a></td>
-    <? } ?>
+    if($rank[$v][result] =="N")
+        评测信息($rank[$v][result]);
+    else {
+        if($rank[$v][result] == "" && (有此权限('查看比赛') || $end))
+            echo "<a href='code.php?csid={$rank[$v]['csid']}'>未评测</a>";
+        else if($rank[$v][result] == "") echo "未评测";
+        else {
+            echo "<a href='code.php?csid={$rank[$v]['csid']}' target='_blank'>";
+            评测结果($rank[$v][result]);
+            echo "</a>";
+        }
+    } ?></td>
     <td id="score<?=$v ?>_<?=$rowcnt ?>" ><?=$rank[$v][score]; ?></td>
 <?php
         }
