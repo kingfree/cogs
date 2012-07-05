@@ -51,10 +51,6 @@ if ($cnt) {
     <td><?=$STR['lang'][$d['lang']]?></td>
   </tr>
   <tr>
-    <th>是否通过</th>
-    <td><?php echo $d['accepted']?"<span class='ok'>通过":"<span class='no'>未通过"; ?></span></td>
-  </tr>
-  <tr>
     <th>提交时间</th>
     <td><?php echo date('Y-m-d H:i:s',$d[subtime]); ?></td>
   </tr>

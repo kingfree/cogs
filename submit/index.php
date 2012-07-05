@@ -6,6 +6,7 @@ $p=new DataAccess();
 $q=new DataAccess();
 ?>
 <div class='container-fluid'>
+<a class="btn btn-success pull-left" href="graderlist.php">评测机列表</a>
 <form id="search_submit" action="" method="get" class='center'>
 用户UID
 <input name="uid" type="text" value="<?=$_GET['uid']?>" />

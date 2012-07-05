@@ -12,5 +12,8 @@
 <li>评测次数：<?echo read_cnt();?></li>
 <li>Running：<?echo getrunning();?></li>
 </ul>
+<pre><?passthru("fpc -v")?></pre>
+<pre><?passthru("gcc --version")?></pre>
+<pre><?passthru("g++ --version")?></pre>
 </body>
 </html>

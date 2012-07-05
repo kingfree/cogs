@@ -98,7 +98,7 @@ for ($i=0;$i<$cnt;$i++) {
     $f=$r->rtnrlt($i);
     ?>
 <tr>
-<td><a href="comp.php?ctid=<?=$_GET['ctid'] ?>&uid=<?=$f['uid'] ?>" target="_blank">
+<td><a href="../user/detail.php?uid=<?=$f['uid'] ?>" target="_blank">
 <?=gravatar::showImage($f['email'], 14);?>
 <?=有此权限('查看用户') ? $f['realname'] : $f['nickname'] ?>
 </a></td>

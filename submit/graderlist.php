@@ -3,7 +3,7 @@ require_once("../include/header.php");
 gethead(1,"","评测机列表");
     $q=new DataAccess();
 ?>
-<div class='container'>
+<div class='container-fluid'>
 <?php if(有此权限('管理评测')) { ?>
 <a class="btn btn-info pull-left" href="editgrader.php?action=add">添加新评测机</a>
 <?php } ?>
@@ -15,9 +15,9 @@ gethead(1,"","评测机列表");
     <th>状态</th>
     <th>版本</th>
     <th>备注</th>
-<?php if(有此权限('管理评测')) { ?>
     <th>地址</th>
     <th>优先级</th>
+<?php if(有此权限('管理评测')) { ?>
     <th>操作</th>
   </tr>
 <?php } ?>
@@ -46,9 +46,9 @@ gethead(1,"","评测机列表");
     <td><?php echo $tmp['state'] ?></td>
     <td><?php echo $tmp['ver'] ?></td>
     <td><?php echo sp2n(htmlspecialchars($d['memo'])) ?></td>
-<?php if(有此权限('管理评测')) { ?>
     <td><a href='<?=$d['address']?>'><?php echo $d['address'] ?></a></td>
     <td><?php echo $d['priority'] ?></td>
+<?php if(有此权限('管理评测')) { ?>
     <td><a href="editgrader.php?action=edit&amp;grid=<?php echo $d['grid'] ?>">修改</a> <a href="doeditgrader.php?action=start&amp;grid=<?php echo $d['grid'] ?>">启动</a> <a href="doeditgrader.php?action=stop&amp;grid=<?php echo $d['grid'] ?>">关闭</a></td>
 <?php } ?>
   </tr>

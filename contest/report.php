@@ -51,7 +51,7 @@ $pbs=explode(":",$d['contains']);
 ?>
   <tr>
     <th id="rank<?=$rowcnt ?>">&nbsp;</th>
-    <td id="nickname<?=$rowcnt ?>"><a href="comp.php?ctid=<?=$_GET['ctid'] ?>&uid=<?=$d['uid'] ?>" target="_blank">
+    <td id="nickname<?=$rowcnt ?>"><a href="../user/detail.php?uid=<?=$d['uid'] ?>" target="_blank">
 <?=gravatar::showImage($d['email'], 14);?>
 <?=有此权限('查看用户') ? $d['realname'] : $d['nickname'] ?>
 </a></td>
@@ -71,7 +71,8 @@ $pbs=explode(":",$d['contains']);
 ?>
     <td id="result<?=$v?>_<?=$rowcnt?>" >
     <?php
-    if ($rank[$v][result] =="") echo "未评测";
+    if ($rank[$v][result] =="" && 有此权限('查看比赛')) echo "<a href='code.php?csid={$rank[$v]['csid']}'>未评测</a>";
+    else if ($rank[$v][result] =="") echo "未评测";
     else if ($rank[$v][result] =="N") echo 评测信息($rank[$v][result]);
     else { ?>
     <a href="code.php?csid=<?=$rank[$v]['csid']?>" target="_blank"><?=评测结果($rank[$v][result])?></a></td>
