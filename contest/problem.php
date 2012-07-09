@@ -95,10 +95,12 @@ if(有此权限('查看比赛') || time()>$e['endtime']) echo "<a href='report.p
 <tr>
 <th>用户</th>
 <th>结果</th>
+<th>时间(s)</th>
+<th>内存(M)</th>
 <th>得分</th>
 </tr>
 <?
-$sql="select * from compscore,userinfo where userinfo.uid=compscore.uid and compscore.pid={$_GET['pid']} and compscore.ctid={$_GET[ctid]} order by compscore.score desc";
+$sql="select * from compscore,userinfo where userinfo.uid=compscore.uid and compscore.pid={$_GET['pid']} and compscore.ctid={$_GET[ctid]} order by compscore.score desc, compscore.runtime asc, compscore.memory asc";
 $cnt=$r->dosql($sql);
 for ($i=0;$i<$cnt;$i++) {
     $f=$r->rtnrlt($i);
@@ -109,6 +111,8 @@ for ($i=0;$i<$cnt;$i++) {
 <?=有此权限('查看用户') ? $f['realname'] : $f['nickname'] ?>
 </a></td>
 <td><a href="code.php?csid=<?=$f['csid']?>" target="_blank"><?=评测结果($f['result'])?></a></td>
+<td align=right><?php printf("%.3f",$f['runtime']/1000.0) ?></td>
+<td><?php printf("%.2f",$f['memory']/1024)?></td>
 <td><span class="<?=$f['score']>=100?'ok':'no'?>"><?=$f['score'] ?></span></td>
 </tr>
     <?

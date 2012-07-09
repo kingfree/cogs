@@ -51,7 +51,7 @@ if (!$csucc) {
 		$Cp->getresult();
 	}
 	$Cp->getscore();
-	echo "{$Cp->s_score}!{$Cp->s_detail}";
+	echo "{$Cp->s_score}!{$Cp->s_detail}!".$Cp->gettotaltime()."!".$Cp->getmemory();
 }
 
 $Cp->writedb_comp($_POST['csid']);

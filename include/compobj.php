@@ -236,7 +236,7 @@ class Compiler
     public function writedb_comp($csid)
     {
         $p=new DataAccess();
-        $sql="update compscore set score={$this->s_score} ,result='{$this->s_detail}' where csid={$csid}";
+        $sql="update compscore set score={$this->s_score}, result='{$this->s_detail}', memory='{$this->avgmemory}', runtime='{$this->totaltime}' where csid={$csid}";
         $p->dosql($sql);
     }
 
