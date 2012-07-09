@@ -85,26 +85,27 @@ function getmicrotime()
     return $sec.substr($usec,1);
 }
 
-function plugin($pname,$inn,$outn,$ansn,$fin,$fout,$fans) {
+function plugin($pname,$inn,$outn,$ansn) {
     global $compiledir,$datadir;
     $spj="{$datadir}/{$pname}/spj";
-    if(!file_exists($spj)) {
-        if(file_exists($spj.".cc"))
-            exec("g++ -lm $spj.cc -o $spj");
-        else if(file_exists($spj.".cpp"))
-            exec("g++ -lm $spj.cpp -o $spj");
-        else if(file_exists($spj.".c"))
-            exec("gcc -lm $spj.c -o $spj");
-        else if(file_exists($spj.".pas"))
-            exec("fpc $spj.pas -o$spj");
-        else if(file_exists($spj.".pp"))
-            exec("fpc $spj.pp -o$spj");
-        else {
-            require("{$datadir}/{$pname}/plugin.php");
-            return plugin_compare($fin,$fout,$fans);
-        }
+    if(file_exists($spj.".cc"))
+        exec("g++ -O2 -lm $spj.cc -o spj");
+    else if(file_exists($spj.".cpp"))
+        exec("g++ -O2 -lm $spj.cpp -o spj");
+    else if(file_exists($spj.".c"))
+        exec("gcc -lm $spj.c -o spj");
+    else if(file_exists($spj.".pas"))
+        exec("fpc $spj.pas -ospj");
+    else if(file_exists($spj.".pp"))
+        exec("fpc $spj.pp -ospj");
+    else if(!file_exists($spj)) {
+        $fin=fopen($inn,"r");
+        $fans=fopen($ansn,"r");
+        $fout=fopen($outn,"r");
+        require("{$datadir}/{$pname}/plugin.php");
+        return plugin_compare($fin,$fout,$fans);
     }
-    $judge="./$spj $inn $outn $ansn";
+    $judge="./spj $inn $outn $ansn";
     exec($judge, $res, $score);
     return $score;
 }
@@ -168,18 +169,20 @@ function grade($query)
     if (!file_exists("{$query['pname']}.out"))
         $tmp['noreport']=true;
     else {
-        $fin=fopen($inn="{$datadir}/{$query['pname']}/{$query['pname']}{$i}.in","r");
-        $fans=fopen($ansn="{$datadir}/{$query['pname']}/{$query['pname']}{$i}.ans","r");
-        $fout=fopen($outn="{$query['pname']}.out","r");
-
+        $inn="{$datadir}/{$query['pname']}/{$query['pname']}{$i}.in";
+        $ansn="{$datadir}/{$query['pname']}/{$query['pname']}{$i}.ans";
+        $outn="{$query['pname']}.out";
         if ($query['plugin']!=0) {
+            $fin=fopen($inn,"r");
+            $fans=fopen($ansn,"r");
+            $fout=fopen($outn,"r");
             $tmp['score']=standard_compare($fans,$fout);
+            fclose($fin);
+            fclose($fout);
+            fclose($fans);
         } else if ($query['plugin']==0) {
-            $tmp['score']=plugin($query['pname'],$inn,$outn,$ansn,$fin,$fout,$fans);
+            $tmp['score']=plugin($query['pname'],$inn,$outn,$ansn);
         }
-        fclose($fin);
-        fclose($fout);
-        fclose($fans);
     }
     $fians="{$datadir}/{$query['pname']}/{$query['pname']}{$i}.ans";
     $fiout="{$query['pname']}.out";
