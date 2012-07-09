@@ -72,8 +72,9 @@ if(有此权限('查看比赛') || time()>$e['endtime']) echo "<a href='report.p
 <td><?php echo $d['memorylimit']; ?> MiB </td></tr>
 <tr><th>测试点数</th>
 <td><span class='badge badge-success'><?=$d['datacnt']?></span>
+<span class='pull-right'><?=$STR['plugin'][$d['plugin']]?></span>
 <?php if(有此权限('修改题目')) { ?>
-<a href="../problem/editprob.php?action=edit&pid=<?=$d['pid']?>" class='btn btn-info btn-mini pull-right' >修改该题</a>
+<a href="../problem/editprob.php?action=edit&pid=<?=$d['pid']?>" class='btn btn-info btn-mini pull-left' >修改该题</a>
 <? } ?></td></tr>
 <? if(有此权限('查看比赛') || ($_SESSION['ID'] && time() < $e['endtime'] && time() > $e['starttime'])) { ?>
 <tr><form action="submit.php" method="post" enctype="multipart/form-data" class='form-inline'>
