@@ -18,18 +18,17 @@ for ($i=0;$i<$cnt;$i++) {
     $d=$p->rtnrlt($i);
     //if($d[uid]==$tu) continue;
     $tu=$d[uid];
-    if(!file_exists("{$dir}/{$tu}.{$d['realname']}"))
-        exec("mkdir {$dir}/{$tu}.{$d['realname']}");
-    $mv="cp {$ctid}/{$tu}/{$d['filename']}.* {$dir}/{$tu}.{$d['realname']}/";
+    exec("mkdir -p {$dir}/{$tu}.{$d['realname']}_/");
+    $mv="cp {$ctid}/{$tu}/{$d['filename']}.* {$dir}/{$tu}.{$d['realname']}_/";
     exec($mv);
 }
 
 exec("rm $src");
 $zip="zip -r {$src} {$dir}";
 exec($zip);
-if(file_exists($dir)) exec("rm -R $dir");
 header("Content-type: application/zip");
 header("Content-Disposition: attachment; filename=\"{$dir}.zip\"");
+if(file_exists($dir)) exec("rm -R $dir");
 @readfile($src);
 ?>
 
