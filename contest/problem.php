@@ -50,9 +50,10 @@ if ($cnt) {
 <li class='nav-header'>比赛：<?=$e['cname']?></li>
 <li class=''><?php echo nl2br(sp2n(htmlspecialchars($e['intro']))) ?></li>
 <li class=''>比赛状态：<?php
-if (time()>$e['endtime']) echo "<span class='did'>已结束</span> <a href='report.php?ctid={$_GET['ctid']}'>查看比赛成绩列表</a>"; else
+if (time()>$e['endtime']) echo "<span class='did'>已结束</span>"; else
 if (time()<$e['endtime'] && time()>$e['starttime']) echo "<span class='doing'>正在进行</span>"; else
-echo "还未开始"; 
+echo "还未开始";
+if(有此权限('查看比赛') || time()>$e['endtime']) echo "<a href='report.php?ctid={$_GET['ctid']}'>查看比赛成绩列表</a>"; 
 ?></li>
 <li class=''>开始时间：<?=date("Y-m-d H:i:s",$e['starttime']) ?></li>
 <li class=''>结束时间：<?=date("Y-m-d H:i:s",$e['endtime']) ?></li>
@@ -69,6 +70,11 @@ echo "还未开始";
 <td><?php echo $d['timelimit']; ?> ms (<?=$d['timelimit']/1000?> s)</td></tr>
 <tr><th>内存限制</th>
 <td><?php echo $d['memorylimit']; ?> MiB </td></tr>
+<tr><th>测试点数</th>
+<td><span class='badge badge-success'><?=$d['datacnt']?></span>
+<?php if(有此权限('修改题目')) { ?>
+<a href="../problem/editprob.php?action=edit&pid=<?=$d['pid']?>" class='btn btn-info btn-mini pull-right' >修改该题</a>
+<? } ?></td></tr>
 <? if(有此权限('查看比赛') || ($_SESSION['ID'] && time() < $e['endtime'] && time() > $e['starttime'])) { ?>
 <tr><form action="submit.php" method="post" enctype="multipart/form-data" class='form-inline'>
 <td colspan=2>
