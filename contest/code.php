@@ -6,7 +6,7 @@ $LIB->hlighter();
 
 <?php
 $p=new DataAccess();
-$sql="select problem.pid,problem.filename,problem.probname,userinfo.uid,userinfo.nickname,userinfo.realname,compscore.ctid,compscore.subtime,comptime.endtime,compscore.score,compscore.result,compscore.lang from problem,compscore,comptime,userinfo where compscore.pid=problem.pid and comptime.ctid=compscore.ctid and userinfo.uid=compscore.uid and compscore.csid={$_GET[csid]}";
+$sql="select problem.pid,problem.filename,problem.probname,userinfo.uid,userinfo.nickname,userinfo.realname,compscore.* from problem,compscore,comptime,userinfo where compscore.pid=problem.pid and comptime.ctid=compscore.ctid and userinfo.uid=compscore.uid and compscore.csid={$_GET[csid]}";
 $cnt=$p->dosql($sql);
 if ($cnt) {
 	$d=$p->rtnrlt(0);
@@ -49,6 +49,14 @@ if ($cnt) {
   <tr>
     <th>代码语言</th>
     <td><?=$STR['lang'][$d['lang']]?></td>
+  </tr>
+  <tr>
+    <th>运行时间</th>
+    <td><?php printf("%.3f",$d['runtime']/1000.0) ?> s </td>
+  </tr>
+  <tr>
+    <th>内存使用</th>
+    <td><?php printf("%.2f",$d['memory']/1024) ?> MiB </td>
   </tr>
   <tr>
     <th>提交时间</th>

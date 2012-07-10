@@ -63,8 +63,14 @@ if($cnt) {
 <span class='pull-right'><?=$STR['plugin'][$d['plugin']]?></span>
 </td></tr>
 <tr>
-<th>添加时间</th>
+<th>添加题目</th>
 <td>
+<?php if(有此权限('查看题目')) { 
+    $sql="SELECT realname FROM userinfo WHERE uid ={$d['addid']} limit 1";
+    $ac=$q->dosql($sql);
+    $e=$q->rtnrlt(0); ?>
+<a href="../user/detail.php?uid=<?=$d['addid']; ?>"><?=$e['realname']?></a>
+<? } ?>
 <?=date('Y-m-d', $d['addtime']) ?>
 <?php if(有此权限('修改题目')) { ?>
 <a href="editprob.php?action=edit&pid=<?=$d['pid']?>" class='btn btn-info btn-mini pull-right' >修改该题</a>
