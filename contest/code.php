@@ -6,7 +6,7 @@ $LIB->hlighter();
 
 <?php
 $p=new DataAccess();
-$sql="select problem.pid,problem.filename,problem.probname,userinfo.uid,userinfo.nickname,userinfo.realname,compscore.* from problem,compscore,comptime,userinfo where compscore.pid=problem.pid and comptime.ctid=compscore.ctid and userinfo.uid=compscore.uid and compscore.csid={$_GET[csid]}";
+$sql="select problem.pid,problem.filename,problem.probname,userinfo.uid,userinfo.nickname,userinfo.realname,comptime.endtime,compscore.* from problem,compscore,comptime,userinfo where compscore.pid=problem.pid and comptime.ctid=compscore.ctid and userinfo.uid=compscore.uid and compscore.csid={$_GET[csid]}";
 $cnt=$p->dosql($sql);
 if ($cnt) {
 	$d=$p->rtnrlt(0);
