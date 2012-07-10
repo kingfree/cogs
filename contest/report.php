@@ -75,14 +75,12 @@ $pbs=explode(":",$d['contains']);
     if($rank[$v][result] =="N")
         评测信息($rank[$v][result]);
     else {
-        if($rank[$v][result] == "" && (有此权限('查看比赛') || $end))
-            echo "<a href='code.php?csid={$rank[$v]['csid']}'>未评测</a>";
-        else if($rank[$v][result] == "") echo "未评测";
-        else {
-            echo "<a href='code.php?csid={$rank[$v]['csid']}' target='_blank'>";
-            评测结果($rank[$v][result]);
+        if((有此权限('查看比赛') || $end))
+            echo "<a href='code.php?csid={$rank[$v]['csid']}'>";
+        if($rank[$v][result] == "") echo "未评测";
+        else 评测结果($rank[$v][result]);
+        if((有此权限('查看比赛') || $end))
             echo "</a>";
-        }
     } ?></td>
     <td id="score<?=$v ?>_<?=$rowcnt ?>" ><?=$rank[$v][score]; ?></td>
 <?php
