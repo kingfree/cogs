@@ -2,7 +2,7 @@
 class Compiler
 {
     private $compiledir,$gds,$odir,$info;
-    public $command,$compilemessage,$runtime,$exitcode,$s_detail,$s_score,$ac,$state,$srcname,$cmds,$memory,$avgmemory,$totaltime;
+    public $command,$compilemessage,$runtime,$exitcode,$s_detail,$s_score,$ac,$state,$filename,$srcname,$cmds,$memory,$avgmemory,$totaltime;
     public $wrongpoint, $nowjudge, $inputtext, $difftext;
     public $noindata, $noansdata;
 
@@ -57,6 +57,7 @@ class Compiler
         }
         chdir($this->info['uid']);
         $this->srcname=$this->info['pname'].'.'.langnumtostr($this->info['language']);
+        $this->filename=$this->info['pname'];
     }
 
     public function getupload()

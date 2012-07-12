@@ -119,6 +119,15 @@ if ($csucc) {
 <?php } else if($AC < 1) { ?>
     <p class="no">你没有通过这道题！</p>
     <p><a href="../docs/help.php" target="_blank" title="RP问题">为什么程序在我的电脑上能够正常运行，而在评测机上不能?</a></p>
+<?php }
+if($AC == -1) { ?>
+<form action="testdata.php" method="post" class='form-inline'>
+<span class='badge'>第<?=$Cp->wrongpoint?>个</span>测试点数据：
+<input name="filename" type="hidden" value="<?=$Cp->filename?>" />
+<input name="point" type="hidden" value="<?=$Cp->wrongpoint?>" />
+<input name="io" type="submit" value="in" class='btn btn-success'/>
+<input name="io" type="submit" value="ans" class='btn btn-success'/>
+</form>
 <?php } ?>
 <?php
 if($nodata == false && ($_POST['testmode'] != 1 || !有此权限('测试题目')))
@@ -131,9 +140,9 @@ else echo "<p class=no>没有写入数据库</p>";
 <?php if($AC == -1) { ?>
 <div class='alert'>
 <p class="no">你在<span class='badge'>第<?=$Cp->wrongpoint?>个</span>测试点出现了爆零的情况，下面是该题的输入数据：
-<pre class="brush: text;"><?=htmlspecialchars($Cp->inputtext)?></pre>
+<pre class="brush: text;"><?=htmlspecialchars(substr($Cp->inputtext, 0, 512))?>...</pre>
 <p>下面是你的输出与标准答案不同的地方（上面带减号“-”的是你的输出，下面带加号“+”的是答案输出，“@@”之间的数字表示行号）：
-<pre class="brush: diff;"><?=htmlspecialchars($Cp->difftext)?></pre>
+<pre class="brush: diff;"><?=htmlspecialchars(substr($Cp->difftext, 0, 512))?>...</pre>
 <p><a href="../problem/problem.php?pid=<?=$_POST['pid'] ?>">返回原题 “<?=$ptitle?>”</a></p>
 </div>
 <?php } ?>
