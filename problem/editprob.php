@@ -371,7 +371,7 @@ $f=$p->rtnrlt($i);
 <label class='control-label' for='plugin'>评测方式</label>
 <div class='controls'>
 <select name="plugin" id="plugin">
-<? for($i=-1; $i<=2; $i++) {
+<? for($i=-1; $i<5; $i++) {
     echo "<option value='$i' ";
     if($d['plugin']==$i) echo "selected='selected'";
     echo " >{$STR['plugin'][$i]}</option>";

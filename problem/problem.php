@@ -122,20 +122,15 @@ for ($i=0;$i<$cnt;$i++) {
 }
 ?>       
 </select>
-<!--<div class='btn-group pull-right' data-toggle-name='lang' data-toggle='buttons-radio'>
-<button type='button' class='btn' data-toggle='button' value="pas">Pascal</button>
-<button type='button' class='btn' data-toggle='button' value="c">C</button>
-<button type='button' class='btn active' data-toggle='button' value="cpp">C++</button>
-</div>
-<input name="lang" type='hidden' value='cpp' />-->
-<!--<select class='input-medium pull-left' name='lang'>
-<option value="pas">Pascal</option>
-<option value="c">C</option>
-<option value="cpp" selected='1'>C++</option>
-</select>--><br />
+<br />
+<? if($d['plugin'] == 3 || $d['plugin'] == 4) { ?>
+请提交一个 zip 压缩包，里面有一个 <?=$d['filename']?> 文件夹，文件夹中有 <?=$d['datacnt']?> 个 <?=$d['filename']?>#.out 文件<br />
+<a href="downinput.php?file=<?=$d['filename']?>&data=<?=$d['datacnt']?>" class="btn btn-success btn-mini pull-left">下载测试数据</a>
+<?php } else { ?>
 <label class='radio inline'><input type='radio' name='lang' value='pas' />Pascal</label>
 <label class='radio inline'><input type='radio' name='lang' value='c' />C</label>
 <label class='radio inline'><input type='radio' name='lang' value='cpp' checked='checked'/>C++</label>
+<? } ?>
 <button type='submit' class='btn btn-primary pull-right' >提交代码</button>
 </td>
 </form>
