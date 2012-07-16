@@ -123,9 +123,13 @@ if ($forcetocode) {
     if($d['lang']==0) $langstr="pascal";
     else if($d['lang']==1) $langstr="c";
     else if($d['lang']==2) $langstr="cpp";
+    if($d['lang'] == 3) {
+?>
+<?
+    } else {
 ?>
 <pre class="brush: <?=$langstr?>;"><?=htmlspecialchars($code)?></pre>
-<?php } else {
+<?php } } else {
 ?>
     <h1>您没有权限查看代码。</h1>
 <?php } ?>

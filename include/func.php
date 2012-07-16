@@ -172,6 +172,8 @@ function langstrtonum($str) {
             return 1;
         case 'cpp':
             return 2;
+        case 'zip':
+            return 3;
     }
 }
 
@@ -183,6 +185,8 @@ function langnumtostr($num) {
             return 'c';
         case 2:
             return 'cpp';
+        case 3:
+            return 'zip';
     }
 }
 

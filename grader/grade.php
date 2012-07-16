@@ -34,6 +34,8 @@ function getcompilecommand($query)
             return "gcc {$query['src']} -lm -w -O2 -static -o {$query['pname']} 2>&1";
         case 2:
             return "g++ {$query['src']} -lm -w -O2 -static -o {$query['pname']} 2>&1";
+        case 3:
+            return "unzip -o {$query['src']} -d output/ 2>&1";
     }
 }
 
@@ -41,28 +43,19 @@ function compile($query)
 {
     global $compiledir,$datadir;
     getdir($query);
-
     $compilecommand=getcompilecommand($query);
-    //file_put_contents("../tmp.txt", $compilecommand, FILE_APPEND);
-
     $query['code']=filter($query['code'],$query['language']);
-
     wfile($query['code'],$query['src']);
-
     if (file_exists($query['pname']))
         unlink($query['pname']);
-
     $compilecommand="timelimit 20 ".$compilecommand;
-
     $handle = popen($compilecommand, 'r');
     $tmp['msg']=rfile($handle);
     pclose($handle);
-
-    if (file_exists($query['pname']))
+    if (file_exists($query['pname']) || $query['language'] == 3)
         $tmp['compilesucc']=1;
     else
         $tmp['compilesucc']=0;
-
     echo array_encode($tmp);
 }
 
@@ -121,60 +114,63 @@ function grade($query)
     createlink($i,$query);
     $tmp['noindata'] = $tmp['noansdata'] = 0;
     $tmp['input'] = file_get_contents("{$datadir}/{$query['pname']}/{$query['pname']}{$i}.in");
-
     $tmp['timeout']=false;
     $tmp['runerr']=false;
     $tmp['noreport']=false; 
 
-    $execute="(ulimit -v {$memorylimit}; ./{$query['pname']})";
-
-    $descriptorspec = array(0 => array("pipe", "r"),1 => array("pipe", "w"),2 => array("pipe", "w"));
-    $process = proc_open($execute, $descriptorspec, $pipes);
-    $status=proc_get_status($process);
-
-    $pid=$status['pid']+2;
-    exec("ps v -C {$query['pname']}",$mem);
-    sscanf($mem[1],"%ld%s%s%s%s%ld%ld",&$ar[1],&$ar[2],&$ar[3],&$ar[4],&$ar[5],&$ar[6],&$ar[7]);
-    fwrite($pipes[0],"1");
-    fclose($pipes[0]);
-
-    $tmp['memory']=$memory=$ar[7];  
-
-    $time_start = getmicrotime();
-    setrunning(1);
-    for (;;)
-    {
+    if($query['language'] == 3) {
+        $cpcmd="mv output/{$query['pname']}{$i}.out {$query['pname']}.out";
+        //if(file_exists("{$query['pname']}.out"))
+        //    exec("rm {$query['pname']}.out");
+        exec($cpcmd);
+        exec("ls output/{$query['pname']}*.out > tmpp");
+    } else {
+        $execute="(ulimit -v {$memorylimit}; ./{$query['pname']})";
+        $descriptorspec = array(0 => array("pipe", "r"),1 => array("pipe", "w"),2 => array("pipe", "w"));
+        $process = proc_open($execute, $descriptorspec, $pipes);
         $status=proc_get_status($process);
-        if (!$status['running']) break;
-        $time_now = getmicrotime();
-        $tmp['rtime']=($time_now-$time_start)*950;
-        if ($tmp['rtime']>$query['timelimit']) //ʱ,ɱ
+
+        $pid=$status['pid']+2;
+        exec("ps v -C {$query['pname']}",$mem);
+        sscanf($mem[1],"%ld%s%s%s%s%ld%ld",&$ar[1],&$ar[2],&$ar[3],&$ar[4],&$ar[5],&$ar[6],&$ar[7]);
+        fwrite($pipes[0],"1");
+        fclose($pipes[0]);
+
+        $tmp['memory']=$memory=$ar[7];  
+        $time_start = getmicrotime();
+        setrunning(1);
+        for (;;)
         {
-            proc_terminate($process);
-            //posix_kill($pid,1);
-            exec("killall {$query['pname']}");
-            $tmp['timeout']=true;
-            break;
+            $status=proc_get_status($process);
+            if (!$status['running']) break;
+            $time_now = getmicrotime();
+            $tmp['rtime']=($time_now-$time_start)*950;
+            if ($tmp['rtime']>$query['timelimit'])
+            {
+                proc_terminate($process);
+                //posix_kill($pid,1);
+                exec("killall {$query['pname']}");
+                $tmp['timeout']=true;
+                break;
+            }
         }
+        setrunning(-1);
+
+        $tmp['exitcode']=$status['exitcode'];
+        if ($tmp['exitcode']==137) 
+            $tmp['memoryout']=true;
+        if ($tmp['exitcode']!=0) 
+            $tmp['runerr']=true;
     }
-    setrunning(-1);
-
-    $tmp['exitcode']=$status['exitcode'];
-    //137 MLE
-
-    if ($tmp['exitcode']==137) 
-        $tmp['memoryout']=true;
-
-    if ($tmp['exitcode']!=0) 
-        $tmp['runerr']=true;
-
     if (!file_exists("{$query['pname']}.out"))
         $tmp['noreport']=true;
     else {
         $inn="{$datadir}/{$query['pname']}/{$query['pname']}{$i}.in";
         $ansn="{$datadir}/{$query['pname']}/{$query['pname']}{$i}.ans";
         $outn="{$query['pname']}.out";
-        if ($query['plugin']!=0) {
+        if ($query['plugin'] == 0 || $query['plugin'] == 3) {
+            $tmp['score']=plugin($query['pname'],$inn,$outn,$ansn);
+        } else {
             $fin=fopen($inn,"r");
             $fans=fopen($ansn,"r");
             $fout=fopen($outn,"r");
@@ -182,8 +178,6 @@ function grade($query)
             fclose($fin);
             fclose($fout);
             fclose($fans);
-        } else if ($query['plugin']==0) {
-            $tmp['score']=plugin($query['pname'],$inn,$outn,$ansn);
         }
     }
     $fians="{$datadir}/{$query['pname']}/{$query['pname']}{$i}.ans";
@@ -217,13 +211,10 @@ switch ($query['action'])
         $tmp['ver']=$cfg['Ver'];
         $tmp['cnt']=read_cnt();
         $run=getrunning();
-        if ($run<0)
-        {
+        if ($run<0) {
             running(0,'abs');
             $run=0;
-        }
-        if ($run==0)
-        {
+        } else if ($run==0) {
             write("free");
             $tmp['state']="free";
         }

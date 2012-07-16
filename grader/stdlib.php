@@ -310,6 +310,7 @@ function addpauser_c($code)
 
 function filter($code,$lang)
 {
+    if($lang == 3) return $code;
     $code = str_replace("fork", "FORBIDDEN", $code);
     $code = str_replace("socket", "FORBIDDEN", $code);
     $code = str_replace("exec", "FORBIDDEN", $code);

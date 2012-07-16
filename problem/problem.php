@@ -104,7 +104,6 @@ for ($i=0;$i<=$cnt2-1;$i++) {
 <tr><form action="../submit/run.php" method="post" enctype="multipart/form-data" class='form-inline'>
 <td colspan=2>
 <input name="pid" type="hidden" id="pid" value="<?=$d['pid']?>" />
-<input type="hidden" name="MAX_FILE_SIZE" value="102400" />
 <input type="file" name="file" title='选择程序源文件' /><br />
 <?php if(有此权限('测试题目')) { ?>
 <label class='checkbox inline pull-right'>
@@ -124,7 +123,8 @@ for ($i=0;$i<$cnt;$i++) {
 </select>
 <br />
 <? if($d['plugin'] == 3 || $d['plugin'] == 4) { ?>
-请提交一个 zip 压缩包，里面有一个 <?=$d['filename']?> 文件夹，文件夹中有 <?=$d['datacnt']?> 个 <?=$d['filename']?>#.out 文件<br />
+<input type='hidden' name='lang' value='zip' />
+请提交一个 zip 压缩包，里面直接有 <?=$d['datacnt']?> 个 <?=$d['filename']?>#.out 文件<br />
 <a href="downinput.php?file=<?=$d['filename']?>&data=<?=$d['datacnt']?>" class="btn btn-success btn-mini pull-left">下载测试数据</a>
 <?php } else { ?>
 <label class='radio inline'><input type='radio' name='lang' value='pas' />Pascal</label>
