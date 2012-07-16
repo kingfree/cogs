@@ -62,7 +62,7 @@ if(有此权限('查看比赛') || time()>$e['endtime']) echo "<a href='report.p
 <table id="probinfo" class='table table-striped table-condensed table-bordered fiexd'>
 <tr><th width=60px>题目名称</th>
 <td><b><?php echo $d['probname']; ?></b>
-<? if(time() > $e['endtime'] || 有此权限('查看比赛')) { ?><a href="../problem/problem.php?pid=<?=$_GET['pid']?>"><i class='icon-share'></i></a><? } ?>
+<? if(time() > $e['endtime'] || 有此权限('查看比赛')) { ?><a href="../problem/problem.php?pid=<?=$_GET['pid']?>">跳转</a><? } ?>
 </td></tr>
 <tr><th>输入输出</th>
 <td><code><?php echo $d['filename']; ?>.in/out</code></td></tr>
@@ -73,14 +73,16 @@ if(有此权限('查看比赛') || time()>$e['endtime']) echo "<a href='report.p
 <tr><th>测试点数</th>
 <td><span class='badge badge-success'><?=$d['datacnt']?></span>
 <span class='pull-right'><?=$STR['plugin'][$d['plugin']]?></span>
-</td></tr>
+<?php if(有此权限('修改题目')) { ?>
+<a href="../problem/editprob.php?action=edit&pid=<?=$d['pid']?>" class='btn btn-info btn-mini pull-left' >修改该题</a>
+<? } ?></td></tr>
 <? if(有此权限('查看比赛') || ($_SESSION['ID'] && time() < $e['endtime'] && time() > $e['starttime'])) { ?>
 <tr><form action="submit.php" method="post" enctype="multipart/form-data" class='form-inline'>
 <td colspan=2>
 <input type="file" name="file" title='选择程序源文件' /><br />
 <? if($d['plugin'] == 3 || $d['plugin'] == 4) { ?>
 <input type='hidden' name='lang' value='zip' />
-请提交一个 zip 压缩包，里面<b>直接</b>有 <?=$d['datacnt']?> 个 <?=$d['filename']?>#.out 文件<br />
+请提交一个 zip 压缩包，里面直接有 <?=$d['datacnt']?> 个 <?=$d['filename']?>#.out 文件<br />
 <a href="../problem/downinput.php?file=<?=$d['filename']?>&data=<?=$d['datacnt']?>" class="btn btn-success btn-mini pull-left">下载测试数据</a>
 <?php } else { ?>
 <label class='radio inline'><input type='radio' name='lang' value='pas' />Pascal</label>
