@@ -102,6 +102,7 @@ function plugin($pname,$inn,$outn,$ansn) {
     }
     $judge="./spj $inn $outn $ansn";
     exec($judge, $res, $score);
+    if($score > 100 || $score < 0) $score = 0;
     return $score / 100.0;
 }
 
