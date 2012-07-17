@@ -19,6 +19,10 @@ switch ($_POST[lang]) {
         $fname.=".cpp";
         $nlang=2;
         break;
+    case 'zip':
+        $fname.=".zip";
+        $nlang=3;
+        break;
 }
 
 chdir($SET['dir_competition']);
