@@ -63,7 +63,7 @@ function createlink($i,$query)
 {
     global $compiledir,$datadir;
     if (file_exists("{$query['pname']}.in")) unlink("{$query['pname']}.in");
-    $crlink="ln -s {$datadir}/{$query['pname']}/{$query['pname']}{$i}.in {$query['pname']}.in";
+    $crlink="cp -u {$datadir}/{$query['pname']}/{$query['pname']}{$i}.in {$query['pname']}.in";
     exec($crlink);
 }
 
