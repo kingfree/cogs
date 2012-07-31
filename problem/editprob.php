@@ -411,7 +411,9 @@ for ($j=0;$j<$c;$j++) {
 <div class='row'>
 <div class='span12'>
 <div class='control-group'>
-<label class='control-label' for='detail'>题目内容</label>
+<label class='control-label' for='detail'>题目内容
+<div><a href="../style/mathjax/docs/html/" target="_blank">如何编写数学式子？</a></div>
+</label>
 <div class='controls'>
 <textarea id="detail" name="detail" class='pagearea'><?=$d['detail']?></textarea>
 </div>

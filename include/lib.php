@@ -45,6 +45,10 @@ class lib {
         global $SET;
         require("editor.inc.php");
     }
+    public function mathjax($edname) {
+        global $SET;
+        require("mathjax.php");
+    }
     public function tradsimp() {
         global $SET;
         require("tradsimp.inc.php");

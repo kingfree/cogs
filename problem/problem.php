@@ -10,6 +10,7 @@ $ress = @mysql_fetch_object($res);
 $title = $ress->probname;
 @mysql_close($db);
 gethead(1,"",$pid.". ".$title);
+$LIB->mathjax();
 
 $p=new DataAccess();
 $q=new DataAccess();
