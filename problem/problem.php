@@ -182,6 +182,17 @@ for ($i=0;$i<$cnt;$i++) {
 </div>
 <div class='span8'>
 <div id="probdetail" class='page'>
+<center>
+<h1><?=$d['pid']?>. <?=$d['probname']?></h1>
+<?=难度($d['difficulty']); ?>
+输入文件：<?=$d['filename']?>.in
+输出文件：<?=$d['filename']?>.out
+<?=$STR['plugin'][$d['plugin']]?>
+<br />
+时间限制：<?=$d['timelimit']/1000?> s
+内存限制：<?=$d['memorylimit']; ?> MiB
+<hr />
+</center>
 <?=$d['detail']?>
 </div>
 </div>

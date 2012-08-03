@@ -1,6 +1,7 @@
 <?php
 require_once("../include/header.php");
 gethead(1,"","比赛题目");
+$LIB->mathjax();
 $uid = (int) ($_GET['uid'] ? $_GET['uid'] : $_SESSION['ID']);
 $p=new DataAccess();
 $r=new DataAccess();
@@ -100,8 +101,8 @@ if(有此权限('查看比赛') || time()>$e['endtime']) echo "<a href='report.p
 <tr>
 <th>用户</th>
 <th>结果</th>
-<th>时间(s)</th>
-<th>内存(M)</th>
+<th>时间</th>
+<th>内存</th>
 <th>得分</th>
 </tr>
 <?
@@ -170,6 +171,17 @@ if($cnt) {
 <?  } ?>
 </ul>
 </div>
+<center>
+<h1><?=$d['pid']?>. <?=$d['probname']?></h1>
+<?=难度($d['difficulty']); ?>
+输入文件：<?=$d['filename']?>.in
+输出文件：<?=$d['filename']?>.out
+<?=$STR['plugin'][$d['plugin']]?>
+<br />
+时间限制：<?=$d['timelimit']/1000?> s
+内存限制：<?=$d['memorylimit']; ?> MiB
+<hr />
+</center>
 <?=$d['detail']?>
 </div>
 </div>
