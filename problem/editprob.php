@@ -346,8 +346,8 @@ $f=$p->rtnrlt($i);
 <div class='control-group'>
 <div class='controls'>
 <a class='btn btn-success' href="#cates" data-toggle='modal'><i class='icon-tags icon-white'></i>编辑分类</a>
-<button type="submit" class='btn btn-primary'>提交题目修改</button>
 <a class='btn pull-right' href="#copy" data-toggle='modal'><i class='icon-barcode'></i>抄袭题目</a>
+<button type="submit" class='btn btn-primary'>提交题目修改</button>
 </div>
 </div>
 </div>
@@ -402,7 +402,8 @@ for ($j=0;$j<$c;$j++) {
 <input name="datacnt" type="number" id="datacnt" value="<?=$d['datacnt'] ?>" class='span2' />
 <input type="file" name="datafile" id="datafile" />
 <span class='help-inline'>
-打包zip文件包含一个以该题目*命名的文件夹，其中为*#.in和*#.ans数据，spj.c/cpp/cc/pas/pp为评测插件
+打包zip文件包含一个以该题目*命名的文件夹，其中为*#.in和*#.ans数据（<em>或者有一个data.txt描述文件，第一行为起始数据编号，第二行为输入数据格式，第三行为答案数据格式，数据格式中的数字通配符为#</em>）。
+spj.c/cpp/cc/pas/pp为评测插件
 </span>
 </div>
 </div>

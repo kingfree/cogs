@@ -106,6 +106,15 @@ function plugin($pname,$inn,$outn,$ansn) {
     return $score / 100.0;
 }
 
+function dataset($pname, $i) {
+    global $compiledir,$datadir;
+    $dir="{$datadir}/{$pname}/";
+    $a=array();
+    $a['input'] = $dir."${pname}{$i}.in";
+    $a['answer'] = $dir."${pname}{$i}.ans";
+    return $a;
+}
+
 function grade($query)
 {
     global $compiledir,$datadir;
@@ -113,8 +122,9 @@ function grade($query)
     $memorylimit=$query['memorylimit']*1024;
     getdir($query);
     createlink($i,$query);
+    $data=dataset($query['pname'], $i);
     $tmp['noindata'] = $tmp['noansdata'] = 0;
-    $tmp['input'] = file_get_contents("{$datadir}/{$query['pname']}/{$query['pname']}{$i}.in");
+    $tmp['input'] = file_get_contents($data['input']);
     $tmp['timeout']=false;
     $tmp['runerr']=false;
     $tmp['noreport']=false; 
@@ -166,8 +176,8 @@ function grade($query)
     if (!file_exists("{$query['pname']}.out"))
         $tmp['noreport']=true;
     else {
-        $inn="{$datadir}/{$query['pname']}/{$query['pname']}{$i}.in";
-        $ansn="{$datadir}/{$query['pname']}/{$query['pname']}{$i}.ans";
+        $inn=$data['input'];
+        $ansn=$data['answer'];
         $outn="{$query['pname']}.out";
         if ($query['plugin'] == 0 || $query['plugin'] == 3) {
             $tmp['score']=plugin($query['pname'],$inn,$outn,$ansn);
@@ -185,10 +195,8 @@ function grade($query)
     $fiout="{$query['pname']}.out";
     $fistr="diff -b -U0 {$fiout} {$fians}";
     exec($fistr . " > tmp", $diff);
-    if(file_exists("{$datadir}/{$query['pname']}/{$query['pname']}{$i}.in") == 0)
-        $tmp['noindata'] = 1;
-    if(file_exists("{$datadir}/{$query['pname']}/{$query['pname']}{$i}.ans") == 0)
-        $tmp['noansdata'] = 1;
+    if(!file_exists($data['input'])) $tmp['noindata'] = 1;
+    if(!file_exists($data['answer'])) $tmp['noansdata'] = 1;
     if($tmp['timeout']==true || $tmp['runerr']==true || $tmp['noindata'] + $tmp['noansdata']) $tmp['score'] = 0;
     if($tmp['score'] < 1.0)
         $tmp['diff'] = file_get_contents("tmp");
