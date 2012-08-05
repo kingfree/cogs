@@ -45,7 +45,10 @@ if ($cnt) {
 </tr>
 </table>
     </td>
-    <td colspan=2 class="CommentsK"><?php echo nl2br(sp2n(htmlspecialchars($d['detail'])))?></td>
+    <td colspan=3 class="CommentsK">
+    <? if($_SESSION['ID']==$d['uid']) echo "<a href='comment.php?cid={$d['cid']}' class='pull-right btn btn-mini'>修改</a>";?>
+    <?php echo nl2br(sp2n(htmlspecialchars($d['detail'])))?>
+    </td>
   </tr>
   <tr>
 	<td class="CommentsCode"><?php if ($d['showcode']){
@@ -58,6 +61,7 @@ if ($cnt) {
 	</div>
     </td>
 	<td  class="CommentsTime">发表时间：<?php echo date('Y-m-d H:i:s',$d['stime']);?></td>
+	<td class="CommentsTime">帖子编号：<?=$d['cid']?></td>
   </di></tr>
 </table>
 <?php

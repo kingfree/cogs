@@ -40,7 +40,7 @@ if ($cnt)
 </td>
 </tr>
 <tr>
-<td><a href="../problem/problem.php?pid=<?=$d['pid']?>"><?=$d['pid']?>: <?=$d['probname'] ?></a></td>
+<td style="font-size:140%;"><a href="../problem/problem.php?pid=<?=$d['pid']?>"><?=$d['pid']?>: <?=$d['probname'] ?></a></td>
 </tr>
 </table>
 </td>
@@ -61,6 +61,7 @@ if ($cnt)
     </td>
 	<td class="CommentsTime">发表时间：<?php echo date('Y-m-d H:i:s',$d['stime']);?></td>
 	<td class="CommentsTime">帖子编号：<?=$d['cid']?></td>
+	<td class="CommentsTime">楼层编号：<?=($i+1)?></td>
   </di></tr>
 </table>
 <?php
