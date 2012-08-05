@@ -166,8 +166,8 @@ padding: 10px;
 
 .CommentsU {
     width: 250px;
-    background-color: rgba(197,248,252,0.4);
-    border: 0;
+    background-color: rgba(197,248,252,0.2);
+    border: 2px solid white;
 }
 
 .CommentsU tr {

@@ -3,16 +3,21 @@ require_once("../include/header.php");
 gethead(8,"sess","");
 $scd=(int)$_POST['showcode'];
 $p=new DataAccess();
-$sql="select * from comments where pid={$_POST['pid']} and uid={$_SESSION[ID]}";
-$cnt=$p->dosql($sql);
+$uid=(int)$_SESSION['ID'];
+$pid=(int)$_POST['pid'];
+$cid=(int)$_POST['cid'];
+$showcode=(int)$_POST['showcode'];
+$detail=mysql_real_escape_string($_POST['detail']);
+$detail = str_replace("'", "\'", $detail);
 $tm=time();
-if (!$cnt) {
-    $sql="insert into comments(pid,uid,detail,stime,showcode) values({$_POST['pid']},{$_SESSION[ID]},'{$_POST['detail']}',{$tm} ,{$scd})";
+
+if($cid) {
+    $sql="update comments set detail='{$detail}', stime={$tm} ,showcode={$showcode} where cid={$cid}";
+} else if($pid) {
+    $sql="insert into comments(pid,uid,detail,stime,showcode) values({$pid},{$uid},'{$detail}',{$tm} ,{$showcode})";
 } else {
-    $sql="update comments set detail='{$_POST['detail']}', stime={$tm} ,showcode={$scd} where pid={$_POST['pid']} and uid={$_SESSION[ID]}";
+    异常("发表评论失败！",取路径("problem/comments.php?pid={$_POST['pid']}"));
 }
-$p->dosql($sql);
-
+$cnt=$p->dosql($sql);
 提示("发表评论成功！",取路径("problem/comments.php?pid={$_POST['pid']}"));
-
 ?>
