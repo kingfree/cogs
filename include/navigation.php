@@ -10,7 +10,7 @@ function 列表($path, $icon, $text) {
 }
 function Navigation($p) {
     global $SET;
-    HTML("<div class='navbar navbar-fixed-top'>");
+    HTML("<div id='nav' class='navbar navbar-fixed-top'>");
     HTML("<div class='navbar-inner'>");
     HTML("<div class='container-fluid'>");
     HTML("<a href='".路径("index.php")."' class='brand'>COGS</a>");

@@ -2,9 +2,10 @@
 error_reporting(E_ALL);
 require_once("lib.php");
 $LIB->cls_getsettings();
-if(!isset($_SESSION['ID'])) {
+if(!($_SESSION['ID'])) {
     $_SESSION['readforce']=0;
     $_SESSION['ID']=0;
+    $_SESSION['user_style']="bootstrap";
 }
 
 function gethead($head,$check,$title,$userid=0) {
@@ -18,11 +19,10 @@ function gethead($head,$check,$title,$userid=0) {
 <head>
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <link rel="Shortcut Icon" href="<?=路径("style/favicon.ico")?>" />
-<!--<link rel=stylesheet href="<?=路径("style/".$SET['style_profile'])?>" />-->
 <link rel=stylesheet href="<?=路径("style/cogs.css")?>" />
 <?背景图片($userid ? $userid : $_SESSION['ID']);?>
 <?php $LIB->tradsimp(); ?>
-<link rel=stylesheet type="text/css" href="<?=路径("style/bootstrap/css/bootstrap.min.css")?>" />
+<link rel=stylesheet type="text/css" href="<?=路径("style/bootstrap/css/{$_SESSION['user_style']}.min.css")?>" />
 <script type="text/javascript" src="<?=路径("include/jquery.js")?>"></script>
 <script type="text/javascript" src="<?=路径("include/sortTable.js")?>"></script>
 <script type="text/javascript" src="<?=路径("style/bootstrap/js/bootstrap.min.js")?>"></script>
@@ -46,3 +46,4 @@ if($head != 8) Navigation($p);
     }
 }
 ?>
+

@@ -74,6 +74,17 @@ $d=$p->rtnrlt(0);
     </td>
   </tr>
   <tr>
+    <th>系统主题</th>
+    <td><input name="user_style" value="<?=$d['user_style']?>" />
+<? chdir(路径("style/bootstrap/css/"));
+$ssss= glob("*.min.css");
+foreach($ssss as $sms) {
+    echo str_replace(".min.css", "", $sms).", ";
+} chdir(路径("user/"));
+?> 为可用的主题
+    </td>
+  </tr>
+  <tr>
     <th>背景图片</th>
     <td><input type="file" name="file" /> 在此选择系统背景图片，请手动清除浏览器缓存</td>
   </tr>

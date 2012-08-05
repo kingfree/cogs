@@ -10,6 +10,7 @@ $_SESSION['portrait']=$d['portrait'];
 $_SESSION['group']=$d['gbelong'];
 $_SESSION['email']=$d['email'];
 $_SESSION['grade']=$d['grade'];
+$_SESSION['user_style']=$d['user_style']?$d['user_style']:"bootstrap";
 
 $sql = "select * from privilege where uid=$uid";
 $cnt=$p->dosql($sql);

@@ -175,3 +175,12 @@ padding: 10px;
     border: 0;
 }
 
+#nav ul {
+    list-style: none;
+}
+
+#nav ul li {
+    float: left;
+    margin-left: 0px;
+}
+

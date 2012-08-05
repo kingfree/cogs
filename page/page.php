@@ -34,17 +34,17 @@ if($cnt) {
 ?>
 
 <div class='container-fluid'>
-<div class='page-header'>
-<h1><?=$d['title']?>
-<?php if(有此权限('修改页面')) { ?>
-<a href="editpage.php?action=edit&aid=<?=$d[aid]?>" class="btn btn-info">编辑</a>
-<? } ?>
-</h1>
+<div class='page'>
+<center>
+<h1><?=$d['title']?></h1>
 由 <a href="user/detail.php?uid=<?=$d['uid']; ?>" target="_blank"><?=$d['nickname']?></a> 在 <?=date('Y-m-d', $d['time']) ?> 创建
 开放分组：<a href="../user/index.php?gid=<?=$d['gid'] ?>" target="_blank"><?=$d['gname'] ?></a>
 上次编辑时间：<?=date('Y-m-d', $d['etime'])?>
-</div>
-<div class='page'>
+<?php if(有此权限('修改页面')) { ?>
+<a href="editpage.php?action=edit&aid=<?=$d[aid]?>" class="btn btn-info">编辑</a>
+<? } ?>
+<hr />
+</center>
 <?=$d['text'] ?>
 </div>
 </div>

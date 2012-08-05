@@ -17,7 +17,7 @@ if ($_POST[action]=="edit") {
         pclose($hr);
     }
 	$p=new DataAccess();
-	$sql="update userinfo set nickname='{$_POST['nick']}',realname='{$_POST['realname']}',email='{$_POST['email']}',memo='{$_POST['memo']}' where uid={$_POST['uid']}";
+	$sql="update userinfo set nickname='{$_POST['nick']}',realname='{$_POST['realname']}',email='{$_POST['email']}',memo='{$_POST['memo']}',user_style='{$_POST['user_style']}' where uid={$_POST['uid']}";
 	$p->dosql($sql);
 	$LIB->get_userinfo($_GET['uid']);
     提示("用户设置信息修改成功！", 取路径("user/panel.php"));
