@@ -80,7 +80,7 @@ $d=$p->rtnrlt(0);
 $ssss= glob("*.min.css");
 foreach($ssss as $sms) {
     echo str_replace(".min.css", "", $sms).", ";
-} chdir(路径("user/"));
+} chdir("../../../user/");
 ?> 为可用的主题
     </td>
   </tr>

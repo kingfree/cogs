@@ -5,7 +5,7 @@ $LIB->cls_getsettings();
 if(!($_SESSION['ID'])) {
     $_SESSION['readforce']=0;
     $_SESSION['ID']=0;
-    $_SESSION['user_style']="bootstrap";
+    $_SESSION['user_style']=$SET["user_style"];
 }
 
 function gethead($head,$check,$title,$userid=0) {
@@ -13,7 +13,8 @@ function gethead($head,$check,$title,$userid=0) {
     /*if(!$_SESSION['ID'])
         if($_COOKIE['User']) if($_COOKIE['cojs_login'])
             header("location: ".路径("user/dologin.php"));*/
-    if($head > 0) {
+   $user_style = $_SESSION['user_style']?$_SESSION['user_style']:$SET["user_style"];
+   if($head > 0) {
 ?>
 <!DOCTYPE html>
 <head>
@@ -22,7 +23,7 @@ function gethead($head,$check,$title,$userid=0) {
 <link rel=stylesheet href="<?=路径("style/cogs.css")?>" />
 <?背景图片($userid ? $userid : $_SESSION['ID']);?>
 <?php $LIB->tradsimp(); ?>
-<link rel=stylesheet type="text/css" href="<?=路径("style/bootstrap/css/{$_SESSION['user_style']}.min.css")?>" />
+<link rel=stylesheet type="text/css" href="<?=路径("style/bootstrap/css/{$user_style}.min.css")?>" />
 <script type="text/javascript" src="<?=路径("include/jquery.js")?>"></script>
 <script type="text/javascript" src="<?=路径("include/sortTable.js")?>"></script>
 <script type="text/javascript" src="<?=路径("style/bootstrap/js/bootstrap.min.js")?>"></script>
