@@ -2,6 +2,17 @@
 require_once("../include/header.php");
 gethead(8,"修改题目","");
 
+$pid = (int)$_GET['pid'];
+if($_GET[action]=="change") {
+    if(有此权限("修改题目") && 有此权限("查看题目")) {
+        $p=new DataAccess();
+        $sql="update problem set submitable=1-submitable where pid={$pid}";
+        $p->dosql($sql);
+        提示("修改可用与否成功！", 取路径("problem/index.php"));
+    } else
+        异常("没有权限修改或查看题目！", 取路径("problem/index.php"));
+}
+
 if($_FILES['datafile']['size'] && !$_FILES['datafile']['error']) {
     $cmd = "unzip -o {$_FILES['datafile']['tmp_name']} -d\"{$cfg['testdata']}\"";
     $handle = popen($cmd, 'r');
@@ -30,8 +41,6 @@ if($_FILES['datafile']['size'] && !$_FILES['datafile']['error']) {
     $ff.="</ul></p>";
 }
 
-$pid = 0;
-
 if ($_POST[submitable]==1) $sub=1; else $sub=0;
 if ($_REQUEST[action]=='add')
 {
@@ -52,9 +61,7 @@ if ($_REQUEST[action]=='add')
 		}
 	}
     提示("$ff 添加题目 $pid 成功！", 取路径("problem/problem.php?pid=$pid"));
-}
-
-if ($_REQUEST[action]=='edit') {
+} else if ($_REQUEST[action]=='edit') {
 	$p=new DataAccess();
 	$sql="update problem set probname='{$_POST[probname]}',filename='{$_POST[filename]}',readforce={$_POST[readforce]},submitable={$sub},datacnt={$_POST[datacnt]},timelimit={$_POST[timelimit]},memorylimit={$_POST[memorylimit]},detail='".mysql_escape_string($_POST['detail'])."',difficulty={$_POST[difficulty]},plugin='{$_POST['plugin']}',`group`='{$_POST['group']}' where pid={$_REQUEST[pid]}";
 	$p->dosql($sql);
@@ -76,9 +83,7 @@ if ($_REQUEST[action]=='edit') {
 	}
 	$pid=$_REQUEST[pid];
     提示("$ff 修改题目 $pid 成功！", 取路径("problem/problem.php?pid=$pid"));
-}
-
-if ($_REQUEST[action]=='del') {
+} else if ($_REQUEST[action]=='del') {
 	$p=new DataAccess();
 	$sql="delete from problem where pid={$_REQUEST['pid']}";
 	$p->dosql($sql);

@@ -6,7 +6,7 @@ $p=new DataAccess();
 if ($_GET[action]=="del") {
     $sql="select admin,uid from userinfo where uid={$_GET[uid]}";
     $cnt=$p->dosql($sql);
-    异常("无此用户！",取路径("user/index.php"));
+    if(!$cnt) 异常("无此用户！",取路径("user/index.php"));
     $d=$p->rtnrlt(0);
     $sql="delete from userinfo where uid={$_GET[uid]}";
     $p->dosql($sql);

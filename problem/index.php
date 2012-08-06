@@ -68,30 +68,37 @@ $st=检测页面($cnt, $_GET['page']);
 <p />
 <button name="rank" class='btn' value='probname'>按题目名称排序</button>
 <button name="rank" class='btn' value='filename'>按文件名称排序</button>
-<button name="rank" class='btn' value='plugin'>按评测方式排序</button>
 <button name="rank" class='btn' value='timelimit'>按时间限制排序</button>
 <button name="rank" class='btn' value='memorylimit'>按空间限制排序</button>
 <button name="rank" class='btn' value='difficulty'>按题目难度排序</button>
+<button name="rank" class='btn' value='plugin'>按评测方式排序</button>
 <button name="rank" class='btn' value='acceptcnt'>按通过次数排序</button>
 <?php if(有此权限('查看题目')) { ?>
 <button name="rank" class='btn' value='submitable'>按可否提交排序</button>
 <? } ?>
 </form>
+<script language=javascript>
+function okic(name) {
+    if(confirm("你确定要更改 "+name+" 的提交属性吗？"))
+        return true;
+    return false;
+}
+</script>
 <table id="problist" class='table table-striped table-condensed table-bordered fiexd'>
 <thead><tr>
 <th width='20px'>PID</th>
 <th onclick="sortTable('problist', 0, 'int')">题目名称</th>
 <th>文件名称</th>
-<th>时间限制</th>
-<th>空间限制</th>
+<th>时间</th>
+<th>空间</th>
 <th>难度</th>
+<th>评测方式</th>
 <th onclick="sortTable('problist', 6, 'int')">通过</th>
 <th onclick="sortTable('problist', 7, 'int')">提交</th>
 <th onclick="sortTable('problist', 8, 'int')">通过率</th>
 <?php if(有此权限('查看题目')) { ?>
+<th class=admin>作者</th>
 <th class=admin>标识</th>
-<th class=admin>权限</th>
-<th class=admin>addid</th>
 <?php } ?>
 <?php if(有此权限('修改题目')) { ?>
 <th class=admin>编辑</th>
@@ -112,18 +119,20 @@ if (!$err) for ($i=$st;$i<$cnt && $i<$st+$SET['style_pagesize'] ;$i++) {
 <td><?php echo $d['timelimit']/1000 . " s"; ?></td>
 <td><?php echo $d['memorylimit'] . " MiB"; ?></td>
 <td><?php echo 难度($d['difficulty']); ?></td>
+<td><?=$STR['plugin'][$d['plugin']]?></td>
 <td><?php echo $d['acceptcnt']; ?></td>
 <td><?php echo $d['submitcnt']; ?></td>
 <td><?php echo @round($d['acceptcnt']/$d['submitcnt']*100,2); ?>%</td>
 <?php if(有此权限('查看题目')) { ?>
+<td class=admin><a href="../user/detail.php?uid=<?=$d['addid']?>"><?=$d['addid']?></a></td>
 <td class=admin>
-<?php if ($d['submitable']) echo "<span class='label label-success'>可提交</span>"; else echo "<span class='label label-important'>不可提交</span>"; ?>
+<a href="doeditprob.php?action=change&pid=<?=$d['pid']?>" onclick="return okic('<?=$d['probname']?>')">
+<?php if ($d['submitable']) echo "<span class='label label-success'>可用</span>"; else echo "<span class='label label-important'>禁用</span>"; ?>
+</a>
 </td>
-<td class=admin><?=$d['readforce']?></td>
-<td class=admin><a href="../user/detail.php?uid=<?=$d['addid']; ?>"><?=$d['addid']?></a></td>
 <?php } ?>
 <?php if(有此权限('修改题目')) { ?>
-<td class=admin><a href="editprob.php?action=edit&pid=<?=$d['pid']; ?>">修改</a></td>
+<td class=admin><a href="editprob.php?action=edit&pid=<?=$d['pid']?>">修改</a></td>
 <?php } ?>
 </tr>
 <?php } ?>
