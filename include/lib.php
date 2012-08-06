@@ -47,7 +47,7 @@ class lib {
     }
     public function mathjax($edname) {
         global $SET;
-        require("mathjax.php");
+        require("mathjax.inc.php");
     }
     public function tradsimp() {
         global $SET;
