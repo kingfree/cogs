@@ -98,18 +98,6 @@ th {
     table-layout: fixed;
 }
 
-#catebar li {
-    height: 30px;
-}
-
-#catebar a {
-    color: #000000;
-}
-
-#catebar a:hover {
-    color: #008000;
-}
-
 .judge {
     font-family: monospace;
 }
@@ -183,4 +171,14 @@ padding: 10px;
     float: left;
     margin-left: 0px;
 }
+
+#catebar ul {
+    list-style: none;
+}
+
+#catebar ul li {
+    float: left;
+    margin-left: 0px;
+}
+
 

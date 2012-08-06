@@ -401,10 +401,6 @@ for ($j=0;$j<$c;$j++) {
 <div class='controls'>
 <input name="datacnt" type="number" id="datacnt" value="<?=$d['datacnt'] ?>" class='span2' />
 <input type="file" name="datafile" id="datafile" />
-<span class='help-inline'>
-打包zip文件包含一个以该题目*命名的文件夹，其中为*#.in和*#.ans数据（<em>或者有一个data.txt描述文件，第一行为起始数据编号，第二行为输入数据格式，第三行为答案数据格式，数据格式中的数字通配符为#</em>）。
-spj.c/cpp/cc/pas/pp为评测插件
-</span>
 </div>
 </div>
 </div>
@@ -413,7 +409,6 @@ spj.c/cpp/cc/pas/pp为评测插件
 <div class='span12'>
 <div class='control-group'>
 <label class='control-label' for='detail'>题目内容
-<div><a href="../style/mathjax/docs/html/" target="_blank">如何编写数学式子？</a></div>
 </label>
 <div class='controls'>
 <textarea id="detail" name="detail" class='pagearea'><?=$d['detail']?></textarea>

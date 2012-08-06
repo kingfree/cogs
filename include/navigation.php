@@ -19,20 +19,18 @@ function Navigation($p) {
     HTML("<ul class='nav'>");
     HTML("<li class='dropdown'>");
     HTML("<a href='#' class='dropdown-toggle' data-toggle='dropdown'><b class='caret'></b></a>");
-    HTML("<ul class='dropdown-menu span11'><li>");
-    //HTML("<ul class='nav' id='catebar'>");
-    HTML("<table id='catebar'>");
+    HTML("<ul class='dropdown-menu span11' id='catebar'>");
+    //HTML("<table id='catebar'>");
     $sql="select * from category order by cname";
     $cnt=$p->dosql($sql);
-    for ($i=$st;$i<$cnt;$i++) {
+    for ($i=0;$i<$cnt;$i++) {
         $d=$p->rtnrlt($i);
-        if($i%8==0) HTML("<tr>");
-        //HTML("<li class='span2'><a href='".路径("problem/index.php?caid={$d['caid']}")."' title='".sp2n(htmlspecialchars($d['memo']))."'>{$d['cname']}</a></li>");
-        HTML("<td><a href='".路径("problem/index.php?caid={$d['caid']}")."' title='".sp2n(htmlspecialchars($d['memo']))."'>{$d['cname']}</a></td>");
+        //if($i%8==0) HTML("<tr>");
+        HTML("<li><a href='".路径("problem/index.php?caid={$d['caid']}")."' title='".sp2n(htmlspecialchars($d['memo']))."'>{$d['cname']}</a></li>");
+        //HTML("<td><a href='".路径("problem/index.php?caid={$d['caid']}")."' title='".sp2n(htmlspecialchars($d['memo']))."'>{$d['cname']}</a></td>");
     }
-    //HTML("</ul>");
-    HTML("</table>");
-    HTML("</li></ul>");
+    //HTML("</table>");
+    HTML("</ul>");
     HTML("</li>");
     if(strpos($SET['cur'],"comment")) $active['comment']='active';
     else if(strpos($SET['cur'],"contest")) $active['contest']='active';
@@ -81,27 +79,27 @@ function Navigation($p) {
         列表("mail/index.php", "envelope", "信件".$mails);
         列表("user/dologout.php", "off", "退出");
     } else {
-        ?>
-            <li><form method="post" action="<?=路径("user/dologin.php")?>" class='form-inline center'>
-            <input name="from" type="hidden" id="from" value="<?=$SET['URI']?>" />
-            <input name="username" type="text" class='input-small' placeholder='用户名' /><br />
-            <input name="password" type="password" class='input-small' placeholder='密码' /><br />
-            <!--<label class="checkbox">
-            <input name="savepwd" type="checkbox" value="1" />记住
-            <label>-->
-            <button class='btn btn-primary'>登录</button>
-            </form></li>
-            <li class='divider'></li>
-            <?
-            列表("user/register.php", "", "注册");
-        列表("user/lost.php", "", "忘记密码");
-    }
-    HTML("</ul>");
-    HTML("</li>");
-    HTML("</ul>");
-    HTML("</div>");
-    HTML("</div>");
-    HTML("</div>");
+?>
+<li><form method="post" action="<?=路径("user/dologin.php")?>" class='form-inline center'>
+<input name="from" type="hidden" id="from" value="<?=$SET['URI']?>" />
+<input name="username" type="text" class='input-small' placeholder='用户名' /><br />
+<input name="password" type="password" class='input-small' placeholder='密码' /><br />
+<!--<label class="checkbox">
+<input name="savepwd" type="checkbox" value="1" />记住
+<label>-->
+<button class='btn btn-primary'>登录</button>
+</form></li>
+<li class='divider'></li>
+<?
+列表("user/register.php", "", "注册");
+列表("user/lost.php", "", "忘记密码");
+}
+HTML("</ul>");
+HTML("</li>");
+HTML("</ul>");
+HTML("</div>");
+HTML("</div>");
+HTML("</div>");
     HTML("</div>");
 }
 ?>
