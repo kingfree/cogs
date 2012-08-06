@@ -21,14 +21,14 @@
       extensions: ["mhchem.js"],
     }
   });
-  MathJax.Hub.Register.StartupHook("HTML-CSS Jax Ready",function () {
+  MathJax.Hub.Register.StartupHook("HTML-CSS Jax 就绪",function () {
     var FONT = MathJax.OutputJax["HTML-CSS"].Font;
     FONT.loadError = function (font) {
-      MathJax.Message.Set("Can't load web font TeX/"+font.directory,null,2000);
+      MathJax.Message.Set("无法加载网络字体 TeX/"+font.directory,null,2000);
       document.getElementById("noWebFont").style.display = "";
     };
     FONT.firefoxFontError = function (font) {
-      MathJax.Message.Set("Firefox can't load web fonts from a remote host",null,3000);
+      MathJax.Message.Set("Firefox 不能从远端加载网络字体",null,3000);
       document.getElementById("ffWebFont").style.display = "";
     };
   });
@@ -62,6 +62,6 @@ MathJax.Hub.Register.StartupHook("End",function () {
 });
 
 </script>
-<script type="text/javascript" src="<?=路径("style/mathjax/MathJax.js")?>"></script>
+<script type="text/javascript" src="<?=路径("include/mathjax/MathJax.js")?>"></script>
 
 

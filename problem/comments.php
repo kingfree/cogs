@@ -7,20 +7,27 @@ $q=new DataAccess();
 $pid=(int)$_GET['pid'];
 ?>
 <div class='container-fluid'>
+<? if($pid) { ?>
 <a class='btn btn-success' href="comment.php?pid=<?=$pid?>">发表评论</a>
-
+<? } ?>
 <?php
-$sql="select comments.*,userinfo.nickname,userinfo.email,userinfo.uid,problem.pid,problem.probname from comments,userinfo,problem where userinfo.uid=comments.uid and problem.pid=comments.pid and comments.pid='{$_GET[pid]}'";
-$sql.=" order by comments.cid asc";
+$sql="select comments.*,userinfo.nickname,userinfo.email,userinfo.uid,problem.pid,problem.probname from comments,userinfo,problem where userinfo.uid=comments.uid and problem.pid=comments.pid";
+if($pid) $sql.=" and problem.pid=$pid";
+if ($_GET['key']!="")
+$sql.=" and (problem.probname like '%{$_GET[key]}%' or problem.pid ='{$_GET[key]}' or problem.filename like '%{$_GET[key]}%' or comments.detail like '%{$_GET[key]}%')";
+$sql.=" order by comments.stime desc";
 $cnt=$p->dosql($sql);
-$sended=0;
-$cnter=0;
-$sql="select * from submit where uid={$_SESSION[ID]} and pid='{$pid}'";
-$cnter=$q->dosql($sql);
-if ($cnt)
-{
-	for ($i=0;$i<$cnt;$i++)
-	{
+$st=检测页面($cnt, $_GET['page']);
+?>
+<div class='container-fluid'>
+<form method="get" action="" class='center'>
+搜索帖子全文
+<input name="key" type="text" class='search-query input-medium' value='<?=$_GET['key']?>'/>
+<button type="submit" class='btn'>搜索</button>
+</form>
+<?
+if ($cnt) {
+	for ($i=$st;$i<$cnt && $i<$st+$SET['style_pagesize'];$i++) {
 		$d=$p->rtnrlt($i);
 		if ($d['uid']==$_SESSION['ID'])
 		{
@@ -71,6 +78,7 @@ if ($cnt)
 }
 ?>
 </div>
+<? 分页($cnt, $_GET['page'], '?key='.$_GET['key'].'&'); ?>
 <?php
 include_once("../include/footer.php");
 ?>
