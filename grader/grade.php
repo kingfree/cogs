@@ -81,18 +81,29 @@ function getmicrotime()
 function plugin($pname,$inn,$outn,$ansn) {
     global $compiledir,$datadir;
     $spj="{$datadir}/{$pname}/spj";
-    if(!file_exists($spj)) {
-        if(file_exists($spj.".cc"))
+    $cena="{$datadir}/{$pname}/cena";
+    if(!file_exists("spj") && !file_exists("cena")) {
+        if(file_exists("$spj.cc"))
             exec("g++ -O2 -lm $spj.cc -o spj");
-        else if(file_exists($spj.".cpp"))
+        else if(file_exists("$spj.cpp"))
             exec("g++ -O2 -lm $spj.cpp -o spj");
-        else if(file_exists($spj.".c"))
+        else if(file_exists("$spj.c"))
             exec("gcc -lm $spj.c -o spj");
-        else if(file_exists($spj.".pas"))
+        else if(file_exists("$spj.pas"))
             exec("fpc $spj.pas -ospj");
-        else if(file_exists($spj.".pp"))
+        else if(file_exists("$spj.pp"))
             exec("fpc $spj.pp -ospj");
-        else if(!file_exists($spj)) {
+        else if(file_exists("$cena.cc"))
+            exec("g++ -O2 -lm $cena.cc -o cena");
+        else if(file_exists("$cena.cpp"))
+            exec("g++ -O2 -lm $cena.cpp -o cena");
+        else if(file_exists("$cena.c"))
+            exec("gcc -lm $cena.c -o cena");
+        else if(file_exists("$cena.pas"))
+            exec("fpc $cena.pas -ocena");
+        else if(file_exists("$cena.pp"))
+            exec("fpc $cena.pp -ocena");
+        else if(file_exists("{$datadir}/{$pname}/plugin.php")) {
             $fin=fopen($inn,"r");
             $fans=fopen($ansn,"r");
             $fout=fopen($outn,"r");
@@ -100,8 +111,16 @@ function plugin($pname,$inn,$outn,$ansn) {
             return plugin_compare($fin,$fout,$fans);
         }
     }
-    $judge="./spj $inn $outn $ansn";
-    exec($judge, $res, $score);
+    if(file_exists("spj")) {
+        $judge="./spj $inn $outn $ansn";
+        exec($judge, $res, $score);
+    } else if(file_exists("cena")) {
+        $judge="./cena 100 $ansn";
+        exec($judge);
+        $fsc=fopen("score.log", "r");
+        fscanf($fsc, "%d", $score);
+        fclose($fsc);
+    }
     if($score > 100 || $score < 0) $score = 0;
     return $score / 100.0;
 }
@@ -110,8 +129,8 @@ function dataset($pname, $i) {
     global $compiledir,$datadir;
     $dir="{$datadir}/{$pname}/";
     $a=array();
-    $a['input'] = $dir."${pname}{$i}.in";
-    $a['answer'] = $dir."${pname}{$i}.ans";
+    $a['input'] = "{$dir}{$pname}{$i}.in";
+    $a['answer'] = "{$dir}{$pname}{$i}.ans";
     return $a;
 }
 
@@ -191,15 +210,16 @@ function grade($query)
             fclose($fans);
         }
     }
-    $fians="{$datadir}/{$query['pname']}/{$query['pname']}{$i}.ans";
-    $fiout="{$query['pname']}.out";
-    $fistr="diff -b -U0 {$fiout} {$fians}";
-    exec($fistr . " > tmp", $diff);
     if(!file_exists($data['input'])) $tmp['noindata'] = 1;
     if(!file_exists($data['answer'])) $tmp['noansdata'] = 1;
     if($tmp['timeout']==true || $tmp['runerr']==true || $tmp['noindata'] + $tmp['noansdata']) $tmp['score'] = 0;
-    if($tmp['score'] < 1.0)
+    if($tmp['score'] < 1.0) {
+        $fians=$data['answer'];
+        $fiout="{$query['pname']}.out";
+        $fistr="diff -b -U0 {$fiout} {$fians}";
+        exec($fistr . " > tmp", $diff);
         $tmp['diff'] = file_get_contents("tmp");
+    }
     proc_close($process);
 
     destroylink($i,$query);
