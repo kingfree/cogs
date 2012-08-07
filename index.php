@@ -8,7 +8,8 @@ $q=new DataAccess();
 <div class='span3'>
 <?php 
 $now = time();
-$cnt = $p->dosql("select comptime.*,compbase.*,userinfo.nickname,groups.* from comptime,compbase,userinfo,groups where comptime.cbid=compbase.cbid and userinfo.uid=compbase.ouid and comptime.group=groups.gid and endtime > $now order by starttime asc");
+$noww = time() + 60*60*2;
+$cnt = $p->dosql("select comptime.*,compbase.*,userinfo.nickname,groups.* from comptime,compbase,userinfo,groups where comptime.cbid=compbase.cbid and userinfo.uid=compbase.ouid and comptime.group=groups.gid and endtime > $now and starttime < $noww order by starttime asc");
 if($cnt) {
 for($i=0; $i<$cnt; $i++) {
 $d=$p->rtnrlt($i);
