@@ -58,7 +58,7 @@ function Callback() {
             document.getElementById("score"+list[p]).innerHTML=str[0];
             document.getElementById("result"+list[p]).innerHTML=str[1];
             ++p;
-            document.getElementById("progress").value=Math.round(p/pmax*100)+"%";
+            document.getElementById("progress").style.cssText="width: "+Math.round(p/pmax*100)+"%;";
             if (p<pmax)
                 doStart(list[p]);
             else
@@ -72,19 +72,22 @@ function StartJudge() {
     p=0;
     document.getElementById("st").disabled=true;
     document.getElementById("st").value="正在评测...";
+    document.getElementById("progressd").className="progress progress-striped progress-warning active";
 }
 
 function Finish() {
     document.getElementById("st").disabled=false;
     document.getElementById("st").value="重新评测";
+    document.getElementById("progressd").className="progress progress-striped progress-success";
 }
 
 </script>
 
 
-<input name="st" type="button" id="st" value="开始评测" class='btn btn-primary'  onclick="StartJudge()" />
-进度
-  <input readonly="readonly" type="text" id="progress" style="background-color:#6699CC; color:#FFFF00" value="0%" size="6" />
+<input name="st" type="button" id="st" value="开始评测" class='btn btn-primary' onclick="StartJudge()" />
+  <div id="progressd">
+  <div id="progress" class="bar" style="width: 0%;"></div>
+  </div>
 当前第<span id="nowp">0</span>个 共<?=$cnt ?>个 </p>
 <table class='table table-striped table-condensed table-bordered fiexd'>
   <tr>
