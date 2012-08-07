@@ -1,11 +1,11 @@
 <?php
 require_once("../include/header.php");
 $p=new DataAccess();
-$uid = $_REQUEST['username'];
+$usr = $_REQUEST['username'];
 $pwd = $_REQUEST['pwdhash'];
-if ($uid == "") $uid = $_COOKIE['User'];
-if ($pwd == "") $pwd = $_COOKIE['cojs_login'];
-$sql="select * from userinfo where usr='".$uid."'";
+if(!$usr) $usr = $_COOKIE['cogs_usr'];
+if(!$pwd) $pwd = $_COOKIE['cogs_pwd_hash'];
+$sql="select * from userinfo where usr='$usr'";
 $cnt=$p->dosql($sql);
 if ($cnt==0)
     i异常("用户不存在！");
@@ -18,13 +18,14 @@ else {
         $q->dosql($sql);
         $sql="insert into login(uid,ua,ip,ltime,version) values({$d['uid']},'".mysql_real_escape_string($_SERVER['HTTP_USER_AGENT'])."','{$_SERVER['REMOTE_ADDR']}',NOW(),'".mysql_real_escape_string($cfg['dir_root'])."')";
         $q->dosql($sql);
-        if ($_REQUEST['savepwd']) {
-            setcookie("cojs_login",$d['pwdhash'], time()+7776000);
-            setcookie("User",$_POST['username'], time()+7776000);
+        if($_REQUEST['savepwd']) {
+            $tm = time()+7776000;
+            setcookie("cogs_usr", $usr, $tm, "/");
+            setcookie("cogs_pwd_hash",$d['pwdhash'], $tm, "/");
         }
         if (!$_REQUEST['from'])
             $_REQUEST['from']=base64_encode("/".$SET['global_root']);
-        i提示("用户 {$d['nickname']} 登录成功！", $_REQUEST['from']);
+        i提示("用户 {$d['nickname']} 登录成功！{$_REQUEST['savepwd']}", $_REQUEST['from']);
     } else
         i异常("密码错误，登录失败！");
 }

@@ -6,7 +6,6 @@ $d=$p->rtnrlt(0);
 $_SESSION['ID']=$d['uid'];
 $_SESSION['nickname']=$d['nickname'];
 $_SESSION['readforce']=$d['readforce'];
-$_SESSION['portrait']=$d['portrait'];
 $_SESSION['group']=$d['gbelong'];
 $_SESSION['email']=$d['email'];
 $_SESSION['grade']=$d['grade'];

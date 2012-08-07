@@ -3,9 +3,24 @@ error_reporting(E_ALL);
 require_once("lib.php");
 $LIB->cls_getsettings();
 if(!($_SESSION['ID'])) {
-    $_SESSION['readforce']=0;
-    $_SESSION['ID']=0;
-    $_SESSION['user_style']=$SET["user_style"];
+    if($_COOKIE['cogs_usr'] && $_COOKIE['cogs_pwd_hash']) {
+        $p=new DataAccess();
+        $usr = $_COOKIE['cogs_usr'];
+        $pwd = $_COOKIE['cogs_pwd_hash'];
+        $sql="select * from userinfo where usr='$usr' AND pwdhash='$pwd' limit 1";
+        $cnt=$p->dosql($sql);
+        if($cnt) {
+            $d=$p->rtnrlt(0);
+            if($pwd==$d['pwdhash']) {
+                $LIB->get_userinfo($d['uid']);
+            }
+        }
+    }
+    if(!($_SESSION['ID'])) {
+        $_SESSION['readforce']=0;
+        $_SESSION['ID']=0;
+        $_SESSION['user_style']=$SET["user_style"];
+    }
 }
 
 function gethead($head,$check,$title,$userid=0) {

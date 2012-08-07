@@ -84,9 +84,9 @@ function Navigation($p) {
 <input name="from" type="hidden" id="from" value="<?=$SET['URI']?>" />
 <input name="username" type="text" class='input-small' placeholder='用户名' /><br />
 <input name="password" type="password" class='input-small' placeholder='密码' /><br />
-<!--<label class="checkbox">
+<label class="checkbox">
 <input name="savepwd" type="checkbox" value="1" />记住
-<label>-->
+<label>
 <button class='btn btn-primary'>登录</button>
 </form></li>
 <li class='divider'></li>
