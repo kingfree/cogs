@@ -90,9 +90,9 @@ function plugin($pname,$inn,$outn,$ansn) {
         else if(file_exists("$spj.c"))
             exec("gcc -lm $spj.c -o spj");
         else if(file_exists("$spj.pas"))
-            exec("fpc $spj.pas -ospj");
+            exec("fpc $spj.pas -ospj && cp {$datadir}/{$pname}/spj .");
         else if(file_exists("$spj.pp"))
-            exec("fpc $spj.pp -ospj");
+            exec("fpc $spj.pp -ospj && cp {$datadir}/{$pname}/spj .");
         else if(file_exists("$cena.cc"))
             exec("g++ -O2 -lm $cena.cc -o cena");
         else if(file_exists("$cena.cpp"))
@@ -100,9 +100,9 @@ function plugin($pname,$inn,$outn,$ansn) {
         else if(file_exists("$cena.c"))
             exec("gcc -lm $cena.c -o cena");
         else if(file_exists("$cena.pas"))
-            exec("fpc $cena.pas -ocena");
+            exec("fpc $cena.pas -ocena && cp {$datadir}/{$pname}/cena .");
         else if(file_exists("$cena.pp"))
-            exec("fpc $cena.pp -ocena");
+            exec("fpc $cena.pp -ocena && cp {$datadir}/{$pname}/cena .");
         else if(file_exists("{$datadir}/{$pname}/plugin.php")) {
             $fin=fopen($inn,"r");
             $fans=fopen($ansn,"r");
@@ -258,7 +258,7 @@ switch ($query['action'])
         write("free");
         write_cnt();
         chdir($compiledir);
-        deldir($query['uid']);
+        //deldir($query['uid']);
         $tmp['state']="successful";
         echo array_encode($tmp);
         break;
