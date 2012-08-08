@@ -32,7 +32,7 @@ $pbs=explode(":",$d['contains']);
         $d=$p->rtnrlt(0);
         $cnt_prob++;
 ?>
-    <th width="150px"><a href="problem.php?pid=<?=$v?>&ctid=<?=$_GET[ctid]?>" target="_blank"><?=$d['probname'] ?></a></th>
+    <th width="150px"><a href="problem.php?pid=<?=$v?>&ctid=<?=$_GET[ctid]?>" target="_blank"><?=shortname($d['probname'])?></a></th>
     <th width="40px"><a href="javascript:qsort('score<?=$v ?>_')">得分</a></th>
 <?php
     }

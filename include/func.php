@@ -207,9 +207,9 @@ function 难度($K) {
     return $str;
 }
 
-function 评测结果($str) {
+function 评测结果($str, $mod=10) {
     $res = "";
-    for($i=0; $i<strlen($str); $i++)
+    for($i=0; $i<strlen($str); $i++) {
         if($str[$i] == 'A') $res .= "<span style='color:#0000FF;'>A</span>";
         else if($str[$i] == 'W') $res .= "<span style='color:#ff0000;'>W</span>";
         else if($str[$i] == 'T') $res .= "<span style='background-color:#0033FF;color:#FFFF00;'>T</span>";
@@ -220,12 +220,14 @@ function 评测结果($str) {
         else if($str[$i] == 'D') $res .= "<span style='color:#fff;background-color:#000'>D</span>";
         else if($str[$i] == 'N') $res .= "<span style='color:#FFFFFF;'>N</span>";
         else if($str[$i] == 'P') $res .= "<span style='color:#B8860B;'>P</span>";
+        if(($i+1)>0 && ($i+1)%$mod==0) $res.="<br />";
+    }
     echo "<span class='judge'>".$res."</span>";
 }
 function 评测信息a($str) {
     $res = "";
     if($str == "") return "未评测";
-    for($i=0; $i<strlen($str); $i++)
+    for($i=0; $i<strlen($str); $i++) {
         if($str[$i] == 'A') $res .= "<span style='color:#0000FF;'>答案正确</span>";
         else if($str[$i] == 'W') $res .= "<span style='color:#ff0000;'>答案错误</span>";
         else if($str[$i] == 'T') $res .= "<span style='background-color:#0033FF;color:#FFFF00;'>超过时间限制</span>";
@@ -236,6 +238,8 @@ function 评测信息a($str) {
         else if($str[$i] == 'D') $res .= "<span style='color:#fff;background-color:#000'>没有测试点数据</span>";
         else if($str[$i] == 'N') $res .= "<span style='color:#FFFFFF;'>没有源代码</span>";
         else if($str[$i] == 'P') $res .= "<span style='color:#B8860B;'>答案部分正确</span>";
+        $res.="<br />";
+    }
     return $res;
 }
 function 评测信息($str) {
@@ -286,6 +290,7 @@ function 分页($total,$page,$url='',$page_size='',$max_length='') {
     $page_table = '';
     //aways in the pages
     $page_table = '<div class="pagination"><ul>';
+    $page_table .= '<li><a href="'.$url.'page='.($page-1).'">上页</a></li>';
     //显示第一页
     if($page == 1 )
         $page_table .= '<li class="active"><a>1</a></li>';
@@ -329,6 +334,7 @@ function 分页($total,$page,$url='',$page_size='',$max_length='') {
         else
             $page_table .= '<li><a href="'.$url.'page='.$total_page.'">'.$total_page.'</a></li>';
     }
+    $page_table .= '<li><a href="'.$url.'page='.($page+1).'">下页</a></li>';
     $page_table .= "</ul></div>";
     //输出分页代码
     echo $page_table;
@@ -425,4 +431,11 @@ function 过滤() {
         $_POST[$post_key] = mysql_real_escape_string($post_var);
     } 
 }
+
+function shortname($longname) {
+    $res = preg_replace("/\[.*\]/", "", $longname);
+    $res = trim($res);
+    return $res;
+}
+
 ?>

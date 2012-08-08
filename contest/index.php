@@ -30,7 +30,6 @@ $st=检测页面($cnt, $_GET['page']);
 <?php if(有此权限('查看比赛')) { ?>
     <th class=admin width='40px'>评测</th>
     <th class=admin width='60px'>组织者</th>
-    <th class=admin width='40px'>权限</th>
 <? } ?>
 <?php if(有此权限('修改比赛')) { ?>
     <th class=admin width='40px'>比赛</th>
@@ -60,7 +59,6 @@ for ($i=$st;$i<$cnt && $i<$st+$SET['style_pagesize'] ;$i++) {
 <?php if(有此权限('查看比赛')) { ?>
 <td class=admin ><a href="comptime.php?ctid=<?=$d['ctid']?>">评测</a></td>
 <td class=admin ><a href='../user/detail.php?uid=<?=$d['ouid']?>' target='_blank'><?=$d['realname']?></a></td>
-<td class=admin ><?=$d['readforce']?></td>
 <? } ?>
 <?php if(有此权限('修改比赛')) { ?>
 <td class=admin ><a href="editcompbase.php?action=edit&cbid=<?=$d['cbid']?>"><?=$d['cbid']?></a></td>

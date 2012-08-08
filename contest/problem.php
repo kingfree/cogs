@@ -166,7 +166,7 @@ if($cnt) {
 ?>
 <li class="<?=($v == $_GET['pid'])?"active":""?>">
 <a href="problem.php?pid=<?=$v?>&ctid=<?=$_GET['ctid']?>&uid=<?=$uid?>">
-<? echo $ppid . ". "; $ppid++; echo $pname; ?></a>
+<? echo $ppid . ". "; $ppid++; echo shortname($pname); ?></a>
 </li>
 <?  } ?>
 </ul>

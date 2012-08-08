@@ -89,7 +89,7 @@ if($_SESSION['ID']) {
         echo "<a href='../submit/code.php?id={$e['sid']}'>";
         echo $STR['lang'][$e['lang']];
         echo "</a> ";
-        评测结果($e['result']);
+        评测结果($e['result'], 20);
     }
 } ?></td></tr>
 <tr><th>所属分类</th>

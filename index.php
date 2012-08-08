@@ -73,7 +73,7 @@ $d=$p->rtnrlt($i);
 <td><?php echo $d['pid']; ?></td>
 <td>
 <? 是否通过($d['pid'], $q); ?>
-<a href="problem/problem.php?pid=<?php echo $d['pid']; ?>" target="_blank"><?php echo $d['probname']; ?></a></td>
+<a href="problem/problem.php?pid=<?php echo $d['pid']; ?>" target="_blank"><?php echo shortname($d['probname']); ?></a></td>
 </tr>
 <?php } ?>
 </table>
