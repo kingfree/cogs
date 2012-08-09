@@ -84,7 +84,7 @@ for ($i=$st;$i<$cnt && $i<$st+$SET['style_pagesize'] ;$i++) {
     echo "<a href='?pid={$d['pid']}&uid={$_GET['uid']}'>".shortname($d['probname'])."</a>";
     echo "<a href='../problem/problem.php?pid={$d['pid']}' target='_blank'><span class='icon-share'></span></a>";
 } else
-    echo "<a href='../problem/problem.php?pid={$d['pid']}' target='_blank'>{$d['probname']}</a>";
+    echo "<a href='../problem/problem.php?pid={$d['pid']}' target='_blank'>".shortname($d['probname'])."</a>";
 ?></td>
 <td><a href='../user/detail.php?uid=<?=$d['uid']?>' target='_blank'><?=gravatar::showImage($d['email']);?></a>
 <?php echo "<a href='?uid={$d[uid]}&pid={$_GET['pid']}'>";

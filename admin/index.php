@@ -42,7 +42,7 @@ gethead(1,"可以管理","后台管理");
 <ul class='nav nav-list span2'>
 <li class='nav-header'>评论</li>
 <!--<li class=''><a href="../discuss/index.php"><i class='icon-comment'></i>评论列表</a></li>-->
-<li class=''><a href="../problem/commentlist.php"><i class='icon-comment'></i>评论列表</a></li>
+<li class=''><a href="../problem/comments.php"><i class='icon-comment'></i>评论列表</a></li>
 <li class='nav-header'>页面</li>
 <li class=''><a href="../page/index.php"><i class='icon-file'></i>页面列表</a></li>
 <li class=''><a href="../page/editpage.php?action=add"><i class='icon-edit'></i>添加新页面</a></li>
