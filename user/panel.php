@@ -76,12 +76,23 @@ $d=$p->rtnrlt(0);
   <tr>
     <th>系统主题</th>
     <td><input name="user_style" value="<?=$d['user_style']?>" />
-<? chdir(路径("style/bootstrap/css/"));
-$ssss= glob("*.min.css");
+<?/*$ssss= glob("*.min.css");
 foreach($ssss as $sms) {
     echo str_replace(".min.css", "", $sms).", ";
-} chdir("../../../user/");
-?> 为可用的主题
+}*/?>
+<b>bootstrap</b>,
+<b>spacelab</b>,
+<b>united</b>,
+amelia,
+cerulean,
+cyborg,
+journal,
+readable,
+simplex,
+slate,
+spruce,
+superhero
+为可用的主题
     </td>
   </tr>
   <tr>
