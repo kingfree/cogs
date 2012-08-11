@@ -38,10 +38,10 @@ function gethead($head,$check,$title,$userid=0) {
 <link rel=stylesheet href="<?=路径("style/cogs.css")?>" />
 <?背景图片($userid ? $userid : $_SESSION['ID']);?>
 <?php $LIB->tradsimp(); ?>
-<link rel=stylesheet type="text/css" href="<?=路径("style/bootstrap/css/{$user_style}.min.css")?>" />
-<script type="text/javascript" src="<?=路径("include/jquery.js")?>"></script>
+<link rel=stylesheet type="text/css" href="/Bootstrap/css/<?=$user_style?>.min.css" />
+<script type="text/javascript" src="/jQuery/jquery-1.8.0.min.js"></script>
 <script type="text/javascript" src="<?=路径("include/sortTable.js")?>"></script>
-<script type="text/javascript" src="<?=路径("style/bootstrap/js/bootstrap.min.js")?>"></script>
+<script type="text/javascript" src="/Bootstrap/js/bootstrap.min.js"></script>
 <title><?php echo $title." - ".$SET['global_sitename'] ?></title>
 </head>
 <body>

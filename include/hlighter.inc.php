@@ -1,5 +1,5 @@
 <?php
-$SH="../include/SyntaxHighlighter/";
+$SH="/SyntaxHighlighter/";
 ?>
 <script type="text/javascript" src="<?=$SH?>scripts/shCore.js"></script>
 <script type="text/javascript" src="<?=$SH?>scripts/shBrushDelphi.js"></script>
