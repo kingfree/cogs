@@ -134,7 +134,7 @@ for ($i=0;$i<$cnt;$i++) {
 <i class='icon-<?=($d['accepted']?"ok":"remove")?>'></i>
 </a>
 <a href="../problem/problem.php?pid=<?=$d['pid'] ?>" target="_blank">
-<?=$d['probname'] ?>
+<?=shortname($d['probname']) ?>
 </a>
 </td>
 <?php
