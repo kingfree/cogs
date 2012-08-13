@@ -1,8 +1,8 @@
 <?php
 require_once("../include/header.php");
 
-setcookie("cojs_login",$d['pwdhash'], time()-7776000);
-setcookie("User",$_POST['User'], time()-7776000);
+setcookie("cogs_user","",time()-7776000);
+setcookie("cogs_pwd_hash","",time()-7776000);
 $_SESSION=array();
 session_destroy();
 
