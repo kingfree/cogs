@@ -19,7 +19,7 @@ $st=检测页面($cnt, $_GET['page']);
 现在时间：<?=date('Y-m-d H:i:s', time());?>
 </div>
 <table id="contestlist" class='table table-striped table-condensed table-bordered fiexd'>
-<tr>
+<thead><tr>
     <th width='110px'>比赛</th>
     <th>场次介绍</th>
     <th width='40px'>状态</th>
@@ -35,7 +35,7 @@ $st=检测页面($cnt, $_GET['page']);
     <th class=admin width='40px'>比赛</th>
     <th class=admin width='40px'>场次</th>
 <? } ?>
-</tr>
+</tr></thead>
 <?
 for ($i=$st;$i<$cnt && $i<$st+$SET['style_pagesize'] ;$i++) {
 		$d=$p->rtnrlt($i);
@@ -57,12 +57,12 @@ for ($i=$st;$i<$cnt && $i<$st+$SET['style_pagesize'] ;$i++) {
     <td ><?=date('Y-m-d H:i', $d[endtime]) ?></td>
     <td ><a href="../user/index.php?gid=<?=$d['gid'] ?>" target="_blank"><?=$d['gname'] ?></a></td>
 <?php if(有此权限('查看比赛')) { ?>
-<td class=admin ><a href="comptime.php?ctid=<?=$d['ctid']?>">评测</a></td>
-<td class=admin ><a href='../user/detail.php?uid=<?=$d['ouid']?>' target='_blank'><?=$d['realname']?></a></td>
+<td><a href="comptime.php?ctid=<?=$d['ctid']?>">评测</a></td>
+<td><a href='../user/detail.php?uid=<?=$d['ouid']?>' target='_blank'><?=$d['realname']?></a></td>
 <? } ?>
 <?php if(有此权限('修改比赛')) { ?>
-<td class=admin ><a href="editcompbase.php?action=edit&cbid=<?=$d['cbid']?>"><?=$d['cbid']?></a></td>
-<td class=admin ><a href="editcomptime.php?action=edit&ctid=<?=$d['ctid']?>"><?=$d['ctid']?></a></td>
+<td><a href="editcompbase.php?action=edit&cbid=<?=$d['cbid']?>"><?=$d['cbid']?></a></td>
+<td><a href="editcomptime.php?action=edit&ctid=<?=$d['ctid']?>"><?=$d['ctid']?></a></td>
 <? } ?>
 </tr>
 <? } ?>

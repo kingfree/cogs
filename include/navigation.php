@@ -74,19 +74,19 @@ function Navigation($p) {
     HTML("<a href='#' class='dropdown-toggle' data-toggle='dropdown'>{$nickname}{$mails}<b class='caret'></b></a>");
     HTML("<ul class='dropdown-menu'>");
     if($uid = (int) $_SESSION['ID']) {
-        HTML("<li><a href='".路径("user/detail.php?uid={$uid}")."'><span class='username'>".$d['nickname']."</span><span class='avatar'>".gravatar::showImage($d['email'],28)."</span></a></li>");
+        HTML("<li class='span3'><a href='".路径("user/detail.php?uid={$uid}")."'><span class='username'>".$d['nickname']."</span><span class='avatar'>".gravatar::showImage($d['email'],28)."</span></a></li>");
         列表("user/panel.php", "cog", "设置");
         列表("mail/index.php", "envelope", "信件".$mails);
         列表("user/dologout.php", "off", "退出");
     } else {
 ?>
-<li><form method="post" action="<?=路径("user/dologin.php")?>" class='form-inline center'>
+<li class='span3'><form method="post" action="<?=路径("user/dologin.php")?>" class='form-inline center'>
 <input name="from" type="hidden" id="from" value="<?=$SET['URI']?>" />
-<input name="username" type="text" class='input-small' placeholder='用户名' /><br />
-<input name="password" type="password" class='input-small' placeholder='密码' /><br />
+<input name="username" type="text" class='input-small span2' placeholder='用户名' /><br />
+<input name="password" type="password" class='input-small span2' placeholder='密码' /><br />
 <label class="checkbox">
-<input name="savepwd" type="checkbox" value="1" />记住
-<label>
+<input name="savepwd" type="checkbox" value="1" />保存 Cookies
+</label><br />
 <button class='btn btn-primary'>登录</button>
 </form></li>
 <li class='divider'></li>

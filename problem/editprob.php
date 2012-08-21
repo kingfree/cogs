@@ -375,6 +375,7 @@ $f=$p->rtnrlt($i);
 <span id='pid' class='uneditable-input' ><?=$_GET['pid'] ? $_GET['pid'] : "新建题目"?></span>
 <input name='pid' type='hidden' value='<?=$_GET['pid'] ? $_GET['pid'] : "0"?>' />
 <input name="action" type="hidden" id="action" value="<?=$_GET['action'] ?>" />
+<a class='btn pull-right' href="#copy" data-toggle='modal'><i class='icon-barcode'></i>抄袭题目</a>
 </div>
 </div>
 <div class='control-group'>
@@ -410,7 +411,6 @@ $f=$p->rtnrlt($i);
 <div class='control-group'>
 <div class='controls'>
 <a class='btn btn-success' href="#cates" data-toggle='modal'><i class='icon-tags icon-white'></i>编辑分类</a>
-<a class='btn pull-right' href="#copy" data-toggle='modal'><i class='icon-barcode'></i>抄袭题目</a>
 <button type="submit" class='btn btn-primary'>提交题目修改</button>
 </div>
 </div>

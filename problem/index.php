@@ -65,16 +65,16 @@ $st=检测页面($cnt, $_GET['page']);
 搜索题目
 <input name="key" type="text" class='search-query input-medium' value='<?=$_GET['key']?>' title='输入关键字按回车搜索题目，保持默认则为随机题目'/>
 <button type="submit" class='btn'>搜索</button>
-<p />
-<button name="rank" class='btn' value='probname'>按题目名称排序</button>
-<button name="rank" class='btn' value='filename'>按文件名称排序</button>
-<button name="rank" class='btn' value='timelimit'>按时间限制排序</button>
-<button name="rank" class='btn' value='memorylimit'>按空间限制排序</button>
-<button name="rank" class='btn' value='difficulty'>按题目难度排序</button>
-<button name="rank" class='btn' value='plugin'>按评测方式排序</button>
-<button name="rank" class='btn' value='acceptcnt'>按通过次数排序</button>
+<p />排序方法：
+<button name="rank" class='btn' value='probname'>题目名称</button>
+<button name="rank" class='btn' value='filename'>文件名称</button>
+<button name="rank" class='btn' value='timelimit'>时间限制</button>
+<button name="rank" class='btn' value='memorylimit'>空间限制</button>
+<button name="rank" class='btn' value='difficulty'>题目难度</button>
+<button name="rank" class='btn' value='plugin'>评测方式</button>
+<button name="rank" class='btn' value='acceptcnt'>通过次数</button>
 <?php if(有此权限('查看题目')) { ?>
-<button name="rank" class='btn' value='submitable'>按可否提交排序</button>
+<button name="rank" class='btn' value='submitable'>标识</button>
 <? } ?>
 </form>
 <script language=javascript>
@@ -124,15 +124,15 @@ if (!$err) for ($i=$st;$i<$cnt && $i<$st+$SET['style_pagesize'] ;$i++) {
 <td><?php echo $d['submitcnt']; ?></td>
 <td><?php echo @round($d['acceptcnt']/$d['submitcnt']*100,2); ?>%</td>
 <?php if(有此权限('查看题目')) { ?>
-<td class=admin><a href="../user/detail.php?uid=<?=$d['addid']?>"><?=$d['addid']?></a></td>
-<td class=admin>
+<td><a href="../user/detail.php?uid=<?=$d['addid']?>"><?=$d['addid']?></a></td>
+<td>
 <a href="doeditprob.php?action=change&pid=<?=$d['pid']?>" onclick="return okic('<?=$d['probname']?>')">
 <?php if ($d['submitable']) echo "<span class='label label-success'>可用</span>"; else echo "<span class='label label-important'>禁用</span>"; ?>
 </a>
 </td>
 <?php } ?>
 <?php if(有此权限('修改题目')) { ?>
-<td class=admin><a href="editprob.php?action=edit&pid=<?=$d['pid']?>">修改</a></td>
+<td><a href="editprob.php?action=edit&pid=<?=$d['pid']?>">修改</a></td>
 <?php } ?>
 </tr>
 <?php } ?>

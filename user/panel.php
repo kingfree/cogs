@@ -57,11 +57,11 @@ $d=$p->rtnrlt(0);
   </tr>
   <tr>
     <th>用户昵称</th>
-    <td><input name="nick" value="<?=$d['nickname']?>" /> 不要太长，否则会导致在首页上显示得很难看</td>
+    <td><input name="nick" value="<?=$d['nickname']?>" type='text'/> 不要太长，否则会导致在首页上显示得很难看</td>
   </tr>
   <tr>
     <th>真实姓名</th>
-    <td><input name="realname" value="<?=$d['realname']?>" /> 如果以前没有填过或者填的不是的话请注意修改</td>
+    <td><input name="realname" type='text' value="<?=$d['realname']?>" /> 如果以前没有填过或者填的不是的话请注意修改</td>
   </tr>
   <tr>
     <th>E-mail</th>
@@ -75,7 +75,7 @@ $d=$p->rtnrlt(0);
   </tr>
   <tr>
     <th>系统主题</th>
-    <td><input name="user_style" value="<?=$d['user_style']?>" />
+    <td><input name="user_style" type='text' value="<?=$d['user_style']?>" />
 <?/*$ssss= glob("*.min.css");
 foreach($ssss as $sms) {
     echo str_replace(".min.css", "", $sms).", ";

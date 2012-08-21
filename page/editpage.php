@@ -45,23 +45,17 @@ if ($cnt) {
 }
 ?>
 <form action="doeditpage.php" method="post" class='form-inline'>
-<table class='table-form'>
-<tr>
-<td width="60px">AID</td>
-<td><?=$d['aid'] ?>
+<dl class='dl-horizontal'>
+<dt>AID</dt>
+<dd><?=$d['aid'] ?>
 <input name="aid" type="hidden" id="aid" value="<?php echo $d['aid'] ?>" />
-</td>
-<tr>
-<td>页面标题</td>
-<td><input name="title" type="text" id="title" value="<?=$d['title'] ?>"></td>
-</tr>
-<tr>
-<td>阅读权限</td>
-<td><input name="force" type="number" id="force" value="<?=$d['force'] ?>" /> </td>
-</tr>
-<tr>
-<td>开放分组</td>
-<td><select name="group" id="group">
+</dd>
+<dt>页面标题</dt>
+<dd><input name="title" type="text" id="title" value="<?=$d['title'] ?>"></dd>
+<dt>阅读权限</dt>
+<dd><input name="force" type="number" id="force" value="<?=$d['force'] ?>" /> </dd>
+<dt>开放分组</dt>
+<dd><select name="group" id="group">
 <?php
 $sql="select * from groups order by gname";
 $c=$q->dosql($sql);
@@ -70,21 +64,15 @@ $e=$q->rtnrlt($j);
 ?>
 <option value="<?php echo $e['gid'] ?>" <?php if($e['gid']==$d['group']) echo 'selected="selected"' ?>>[<?php echo $e['gname'] ?>]</option>
 <?php } ?>
-</select></td>
-</tr>
-<tr>
-<td>提交修改</td>
-<td><button type="submit" class='btn btn-primary'>单击此处提交对该页面的修改</button>
+</select></dd>
+<dt>页面内容</dt>
+<dd>
+<textarea id="editor_id" name="text" style="width:90%; height:500px;"><?=$dtext?></textarea>
+</dd>
+<dd><button type="submit" class='btn btn-primary'>单击此处提交对该页面的修改</button>
 <input name="action" type="hidden" id="action" value="<?=$_GET['action']?>" />
-</td>
-</tr>
-<tr>
-<td valign="top">页面内容</td>
-<td>
-<textarea id="editor_id" name="text" style="width:100%; height:500px;"><?=$dtext?></textarea>
-</td>
-</tr>
-</table>
+</dd>
+</dl>
 </form>
 
 <?php

@@ -71,7 +71,7 @@ if(!$_GET['page']) {
 <th width='40px'>语言</th>
 <th width='60px' onclick="sortTable('submitlist', 6, 'int')">用时</th>
 <th width='80px' onclick="sortTable('submitlist', 7, 'int')">内存</th>
-<th width='120px' onclick="sortTable('submitlist', 8)">时间</th>
+<th width='140px' onclick="sortTable('submitlist', 8)">时间</th>
 </tr></thead>
 <?php if (!$err)
 for ($i=$st;$i<$cnt && $i<$st+$SET['style_pagesize'] ;$i++) {

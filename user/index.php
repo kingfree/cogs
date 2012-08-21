@@ -75,17 +75,17 @@ $st=检测页面($cnt, $_GET['page']);
   搜索用户
 <input name="key" type="text" class='search-query input-medium' value='<?=$_GET['key']?>' />
 <button type="submit" class='btn'>搜索</button>
-<p>
-  <button name="rank" type="submit" value='uid' class='btn'>按ID排序</button>
-  <button name="rank" type="submit" value='nickname' class='btn'>按昵称排序</button>
+<p />排序方法：
+  <button name="rank" type="submit" value='uid' class='btn'>UID</button>
+  <button name="rank" type="submit" value='nickname' class='btn'>昵称</button>
   <?php if(有此权限('查看用户')) { ?>
-  <button name="rank" type="submit" value='realname' class='btn'>按姓名排序</button>
+  <button name="rank" type="submit" value='realname' class='btn'>姓名</button>
   <? } ?>
-  <button name="rank" type="submit" value='readforce' class='btn'>按阅读权限排序</button>
-  <button name="rank" type="submit" value='gbelong' class='btn'>按分组排序</button>
-  <button name="rank" type="submit" value='accepted' class='btn'>按通过数量排序</button>
-  <button name="rank" type="submit" value='accepted/submited' class='btn'>按通过率排序</button>
-  <button name="rank" type="submit" value='grade' class='btn'>按等级排序</button>
+  <button name="rank" type="submit" value='readforce' class='btn'>阅读权限</button>
+  <button name="rank" type="submit" value='gbelong' class='btn'>分组</button>
+  <button name="rank" type="submit" value='accepted' class='btn'>通过数量</button>
+  <button name="rank" type="submit" value='accepted/submited' class='btn'>通过率</button>
+  <button name="rank" type="submit" value='grade' class='btn'>等级</button>
 </form>
 <script language=javascript>
 function okdel(name) {
@@ -103,7 +103,7 @@ function okdel(name) {
     <? if(有此权限('查看用户')) { ?><th class='admin' width='50px'>姓名</th><? } ?>
     <th>权限</th>
     <th width='40px'>阅读</th>
-    <th width='120px'>分组</th>
+    <th width='140px'>分组</th>
     <th width='40px'>通过</th>
     <th width='50px'>通过率</th>
     <th width='40px'>等级</th>
