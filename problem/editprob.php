@@ -46,7 +46,21 @@ if ($cnt) {
         $d['readforce']=0;
         $d['plugin']=1;
         $d['group']=0;
-        $d['detail']="请在此键入题目内容";
+        $d['detail']="";
+        $d['detail'].="<h3>【题目描述】</h3>";
+        $d['detail'].="<p>在此键入。</p>";
+        $d['detail'].="<h3>【输入格式】</h3>";
+        $d['detail'].="<p>在此键入。</p>";
+        $d['detail'].="<h3>【输出格式】</h3>";
+        $d['detail'].="<p>在此键入。</p>";
+        $d['detail'].="<h3>【样例输入】</h3>";
+        $d['detail'].="<pre>在此键入。</pre>";
+        $d['detail'].="<h3>【样例输出】</h3>";
+        $d['detail'].="<pre>在此键入。</pre>";
+        $d['detail'].="<h3>【提示】</h3>";
+        $d['detail'].="<p>在此键入。</p>";
+        $d['detail'].="<h3>【来源】</h3>";
+        $d['detail'].="<p>在此键入。</p>";
     }
 }
 if($_GET['oj']=='poj' && $_GET['id']>=1000) {
@@ -96,6 +110,7 @@ if($_GET['oj']=='poj' && $_GET['id']>=1000) {
     $d['detail'].="<h3>【提示】</h3>".$element->outertext;
     $element=$html->find('div[class=ptx]',4);
     $d['detail'].="<h3>【来源】</h3>".$element->outertext;
+    $d['detail'].="<h3>【题目来源】</h3>"."<a href=\"".$url."\"> 北京大学 POJ ".$_GET['id']."</a>";
 } else if($_GET['oj']=='soj' && $_GET['id']>=1000) {
     $d=array();
     $url="http://www.soj.me/show_problem.php?pid=".$_GET['id'];
@@ -141,6 +156,52 @@ if($_GET['oj']=='poj' && $_GET['id']>=1000) {
     $d['detail'].="<h3>【样例输入】</h3>".str_replace("  ","\n",$element->outertext)."";
     $element=$html->find('pre',1);
     $d['detail'].="<h3>【样例输出】</h3>".str_replace("  ","\n",$element->outertext)."";
+    $d['detail'].="<h3>【题目来源】</h3>"."<a href=\"".$url."\">中山大学 SOJ ".$_GET['id']."</a>";
+} else if($_GET['oj']=='pojgrids' && $_GET['id']>=1000) {
+    $d=array();
+    $url="http://poj.grids.cn/practice/".$_GET['id'];
+    if(get_magic_quotes_gpc()) {
+        $url=stripslashes($url);
+    }
+    $baseurl=substr($url,0,strrpos($url,"/")+1);
+    $html=file_get_html($url);
+
+    foreach($html->find('img') as $element)
+        $element->src=$baseurl.$element->src;
+
+    $pname=$html->find('div[id=pageTitle]', 0)->plaintext;
+    $pname=substr($pname,stripos($pname,"题目")+5);
+    $d['probname']=$pname;
+    $d['filename']="pojg_".$_GET['id'];
+    $d['submitable']=1;
+
+    $params=$html->find('dl[class=problem-params]',0);
+    $tlimit=$params->find('dd', 0)->plaintext;
+    $mlimit=$params->find('dd', 1)->plaintext;
+    $tlimit=substr($tlimit,0,stripos($tlimit,"ms"));
+    $mlimit=substr($mlimit,0,stripos($mlimit,"kB"));
+    $d['timelimit']=(int)($tlimit);
+    $d['memorylimit']=(int)($mlimit) / 1024;
+
+    $d['datacnt']=10;
+    $d['difficulty']=2;
+    $d['readforce']=0;
+    $d['plugin']=1;
+    $d['group']=0;
+
+    $content=$html->find('dl[class=problem-content]',0);
+    $d['detail']="";
+    $element=$content->find('dd',0);
+    $d['detail'].="<h3>【题目描述】</h3>".$element->outertext;
+    $element=$content->find('dd',1);
+    $d['detail'].="<h3>【输入格式】</h3>".$element->outertext;
+    $element=$content->find('dd',2);
+    $d['detail'].="<h3>【输出格式】</h3>".$element->outertext;
+    $element=$content->find('pre',0);
+    $d['detail'].="<h3>【样例输入】</h3>".str_replace("  ","\n",$element->outertext)."";
+    $element=$content->find('pre',1);
+    $d['detail'].="<h3>【样例输出】</h3>".str_replace("  ","\n",$element->outertext)."";
+    $d['detail'].="<h3>【题目来源】</h3>"."<a href=\"".$url."\">百练 POJ ".$_GET['id']."</a>";
 } else if($_GET['oj']=='lydsy' && $_GET['id']>=1000) {
     $d=array();
     $url="http://www.lydsy.com/JudgeOnline/problem.php?id=".$_GET['id'];
@@ -190,6 +251,7 @@ if($_GET['oj']=='poj' && $_GET['id']>=1000) {
     $d['detail'].="<h3>【提示】</h3>".$element->outertext;
     $element=$html->find('div[class=content]',6);
     $d['detail'].="<h3>【来源】</h3>".$element->outertext;
+    $d['detail'].="<h3>【题目来源】</h3>"."<a href=\"".$url."\">耒阳大世界（衡阳八中） OJ ".$_GET['id']."</a>";
 } else if($_GET['oj']=='uva' && $_GET['id']) {
     $d=array();
     $url="http://uva.onlinejudge.org/external/".(int)($_GET['id']/100)."/".$_GET['id'].".html";
@@ -249,6 +311,8 @@ if($_GET['oj']=='poj' && $_GET['id']>=1000) {
 <select id='oj' name='oj' class='input-medium'>
 <option value='poj' <?if($_GET['oj']=='poj') echo "selected=selected";?> >POJ</option>
 <option value='soj' <?if($_GET['oj']=='soj') echo "selected=selected";?> >SOJ</option>
+<!--<option value='rqnoj' <?if($_GET['oj']=='rqnoj') echo "selected=selected";?> >RQNOJ</option>-->
+<option value='pojgrids' <?if($_GET['oj']=='pojgrids') echo "selected=selected";?> >POJ 百练</option>
 <option value='lydsy' <?if($_GET['oj']=='lydsy') echo "selected=selected";?> >耒阳大视野</option>
 <!--<option value='uva' <?if($_GET['oj']=='uva') echo "selected=selected";?> >UVa</option>-->
 </select>
