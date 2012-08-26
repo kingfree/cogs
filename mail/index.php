@@ -22,11 +22,11 @@ $q = new DataAccess();
 <input name="fromid" type="hidden" value="<?=$uid?>" />
 <div class='control-group'>
 <label class='control-label' for='title'>邮件主题</label>
-<div class='controls'><input id='title' name="title" value="<?=$_POST['title']?>"/></div>
+<div class='controls'><input type='text' id='title' name="title" value="<?=$_POST['title']?>"/></div>
 </div>
 <div class='control-group'>
 <label class='control-label' for='toid'>收件人ID</label>
-<div class='controls'><input id='toid' name="toid" value="<?=$_POST['toid']?$_POST['toid']:$_GET['toid']?>"/></div>
+<div class='controls'><input type='number' id='toid' name="toid" value="<?=$_POST['toid']?$_POST['toid']:$_GET['toid']?>"/></div>
 </div>
 <div class='control-group'>
 <label class='control-label' for='msg'>邮件内容</label>

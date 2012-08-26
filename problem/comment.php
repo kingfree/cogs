@@ -30,7 +30,6 @@ if($pid) {
 <div class='container-fluid'>
 <form method="post" action="sendcomments.php" class='form-horizontal'>
 <div class='modal-header'>
-<button class='close' data-dismiss='modal'>×</button>
 <h2>发表 <a href="problem.php?pid=<?=$pid?>" target="_blank"><?=$d['probname']?></a> 的评论</h2>
 </div>
 <div class='modal-body'>
@@ -41,7 +40,6 @@ if($pid) {
 <div class='modal-footer'>
 <input name="pid" type="hidden" id="pid" value="<?php echo $pid ?>" />
 <input name="cid" type="hidden" id="cid" value="<?php echo $cid ?>" />
-<button data-dismiss='modal' class='btn'>取消</button>
 <button type="submit" class='btn btn-primary'>发表评论</button>
 </div>
 </form>

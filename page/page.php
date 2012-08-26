@@ -41,7 +41,7 @@ if($cnt) {
 开放分组：<a href="../user/index.php?gid=<?=$d['gid'] ?>" target="_blank"><?=$d['gname'] ?></a>
 上次编辑时间：<?=date('Y-m-d', $d['etime'])?>
 <?php if(有此权限('修改页面')) { ?>
-<a href="editpage.php?action=edit&aid=<?=$d[aid]?>" class="btn btn-info">编辑</a>
+<a href="editpage.php?action=edit&aid=<?=$d[aid]?>" class="btn btn-info btn-mini">编辑</a>
 <? } ?>
 <hr />
 </center>

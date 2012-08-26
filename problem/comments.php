@@ -58,11 +58,11 @@ if ($cnt) {
   </tr>
   <tr>
 	<td class="CommentsCode"><?php if ($d['showcode']){
-	$sql="select sid from submit where uid='{$d['uid']}' and pid='{$pid}' order by subtime desc";
+	$sql="select sid from submit where uid='{$d['uid']}' and pid='{$d['pid']}' order by subtime desc";
 	$q->dosql($sql);
 	$e=$q->rtnrlt(0);
 	?>
-	<a href="../submit/code.php?id=<?php echo $e['sid'] ?>"><i class='icon icon-download'></i>查看该用户最后一次提交的代码</a>
+	<a href="../submit/code.php?id=<?=$e['sid']?>"><i class='icon icon-download'></i>查看该用户最后一次提交的代码</a>
 	<?php } ?>
 	</div>
     </td>

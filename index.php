@@ -95,11 +95,10 @@ $d=$p->rtnrlt($i);
 <table class='table table-striped table-condensed table-bordered fixed'>
 <thead>
 <tr>
-<td width='12px'></td>
-<td width='28px'>头像</td>
-<td>用户</td>
-<td width='30px'>等级</td>
-<td width='30px'>题目</td>
+<th width='12px'></th>
+<th>用户</th>
+<th width='30px'>等级</th>
+<th width='28px'>题目</th>
 </tr>
 </thead>
 <?php 
@@ -109,10 +108,10 @@ $d=$p->rtnrlt($i);
 ?>
 <tr>
 <td><i><?=$i+1 ?></i></td>
-<td class='jin'><a href="user/detail.php?uid=<?php echo $d['uid']; ?>" target="_blank"><?=gravatar::showImage($d['email'], 28);?></a></td>
-<td><a href="user/detail.php?uid=<?php echo $d['uid']; ?>" target="_blank"><?=$d['nickname']?></a></td>
-<td ><b><?php echo $d['grade'] ?></b></td>
-<td ><b><?php echo $d['accepted'] ?></b></td>
+<td><a href="user/detail.php?uid=<?php echo $d['uid']; ?>" target="_blank"><?=gravatar::showImage($d['email'], 28);?></a>
+<a href="user/detail.php?uid=<?php echo $d['uid']; ?>" target="_blank"><?=$d['nickname']?></a></td>
+<td><?=$d['grade']?></td>
+<td><?=$d['accepted']?></td>
 </tr>
 <?php } ?>
 </table>
