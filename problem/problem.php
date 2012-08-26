@@ -168,7 +168,7 @@ for ($i=0;$i<$cnt;$i++) {
 ?>
     <tr class="CommentsU">
     <td><a href="../user/detail.php?uid=<?=$e['uid'] ?>"><?=gravatar::showImage($e['email']);?><?=$e['nickname'] ?></a></td>
-    <td><?=date('Y-m-d H:i:s',$e['stime'])?>
+    <td><?=date('y/m/d H:i',$e['stime'])?>
    <?php if($e['showcode']) {
 	$sql="select sid from submit where uid='{$e['uid']}' and pid='{$d['pid']}' order by subtime desc";
 	$r->dosql($sql);

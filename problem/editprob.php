@@ -46,7 +46,7 @@ if ($cnt) {
         $d['readforce']=0;
         $d['plugin']=1;
         $d['group']=0;
-        $d['detail']="";
+        $d['detail']="。";
         $d['detail'].="<h3>【题目描述】</h3>";
         $d['detail'].="<p>在此键入。</p>";
         $d['detail'].="<h3>【输入格式】</h3>";

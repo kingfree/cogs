@@ -31,7 +31,7 @@ if($way=='ins' && $uid) {
     $sql="select def from `privilege` where uid=$uid and pri=$priv limit 1";
     $cnt=$p->dosql($sql);
     if(!$cnt) {
-        $sql="insert into `privilege` values('$uid','$priv','1')";
+        $sql="insert into `privilege`(uid, pri, def) values('$uid','$priv','1')";
         $cnt=$p->dosql($sql);
         HTML("<div class='alert alert-success'>用户 $uid 已添加权限 ".array_search($priv, $pri)." ！</div>");
     }
