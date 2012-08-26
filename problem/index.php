@@ -52,7 +52,7 @@ $cnt=$p->dosql($sql);
 $st=检测页面($cnt, $_GET['page']);
 ?>
 <form method="get" action="" class='center'>
-<a href="random.php" title="随机选择一道你没有通过的题目" class='btn' >随机题目</a>
+<a href="random.php" title="随机选择一道你没有通过的题目" class='btn btn-danger' >随机题目</a>
 <input name="caid" type="hidden" value="<?=$_GET['caid']?>" />
 <input name="order" type="hidden" value="<?=$_GET['order']=='asc'?'desc':'asc'?>" />
 难度 

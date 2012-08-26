@@ -61,7 +61,9 @@ $d=$p->rtnrlt($i);
 <thead>
 <tr>
 <th width="40px">PID</th>
-<th>最新题目</th>
+<th>最新题目
+<a href="problem/random.php" title="随机选择一道你没有通过的题目" class='btn btn-danger btn-mini pull-right' >随机题目</a>
+</th>
 </thead>
 </tr>
 <?php 

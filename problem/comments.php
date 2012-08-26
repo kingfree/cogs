@@ -8,7 +8,7 @@ $pid=(int)$_GET['pid'];
 ?>
 <div class='container-fluid'>
 <? if($pid) { ?>
-<a class='btn btn-success' href="comment.php?pid=<?=$pid?>">发表评论</a>
+<a class='btn btn-danger' href="comment.php?pid=<?=$pid?>">发表评论</a>
 <? } ?>
 <?php
 $sql="select comments.*,userinfo.nickname,userinfo.email,userinfo.uid,problem.pid,problem.probname from comments,userinfo,problem where userinfo.uid=comments.uid and problem.pid=comments.pid";
@@ -52,7 +52,7 @@ if ($cnt) {
 </table>
 </td>
     <td colspan=4 class="CommentsK">
-    <? if($_SESSION['ID']==$d['uid']) echo "<a href='comment.php?cid={$d['cid']}' class='pull-right btn btn-mini'>修改</a>";?>
+    <? if($_SESSION['ID']==$d['uid']) echo "<a href='comment.php?cid={$d['cid']}' class='pull-right btn btn-mini btn-warning'>修改</a>";?>
     <?php echo nl2br(sp2n(htmlspecialchars($d['detail'])))?>
     </td>
   </tr>

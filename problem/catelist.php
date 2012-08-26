@@ -13,6 +13,7 @@ $q=new DataAccess();
     $cnt=$p->dosql($sql);
 ?>
 <table id="catelist" class='table table-striped table-condensed table-bordered fiexd'>
+<thead>
   <tr>
     <?php if(有此权限('修改分类')) { ?>
     <th class='admin' width='40px'>操作</th>
@@ -20,13 +21,14 @@ $q=new DataAccess();
     <th width='240px'>分类</th>
     <th>备注</th>
   </tr>
+</thead>
 <?php 
 for ($i=$st;$i<$cnt;$i++) {
     $d=$p->rtnrlt($i);
 ?>
   <tr>
     <?php if(有此权限('修改分类')) { ?>
-    <td class=admin><a href="editcate.php?action=edit&caid=<?php echo $d['caid'] ?>">修改</a></td><?php } ?>
+    <td><a href="editcate.php?action=edit&caid=<?php echo $d['caid'] ?>">修改</a></td><?php } ?>
     <td><a href="index.php?caid=<?php echo $d['caid'] ?>"><?php echo $d['cname'] ?></a></td>
     <td><?php echo sp2n(htmlspecialchars($d['memo'])) ?></td>
   </tr>

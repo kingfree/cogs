@@ -158,7 +158,7 @@ for ($i=0;$i<$cnt;$i++) {
 <table id="Comments" class='table table-striped table-condensed table-bordered fiexd'>
 <tr><th colspan=3>最新讨论
 <a href="comments.php?pid=<?=$pid?>"><b>讨论版</b></a>
-<a href="comment.php?pid=<?=$pid?>" class="pull-right btn btn-mini"><b>发表评论</b></a>
+<a href="comment.php?pid=<?=$pid?>" class="pull-right btn btn-mini btn-danger"><b>发表评论</b></a>
 </th></tr>
 <?
 $sql="select comments.*,userinfo.nickname,userinfo.uid,userinfo.email from comments,userinfo where userinfo.uid=comments.uid and comments.pid='{$d['pid']}' order by comments.cid desc";
@@ -181,7 +181,7 @@ for ($i=0;$i<$cnt;$i++) {
     #<?=$cnt-$i?></td>
     </tr>
     <tr><td colspan=3 class="CommentsK">
-    <? if($_SESSION['ID']==$e['uid']) echo "<a href='comment.php?cid={$e['cid']}' class='pull-right btn btn-mini'>修改</a>";?>
+    <? if($_SESSION['ID']==$e['uid']) echo "<a href='comment.php?cid={$e['cid']}' class='pull-right btn btn-mini btn-warning'>修改</a>";?>
     <?php echo nl2br(sp2n(htmlspecialchars($e['detail'])))?>
     </td></tr>
 <?

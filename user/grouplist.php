@@ -9,6 +9,7 @@ $q=new DataAccess();
 <a href="editgroup.php?action=add" class="btn btn-info">添加新分组</a>
 <?php } ?>
 <table class='table table-striped table-condensed table-bordered fiexd'>
+<thead>
   <tr>
     <th width='160px'>分组名</th>
     <th width='160px'>上级分组</th>
@@ -21,6 +22,7 @@ $q=new DataAccess();
     <th class='admin' width='40px'>操作</th>
     <?php } ?>
   </tr>
+</thead>
 <?php
     $sql="select groups.*,userinfo.uid,userinfo.nickname from groups,userinfo where groups.adminuid=userinfo.uid order by gname";
     $cnt=$p->dosql($sql);
@@ -55,7 +57,7 @@ if ($d['parent']!=-1)
     </td>
     <?php } ?>
     <?php if(有此权限('分组管理')) { ?>
-    <td class='admin'><a href="editgroup.php?action=edit&gid=<?=$d['gid'] ?>">修改</a></td>
+    <td><a href="editgroup.php?action=edit&gid=<?=$d['gid'] ?>">修改</a></td>
     <?php } ?>
   </tr>
 <?php

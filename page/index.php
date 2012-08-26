@@ -36,7 +36,6 @@ $st=检测页面($cnt, $_GET['page']);
 <th>开放分组</th>
 <?php if(有此权限('查看页面')) { ?>
 <th class=admin>添加用户</th>
-<th class=admin>权限</th>
 <?php } ?>
 <?php if(有此权限('修改页面')) { ?>
 <th class=admin>编辑</th>
@@ -57,10 +56,9 @@ for ($i=$st;$i<$cnt && $i<$st+$SET['style_pagesize'] ;$i++) {
 <td><a href="../user/index.php?gid=<?=$d['gid'] ?>" target="_blank"><?=$d['gname'] ?></a></td>
 <?php if(有此权限('查看页面')) { ?>
 <td><?=$d['name']?></td>
-<td><?=$d['force']?></td>
 <?php } ?>
 <?php if(有此权限('修改页面')) { ?>
-<th><a href="editpage.php?action=edit&aid=<?=$d['aid']?>">修改</a></th>
+<td><a href="editpage.php?action=edit&aid=<?=$d['aid']?>">修改</a></td>
 <?php } ?>
 </tr>
 <?php } ?>
