@@ -8,7 +8,7 @@ $SS=路径("style/");
 var editor;
 KindEditor.ready(function(K) {
     editor = K.create('#<?=$edname?>', {
-        cssPath : '<?=$SH?>cogs.css',
+        cssPath : '<?=$SS?>cogs.css',
         uploadJson : '<?=$SH?>upload_json.inc.php',
         //fileManagerJson : '../php/file_manager_json.php',
         //allowFileManager : true,

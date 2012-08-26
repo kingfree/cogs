@@ -181,7 +181,102 @@ padding: 10px;
     margin-left: 0px;
 }
 
-
+.tagcloud {
+  list-style: none;
+  margin-left: 0;
+  margin-top: 10px;
+}
+.tagcloud .tag {
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  border-radius: 4px;
+  background-color: #EEE;
+  padding: 4px 10px;
+  display: inline;
+  margin-right: 4px;
+  margin-bottom: 5px;
+}
+.tagcloud .tag a {
+  color: black;
+}
 .problem {
-background:#467;
+    background: AliceBlue;
+    font-size: 14px;
+    width: 600px;
+}
+.problem h1 {
+    font-family: sans-serif;
+    font-size: 26px;
+    font-weight: bold;
+    padding: 10px 10px 10px 10px;
+    margin: 0;
+    background-color: PaleTurquoise;
+    color: MidnightBlue;
+}
+.problem h2 {
+    font-family: sans-serif;
+    font-size: 22px;
+    font-weight: bold;
+    padding: 10px 10px 10px 10px;
+    margin: 0;
+    background-color: PowderBlue;
+    color: MidnightBlue;
+}
+.problem dt, .problem h3 {
+    font-family: sans-serif;
+    font-size: 16px;
+    font-weight: bold;
+    color: white;
+    background-color: CornflowerBlue;
+    margin: 0;
+    padding: 2px 10px 2px 10px;
+}
+.problem dd {
+    font-family: serif;
+    font-size: 14px;
+    font-weight: normal;
+    color: black;
+    background-color: Azure;
+    margin: 0;
+    padding: 10px 30px 10px 30px;
+}
+.problem pre {
+    font-family: monospace;
+    font-size: 14px;
+    font-weight: normal;
+    color: black;
+    background-color: PaleGreen;
+    outline-width: 2px;
+    margin: 0;
+    padding: 10px;
+}
+.problem table {
+    border-collapse: collapse;
+    table-layout: fixed;
+    empty-cells: show;
+    caption-side: bottom;
+    background-color: white;
+    border-style: solid;
+    border-width: 0;
+}
+.problem th {
+    font-weight: bold;
+    border-style: solid;
+    border-width: 0 0 2px 0;
+    border-color: DarkGray;
+    padding: 5px;
+    background-color: WhiteSmoke;
+}
+.problem tr {
+    border-style: solid;
+    border-width: 0 0 1px 0;
+    border-color: DarkGray;
+    background-color: white;
+}
+.problem tr:nth-child(even) {
+    background-color: WhiteSmoke;
+}
+.problem td {
+    border-width: 0;
+    padding: 4px 2px 4px 2px;
 }

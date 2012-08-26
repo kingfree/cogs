@@ -202,7 +202,9 @@ for ($i=0;$i<$cnt;$i++) {
 内存限制：<?=$d['memorylimit']; ?> MiB
 <hr />
 </center>
+<dl class='problem'>
 <?=$d['detail']?>
+</dl>
 </div>
 </div>
 </div>
