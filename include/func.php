@@ -289,7 +289,9 @@ function 分页($total,$page,$url='',$page_size='',$max_length='') {
 
     $page_table = '';
     //aways in the pages
-    $page_table = '<div class="pagination"><ul>';
+    $page_table = '<div class="pagination pagination-center"><ul>';
+    //$page_table = '<div class="pager"><ul>';
+    $page_table .= '<li><a href="'.$url.'page='.(1).'">首页</a></li>';
     $page_table .= '<li><a href="'.$url.'page='.($page-1).'">上页</a></li>';
     //显示第一页
     if($page == 1 )
@@ -335,6 +337,7 @@ function 分页($total,$page,$url='',$page_size='',$max_length='') {
             $page_table .= '<li><a href="'.$url.'page='.$total_page.'">'.$total_page.'</a></li>';
     }
     $page_table .= '<li><a href="'.$url.'page='.($page+1).'">下页</a></li>';
+    $page_table .= '<li><a href="'.$url.'page='.($total_page).'">尾页</a></li>';
     $page_table .= "</ul></div>";
     //输出分页代码
     echo $page_table;

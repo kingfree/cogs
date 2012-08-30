@@ -20,10 +20,11 @@ $cnt=$p->dosql($sql);
 $st=检测页面($cnt, $_GET['page']);
 ?>
 <div class='container-fluid'>
-<form method="get" action="" class='center'>
-搜索帖子全文
-<input name="key" type="text" class='search-query input-medium' value='<?=$_GET['key']?>'/>
-<button type="submit" class='btn'>搜索</button>
+<form method="get" action="" class='form-search center'>
+<div class='input-append pull-right'>
+<input name="key" type="text" class='search-query input-medium' value='<?=$_GET['key']?>' placeholder='搜索评论'/>
+<button type='submit' class='btn'><i class='icon icon-search'></i></button>
+</div>
 </form>
 <?
 if ($cnt) {

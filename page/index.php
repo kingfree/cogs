@@ -22,10 +22,11 @@ $sql .= " order by title asc";
 $cnt=$p->dosql($sql);
 $st=检测页面($cnt, $_GET['page']);
 ?>
-<form method="get" action="" class='center'>
-搜索页面
-<input name="key" type="text" class='search-query input-medium' value='<?=$_GET['key']?>'/>
-<button type="submit" class='btn'>搜索</button>
+<form method="get" action="" class='form-search center'>
+<div class='input-append pull-right'>
+<input name="key" type="text" class='search-query input-medium' value='<?=$_GET['key']?>' placeholder='搜索页面'/>
+<button type='submit' class='btn'><i class='icon icon-search'></i></button>
+</div>
 </form>
 <table id="pagelist" class='table table-striped table-condensed table-bordered fiexd'>
 <thead><tr>

@@ -49,7 +49,8 @@ echo "<span class='todo'>还未开始</span>";
 <? } else { ?>
 <table class='table table-striped table-condensed table-bordered fiexd'>
 <?php 
-$cnt=$p->dosql("select * from page order by etime desc limit 7");
+$sizee=$SET['style_ranksize']/2 + 2;
+$cnt=$p->dosql("select * from page order by etime desc limit $sizee");
 for($i=0;$i<$cnt;$i++) {
 $d=$p->rtnrlt($i);
 ?>
@@ -67,7 +68,7 @@ $d=$p->rtnrlt($i);
 </thead>
 </tr>
 <?php 
-$cnt=$p->dosql("select * from problem where submitable=1 order by pid desc limit 7");
+$cnt=$p->dosql("select * from problem where submitable=1 order by pid desc limit $sizee");
 for($i=0;$i<$cnt;$i++) {
 $d=$p->rtnrlt($i);
 ?>

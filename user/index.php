@@ -69,21 +69,22 @@ $sql.=" order by grade desc";
 $cnt=$p->dosql($sql);
 $st=检测页面($cnt, $_GET['page']);
 ?>
-<form method="get" action="" class='center'>
+<form method="get" action="" class='form-search center'>
   <input name="gid" type="hidden" value="<?=$_GET['gid'] ?>" />
   <input name="order" type="hidden" value="<?=$_GET['order']=='asc'?'desc':'asc'?>" />
-  搜索用户
-<input name="key" type="text" class='search-query input-medium' value='<?=$_GET['key']?>' />
-<button type="submit" class='btn'>搜索</button>
-<p />排序方法：
+<div class='input-append pull-right'>
+<input name="key" type="text" class='search-query input-medium' value='<?=$_GET['key']?>' placeholder='搜索用户'/>
+<button type='submit' class='btn'><i class='icon icon-search'></i></button>
+</div>
+排序方法：
   <button name="rank" type="submit" value='uid' class='btn'>UID</button>
   <button name="rank" type="submit" value='nickname' class='btn'>昵称</button>
   <?php if(有此权限('查看用户')) { ?>
   <button name="rank" type="submit" value='realname' class='btn'>姓名</button>
   <? } ?>
-  <button name="rank" type="submit" value='readforce' class='btn'>阅读权限</button>
+  <button name="rank" type="submit" value='readforce' class='btn'>阅读</button>
   <button name="rank" type="submit" value='gbelong' class='btn'>分组</button>
-  <button name="rank" type="submit" value='accepted' class='btn'>通过数量</button>
+  <button name="rank" type="submit" value='accepted' class='btn'>通过</button>
   <button name="rank" type="submit" value='accepted/submited' class='btn'>通过率</button>
   <button name="rank" type="submit" value='grade' class='btn'>等级</button>
 </form>

@@ -51,7 +51,7 @@ $sql.=" order by problem.pid asc";
 $cnt=$p->dosql($sql);
 $st=检测页面($cnt, $_GET['page']);
 ?>
-<form method="get" action="" class='center'>
+<form method="get" action="" class='form-search center'>
 <a href="random.php" title="随机选择一道你没有通过的题目" class='btn btn-danger' >随机题目</a>
 <input name="caid" type="hidden" value="<?=$_GET['caid']?>" />
 <input name="order" type="hidden" value="<?=$_GET['order']=='asc'?'desc':'asc'?>" />
@@ -62,9 +62,10 @@ $st=检测页面($cnt, $_GET['page']);
 <option value="<?php echo $i;?>" <?php if ($_GET['diff']==$i) {?> selected="selected"<?php } ?> ><?php echo 难度($i);?></option>
 <?php } ?>
 </select>
-搜索题目
-<input name="key" type="text" class='search-query input-medium' value='<?=$_GET['key']?>' title='输入关键字按回车搜索题目，保持默认则为随机题目'/>
-<button type="submit" class='btn'>搜索</button>
+<div class='input-append pull-right'>
+<input name="key" type="text" class='search-query input-medium' value='<?=$_GET['key']?>' title='输入关键字按回车搜索题目' placeholder='搜索题目'/>
+<button type='submit' class='btn'><i class='icon icon-search'></i></button>
+</div>
 <p />排序方法：
 <button name="rank" class='btn' value='probname'>题目名称</button>
 <button name="rank" class='btn' value='filename'>文件名称</button>

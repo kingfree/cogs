@@ -11,7 +11,7 @@ $way=$_POST['way'] ? $_POST['way'] : $_GET['way'];
 <div class='container'>
 <form method=post>
 	<b>为用户添加权限</b>
-	用户编号：<input type=text size=10 name="uid" value="<?=$uid?>" />
+	用户编号：<input type='number' size=10 name="uid" value="<?=$uid?>" />
     <input type=hidden name=way value="ins" />
 	用户权限：<select name="pri">
 <?php
