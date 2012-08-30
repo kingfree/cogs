@@ -140,9 +140,9 @@ else echo "<p class=no>没有写入数据库</p>";
 <?php if($AC == -1) { ?>
 <div class='alert'>
 <p class="no">你在<span class='badge'>第<?=$Cp->wrongpoint?>个</span>测试点出现了爆零的情况，下面是该题的输入数据：
-<pre class="brush: text;"><?=htmlspecialchars(substr($Cp->inputtext, 0, 512))?>...</pre>
+<pre class="syntax plain"><?=htmlspecialchars(substr($Cp->inputtext, 0, 512))?>...</pre>
 <p>下面是你的输出与标准答案不同的地方（上面带减号“-”的是你的输出，下面带加号“+”的是答案输出，“@@”之间的数字表示行号）：
-<pre class="brush: diff;"><?=htmlspecialchars(substr($Cp->difftext, 0, 512))?>...</pre>
+<pre class="syntax diff"><?=htmlspecialchars(substr($Cp->difftext, 0, 512))?>...</pre>
 <p><a href="../problem/problem.php?pid=<?=$_POST['pid'] ?>">返回原题 “<?=$ptitle?>”</a></p>
 </div>
 <?php } ?>
@@ -152,7 +152,7 @@ else echo "<p class=no>没有写入数据库</p>";
 </div>
 <div class='alert'>
 <p>编译失败：</p>
-<pre class="brush: bash;"><?=htmlspecialchars($Cp->compilemessage)?></pre>
+<pre class="syntax bash"><?=htmlspecialchars($Cp->compilemessage)?></pre>
 </div>
 <?php 
 }

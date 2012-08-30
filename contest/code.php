@@ -69,7 +69,7 @@ if ($cnt) {
     else if($d['lang']==1) $langstr="c";
     else if($d['lang']==2) $langstr="cpp";
 ?>
-<pre class="brush: <?=$langstr?>;"><?=htmlspecialchars($code)?></pre>
+<pre class="syntax <?=$langstr?>"><?=htmlspecialchars($code)?></pre>
 </div>
 </div>
 <?php
