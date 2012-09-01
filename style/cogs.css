@@ -204,43 +204,50 @@ padding: 10px;
   margin-bottom: 5px;
 }
 .tagcloud .tag a {
-  color: black;
+    color: black;
 }
 .problem {
-    background: AliceBlue;
-    font-size: 14px;
-    width: 600px;
+    color: black;
+    background: white;
+    font-size: 16px;
 }
 .problem h1 {
     font-family: sans-serif;
-    font-size: 26px;
+    font-size: 28px;
+    line-height: 30px;
     font-weight: bold;
     padding: 10px 10px 10px 10px;
     margin: 0;
     background-color: PaleTurquoise;
     color: MidnightBlue;
+    text-shadow: 2px 2px 10px Linen;
 }
 .problem h2 {
     font-family: sans-serif;
-    font-size: 22px;
+    font-size: 24px;
+    line-height: 26px;
     font-weight: bold;
     padding: 10px 10px 10px 10px;
     margin: 0;
     background-color: PowderBlue;
     color: MidnightBlue;
+    text-shadow: 1px 1px 5px Azure;
 }
 .problem dt, .problem h3 {
     font-family: sans-serif;
-    font-size: 16px;
+    font-size: 20px;
+    line-height: 25px;
     font-weight: bold;
     color: white;
     background-color: CornflowerBlue;
     margin: 0;
     padding: 2px 10px 2px 10px;
+    text-shadow: 1px 1px 5px MediumBlue;
 }
 .problem dd {
     font-family: serif;
-    font-size: 14px;
+    font-size: 16px;
+    line-height: 18px;
     font-weight: normal;
     color: black;
     background-color: Azure;
@@ -249,10 +256,11 @@ padding: 10px;
 }
 .problem pre {
     font-family: monospace;
-    font-size: 14px;
+    font-size: 15px;
+    line-height: 16px;
     font-weight: normal;
     color: black;
-    background-color: PaleGreen;
+    background-color: LavenderBlush;
     outline-width: 2px;
     margin: 0;
     padding: 10px;
