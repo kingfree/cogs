@@ -4,8 +4,7 @@ gethead(1,"可以管理","后台管理");
     $q=new DataAccess();
 ?>
 
-<div class='container-fluid'>
-<div class='row-fluid meng'>
+<div class='row-fluid'>
 <div class='span2 center'>
 <h1 class='well'>后台<br/>管理</h1>
 </p>
@@ -56,7 +55,6 @@ gethead(1,"可以管理","后台管理");
 <li class=''><a href="gen_acrank.php"><i class='icon-retweet'></i>生成等级</a></li>
 <li class=''><a href="clear_record.php"><i class='icon-repeat'></i>清理垃圾</a></li>
 </ul>
-</div>
 </div>
 <?php
 include_once("../include/footer.php");

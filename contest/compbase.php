@@ -2,7 +2,7 @@
 require_once("../include/header.php");
 gethead(1,"修改比赛","修改比赛");
 ?>
-<div class='container'>
+<div class='row-fluid'>
 <script type="text/JavaScript">
 function MM_jumpMenu(targ,selObj,restore){ //v3.0
   eval(targ+".location='"+selObj.options[selObj.selectedIndex].value+"'");

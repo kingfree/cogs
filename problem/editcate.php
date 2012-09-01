@@ -2,7 +2,7 @@
 require_once("../include/header.php");
 gethead(1,"分类管理","修改分类");
 ?>
-<div class='container'>
+<div class='row-fluid'>
 <?php
 if ($_GET[action]=='edit') {
 	$p=new DataAccess();

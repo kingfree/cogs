@@ -6,8 +6,8 @@ $p=new DataAccess();
 
 <form action="" method="get" class='form-inline center'>
 检索： 用户UID
-<input name="uid" type="text" id="uid" value="<?=$_GET['uid'] ?>" />
-<button type="submit" class='btn'>检索</button>
+<input name="uid" type="number" value="<?=$_GET['uid']?>" class='span1' />
+<button type="submit" class='btn btn-primary'>检索</button>
 </form>
 <?php
 $sql="select login.*,userinfo.email,userinfo.realname from login,userinfo where login.uid=userinfo.uid";
@@ -16,6 +16,7 @@ $sql .= " order by ltime desc";
 $cnt=$p->dosql($sql);
 $st=检测页面($cnt, $_GET['page']);
 ?>
+<div class='row-fluid'>
 <table class='table table-striped table-condensed table-bordered fiexd'>
 <thead><tr>
 <th width=40px>编号</th>
@@ -39,6 +40,7 @@ for ($i=$st;$i<$cnt && $i<$st+$SET['style_pagesize'] ;$i++) {
 </tr>
 <? } ?>
 </table>
+</div>
 <?php
 //if($_GET['show'])
 分页($cnt, $_GET['page'], '?uid='.$_GET['uid']."&");

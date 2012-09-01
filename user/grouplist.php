@@ -4,7 +4,7 @@ gethead(1,"","分组列表");
 $p=new DataAccess();
 $q=new DataAccess();
 ?>
-<div class='container'>
+<div class='row-fluid'>
 <?php if(有此权限('分组管理')) { ?>
 <a href="editgroup.php?action=add" class="btn btn-info">添加新分组</a>
 <?php } ?>

@@ -3,7 +3,7 @@ require_once("../include/header.php");
 gethead(1,"参数设置","参数设置");
 $p=new DataAccess();
 ?>
-<div class='container'>
+<div class='row-fluid'>
 <table class='table table-striped table-condensed table-bordered fiexd'>
   <tr>
     <th width=10%>修改</th>

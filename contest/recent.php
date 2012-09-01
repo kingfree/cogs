@@ -2,7 +2,7 @@
 require_once("../include/header.php");
 gethead(1,"","在线竞赛");
 ?>
-<div class='container'>
+<div class='row-fluid'>
 <table class='table table-striped table-condensed table-bordered fiexd'>
 <thead>
 <tr>

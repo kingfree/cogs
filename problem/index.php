@@ -5,7 +5,7 @@ $p=new DataAccess();
 $q=new DataAccess();
 ?>
 
-<div class='container-fluid'>
+<div class='row-fluid'>
 <script type="text/JavaScript">
 function MM_jumpMenu(targ,selObj,restore){
 eval(targ+".location='?diff=<?php echo $_GET['diff'] ?>&caid=<?php echo $_GET['caid'] ?>&key=<?php echo $_GET['key'] ?>&page="+selObj.options[selObj.selectedIndex].value+"'");
@@ -66,7 +66,7 @@ $st=检测页面($cnt, $_GET['page']);
 <input name="key" type="text" class='search-query input-medium' value='<?=$_GET['key']?>' title='输入关键字按回车搜索题目' placeholder='搜索题目'/>
 <button type='submit' class='btn'><i class='icon icon-search'></i></button>
 </div>
-<p />排序方法：
+<div class='btn-group'>排序方法：
 <button name="rank" class='btn' value='probname'>题目名称</button>
 <button name="rank" class='btn' value='filename'>文件名称</button>
 <button name="rank" class='btn' value='timelimit'>时间限制</button>
@@ -77,6 +77,7 @@ $st=检测页面($cnt, $_GET['page']);
 <?php if(有此权限('查看题目')) { ?>
 <button name="rank" class='btn' value='submitable'>标识</button>
 <? } ?>
+</div>
 </form>
 <script language=javascript>
 function okic(name) {

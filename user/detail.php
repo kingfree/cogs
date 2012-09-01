@@ -4,7 +4,7 @@ gethead(1,"","用户信息", $_GET['uid']);
 $p=new DataAccess();
 $q=new DataAccess();
 ?>
-<div class='container-fluid'>
+<div class='row-fluid'>
 <div class='span4'>
 <?php
 $sql="select userinfo.*,groups.gname,groups.gid from userinfo,groups where userinfo.uid={$_GET['uid']} and userinfo.gbelong=groups.gid";

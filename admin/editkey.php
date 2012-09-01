@@ -14,7 +14,7 @@ $ssid=$d['ssid'];
 $sname=$d['name'];
 
 ?>
-<div class='container'>
+<div class='row-fluid'>
 <form method="post" action="doeditkey.php?ssid=<?=$ssid?>" class='form-horizontal'>
 <div class='control-group'>
 <div class='controls'>

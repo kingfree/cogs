@@ -4,7 +4,7 @@ gethead(1,"","首页");
 $p=new DataAccess();
 $q=new DataAccess();
 ?>
-<div class='container-fluid'>
+<div class='row-fluid'>
 <div class='span3'>
 <?php 
 $now = time();
@@ -49,7 +49,7 @@ echo "<span class='todo'>还未开始</span>";
 <? } else { ?>
 <table class='table table-striped table-condensed table-bordered fiexd'>
 <?php 
-$sizee=$SET['style_ranksize']/2 + 2;
+$sizee=$SET['style_ranksize']/2 + 1;
 $cnt=$p->dosql("select * from page order by etime desc limit $sizee");
 for($i=0;$i<$cnt;$i++) {
 $d=$p->rtnrlt($i);

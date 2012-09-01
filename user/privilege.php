@@ -8,7 +8,7 @@ $priv=(int) ($_POST['pri'] ? $_POST['pri'] : $_GET['pri']);
 $way=$_POST['way'] ? $_POST['way'] : $_GET['way'];
 
 ?>
-<div class='container'>
+<div class='row-fluid'>
 <form method=post>
 	<b>为用户添加权限</b>
 	用户编号：<input type='number' size=10 name="uid" value="<?=$uid?>" />

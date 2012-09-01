@@ -2,7 +2,6 @@
 require_once("../include/header.php");
 gethead(1,"","用户列表");
 ?>
-<div class='container-fluid'>
 <?php
     $p=new DataAccess();
     $q=new DataAccess();
@@ -76,7 +75,7 @@ $st=检测页面($cnt, $_GET['page']);
 <input name="key" type="text" class='search-query input-medium' value='<?=$_GET['key']?>' placeholder='搜索用户'/>
 <button type='submit' class='btn'><i class='icon icon-search'></i></button>
 </div>
-排序方法：
+<div class='btn-group'>排序方法：
   <button name="rank" type="submit" value='uid' class='btn'>UID</button>
   <button name="rank" type="submit" value='nickname' class='btn'>昵称</button>
   <?php if(有此权限('查看用户')) { ?>
@@ -87,6 +86,7 @@ $st=检测页面($cnt, $_GET['page']);
   <button name="rank" type="submit" value='accepted' class='btn'>通过</button>
   <button name="rank" type="submit" value='accepted/submited' class='btn'>通过率</button>
   <button name="rank" type="submit" value='grade' class='btn'>等级</button>
+</div>
 </form>
 <script language=javascript>
 function okdel(name) {
@@ -95,6 +95,7 @@ function okdel(name) {
     return false;
 }
 </script>
+<div class='row-fluid'>
 <table id="userlist" class='table table-striped table-condensed table-bordered fiexd'>
 <thead>
   <tr>

@@ -8,7 +8,7 @@ $cnt=$p->dosql($sql);
 if(!$cnt) 异常("未查询到记录！");
 $d=$p->rtnrlt(0);
 ?>
-<div class='container'>
+<div class='row-fluid'>
 <table class='table table-striped table-condensed table-bordered fiexd'>
   <tr>
     <td width="90px">CTID</td>

@@ -23,7 +23,7 @@ if($cnt) {
     $code=mb_convert_encoding($code, "utf-8", "gbk");
 } else 异常("提交记录不存在");
 ?>
-<div class='container-fluid'>
+<div class='row-fluid'>
 <div class='span3'>
 <table id="submitdetail" class='fixed'>
   <tr>
@@ -80,7 +80,7 @@ if($cnt) {
         <input name="sid" type="hidden" id="sid" value="<?=$d['sid']; ?>" />
         <input type="hidden" name="rejudge" value="1">
         <input type="hidden" name="lang" value="<?php echo langnumtostr($d['lang']) ?>">
-    <select name='judger' id='judger' class='span2'>
+    <select name='judger' id='judger' style='width: 100%;'>
     <option value=0 selected=selected>自动选择</option>
 <?
     $sql="select grid,address,memo from grader where enabled=1 order by priority desc";
@@ -91,6 +91,7 @@ if($cnt) {
     }
 ?>       
     </select>
+    <br />
     <button type="submit" class='btn'>重新评测</button>
     </form>
     </td>

@@ -33,7 +33,7 @@ if($cnt) {
 }
 ?>
 
-<div class='container-fluid'>
+<div class='row-fluid'>
 <div class='page'>
 <center>
 <h1><?=$d['title']?></h1>

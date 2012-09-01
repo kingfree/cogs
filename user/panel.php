@@ -37,6 +37,7 @@ $d=$p->rtnrlt(0);
 </div>
 </form>
 
+<div class='row-fluid'>
 <form method="post" action="doedit.php?uid=<?=$_SESSION[ID] ?>" enctype="multipart/form-data" class='form-inline' >
 <input name="action" type="hidden" value="edit" />
 <input name="uid" type="hidden" value="<?=$d['uid']?>" />
@@ -114,7 +115,7 @@ superhero
   </tr>
 </table>
 </form>
-
+</div>
 <?php
 include_once("../include/footer.php");
 ?>

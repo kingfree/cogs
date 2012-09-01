@@ -24,7 +24,7 @@ if ($cnt) {
 } else 异常("提交记录不存在");
 
 ?>
-<div class='container-fluid'>
+<div class='row-fluid'>
 <div class='span3'>
 <table id="submitdetail" class='fixed'>
   <tr>

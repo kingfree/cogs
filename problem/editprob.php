@@ -332,7 +332,7 @@ if($_GET['oj']=='poj' && $_GET['id']>=1000) {
 </form>
 </div>
 
-<div class='container-fluid'>
+<div class='row-fluid'>
 <form action="doeditprob.php" method="post" enctype="multipart/form-data" class='form-horizontal'>
 <div id='cates' class='modal hide fade in' style='width:940px; margin-left:-470px;'>
 <?php

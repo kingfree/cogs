@@ -17,7 +17,7 @@ $end = time() > $d['endtime'];
 $q=new DataAccess();
 $pbs=explode(":",$d['contains']);
 ?>
-<div class='container-fluid'>
+<div class='row-fluid'>
 <table id="contest_report" class='table table-striped table-condensed table-bordered fiexd'>
   <tr>
     <th width="40px"><a href="javascript:qsort('rank')">名次</a></th>

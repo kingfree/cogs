@@ -4,7 +4,7 @@ gethead(1,"","页面列表");
 $p=new DataAccess();
 $q=new DataAccess();
 ?>
-<div class='container-fluid'>
+<div class='row-fluid'>
 <?php if(有此权限('修改页面')) { ?>
 <a href="editpage.php?action=add" class="btn btn-info pull-left">添加新页面</a>
 <?php } ?>

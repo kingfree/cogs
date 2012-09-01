@@ -3,7 +3,7 @@ require_once("../include/header.php");
 gethead(1,"","评测机列表");
     $q=new DataAccess();
 ?>
-<div class='container-fluid'>
+<div class='row-fluid'>
 <?php if(有此权限('管理评测')) { ?>
 <a class="btn btn-info pull-left" href="editgrader.php?action=add">添加新评测机</a>
 <?php } ?>

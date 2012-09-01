@@ -4,7 +4,7 @@ gethead(1,"","分类列表");
 $p=new DataAccess();
 $q=new DataAccess();
 ?>
-<div class='container'>
+<div class='row-fluid'>
 <?php if(有此权限('修改分类')) { ?>
 <a href="editcate.php?action=add" class="btn btn-info">添加新分类</a>
 <?php } ?>

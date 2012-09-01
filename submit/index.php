@@ -5,7 +5,7 @@ gethead(1,"","记录列表");
 $p=new DataAccess();
 $q=new DataAccess();
 ?>
-<div class='container-fluid'>
+<div class='row-fluid'>
 <a class="btn btn-success pull-left" href="graderlist.php">评测机列表</a>
 <form id="search_submit" method="get" class='form-search center'>
 <span>

@@ -2,7 +2,7 @@
 require_once("../include/header.php");
 gethead(1,"修改比赛","修改比赛");
 ?>
-<div class='container'>
+<div class='row-fluid'>
 <?php
 $p=new DataAccess();
 if ($_GET[action]=='edit') {
@@ -34,7 +34,7 @@ if ($_GET[action]=='edit') {
 	for ($i=0;$i<$cnt;$i++) {
 		$d=$p->rtnrlt($i);
 ?>
-<li class='span3'><input name="cons[<?=$d[pid]?>]" type="checkbox" id="cons[<?=$d[pid]?>]" value="<?=$d[pid]?>" <?php if (is_numeric($pbs[$d[pid]])) echo 'checked="checked"' ?> /><label for="cons[<?=$d[pid]?>]"><?=$d[pid]?>.<?=shortname($d['probname']) ?></label></li>
+<li style='width: 160px'><input name="cons[<?=$d[pid]?>]" type="checkbox" id="cons[<?=$d[pid]?>]" value="<?=$d[pid]?>" <?php if (is_numeric($pbs[$d[pid]])) echo 'checked="checked"' ?> /><label for="cons[<?=$d[pid]?>]"><?=$d[pid]?>.<?=shortname($d['probname']) ?></label></li>
 <?php
 	}
 ?>

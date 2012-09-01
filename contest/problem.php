@@ -44,7 +44,7 @@ if ($cnt) {
 } else 异常("未查询到记录！",取路径("contest/index.php"));
 ?>
 
-<div class='container-fluid'>
+<div class='row-fluid'>
 <div class='span4'>
 <div class='well'>
 <ul class='nav nav-list'>

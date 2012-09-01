@@ -6,7 +6,7 @@ $p=new DataAccess();
 $q=new DataAccess();
 $pid=(int)$_GET['pid'];
 ?>
-<div class='container-fluid'>
+<div class='row-fluid'>
 <? if($pid) { ?>
 <a class='btn btn-danger' href="comment.php?pid=<?=$pid?>">发表评论</a>
 <? } ?>

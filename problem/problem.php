@@ -42,7 +42,7 @@ if($cnt) {
 }
 ?>
 
-<div class='container-fluid'>
+<div class='row-fluid'>
 <div class='span4'>
 <table class='table table-striped table-condensed table-bordered fiexd'>
 <tr><th width='80px'>题目名称</th>

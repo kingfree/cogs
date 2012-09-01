@@ -20,7 +20,6 @@ else {$("#msg2").html("<b><span style='color:red;'>NO</span></b>");}
 });
 }
 </script>
-<p>
 <?php
 if ($_GET[action]=='del') {
     echo "确认要删除该题目及与该题目相关所有内容吗(无法恢复)？<p><a href='doeditpage.php?action=del&aid={$_GET[aid]}'>确认删除</a>";
@@ -44,6 +43,7 @@ if ($cnt) {
     }
 }
 ?>
+<div class='row-fluid'>
 <form action="doeditpage.php" method="post" class='form-inline'>
 <dl class='dl-horizontal'>
 <dt>AID</dt>
@@ -74,6 +74,7 @@ $e=$q->rtnrlt($j);
 </dd>
 </dl>
 </form>
+</div>
 
 <?php
 include_once("../include/footer.php");
