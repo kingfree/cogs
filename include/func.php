@@ -155,6 +155,8 @@ function 路径($str) {
 function 输出文本($S) {
     global $Query_Times,$SET,$cfg,$time_Ls;
     $S = str_replace("%global_sitename%",$SET['global_sitename'], $S);
+    $S = str_replace("%problem_weight%",$SET['problem_weight'], $S);
+    $S = str_replace("%contest_weight%",$SET['contest_weight'], $S);
     $S = str_replace("%style_profile%",$SET['style_profile'], $S);
     $S = str_replace("%global_adminname%",$SET['global_adminname'], $S);
     $S = str_replace("%global_adminaddress%",$SET['global_adminaddress'], $S);

@@ -13,7 +13,7 @@ $probcnt=$rand_gen_data_access->dosql($sql);
 
 $sql="select submit.pid,uid,accepted,difficulty,score from submit,problem where problem.pid=submit.pid order by uid,pid,-score";
 $cnt=$rand_gen_data_access->dosql($sql);
-echo "更新等级排名信息。<br />";
+echo "计算题目等级积分……<br />";
 $lastuser=0;
 for ($i=0;$i<$cnt;$i++) {
     $d=$rand_gen_data_access->rtnrlt($i);
@@ -28,18 +28,25 @@ for ($i=0;$i<$cnt;$i++) {
         $lastprob=$d['pid'];
         if($d['accepted']) $accnt[ $lastuser ]++;
         $supcnt[ $lastuser ]++;
-        $grade[ $lastuser ] += $d['difficulty'] * $d['score'] / 30.0;
+        $grade[ $lastuser ] += $d['difficulty'] * $d['score'] * $SET['problem_weight'] / 100.0;
     }
 }
+$sql="select compscore.score,compscore.uid,problem.difficulty,problem.pid from compscore,problem where problem.pid=compscore.pid order by uid,pid";
+$cnt=$rand_gen_data_access->dosql($sql);
+echo "计算比赛等级积分……<br />";
+for ($i=0;$i<$cnt;$i++) {
+    $d=$rand_gen_data_access->rtnrlt($i);
+    $grade[$d['uid']] += $d['difficulty'] * $d['score'] * $SET['contest_weight'] / 100.0;
+}
+
 $users=$lastuser;
-echo "更新数据库……<br />";
+echo "更新数据库积分……<br />";
 for ($i=1;$i<=$users;$i++) {
     $grade[$i]=(int) ($grade[$i] /* * ($accnt[$i] / $supcnt[$i])*/);
-    if($grade[$i]) echo "计算用户{$i}的等级为{$grade[$i]}……<br />";
     $sql="update userinfo set accepted='{$accnt[$i]}',submited='{$subcnt[$i]}',grade='{$grade[$i]}' where uid='{$i}'";
     $rand_gen_data_access->dosql($sql);
 }
-echo "更新数据库……<br />";
+echo "更新题目提交数据库……<br />";
 
 $subcnt=array();
 $accnt=array();
