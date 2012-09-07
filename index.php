@@ -3,6 +3,7 @@ require_once("./include/header.php");
 gethead(1,"","首页");
 $p=new DataAccess();
 $q=new DataAccess();
+$sizee=$SET['style_ranksize']/2 + 1;
 ?>
 <div class='row-fluid'>
 <div class='span3'>
@@ -49,7 +50,6 @@ echo "<span class='todo'>还未开始</span>";
 <? } else { ?>
 <table class='table table-striped table-condensed table-bordered fiexd'>
 <?php 
-$sizee=$SET['style_ranksize']/2 + 1;
 $cnt=$p->dosql("select * from page order by etime desc limit $sizee");
 for($i=0;$i<$cnt;$i++) {
 $d=$p->rtnrlt($i);
