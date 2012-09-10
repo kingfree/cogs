@@ -1,0 +1,46 @@
+body, .rowdata {
+	background-color: #EAECEE;
+}
+
+body, td, input, textarea, select {
+        font-family: verdana, arial, helvetica, sans-serif;
+        font-size: 11;
+        color: #000000;
+}
+
+.rowdatasel {
+	background-color: #D8E1EB;
+}
+
+td {
+	vertical-align: top;
+}
+
+td.header {
+	background-color: #DDDDDD;
+	vertical-align: middle;
+}
+
+td.title {
+	background-repeat: repeat-x;
+	background-image: url(./tablebg.gif);
+	font-weight: bold;
+	font-size: 13;
+	border-top: solid 1px #000000;
+	border-bottom: solid 1px #000000;
+}
+
+small {
+	font-size: 10;
+}
+
+
+a, a:link, a:visited {
+	color: #223344;
+	text-decoration: none;
+}
+
+a:hover, a:active {
+	color: #778899;
+	text-decoration: none;
+}
