@@ -10,7 +10,7 @@ if ($_REQUEST[action]=='add')
 	$p=new DataAccess();
 	$sql="insert into grader(address,priority,enabled,memo) values('{$_POST['address']}','{$_POST['priority']}','{$enabled}','{$_POST[memo]}')";
 	$p->dosql($sql);
-    提示("添加评测机 {$_POST['address']} 成功！", 取路径("submit/grader.php"));
+    提示("添加评测机 {$_POST['address']} 成功！", 取路径("submit/graderlist.php"));
 }
 
 if ($_REQUEST['action']=='edit')

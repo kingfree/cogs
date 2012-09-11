@@ -30,6 +30,7 @@ gethead(1,"","评测机列表");
     for ($i=$st;$i<$cnt ;$i++) {
         $d=$p->rtnrlt($i);
         $s['action']="state";
+        if($d['address']=='grader') $d['address']='http://'.$_SERVER['HTTP_HOST'].'/'.$cfg['dir_root'].'grader/';
         $debug=$tmp=httpsocket($d['address'],$s);
         $tmp=array_decode($tmp);
         if ($tmp==array()) {
@@ -46,7 +47,7 @@ gethead(1,"","评测机列表");
     <td><?php echo $tmp['state'] ?></td>
     <td><?php echo $tmp['ver'] ?></td>
     <td><?php echo sp2n(htmlspecialchars($d['memo'])) ?></td>
-    <td><a href='<?=$d['address']?>'><?php echo $d['address'] ?></a></td>
+    <td><a href='<?=$d['address']?>' target='_blank'><?php echo $d['address'] ?></a></td>
     <td><?php echo $d['priority'] ?></td>
 <?php if(有此权限('管理评测')) { ?>
     <td><a href="editgrader.php?action=edit&amp;grid=<?php echo $d['grid'] ?>">修改</a> <a href="doeditgrader.php?action=start&amp;grid=<?php echo $d['grid'] ?>">启动</a> <a href="doeditgrader.php?action=stop&amp;grid=<?php echo $d['grid'] ?>">关闭</a></td>

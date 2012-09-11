@@ -1,4 +1,7 @@
 images
 include/env.inc.php
 include/kindeditor/attached
+grader/cnt.php
+grader/running.php
+grader/mode.php
 

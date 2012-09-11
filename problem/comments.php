@@ -75,7 +75,7 @@ if ($cnt) {
 <?php
 	}
 } else {
-	echo "还没有人发表评论！";
+	echo "<div class='alert'>还没有人发表评论！</div>";
 }
 ?>
 </div>

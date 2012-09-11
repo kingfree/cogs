@@ -38,6 +38,7 @@ function Navigation($p) {
     else if(strpos($SET['cur'],"submit")) $active['submit']='active';
     else if(strpos($SET['cur'],"page")) $active['page']='active';
     else if(strpos($SET['cur'],"user")) $active['user']='active';
+    else if(strpos($SET['cur'],"docs")) $active['docs']='active';
     else if(strpos($SET['cur'],"admin")) $active['admin']='active';
     HTML("<li class='{$active['problem']}'><a href='".路径("problem/index.php")."'>题目</a></li>");
     HTML("<li class='{$active['submit']}'><a href='".路径("submit/index.php")."'>记录</a></li>");
@@ -56,10 +57,10 @@ function Navigation($p) {
     HTML("</form>");
     HTML("</ul>");
     HTML("<ul class='nav pull-right'>");
-    if(有此权限('可以管理')) {
+    HTML("<li class='{$active['docs']}'><a href='".路径("docs/index.php")."'>帮助</a></li>");
+    if(有此权限('可以管理'))
         HTML("<li class='{$active['admin']}'><a href='".路径("admin/index.php")."'>管理</a></li>");
-        HTML("<li class='divider-vertical'></li>");
-    }
+    HTML("<li class='divider-vertical'></li>");
     HTML("<li class='dropdown'>");
     if($uid = (int) $_SESSION['ID']) {
         $sql="select * from userinfo where uid='{$uid}'";

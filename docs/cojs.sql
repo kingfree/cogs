@@ -1,8 +1,4 @@
--- phpMyAdmin SQL Dump
--- version 3.4.10.1deb1
--- http://www.phpmyadmin.net
---
-
+﻿
 SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
 
@@ -22,7 +18,7 @@ CREATE TABLE IF NOT EXISTS `category` (
   `memo` text,
   PRIMARY KEY (`caid`),
   UNIQUE KEY `cname` (`cname`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=72 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -40,7 +36,7 @@ CREATE TABLE IF NOT EXISTS `comments` (
   PRIMARY KEY (`cid`),
   KEY `pid` (`pid`),
   KEY `uid` (`uid`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=707 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -56,7 +52,7 @@ CREATE TABLE IF NOT EXISTS `compbase` (
   PRIMARY KEY (`cbid`),
   UNIQUE KEY `cname` (`cname`),
   KEY `ouid` (`ouid`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=156 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -79,7 +75,7 @@ CREATE TABLE IF NOT EXISTS `compscore` (
   KEY `ctid` (`ctid`),
   KEY `uid` (`uid`),
   KEY `pid` (`pid`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=5327 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -98,7 +94,7 @@ CREATE TABLE IF NOT EXISTS `comptime` (
   `group` int(11) NOT NULL DEFAULT '1',
   PRIMARY KEY (`ctid`),
   KEY `cbid` (`cbid`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=170 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -113,7 +109,14 @@ CREATE TABLE IF NOT EXISTS `grader` (
   `priority` int(11) NOT NULL DEFAULT '1',
   `memo` text,
   PRIMARY KEY (`grid`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=7 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
+
+--
+-- 转存表中的数据 `grader`
+--
+
+INSERT INTO `grader` (`grid`, `address`, `enabled`, `priority`, `memo`) VALUES
+(1, 'grader', 1, 0, '默认自带的评测机');
 
 -- --------------------------------------------------------
 
@@ -129,7 +132,7 @@ CREATE TABLE IF NOT EXISTS `groups` (
   `parent` int(11) NOT NULL,
   PRIMARY KEY (`gid`),
   UNIQUE KEY `gname` (`gname`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=21 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -145,7 +148,7 @@ CREATE TABLE IF NOT EXISTS `login` (
   `ltime` datetime NOT NULL,
   `version` varchar(20) NOT NULL,
   PRIMARY KEY (`lid`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=6025 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -162,7 +165,7 @@ CREATE TABLE IF NOT EXISTS `mail` (
   `title` varchar(200) CHARACTER SET utf8 NOT NULL,
   `msg` text CHARACTER SET utf8,
   PRIMARY KEY (`mid`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='站内邮件' AUTO_INCREMENT=261 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='站内邮件';
 
 -- --------------------------------------------------------
 
@@ -180,7 +183,7 @@ CREATE TABLE IF NOT EXISTS `page` (
   `group` int(11) NOT NULL DEFAULT '0',
   `text` text NOT NULL,
   PRIMARY KEY (`aid`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=25 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -194,7 +197,7 @@ CREATE TABLE IF NOT EXISTS `privilege` (
   `pri` int(11) NOT NULL,
   `def` tinyint(1) NOT NULL DEFAULT '0' COMMENT '该权限是否可用',
   PRIMARY KEY (`prid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -223,7 +226,7 @@ CREATE TABLE IF NOT EXISTS `problem` (
   PRIMARY KEY (`pid`),
   UNIQUE KEY `probname` (`probname`),
   UNIQUE KEY `filename` (`filename`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1071 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -241,7 +244,7 @@ CREATE TABLE IF NOT EXISTS `reply` (
   `ip` varchar(30) NOT NULL,
   PRIMARY KEY (`rid`),
   KEY `author_id` (`author_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=4 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -255,7 +258,7 @@ CREATE TABLE IF NOT EXISTS `settings` (
   `value` text,
   PRIMARY KEY (`ssid`),
   UNIQUE KEY `name` (`name`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=34 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 
 --
 -- 转存表中的数据 `settings`
@@ -265,18 +268,18 @@ INSERT INTO `settings` (`ssid`, `name`, `value`) VALUES
 (22, 'dir_competition', '/home/syzx/cogs_data/comp/'),
 (20, 'dir_databackup', '/home/syzx/cogs_data/backup/'),
 (21, 'dir_source', '/home/syzx/cogs_data/source/'),
-(25, 'global_about', ''),
+(25, 'global_about', '<h2>\r\n	<div style="text-align:center;">\r\n		<img src="../style/cogs.png" alt="" /><br />\r\n	</div>\r\n</h2>\r\n<!--\r\n<p>\r\n	全国青少年信息学奥林匹克竞赛 (National Olympiad in Informatics, 简称 NOI) 是一项面向全国青少年的信息学竞赛和普及活动，旨在向那些在中学阶段学习的青少年普及计算机科学知识；给学校的信息技术教育课程提供动力和新的思路；给那些有才华的学生提供相互交流和学习的机会；通过竞赛和相关的活动培养和选拔优秀的计算机人才。\r\n</p>\r\n-->\r\n<p style="text-align:left;">\r\n	CmYkRgB123 Online Grading System (COGS) 是由 <a href="http://www.byvoid.com/">CmYkRgB123</a> 开发的一款信息学竞赛在线评测系统，基于 LAMP  ( Linux + Apache + MySQL + PHP ) ，为实验中学各 OIer 提供了方便。目前仅限于内网访问。\r\n</p>\r\n<p>\r\n	开发者：<a href="http://www.byvoid.com/">CmYkRgB123</a>\r\n</p>\r\n<p>\r\n	维护：<a href="user/detail.php?uid=524" target="_blank">王者自由</a> \r\n</p>\r\n<p>\r\n	指导老师：<a href="/cogs/user/detail.php?uid=12" target="_blank">常庆卫</a> \r\n</p>\r\n<p>\r\n	<br />\r\n</p>'),
 (3, 'global_adminaddress', 'http://www.byvoid.com'),
 (2, 'global_adminname', 'CmYkRgB123'),
-(29, 'global_bulletin', ''),
+(29, 'global_bulletin', '顶部公告栏'),
 (4, 'global_constructiontime', '<p>1213859886</p>'),
 (23, 'global_head', ''),
-(26, 'global_help', ''),
+(26, 'global_help', '<table border="1">\r\n	<tbody>\r\n		<tr>\r\n			<td>\r\n				<li>\r\n					为什么程序在我的电脑上能够正常运行，而在评测系统上不能?\r\n					<ol>\r\n						<li>\r\n							评测系统建立在Linux下，编译器采用Gcc,G++,Free Pascal.评测系统在比较你的输出时默认采用忽略一切无效字符(空格,回车等)的策略。\r\n						</li>\r\n						<li>\r\n							评测系统对你的程序内存的使用进行限制，默认为128MB，同时也对你的程序堆栈的使用进行限制。如果你的程序使用递归多达100,000层(甚至更多)，那么你的程序很可能运行时出错。\r\n						</li>\r\n						<li>\r\n							对于C和C++语言，主函数一定要定义为int main()而不是void main()。如果你的程序运行正常结束，应向系统返回一个整型值0，而不是其他的东西。\r\n						</li>\r\n						<li>\r\n							评测系统和你的电脑使用的内存安排方式可能不同。某些在你的电脑上没有经过初始化，理应为0的变量在评测系统上有可能并不如你所想的那样。\r\n						</li>\r\n						<li>\r\n							Linux对内存的访问控制更为严格，因此在Windows上可能正常运行的无效指针或数组下标访问越界，在评测系统上无法运行。\r\n						</li>\r\n						<li>\r\n							严重的内存泄露的问题很可能会引起系统的保护模块杀死你的进程。因此，凡是使用malloc(或calloc,realloc,new)分配而得的内存空间，请使用free(或delete)完全释放。\r\n						</li>\r\n						<li>\r\n							在极少数情况下，你的程序运行错误(或编译失败)是因为你使用的某些变量与编译系统的变量名或函数名重复(例如:mmap,fork,pipe,exec,system,socket)。对于这种问题，你只好尝试替换某些可能与系统变量名重复的变量名。\r\n						</li>\r\n						<li>\r\n							注意浮点运算，二进制浮点数运算的时候很有可能会造成意想不到的差异。例如a=0.00001+0.000001;\r\n						</li>\r\n						<li>\r\n							如果你会两种以上的语言，不妨将你的代码“翻译”成另一种语言然后提交，或许在翻译的时候你会发现你的程序的错误。如果翻译以后能够正常通过，那么请仔细检查你原来的程序。\r\n						</li>\r\n						<li>\r\n							如果以上都无法解决问题，请与管理员联系。或者联系作者：<a href="http://www.byvoid.com/" target="_blank">CmYkRgB123</a>。\r\n						</li>\r\n					</ol>\r\n				</li>\r\n			</td>\r\n		</tr>\r\n	</tbody>\r\n</table>'),
 (33, 'contest_weight', '3'),
-(18, 'global_index', ''),
+(18, 'global_index', '主页显示的内容'),
 (5, 'global_root', 'cogs/'),
 (1, 'global_sitename', 'CmYkRgB123 Online Grading System'),
-(24, 'global_tail', ''),
+(24, 'global_tail', '底部公告栏'),
 (15, 'limit_checker', '0'),
 (27, 'limit_memory', '131070'),
 (13, 'limit_regallow', '1'),
@@ -317,7 +320,7 @@ CREATE TABLE IF NOT EXISTS `submit` (
   PRIMARY KEY (`sid`),
   KEY `pid` (`pid`),
   KEY `uid` (`uid`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=42042 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -332,7 +335,7 @@ CREATE TABLE IF NOT EXISTS `tag` (
   PRIMARY KEY (`tid`),
   KEY `pid` (`pid`),
   KEY `caid` (`caid`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1770 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -362,5 +365,4 @@ CREATE TABLE IF NOT EXISTS `userinfo` (
   `user_style` varchar(20) NOT NULL,
   PRIMARY KEY (`uid`),
   UNIQUE KEY `usr` (`usr`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=757 ;
-
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
