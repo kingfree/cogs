@@ -34,7 +34,7 @@ function gethead($head,$check,$title,$userid=0) {
 <!DOCTYPE html>
 <head>
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
-<link rel="Shortcut Icon" href="<?=路径("style/favicon.ico")?>" />
+<link rel="Shortcut Icon" href="<?=路径("style/cogs.png")?>" />
 <link rel=stylesheet href="<?=路径("style/cogs.css")?>" />
 <?背景图片($userid ? $userid : $_SESSION['ID']);?>
 <?php $LIB->tradsimp(); ?>
