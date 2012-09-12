@@ -158,7 +158,9 @@ for ($i=0;$i<$cnt;$i++) {
 <table id="Comments" class='table table-striped table-condensed table-bordered fiexd'>
 <tr><th colspan=3>最新讨论
 <a href="comments.php?pid=<?=$pid?>"><b>讨论版</b></a>
+<? if($_SESSION['ID']) { ?>
 <a href="comment.php?pid=<?=$pid?>" class="pull-right btn btn-mini btn-danger"><b>发表评论</b></a>
+<? } ?>
 </th></tr>
 <?
 $sql="select comments.*,userinfo.nickname,userinfo.uid,userinfo.email from comments,userinfo where userinfo.uid=comments.uid and comments.pid='{$d['pid']}' order by comments.cid desc";

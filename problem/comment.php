@@ -5,6 +5,8 @@ $p=new DataAccess();
 $uid=(int)$_SESSION['ID'];
 $pid=(int)$_GET['pid'];
 $cid=(int)$_GET['cid'];
+if(!$uid)
+    异常("非注册用户！", 取路径("problem/comments.php?pid={$pid}"));
 
 if($pid) {
     $sql="select probname from problem where pid={$pid} limit 1";
@@ -30,16 +32,17 @@ if($pid) {
 <div class='container-fluid'>
 <form method="post" action="sendcomments.php" class='form-horizontal'>
 <div class='modal-header'>
-<h2>发表 <a href="problem.php?pid=<?=$pid?>" target="_blank"><?=$d['probname']?></a> 的评论</h2>
+<h3>发表 <a href="problem.php?pid=<?=$pid?>" target="_blank"><?=$d['probname']?></a> 的评论</h3>
 </div>
 <div class='modal-body'>
 <textarea name="detail" class='textarea'><?php echo $d['detail'] ?></textarea>
 <br />
-<label><input id="showcode" name="showcode" type="checkbox" value="1" <?php if($d['showcode']){ ?> checked="checked" <?php } ?> />允许查看你最后一次提交的代码</label>
+<label><input id="showcode" name="showcode" type="checkbox" value="1" <?php if($d['showcode']){ ?> checked="checked" <?php } ?> />允许查看你提交的代码</label>
 </div>
 <div class='modal-footer'>
 <input name="pid" type="hidden" id="pid" value="<?php echo $pid ?>" />
 <input name="cid" type="hidden" id="cid" value="<?php echo $cid ?>" />
+<a class='btn' href='comments.php?pid=<?=$pid?>'>返回评论列表</a>
 <button type="submit" class='btn btn-primary'>发表评论</button>
 </div>
 </form>

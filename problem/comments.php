@@ -7,7 +7,7 @@ $q=new DataAccess();
 $pid=(int)$_GET['pid'];
 ?>
 <div class='row-fluid'>
-<? if($pid) { ?>
+<? if($pid && $_SESSION['ID']) { ?>
 <a class='btn btn-danger' href="comment.php?pid=<?=$pid?>">发表评论</a>
 <? } ?>
 <?php

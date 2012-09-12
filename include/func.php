@@ -417,22 +417,22 @@ function get_str($string)
 }
 function 过滤() {
     /* 过滤所有GET过来变量 */ 
-    /*foreach ($_GET as $get_key=>$get_var) 
+    foreach ($_GET as $get_key=>$get_var) 
     { 
         if (is_numeric($get_var)) { 
             $get[strtolower($get_key)] = get_int($get_var); 
         } else { 
             $get[strtolower($get_key)] = get_str($get_var); 
         } 
-    } */
+    } 
     /* 过滤所有POST过来的变量 */ 
     foreach ($_POST as $post_key=>$post_var) 
     { 
-       /* if (is_numeric($post_var)) { 
+        if (is_numeric($post_var)) { 
             $post[strtolower($post_key)] = get_int($post_var); 
         } else { 
             $post[strtolower($post_key)] = get_str($post_var); 
-        } */
+        } 
         $_POST[$post_key] = mysql_real_escape_string($post_var);
     } 
 }

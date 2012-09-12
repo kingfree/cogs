@@ -2,7 +2,6 @@
 require_once("../include/header.php");
 gethead(8,"sess","");
 $p=new DataAccess();
-过滤();
 $_POST['fromid'] = (int)$_POST['fromid'];
 $_POST['toid'] = (int)$_POST['toid'];
 

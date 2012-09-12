@@ -29,6 +29,7 @@ function gethead($head,$check,$title,$userid=0) {
         if($_COOKIE['User']) if($_COOKIE['cojs_login'])
             header("location: ".路径("user/dologin.php"));*/
    $user_style = $_SESSION['user_style']?$_SESSION['user_style']:$SET["user_style"];
+   过滤();
    if($head > 0) {
 ?>
 <!DOCTYPE html>

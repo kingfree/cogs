@@ -6,6 +6,9 @@ $uid = $_SESSION['ID'];
 
 $p = new DataAccess();
 $q = new DataAccess();
+
+if($_GET['toid']) $_POST['title'] = "给".$_GET['toid']."的邮件";
+
 ?>
 <div class='center'>
 <a class='btn btn-success' href="#sendmail" data-toggle='modal'><i class='icon-envelope icon-white'></i>发送信件</a>
