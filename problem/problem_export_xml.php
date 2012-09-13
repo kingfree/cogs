@@ -1,10 +1,13 @@
 <?php
 @session_start ();
-require_once ("../include/db_info.inc.php");
+$DB_HOST = $cfg['data_server'];
+$DB_USER = $cfg['data_uid'];
+$DB_PASS = $cfg['data_pwd'];
+	$con = mysql_pconnect($DB_HOST,$DB_USER,$DB_PASS);
+	mysql_query("set names utf8",$con);
+	mysql_set_charset("utf8",$con);
+	mysql_select_db($DB_NAME,$con);
 
-if(isset($OJ_LANG)){
-		require_once("../lang/$OJ_LANG.php");
-}
 function getTestFileIn($pid, $testfile,$OJ_DATA) {
 	if ($testfile != "")
 		return file_get_contents ( "$OJ_DATA/$pid/" . $testfile . ".in" );
@@ -46,16 +49,7 @@ class Solution{
 }
 function getSolution($pid,$lang){
 	$ret=new Solution();
-	require("../include/db_info.inc.php");
-	if(isset($OJ_LANG)){
-			require("../lang/$OJ_LANG.php");
-	}
-	require("../include/const.inc.php");
 	$con = mysql_pconnect($DB_HOST,$DB_USER,$DB_PASS);
-	if (!$con)
-    {
-  	    die('Could not connect: ' . mysql_error());
-    }
 	mysql_query("set names utf8",$con);
 	mysql_set_charset("utf8",$con);
 	mysql_select_db($DB_NAME,$con);
@@ -131,37 +125,17 @@ function fixImageURL(&$html,&$did){
    }   	
 }
 
-if (! isset ( $_SESSION ['administrator'] )) {
-	echo "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\">";
-	echo "<a href='../loginpage.php'>Please Login First!</a>";
-	exit ( 1 );
-}
-
-
 if (isset($_POST ['do'])||isset($_GET['cid'])) {
    if(isset($_POST ['in'])&&strlen($_POST ['in'])>0){
-	require_once("../include/check_post_key.php");
    	$in=mysql_real_escape_string ( $_POST ['in'] );
    	$sql = "select * from problem where problem_id in($in)";
    	  $filename="-$in";
-   }else if (isset($_GET['cid'])){
-	  require_once("../include/check_get_key.php");
-	  $cid=intval( $_GET['cid'] );
-      $sql= "select title from contest where contest_id='$cid'";
-      $result = mysql_query ( $sql ) or die ( mysql_error () );
-      $row = mysql_fetch_object ( $result );
-      $filename='-'.$row->title;
-      mysql_free_result ( $result );
-      $sql = "select * from problem where problem_id in(select problem_id from contest_problem where contest_id=$cid)";
-	  
    }else{
-	   require_once("../include/check_post_key.php");
 	   $start = intval ( $_POST ['start'] );
 		$end = intval ( $_POST ['end'] );
-	 	$sql = "select * from problem where problem_id>=$start and problem_id<=$end";
+	 	$sql = "select * from problem where pid>=$start and pid<=$end";
        $filename="-$start-$end";
    }
-
 	
 	//echo $sql;
 	$result = mysql_query ( $sql ) or die ( mysql_error () );
@@ -177,7 +151,7 @@ if (isset($_POST ['do'])||isset($_GET['cid'])) {
 	?>
    
 <fps version="1.1" url="http://code.google.com/p/freeproblemset/">
-	<generator name="HUSTOJ" url="http://code.google.com/p/hustoj/"/>
+	<generator name="COGS" url=""/>
 	<?php
 	while ( $row = mysql_fetch_object ( $result ) ) {
 		
@@ -204,7 +178,6 @@ if (isset($_POST ['do'])||isset($_GET['cid'])) {
 <hint><![CDATA[<?php echo $row->hint?>]]></hint>
 <source><![CDATA[<?php echo fixcdata($row->source)?>]]></source>
 <?php
-require("../include/const.inc.php");
 for ($lang=0;$lang<count($language_name);$lang++){
 
 	$solution=getSolution($row->problem_id,$lang);

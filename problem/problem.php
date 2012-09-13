@@ -46,11 +46,15 @@ if($cnt) {
 <div class='span4'>
 <table class='table table-striped table-condensed table-bordered fiexd'>
 <tr><th width='80px'>题目名称</th>
-<td><?=$d[pid]; ?>. <b><?=$d['probname']; ?></b></td></tr>
+<td><?=$d['pid']?>. <b><?=$d['probname']; ?></b></td></tr>
 <tr><th>输入输出</th>
 <td><code><?=$d['filename']?>.in/out</code></td></tr>
 <tr><th>难度等级</th>
-<td><?=难度($d['difficulty']); ?></td></tr>
+<td><?=难度($d['difficulty']); ?>
+<!--<?php if(有此权限('查看题目')) { ?>
+<a href="../problem/problem_export.php?pid=<?=$d['pid']?>" target='_blank' class='btn btn-mini pull-right'>导出题目</a>
+<? } ?>-->
+</td></tr>
 <tr><th>时间限制</th>
 <td><?=$d['timelimit']; ?> ms (<?=$d['timelimit']/1000?> s)</td></tr>
 <tr><th>内存限制</th>

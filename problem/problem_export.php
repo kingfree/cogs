@@ -12,8 +12,10 @@ $LIB->editor("detail");
 	<input type='hidden' name='do' value='do'>
 	<input type=submit name=submit value='Export'>
    <input type=submit value='Download'>
-   <?php require_once("../include/set_post_key.php");?>
 </form>
 * from-to will working will empty IN <br>
 * if using IN,from-to will not working.<br>
 * IN can go with "," seperated problem_ids like [1000,1020]
+<?php
+include_once("../include/footer.php");
+?>
