@@ -24,19 +24,16 @@ if(!($_SESSION['ID'])) {
 }
 
 function gethead($head,$check,$title,$userid=0) {
-    global $SET,$cfg,$LIB;
-    /*if(!$_SESSION['ID'])
-        if($_COOKIE['User']) if($_COOKIE['cojs_login'])
-            header("location: ".路径("user/dologin.php"));*/
-   $user_style = $_SESSION['user_style']?$_SESSION['user_style']:$SET["user_style"];
+   global $SET,$cfg,$LIB;
    过滤();
+   $user_style = $_SESSION['user_style']?$_SESSION['user_style']:$SET["user_style"];
    if($head > 0) {
 ?>
 <!DOCTYPE html>
 <head>
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <link rel="Shortcut Icon" href="<?=路径("style/cogs.png")?>" />
-<link rel=stylesheet href="<?=路径("style/cogs.css")?>" />
+<link rel=stylesheet href="<?=路径("style/{$SET['style_profile']}")?>" />
 <?背景图片($userid ? $userid : $_SESSION['ID']);?>
 <?php $LIB->tradsimp(); ?>
 <link rel=stylesheet type="text/css" href="/Bootstrap/css/<?=$user_style?>.min.css" />

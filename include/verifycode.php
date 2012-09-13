@@ -4,13 +4,13 @@ header("Cache-Control: post-check=0, pre-check=0", false);
 header("Pragma: no-cache"); 
 session_start(); 
 
-$text="0123456789abcdefghijklmnopqrstuvwxyz";
+$text="0123456789abcdefghijkmnpqrstuvwxyz";
 
 $img_width=60; //先定义图片的长、宽 
 $img_height=24; 
 srand(microtime() * 100000); //随机种子 
-for($i=0;$i <4;$i++){ 
-  $nmsg.=$text[rand(0,strlen($text)-1)]; //使用dechex()将生成的随机数转换成十六进制表示，就会出现 a,b,c,d,e,f等字母 
+for($i=0;$i<4;$i++){ 
+  $nmsg.=$text[rand(0,strlen($text)-1)];
 }
 $_SESSION["IMGCODE"] = $nmsg; 
 

@@ -38,18 +38,18 @@ $d=$p->rtnrlt(0);
 </form>
 
 <div class='row-fluid'>
-<form method="post" action="doedit.php?uid=<?=$_SESSION[ID] ?>" enctype="multipart/form-data" class='form-inline' >
+<form id='xiugai' method="post" action="doedit.php?uid=<?=$_SESSION[ID] ?>" enctype="multipart/form-data" class='form-inline' >
 <input name="action" type="hidden" value="edit" />
 <input name="uid" type="hidden" value="<?=$d['uid']?>" />
 <table id="userpanel" class='table-form'>
   <tr>
     <th width='80px'>用户编号</th>
-    <td><?=$d['uid'] ?></td>
+    <td><?=gravatar::showImage($d['email']);?><?=$d['uid'] ?></td>
     <th width='300px'>用户头像</th>
   </tr>
   <tr>
     <th>用户名称</th>
-    <td><?=gravatar::showImage($d['email']);?><?=$d['usr'] ?></td>
+    <td><input name="usr" value="<?=$d['usr']?>" id='usr' type='text'/> 登录时输入的用户名</td>
     <td rowspan='8' class='center'>
     <?=gravatar::showImage($d['email'], 200);?><br />
     <div>
@@ -58,15 +58,15 @@ $d=$p->rtnrlt(0);
   </tr>
   <tr>
     <th>用户昵称</th>
-    <td><input name="nick" value="<?=$d['nickname']?>" type='text'/> 不要太长，否则会导致在首页上显示得很难看</td>
+    <td><input name="nickname" value="<?=$d['nickname']?>" type='text' id='nickname'/> 不要太长，否则会导致在首页上显示得很难看</td>
   </tr>
   <tr>
     <th>真实姓名</th>
-    <td><input name="realname" type='text' value="<?=$d['realname']?>" /> 如果以前没有填过或者填的不是的话请注意修改</td>
+    <td><input name="realname" type='text' value="<?=$d['realname']?>" id='realname' /> 如果以前没有填过或者填的不是的话请注意修改</td>
   </tr>
   <tr>
     <th>E-mail</th>
-    <td><input name="email" type="email" value="<?=$d['email']?>" /> 这个电子邮箱现在用于显示用户头像，请一律小写</td>
+    <td><input name="email" type="email" value="<?=$d['email']?>" id='email' /> 这个电子邮箱现在用于显示用户头像，请一律小写</td>
   </tr>
   <tr>
     <th>等级</th>
@@ -108,13 +108,48 @@ superhero
     <th></th>
     <td>
     <a class='btn' href="#editpwd" data-toggle='modal'>修改密码</a>
-    <button type="submit" class='btn btn-primary'>确认以上修改</button>
+    <input type="submit" class='btn btn-primary' value='确认以上修改' />
     <a href="dodelimg.php?email=<?=md5($d['email'])?>" class='btn pull-right'>重建头像缓存</a>
     <a href="http://cn.gravatar.com" target='_blank' class='btn pull-right' title='Gravatar - 全球公认的头像' rel='popover' data-content='<p class="alert"><span class="label label-warning">注意</span>此网站在中国大陆访问可能会出现问题，请自行想办法解决。</p><p>首先点此按钮进入 Gravatar 网站，点击上方下滑菜单中的注册，输入你的电子邮件地址（对，就是你在 COGS 使用的邮箱），点击注册后会想你邮箱中发送一封验证邮件，以此连接验证身份后可在网站注册用户。</p><p class="alert alert-info">上传头像并裁剪后会有评级系统，你只需要选择<span class="badge badge-info">G(普通级)</span>即可。</p>'>上传头像</a>
     </td>
   </tr>
 </table>
 </form>
+<script language="javascript">
+$("#xiugai").submit(function() {
+  var t = $("#usr").val();
+  var e = /([a-z0-9][_a-z0-9]{3,23})/;
+  if(!e.test(t)) {
+    alert("用户名长度必须在[4,24]中且只能使用英文字母、数字以及_，并且首字符必须为字母或数字。");
+    return false;
+  }
+  $.get("checkname.php",{name: t},function(txt){
+    if(txt != <?=$d['uid']?>) {
+      alert("用户名已被注册！");
+      return false;
+    }
+  });
+  t = $("#nickname").val();
+  e = /(\S{2,20})/;
+  if(!e.test(t)) {
+    alert("昵称长度必须在[2,20]中。");
+    return false;
+  }
+  t = $("#email").val();
+  e = /(\S*@\S*\.\S*)/;
+  if(!e.test(t)) {
+    alert("电子邮箱格式不正确。");
+    return false;
+  }
+  t = $("#realname").val();
+  e = /(\S{0,20})/;
+  if(!e.test(t)) {
+    alert("真实姓名长度必须在[0,20]中。");
+    return false;
+  }
+  return true;
+});
+</script>
 </div>
 <?php
 include_once("../include/footer.php");

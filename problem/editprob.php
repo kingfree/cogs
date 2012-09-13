@@ -40,9 +40,9 @@ if ($cnt) {
         $d=array();
         $d['submitable']=1;
         $d['datacnt']=10;
-        $d['timelimit']=1000;
-        $d['memorylimit']=128;
-        $d['difficulty']=2;
+        $d['timelimit']=$SET['prob_deftimelimit'] ? $SET['prob_deftimelimit'] : 1000;
+        $d['memorylimit']=$SET['prob_defmemorylimit'] ? $SET['prob_defmemorylimit'] : 128;
+        $d['difficulty']=$SET['prob_defdifficulty'] ? $SET['prob_defdifficulty'] : 2;
         $d['readforce']=0;
         $d['plugin']=1;
         $d['group']=0;
