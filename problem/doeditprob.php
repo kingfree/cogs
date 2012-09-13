@@ -40,7 +40,6 @@ if($_FILES['datafile']['size'] && !$_FILES['datafile']['error']) {
     }
     $ff.="</ul></p>";
 }
-$_POST['detail'] = str_replace("'", "\'", $_POST['detail']);
 if ($_POST[submitable]==1) $sub=1; else $sub=0;
 if ($_REQUEST[action]=='add')
 {

@@ -7,8 +7,6 @@ $uid=(int)$_SESSION['ID'];
 $pid=(int)$_POST['pid'];
 $cid=(int)$_POST['cid'];
 $showcode=(int)$_POST['showcode'];
-$detail=mysql_real_escape_string($_POST['detail']);
-$detail = str_replace("'", "\'", $detail);
 $tm=time();
 
 if($cid) {
