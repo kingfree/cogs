@@ -14,6 +14,7 @@ if (time()<$d['starttime'] && !有此权限('查看比赛'))
 else {
 	$pbs=explode(":",$contains);
 	foreach($pbs as $k=>$v) {
+        $v=(int)$v;
 		$sql="select probname from problem where pid={$v}";
 		$p->dosql($sql);
 		$d=$p->rtnrlt(0);

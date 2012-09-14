@@ -1,6 +1,7 @@
 <?php
 require_once("../include/header.php");
 gethead(8,"admin","");
+过滤();
 
 $p=new DataAccess();
 $sql="update settings set value='{$_POST[value]}' where ssid={$_REQUEST[ssid]}";

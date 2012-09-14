@@ -1,6 +1,7 @@
 <?php
 require_once("../include/header.php");
 gethead(8,"修改题目","");
+过滤();
 
 $pid = (int)$_GET['pid'];
 if($_GET[action]=="change") {

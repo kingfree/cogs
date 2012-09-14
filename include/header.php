@@ -25,7 +25,6 @@ if(!($_SESSION['ID'])) {
 
 function gethead($head,$check,$title,$userid=0) {
    global $SET,$cfg,$LIB;
-   过滤();
    $user_style = $_SESSION['user_style']?$_SESSION['user_style']:$SET["user_style"];
    if($head > 0) {
 ?>

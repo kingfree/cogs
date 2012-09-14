@@ -1,6 +1,7 @@
 <?php
 require_once("../include/header.php");
 gethead(8,"分组管理","");
+过滤();
 
 if ($_REQUEST[action]=='add')
 {

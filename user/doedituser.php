@@ -2,6 +2,7 @@
 require_once("../include/header.php");
 gethead(8,"修改用户","");
 $p=new DataAccess();
+过滤();
 
 if ($_GET[action]=="del") {
     $sql="select admin,uid from userinfo where uid={$_GET[uid]}";

@@ -1,6 +1,7 @@
 <?php
 require_once("../include/header.php");
 gethead(8,"修改页面","");
+过滤();
 //date_default_timezone_set("Asia/Shanghai");
 $_POST['text'] = str_replace("'", "\'", $_POST['text']);
 if ($_REQUEST[action]=='add') {

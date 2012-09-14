@@ -1,6 +1,7 @@
 <?php
 require_once("../include/header.php");
 gethead(8,"管理评测","");
+过滤();
 $LIB->func_socket();
 
 if ($_POST['enabled']==1) $enabled=1; else $enabled=0;

@@ -25,6 +25,7 @@ $pbs=explode(":",$d['contains']);
 <?php
     $cnt_prob=0;
     foreach($pbs as $k=>$v) {
+        $v=(int)$v;
         $mbarray[$v][score]=0;
         $mbarray[$v][result]="N";
         $sql="select probname from problem where pid={$v}";

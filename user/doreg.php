@@ -1,6 +1,7 @@
 <?php
 require_once("../include/header.php");
 gethead(8,"","");
+过滤();
 $p=new DataAccess();
 $LIB->cls_reg();
 $rc=new RegisterCheck;

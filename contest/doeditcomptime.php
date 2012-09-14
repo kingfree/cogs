@@ -1,6 +1,7 @@
 <?php
 require_once("../include/header.php");
 gethead(8,"修改比赛","");
+过滤();
 
 if ($_REQUEST[action]=='add')
 {
