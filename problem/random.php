@@ -23,7 +23,11 @@ function canuse($pid) {
 	return true;
 }
 
+$pnum=0;
 for(;;) {
+	$pnum=$pnum+1;
+	if($pnum>10000)
+	{break;}
 	$pid = rand(1, $mpid);
 	if(canuse($pid)) {
 		$url = "problem.php?pid=" . $pid;
