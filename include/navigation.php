@@ -10,7 +10,7 @@ function 列表($path, $icon, $text) {
 }
 function Navigation($p) {
     global $SET;
-    HTML("<div id='nav' class='navbar navbar-fixed-top'>");
+    HTML("<div id='nav' class='navbar'>");
     HTML("<div class='navbar-inner'>");
     HTML("<div class='container-fluid'>");
     HTML("<a href='".路径("index.php")."' class='brand'>COGS</a>");
@@ -20,16 +20,12 @@ function Navigation($p) {
     HTML("<li class='dropdown'>");
     HTML("<a href='#' class='dropdown-toggle' data-toggle='dropdown'><b class='caret'></b></a>");
     HTML("<ul class='dropdown-menu span11' id='catebar'>");
-    //HTML("<table id='catebar'>");
     $sql="select * from category order by cname";
     $cnt=$p->dosql($sql);
     for ($i=0;$i<$cnt;$i++) {
         $d=$p->rtnrlt($i);
-        //if($i%8==0) HTML("<tr>");
         HTML("<li><a href='".路径("problem/index.php?caid={$d['caid']}")."' title='".sp2n(htmlspecialchars($d['memo']))."'>{$d['cname']}</a></li>");
-        //HTML("<td><a href='".路径("problem/index.php?caid={$d['caid']}")."' title='".sp2n(htmlspecialchars($d['memo']))."'>{$d['cname']}</a></td>");
     }
-    //HTML("</table>");
     HTML("</ul>");
     HTML("</li>");
     if(strpos($SET['cur'],"comment")) $active['comment']='active';

@@ -25,52 +25,43 @@ if ($cnt) {
 
 ?>
 <div class='row-fluid'>
-<div class='span3'>
-<table id="submitdetail" class='fixed'>
-  <tr>
+<table class='table table-striped table-condensed table-bordered fiexd'>
+<tr>
     <th width="60px">比赛</th>
     <td><?=$_GET['csid']?></td>
-  <tr>
-    <th>题目名称</th>
-    <td><a href="problem.php?pid=<?=$d['pid']?>&uid=<?=$d['uid']?>&ctid=<?=$d['ctid']?>" target="_blank"><?php echo $d['probname']; ?></a></td>
+    <th width="60px">评测结果</th>
+    <td class='wrap'><?php 评测结果($d['result'], 100) ?></td>
 </tr>
-  <tr>
-    <th>用户昵称</th>
-    <td><a href="../user/detail.php?uid=<?=$d['uid']?>" target="_blank"><?php echo $d['nickname']; ?></a></td>
-  </tr>
-  <tr>
+<tr>
+    <th>题目名称</th>
+    <td><a href="../problem/problem.php?pid=<?php echo $d['pid']; ?>" target="_blank"><?php echo $d['probname']; ?></a></td>
     <th>最终得分</th>
     <td><?php echo $d['score'] ?></td>
-  </tr>
-  <tr>
-    <th>评测结果</th>
-    <td class='wrap'><?php 评测结果($d['result']) ?></td>
-  </tr>
-  <tr>
-    <th>代码语言</th>
-    <td><?=$STR['lang'][$d['lang']]?></td>
-  </tr>
-  <tr>
+</tr>
+<tr>
+    <th>用户昵称</th>
+    <td><a href="../user/detail.php?uid=<?php echo $d['uid']; ?>" target="_blank"><?php echo $d['nickname']; ?></a></td>
     <th>运行时间</th>
     <td><?php printf("%.3f",$d['runtime']/1000.0) ?> s </td>
-  </tr>
-  <tr>
+</tr>
+<tr>
+    <th>代码语言</th>
+    <td><?=$STR['lang'][$d['lang']]?></td>
     <th>内存使用</th>
     <td><?php printf("%.2f",$d['memory']/1024) ?> MiB </td>
-  </tr>
-  <tr>
+</tr>
+<tr>
     <th>提交时间</th>
-    <td><?php echo date('Y-m-d H:i:s',$d[subtime]); ?></td>
-  </tr>
+    <td colspan='3'><?php echo date('Y-m-d H:i:s',$d[subtime]); ?></td>
+</tr>
+<tr>
+</tr>
 </table>
-</div>
-<div class='span9'>
 <?    if($d['lang']==0) $langstr="pascal";
     else if($d['lang']==1) $langstr="c";
     else if($d['lang']==2) $langstr="cpp";
 ?>
 <pre class="syntax <?=$langstr?>"><?=htmlspecialchars($code)?></pre>
-</div>
 </div>
 <?php
 	include_once("../include/footer.php");
