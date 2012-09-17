@@ -8,7 +8,7 @@ if(!$pwd) $pwd = $_COOKIE['cogs_pwd_hash'];
 $sql="select * from userinfo where usr='$usr'";
 $cnt=$p->dosql($sql);
 if ($cnt==0)
-    i异常("用户不存在！");
+    i异常("用户不存在！", 取路径("user/login.php"));
 else {
     $d=$p->rtnrlt(0);
     if ($pwd==$d['pwdhash'] || (encode($_REQUEST['password'])==$d['pwdhash'])) {
@@ -27,6 +27,6 @@ else {
             $_REQUEST['from']=base64_encode("/".$SET['global_root']);
         i提示("用户 {$d['nickname']} 登录成功！{$_REQUEST['savepwd']}", $_REQUEST['from']);
     } else
-        i异常("密码错误，登录失败！");
+        i异常("密码错误，登录失败！", 取路径("user/login.php"));
 }
 ?>

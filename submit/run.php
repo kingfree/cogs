@@ -118,7 +118,7 @@ if ($csucc) {
     <p class="ok">祝贺你通过了全部测试点！</p>
 <?php } else if($AC < 1) { ?>
     <p class="no">你没有通过这道题！</p>
-    <p><a href="../docs/help.php" target="_blank" title="RP问题">为什么程序在我的电脑上能够正常运行，而在评测机上不能?</a></p>
+    <p><a href="../docs/" target="_blank" title="RP问题">为什么程序在我的电脑上能够正常运行，而在评测机上不能?</a></p>
 <?php }
 if($AC == -1) { ?>
 <form action="testdata.php" method="post" class='form-inline'>
@@ -130,9 +130,9 @@ if($AC == -1) { ?>
 </form>
 <?php } ?>
 <?php
-if($nodata == false && ($_POST['testmode'] != 1 || !有此权限('测试题目')))
+if($nodata == false && ($_POST['testmode'] != 1 || !有此权限('测试题目'))) {
 	$Cp->writedb_single();
-else echo "<p class=no>没有写入数据库</p>";
+} else echo "<p class=no>没有写入数据库</p>";
 ?>
 </div>
 </div>

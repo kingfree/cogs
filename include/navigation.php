@@ -71,7 +71,7 @@ function Navigation($p) {
         if($cnt1 > 0) $mails .= "<span class='doing'>($cnt1)</span>";
         $cnt1 = $p->dosql("select mid from mail where readed = 0 and fromid = {$uid}");
         if($cnt1 > 0) $mails .= "<span class='todo'>($cnt1)</span>";
-    } else $nickname = "注册登录";
+    } else $nickname = "登录";
     HTML("<a href='#' class='dropdown-toggle' data-toggle='dropdown'>{$nickname}{$mails}<b class='caret'></b></a>");
     HTML("<ul class='dropdown-menu'>");
     if($uid = (int) $_SESSION['ID']) {
@@ -101,6 +101,6 @@ HTML("</ul>");
 HTML("</div>");
 HTML("</div>");
 HTML("</div>");
-    HTML("</div>");
+HTML("</div>");
 }
 ?>

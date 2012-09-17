@@ -139,7 +139,7 @@ if (!$err) for ($i=$st;$i<$cnt && $i<$st+$SET['style_pagesize'] ;$i++) {
 </tr>
 <?php } ?>
 </table>
-<? 分页($cnt, $_GET['page'], '?caid='.$_GET['caid'].'&diff='.$_GET['diff'].'&key='.$_GET['key'].'&rank='.$_GET['rank'].'&'); ?>
+<? 分页($cnt, $_GET['page'], '?caid='.$_GET['caid'].'&order='.$_GET['order'].'&diff='.$_GET['diff'].'&key='.$_GET['key'].'&rank='.$_GET['rank'].'&'); ?>
 </div>
 
 <?php

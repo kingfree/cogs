@@ -23,12 +23,19 @@ function canuse($pid) {
 	return true;
 }
 
-for(;;) {
+$ok = 0;
+for($i=0; $i<$mpid; $i++) {
 	$pid = rand(1, $mpid);
 	if(canuse($pid)) {
 		$url = "problem.php?pid=" . $pid;
 		header("Location:$url");
+        $ok = 1;
 		break;
 	}
+}
+if(!$ok) {
+	$pid = rand(1, $mpid);
+    $url = "problem.php?pid=" . $pid;
+    header("Location:$url");
 }
 ?>

@@ -1,6 +1,6 @@
 <?php
 require_once("../include/header.php");
-gethead(1,"生成等级","生成等级");
+gethead(1,"","生成等级");
 
 $rand_gen_data_access=new DataAccess();
 
