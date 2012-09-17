@@ -1,11 +1,13 @@
 <?php
 require_once("../include/header.php");
 gethead(8,"sess","");
+过滤();
 $scd=(int)$_POST['showcode'];
 $p=new DataAccess();
 $uid=(int)$_SESSION['ID'];
 $pid=(int)$_POST['pid'];
 $cid=(int)$_POST['cid'];
+$detail=$_POST['detail'];
 $showcode=(int)$_POST['showcode'];
 $tm=time();
 
