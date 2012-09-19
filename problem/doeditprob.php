@@ -52,10 +52,8 @@ if ($_REQUEST[action]=='add')
 	$p->dosql($sql);
 	$d=$p->rtnrlt(0);
 	$pid=$d['pid'];
-	foreach($_POST[cate] as $k=>$v)
-	{
-		if ($v)
-		{
+	foreach($_POST[cate] as $k=>$v) {
+		if ($v) {
 			$sql="insert into tag(pid,caid) values({$pid},{$k})";
 			$p->dosql($sql);
 		}

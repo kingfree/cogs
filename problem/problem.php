@@ -85,11 +85,13 @@ if($cnt) {
 <td><a href="../user/index.php?gid=<?=$d['gid'] ?>" target="_blank" class='btn btn-mini btn-warning'><?=$d['gname']?></a></td></tr>
 <tr><th><a href="../submit/index.php?pid=<?=$pid; ?>">提交状态</a></th>
 <td><?php
+$acpid=0;
 if($_SESSION['ID']) {
     $sql="SELECT * FROM submit WHERE pid ={$pid} AND uid ={$_SESSION['ID']} order by score desc limit 1";
     $ac=$q->dosql($sql);
     if ($ac) {
         $e=$q->rtnrlt(0);
+        $acpid=$e['accepted'];
         echo "<a href='../submit/code.php?id={$e['sid']}'>";
         echo $STR['lang'][$e['lang']];
         echo "</a> ";
@@ -103,8 +105,40 @@ $cnt2=$r->dosql($sql);
 for ($i=0;$i<=$cnt2-1;$i++) {
     $e=$r->rtnrlt($i);
     HTML(" <a href='index.php?caid={$e['caid']}' target='_blank' class='btn btn-mini'>{$e['cname']}</a> ");
-}
-?></td></tr>
+} ?>
+<? if($acpid) { ?>
+<a class='btn btn-success btn-mini' href="#addcate" data-toggle='modal'><i class='icon-plus icon-white'></i>添加分类</a>
+<div id='addcate' class='modal hide fade in'>
+<form method="post" action="addcate.php" class='form-horizontal'>
+<fieldset>
+<div class='modal-header'>
+<button class='close' data-dismiss='modal'>×</button>
+<h3>添加分类</h3>
+我们以你输入的分类名称来在数据库中查询是否已有该分类或相似分类（即分类名称或分类说明有与之相似的文字）；如果没有找到就添加一个这样的新分类，找到的话就在分类说明末尾加上你的分类说明；然后再为该题添加这样一个分类。
+</div>
+<input name="pid" type="hidden" id="pid" value="<?=$d['pid']?>" />
+<div class='modal-body'>
+<div class='control-group'>
+<label class='control-label' for='cname'>分类名称</label>
+<div class='controls'>
+<input name="cname" type="text" id="cname" value="" />
+</div>
+</div>
+<div class='control-group'>
+<label class='control-label' for='memo'>分类说明</label>
+<div class='controls'>
+<textarea id='memo' name="memo" class="textarea"></textarea>
+</div>
+</div>
+<div class='modal-footer'>
+<button data-dismiss='modal' class='btn'>取消</button>
+<button type="submit" class='btn btn-primary'>添加分类</button>
+</div>
+</fieldset>
+</form>
+</div>
+<? } ?>
+</td></tr>
 <? if($_SESSION['ID']) { ?>
 <tr><form action="../submit/run.php" method="post" enctype="multipart/form-data" class='form-inline'>
 <td colspan=2>
