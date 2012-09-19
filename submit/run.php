@@ -103,7 +103,7 @@ if ($csucc) {
 <p>平均内存 <?php printf("%.2f",$Cp->getmemory()/1024) ?> MiB</p>
 <p>测试点通过状况 <a href="../submit/code.php?id=<?=$info['sid']?>"><?=评测结果($Cp->s_detail) ?></a></p>
 <p>得分：<?=$Cp->getscore(); ?></p>
-<p><a href="../problem/problem.php?pid=<?=$_POST['pid'] ?>">返回原题 “<?=$ptitle?>”</a>（顺便为该题添加一个分类吧！）</p>
+<p><a href="../problem/problem.php?pid=<?=$_POST['pid'] ?>">返回原题 “<?=$ptitle?>”</a></p>
 <?php if ($Cp->ac==$d['datacnt']) {
     $AC = 1;
 } else {
@@ -114,7 +114,7 @@ if ($csucc) {
     } 
 }?>
 <?php if($AC == 1) { ?>
-    <p class="ok">祝贺你通过了全部测试点！</p>
+    <p class="ok">祝贺你通过了全部测试点！</p>（顺便为该题添加一个标签吧！）
 <?php } else if($AC < 1) { ?>
     <p class="no">你没有通过这道题！</p>
     <p><a href="../docs/" target="_blank" title="RP问题">为什么程序在我的电脑上能够正常运行，而在评测机上不能?</a></p>

@@ -38,7 +38,7 @@ echo "<span class='todo'>还未开始</span>";
 </tr>
 <tr>
 <td>分组</td>
-<td><a href="../user/index.php?gid=<?php echo $d['gid'] ?>" target="_blank"><?php echo $d['gname'] ?></a></td>
+<td><a href="../user/index.php?gid=<?php echo $d['gid'] ?>"><?php echo $d['gname'] ?></a></td>
 </tr>
 <tr>
 <td>介绍</td>
@@ -54,7 +54,7 @@ $cnt=$p->dosql("select * from page order by etime desc limit $sizee");
 for($i=0;$i<$cnt;$i++) {
 $d=$p->rtnrlt($i);
 ?>
-<tr><td><a href="page/page.php?aid=<?=$d['aid']?>" target="_blank"><?=$d['title']?></a></td></td>
+<tr><td><a href="page/page.php?aid=<?=$d['aid']?>"><?=$d['title']?></a></td></td>
 <?php } ?>
 </table>
 <? } ?>
@@ -68,7 +68,7 @@ $d=$p->rtnrlt($i);
 </thead>
 </tr>
 <?php 
-$cnt=$p->dosql("select * from problem where submitable=1 order by pid desc limit $sizee");
+$cnt=$p->dosql("select * from problem where submitable=1 order by addtime desc limit $sizee");
 for($i=0;$i<$cnt;$i++) {
 $d=$p->rtnrlt($i);
 ?>
@@ -76,7 +76,7 @@ $d=$p->rtnrlt($i);
 <td><?php echo $d['pid']; ?></td>
 <td>
 <? 是否通过($d['pid'], $q); ?>
-<a href="problem/problem.php?pid=<?php echo $d['pid']; ?>" target="_blank"><?php echo shortname($d['probname']); ?></a></td>
+<a href="problem/problem.php?pid=<?php echo $d['pid']; ?>"><?php echo shortname($d['probname']); ?></a></td>
 </tr>
 <?php } ?>
 </table>
@@ -109,8 +109,8 @@ $d=$p->rtnrlt($i);
 ?>
 <tr>
 <td><i><?=$i+1 ?></i></td>
-<td><a href="user/detail.php?uid=<?php echo $d['uid']; ?>" target="_blank"><?=gravatar::showImage($d['email'], 28);?></a>
-<a href="user/detail.php?uid=<?php echo $d['uid']; ?>" target="_blank"><?=$d['nickname']?></a></td>
+<td><a href="user/detail.php?uid=<?php echo $d['uid']; ?>"><?=gravatar::showImage($d['email'], 28);?></a>
+<a href="user/detail.php?uid=<?php echo $d['uid']; ?>"><?=$d['nickname']?></a></td>
 <td><?=$d['grade']?></td>
 <td><?=$d['accepted']?></td>
 </tr>

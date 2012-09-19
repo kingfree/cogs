@@ -177,7 +177,11 @@ for ($i=0;$i<$cnt;$i++) {
 <? } ?>
 </table>
 <table id="singlerank" class='table table-striped table-condensed table-bordered fiexd'>
-<tr><th colspan=4>综合排行前 <?=$SET['style_single_ranksize']?> 名</th><tr>
+<tr><td colspan=4>
+提交：<?php echo $d['acceptcnt']; ?>，
+通过：<?php echo $d['submitcnt']; ?>，
+通过率：<?php echo @round($d['acceptcnt']/$d['submitcnt']*100,2); ?>%
+</td><tr>
 <?php
 $sql2="select submit.*,userinfo.nickname,userinfo.uid,userinfo.email from submit,userinfo where submit.pid={$pid} and submit.uid=userinfo.uid order by score desc, runtime asc, memory asc limit {$SET['style_single_ranksize']}";
 $cnt=$q->dosql($sql2);
@@ -194,8 +198,8 @@ for ($i=0;$i<$cnt;$i++) {
 }
 ?></table>
 <table id="Comments" class='table table-striped table-condensed table-bordered fiexd'>
-<tr><th colspan=3>最新讨论
-<a href="comments.php?pid=<?=$pid?>"><b>讨论版</b></a>
+<tr><th colspan=3>
+<a href="comments.php?pid=<?=$pid?>"><b>讨论</b></a>
 <? if($_SESSION['ID']) { ?>
 <a href="comment.php?pid=<?=$pid?>" class="pull-right btn btn-mini btn-danger"><b>发表评论</b></a>
 <? } ?>

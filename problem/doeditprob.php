@@ -61,7 +61,16 @@ if ($_REQUEST[action]=='add')
     提示("$ff 添加题目 $pid 成功！", 取路径("problem/problem.php?pid=$pid"));
 } else if ($_REQUEST[action]=='edit') {
 	$p=new DataAccess();
-	$sql="update problem set probname='{$_POST[probname]}',filename='{$_POST[filename]}',readforce={$_POST[readforce]},submitable={$sub},datacnt={$_POST[datacnt]},timelimit={$_POST[timelimit]},memorylimit={$_POST[memorylimit]},detail='".($_POST['detail'])."',difficulty={$_POST[difficulty]},plugin='{$_POST['plugin']}',`group`='{$_POST['group']}' where pid={$_REQUEST[pid]}";
+    $sql="select * from problem where pid={$_REQUEST['pid']}";
+    $cnt=$p->dosql($sql);
+    if($cnt) {
+        $d=$p->rtnrlt(0);
+        if($d['probname'] != $_POST['probname']) {
+            $sql="update problem set addtime=".time().", addid=".(int)$_SESSION['ID']." where pid={$_REQUEST['pid']}";
+            $p->dosql($sql);
+        }
+    }
+	$sql="update problem set probname='{$_POST['probname']}',filename='{$_POST[filename]}',readforce={$_POST[readforce]},submitable={$sub},datacnt={$_POST[datacnt]},timelimit={$_POST[timelimit]},memorylimit={$_POST[memorylimit]},detail='".($_POST['detail'])."',difficulty={$_POST[difficulty]},plugin='{$_POST['plugin']}',`group`='{$_POST['group']}' where pid={$_REQUEST['pid']}";
 	$p->dosql($sql);
 	foreach($_POST[cate] as $k=>$v)
 	{

@@ -27,7 +27,16 @@ if (restore) selObj.selectedIndex=0;
     $d=$p->rtnrlt(0);
 ?>
 
-<span id="cate_detail">当前分类：<span class="big"><?php echo $d['cname'] ?></span>（<?php echo nl2br(sp2n(htmlspecialchars($d['memo']))) ?>）</span>
+<span id="cate_detail"> 当前分类：
+<?php if(有此权限('修改分类')) { ?>
+<a href="editcate.php?action=edit&caid=<?php echo $d['caid'] ?>">
+<?php } ?>
+<span class="big"><?php echo $d['cname'] ?></span>
+<?php if(有此权限('修改分类')) { ?>
+</a>
+<?php } ?>
+（<?php echo nl2br(sp2n(htmlspecialchars($d['memo']))) ?>）
+</span>
 <?php } ?>
 
 <?php
@@ -74,6 +83,7 @@ $st=检测页面($cnt, $_GET['page']);
 <button name="rank" class='btn' value='difficulty'>题目难度</button>
 <button name="rank" class='btn' value='plugin'>评测方式</button>
 <button name="rank" class='btn' value='acceptcnt'>通过次数</button>
+<button name="rank" class='btn' value='submitcnt'>提交次数</button>
 <?php if(有此权限('查看题目')) { ?>
 <button name="rank" class='btn' value='submitable'>标识</button>
 <? } ?>
@@ -99,7 +109,6 @@ function okic(name) {
 <th onclick="sortTable('problist', 7, 'int')">提交</th>
 <th onclick="sortTable('problist', 8, 'int')">通过率</th>
 <?php if(有此权限('查看题目')) { ?>
-<th class=admin>作者</th>
 <th class=admin>标识</th>
 <?php } ?>
 <?php if(有此权限('修改题目')) { ?>
@@ -126,7 +135,6 @@ if (!$err) for ($i=$st;$i<$cnt && $i<$st+$SET['style_pagesize'] ;$i++) {
 <td><?php echo $d['submitcnt']; ?></td>
 <td><?php echo @round($d['acceptcnt']/$d['submitcnt']*100,2); ?>%</td>
 <?php if(有此权限('查看题目')) { ?>
-<td><a href="../user/detail.php?uid=<?=$d['addid']?>"><?=$d['addid']?></a></td>
 <td>
 <a href="doeditprob.php?action=change&pid=<?=$d['pid']?>" onclick="return okic('<?=$d['probname']?>')">
 <?php if ($d['submitable']) echo "<span class='label label-success'>可用</span>"; else echo "<span class='label label-important'>禁用</span>"; ?>
