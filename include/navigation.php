@@ -17,7 +17,7 @@ function Navigation($p) {
     HTML("<a class='btn btn-navbar' data-toggle='collapse' data-target='.nav-collapse'><span class='icon-bar'></span><span class='icon-bar'></span><span class='icon-bar'></span></a>");
     HTML("<div class='nav-collapse'>");
     HTML("<ul class='nav'>");
-    HTML("<li class='dropdown'>");
+    /*HTML("<li class='dropdown'>");
     HTML("<a href='#' class='dropdown-toggle' data-toggle='dropdown'><b class='caret'></b></a>");
     HTML("<ul class='dropdown-menu span11' id='catebar'>");
     $sql="select * from category order by cname";
@@ -27,7 +27,7 @@ function Navigation($p) {
         HTML("<li><a href='".路径("problem/index.php?caid={$d['caid']}")."' title='".sp2n(htmlspecialchars($d['memo']))."'>{$d['cname']}</a></li>");
     }
     HTML("</ul>");
-    HTML("</li>");
+    HTML("</li>");*/
     if(strpos($SET['cur'],"comment")) $active['comment']='active';
     else if(strpos($SET['cur'],"contest")) $active['contest']='active';
     else if(strpos($SET['cur'],"problem")) $active['problem']='active';
@@ -49,7 +49,7 @@ function Navigation($p) {
     HTML("<li class='{$active['user']}'><a href='".路径("user/index.php")."'>用户</a></li>");
     //HTML("<li class='{$active['comment']}'><a href='".路径("problem/comments.php")."'>评论</a></li>");
     HTML("<form class='navbar-search' method='get' action='".路径("problem/index.php")."'>");
-    HTML("<input name='key' type='text' id='key' class='search-query span2' placeholder='搜索题目' />");
+    HTML("<input name='key' type='text' id='key' class='search-query span2' placeholder='搜索题目和分类' />");
     HTML("</form>");
     HTML("</ul>");
     HTML("<ul class='nav pull-right'>");
