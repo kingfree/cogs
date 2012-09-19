@@ -61,11 +61,11 @@ if ($_REQUEST[action]=='add')
     提示("$ff 添加题目 $pid 成功！", 取路径("problem/problem.php?pid=$pid"));
 } else if ($_REQUEST[action]=='edit') {
 	$p=new DataAccess();
-    $sql="select * from problem where pid={$_REQUEST['pid']}";
+    $sql="select filename from problem where pid={$_REQUEST['pid']}";
     $cnt=$p->dosql($sql);
     if($cnt) {
         $d=$p->rtnrlt(0);
-        if($d['probname'] != $_POST['probname']) {
+        if($d['filename'] != $_POST['filename']) {
             $sql="update problem set addtime=".time().", addid=".(int)$_SESSION['ID']." where pid={$_REQUEST['pid']}";
             $p->dosql($sql);
         }
