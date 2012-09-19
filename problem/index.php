@@ -31,14 +31,18 @@ if (restore) selObj.selectedIndex=0;
 <?php } ?>
 
 <?php
-$sql="select problem.* from problem,tag,category";
-if($_GET['caid'])
-$sql.=" where tag.pid=problem.pid and tag.caid={$_GET['caid']}";
-else
-$sql.=" where problem.readforce>=0";
+$sql="select problem.* from problem";
 
-if ($_GET['key']!="")
-$sql.=" and (problem.probname like '%{$_GET[key]}%' or problem.pid ='{$_GET[key]}' or problem.filename like '%{$_GET[key]}%' or (problem.pid=tag.pid and tag.caid=category.caid and (category.cname like '%{$_GET[key]}%' or category.memo like '%{$_GET[key]}%')))";
+if($_GET['caid'])
+$sql.=",tag where tag.pid=problem.pid and tag.caid={$_GET['caid']}";
+else if($_GET['key']) {
+    $cate="";
+    if(strlen($_GET['key']) > 3) {
+        $cate=" or (problem.pid=tag.pid and tag.caid=category.caid and (category.cname like '%{$_GET[key]}%' or category.memo like '%{$_GET[key]}%'))";
+        $sql.=",tag,category ";
+    }
+    $sql.=" where (problem.probname like '%{$_GET[key]}%' or problem.pid ='{$_GET[key]}' or problem.filename like '%{$_GET[key]}%'$cate)";
+}
 
 if ($_GET['diff']!="")
 $sql.=" and problem.difficulty='{$_GET['diff']}'";
@@ -48,6 +52,7 @@ $sql.=" order by {$_GET['rank']} {$_GET['order']}";
 else
 $sql.=" order by problem.pid asc";
 
+//echo $sql;
 $cnt=$p->dosql($sql);
 $st=检测页面($cnt, $_GET['page']);
 ?>
