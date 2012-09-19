@@ -39,8 +39,7 @@ if ($_POST['rejudge']==1) {
 $Cp=new Compiler($info);
 
 ?>
-<div class='container-fluid'>
-<div class='row'>
+<div class='row-fluid'>
 <div class='span6'>
 <div class='alert alert-info'>
 正在连接评测机...
