@@ -3,7 +3,6 @@ require_once("../include/header.php");
 gethead(8,"修改页面","");
 过滤();
 //date_default_timezone_set("Asia/Shanghai");
-$_POST['text'] = str_replace("'", "\'", $_POST['text']);
 if ($_REQUEST[action]=='add') {
 	$p=new DataAccess();
 	$sql="insert into page(title,`force`,`text`,`time`,etime,uid,`group`) values('{$_POST[title]}','{$_POST[force]}','".($_POST[text])."','".time()."','".time()."','{$_SESSION[ID]}','{$_POST['group']}')";
