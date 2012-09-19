@@ -54,7 +54,7 @@ include(路径("include/navigation.php"));
 if($head != 8) Navigation($p);
 ?>
 
-<div id="body">
+<div id="body" class='container-fluid'>
 <?php
     }
 }

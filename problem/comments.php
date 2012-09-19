@@ -7,25 +7,26 @@ $q=new DataAccess();
 $pid=(int)$_GET['pid'];
 ?>
 <div class='row-fluid'>
+<form method="get" action="" class='form-search'>
 <? if($pid && $_SESSION['ID']) { ?>
 <a class='btn btn-danger' href="comment.php?pid=<?=$pid?>">发表评论</a>
 <? } ?>
-<?php
-$sql="select comments.*,userinfo.nickname,userinfo.email,userinfo.uid,problem.pid,problem.probname from comments,userinfo,problem where userinfo.uid=comments.uid and problem.pid=comments.pid";
-if($pid) $sql.=" and problem.pid=$pid";
-if ($_GET['key']!="")
-$sql.=" and (problem.probname like '%{$_GET[key]}%' or problem.pid ='{$_GET[key]}' or problem.filename like '%{$_GET[key]}%' or comments.detail like '%{$_GET[key]}%')";
-$sql.=" order by comments.stime desc";
-$cnt=$p->dosql($sql);
-$st=检测页面($cnt, $_GET['page']);
-?>
-<div class='container-fluid'>
-<form method="get" action="" class='form-search center'>
+<a class='btn' href="comments.php">全部评论</a>
 <div class='input-append pull-right'>
 <input name="key" type="text" class='search-query input-medium' value='<?=$_GET['key']?>' placeholder='搜索评论'/>
 <button type='submit' class='btn'><i class='icon icon-search'></i></button>
 </div>
 </form>
+<?php
+$sql="select comments.*,userinfo.nickname,userinfo.email,userinfo.uid,problem.pid,problem.probname from comments,userinfo,problem where userinfo.uid=comments.uid and problem.pid=comments.pid";
+if($pid) $sql.=" and problem.pid=$pid";
+if ($_GET['key']!="")
+$sql.=" and (problem.probname like '%{$_GET[key]}%' or problem.pid ='{$_GET[key]}' or problem.filename like '%{$_GET[key]}%' or comments.detail like '%{$_GET[key]}%')";
+$sql.=" order by comments.stime ";
+if(!$pid) $sql.="desc";
+$cnt=$p->dosql($sql);
+$st=检测页面($cnt, $_GET['page']);
+?>
 <?
 if ($cnt) {
 	for ($i=$st;$i<$cnt && $i<$st+$SET['style_pagesize'];$i++) {
@@ -37,7 +38,7 @@ if ($cnt) {
 			$sc=$d['showcode'];
 		}
 ?>
-<table class="Comments">
+<table class='Comments table table-condensed table-bordered fiexd'>
   <tr>
     <td class="CommentsU" rowspan=2 valign='top'><table>
 <tr>
@@ -48,7 +49,7 @@ if ($cnt) {
 </td>
 </tr>
 <tr>
-<td style="font-size:140%;"><a href="../problem/problem.php?pid=<?=$d['pid']?>"><?=$d['pid']?>: <?=$d['probname'] ?></a></td>
+<td><a href="../problem/problem.php?pid=<?=$d['pid']?>"><?=$d['pid']?>: <?=$d['probname'] ?></a></td>
 </tr>
 </table>
 </td>
@@ -63,7 +64,7 @@ if ($cnt) {
 	$q->dosql($sql);
 	$e=$q->rtnrlt(0);
 	?>
-	<a href="../submit/code.php?id=<?=$e['sid']?>"><i class='icon icon-download'></i>查看该用户最后一次提交的代码</a>
+	<a href="../submit/code.php?id=<?=$e['sid']?>"><i class='icon icon-download'></i>查看代码</a>
 	<?php } ?>
 	</div>
     </td>
@@ -78,8 +79,8 @@ if ($cnt) {
 	echo "<div class='alert'>还没有人发表评论！</div>";
 }
 ?>
-</div>
 <? 分页($cnt, $_GET['page'], '?key='.$_GET['key'].'&'); ?>
+</div>
 <?php
 include_once("../include/footer.php");
 ?>

@@ -19,8 +19,6 @@ margin: 0;
 }
 
 #body {
-padding: 0;
-margin: 0;
     background-size: 100%;
     background-attachment: fixed;
 }
@@ -136,11 +134,13 @@ padding: 10px;
 .Comments {
     width: 100%;
     border: 0;
+    padding: 0;
+    margin: 0;
     background-color: rgba(255,255,255,0.1);
 }
 
 .CommentsK {
-    height: 40px;
+    height: 55px;
     background-color: rgba(252,253,254,0.8);
     border: 0;
     padding: 10px 10px 10px 10px;
@@ -149,7 +149,7 @@ padding: 10px;
 .CommentsCode {
     border: 0;
     text-align: center;
-    width: 250px;
+    width: 100px;
     background-color: rgba(252,223,200,0.8);
 }
 
@@ -160,7 +160,7 @@ padding: 10px;
 }
 
 .CommentsU {
-    width: 250px;
+    width: 200px;
     background-color: rgba(197,248,252,0.2);
     border: 2px solid white;
 }

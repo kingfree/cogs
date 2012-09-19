@@ -13,11 +13,5 @@
 </p>
 </div>
 </div>
-<script type="text/javascript">
-$(document).ready(function() {
-  $("a[rel=popover]").popover();
-  $("input[rel=date]").datepicker();
-});
-</script>
 </body>
 </html>
