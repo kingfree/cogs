@@ -13,7 +13,6 @@ if($_GET['toid']) $_POST['title'] = "给".$_GET['toid']."的邮件";
 <div class='center'>
 <a class='btn btn-success' href="#sendmail" data-toggle='modal'><i class='icon-envelope icon-white'></i>发送信件</a>
 </div>
-<div class='container-fluid'>
 <div id='sendmail' class='modal <?if(!isset($_POST['title'])) echo "hide"?> fade in'>
 <form method="post" action="send.php" class='form-horizontal'>
 <fieldset>
@@ -50,6 +49,7 @@ function markread(id) {
 }
 </script>
 
+<div class='row-fluid'>
 <div class='span6'>
 <table class='table table-striped table-condensed table-bordered fiexd'>
 <tr>

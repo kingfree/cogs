@@ -199,7 +199,7 @@ for ($i=0;$i<$cnt;$i++) {
 ?></table>
 <table id="Comments" class='table table-striped table-condensed table-bordered fiexd'>
 <tr><th colspan=3>
-<a href="comments.php?pid=<?=$pid?>"><b>讨论</b></a>
+<a href="comments.php?pid=<?=$pid?>"><b><?=$d['probname']; ?></b> 的讨论</a>
 <? if($_SESSION['ID']) { ?>
 <a href="comment.php?pid=<?=$pid?>" class="pull-right btn btn-mini btn-danger"><b>发表评论</b></a>
 <? } ?>
@@ -237,12 +237,12 @@ for ($i=0;$i<$cnt;$i++) {
 <div id="probdetail" class='page'>
 <center>
 <h1><?=$d['pid']?>. <?=$d['probname']?></h1>
-<?=难度($d['difficulty']); ?>
-输入文件：<?=$d['filename']?>.in
-输出文件：<?=$d['filename']?>.out
+<?=难度($d['difficulty']); ?>&nbsp;&nbsp;
+输入文件：<?=$d['filename']?>.in&nbsp;&nbsp;
+输出文件：<?=$d['filename']?>.out&nbsp;&nbsp;
 <?=$STR['plugin'][$d['plugin']]?>
 <br />
-时间限制：<?=$d['timelimit']/1000?> s
+时间限制：<?=$d['timelimit']/1000?> s&nbsp;&nbsp;
 内存限制：<?=$d['memorylimit']; ?> MiB
 <hr />
 </center>

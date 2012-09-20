@@ -1,7 +1,7 @@
 <?php
 require_once("../include/header.php");
 gethead(8,"修改题目","");
-过滤();
+过滤("cate");
 
 $pid = (int)$_GET['pid'];
 if($_GET[action]=="change") {
@@ -42,8 +42,7 @@ if($_FILES['datafile']['size'] && !$_FILES['datafile']['error']) {
     $ff.="</ul></p>";
 }
 if ($_POST[submitable]==1) $sub=1; else $sub=0;
-if ($_REQUEST[action]=='add')
-{
+if ($_REQUEST[action]=='add') {
 	$p=new DataAccess();
 	$sql="insert into problem(probname,filename,readforce,submitable,datacnt,timelimit,memorylimit,detail,addtime,addid,difficulty,plugin,`group`) values('{$_POST[probname]}','{$_POST[filename]}',{$_POST[readforce]},{$sub},{$_POST[datacnt]},{$_POST[timelimit]},{$_POST[memorylimit]},'".$_POST['detail']."',".time().",{$_SESSION[ID]},{$_POST[difficulty]},'{$_POST['plugin']}','{$_POST['group']}')";
 	$p->dosql($sql);
@@ -72,8 +71,7 @@ if ($_REQUEST[action]=='add')
     }
 	$sql="update problem set probname='{$_POST['probname']}',filename='{$_POST[filename]}',readforce={$_POST[readforce]},submitable={$sub},datacnt={$_POST[datacnt]},timelimit={$_POST[timelimit]},memorylimit={$_POST[memorylimit]},detail='".($_POST['detail'])."',difficulty={$_POST[difficulty]},plugin='{$_POST['plugin']}',`group`='{$_POST['group']}' where pid={$_REQUEST['pid']}";
 	$p->dosql($sql);
-	foreach($_POST[cate] as $k=>$v)
-	{
+	foreach($_POST[cate] as $k=>$v) {
 		$sql="select tid from tag where caid={$k} and pid={$_REQUEST[pid]}";
 		$cnt=$p->dosql($sql);
 		if (!$cnt) {

@@ -46,13 +46,13 @@ $Cp=new Compiler($info);
 <?php
 flush();
 $free=$Cp->getgds($_POST['judger']);
-if (!$free) 异常("当前没有空闲的评测机，请稍后重新提交。");
+if (!$free) 异常("当前没有空闲的评测机，请稍后重新提交。", 取路径("problem/problem.php?pid={$_POST['pid']}"));
 $Cp->lock();
 $Cp->getdir();
 if ($_POST['rejudge']==1) {
 	$Cp->get_rejudge_src($src);
 } else if (!$Cp->getupload()) {
-	异常("源代码上传失败。请检查文件大小。");
+	异常("源代码上传失败。请检查文件大小。", 取路径("problem/problem.php?pid={$_POST['pid']}"));
 }
 ?>
 <span class='badge badge-info'><?=$Cp->state['grid']?></span>
@@ -101,7 +101,7 @@ if ($csucc) {
 <div class='alert'>
 <p>运行时间 <?php printf ("%.3f",$Cp->gettotaltime()/1000.0) ?> s</p>
 <p>平均内存 <?php printf("%.2f",$Cp->getmemory()/1024) ?> MiB</p>
-<p>测试点通过状况 <a href="../submit/code.php?id=<?=$info['sid']?>"><?=评测结果($Cp->s_detail) ?></a></p>
+<p>测试点通过状况 <a href="../submit/code.php?id=<?=$info['sid']?>"><?=评测结果($Cp->s_detail, 30) ?></a></p>
 <p>得分：<?=$Cp->getscore(); ?></p>
 <p><a href="../problem/problem.php?pid=<?=$_POST['pid'] ?>">返回原题 “<?=$ptitle?>”</a></p>
 <?php if ($Cp->ac==$d['datacnt']) {
@@ -114,7 +114,9 @@ if ($csucc) {
     } 
 }?>
 <?php if($AC == 1) { ?>
-    <p class="ok">祝贺你通过了全部测试点！</p>（顺便为该题添加一个标签吧！）
+    <p class="ok">祝贺你通过了全部测试点！</p>
+    <p>顺便<a href="../problem/problem.php?pid=<?=$_POST['pid'] ?>">返回</a>为该题添加一个标签吧！</p>
+    <p>...或者看看<a href="../problem/comments.php?pid=<?=$_POST['pid'] ?>">其他人的评论</a>，<a href="../problem/comment.php?pid=<?=$_POST['pid'] ?>">发表</a>一下你的感想吧！</p>
 <?php } else if($AC < 1) { ?>
     <p class="no">你没有通过这道题！</p>
     <p><a href="../docs/" target="_blank" title="RP问题">为什么程序在我的电脑上能够正常运行，而在评测机上不能?</a></p>

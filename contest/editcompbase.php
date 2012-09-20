@@ -29,12 +29,18 @@ if ($_GET[action]=='edit') {
     <td>
 	<ul class='nav nav-pills'>
 	<?php
-	$sql="select pid,probname from problem order by pid";
+	$sql="select pid,probname,submitable from problem order by pid";
 	$cnt=$p->dosql($sql);
 	for ($i=0;$i<$cnt;$i++) {
 		$d=$p->rtnrlt($i);
 ?>
-<li style='width: 160px'><input name="cons[<?=$d[pid]?>]" type="checkbox" id="cons[<?=$d[pid]?>]" value="<?=$d[pid]?>" <?php if (is_numeric($pbs[$d[pid]])) echo 'checked="checked"' ?> /><label for="cons[<?=$d[pid]?>]"><?=$d[pid]?>.<?=shortname($d['probname']) ?></label></li>
+<li style='width: 200px'>
+<input name="cons[<?=$d[pid]?>]" type="checkbox" id="cons[<?=$d[pid]?>]" value="<?=$d[pid]?>" <?php if (is_numeric($pbs[$d[pid]])) echo 'checked="checked"' ?> />
+<label for="cons[<?=$d[pid]?>]" class='<?
+if(is_numeric($pbs[$d[pid]])) echo "label label-success";
+else if(!$d[submitable]) echo "label label-important";
+?>'><?=$d[pid]?>.<?=shortname($d['probname']) ?></label>
+</li>
 <?php
 	}
 ?>

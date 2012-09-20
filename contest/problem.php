@@ -173,12 +173,12 @@ if($cnt) {
 </div>
 <center>
 <h1><?=$d['pid']?>. <?=$d['probname']?></h1>
-<?=难度($d['difficulty']); ?>
-输入文件：<?=$d['filename']?>.in
-输出文件：<?=$d['filename']?>.out
+<?=难度($d['difficulty']); ?>&nbsp;&nbsp;
+输入文件：<?=$d['filename']?>.in&nbsp;&nbsp;
+输出文件：<?=$d['filename']?>.out&nbsp;&nbsp;
 <?=$STR['plugin'][$d['plugin']]?>
 <br />
-时间限制：<?=$d['timelimit']/1000?> s
+时间限制：<?=$d['timelimit']/1000?> s&nbsp;&nbsp;
 内存限制：<?=$d['memorylimit']; ?> MiB
 <hr />
 </center>

@@ -1,10 +1,10 @@
 <?
 function 链接($path, $text, $icon = "") {
-    //if($icon) $ttt = "<span class='icon-{$icon}'></span>";
+    if($icon) $ttt = "<span class='icon-{$icon}'></span>";
     HTML("<a href=\"".路径($path)."\">{$ttt}{$text}</a>");
 }
 function 列表($path, $icon, $text) {
-    HTML("<li>");
+    HTML("<li class='span2'>");
     链接($path, $text, $icon);
     HTML("</li>");
 }
@@ -24,7 +24,7 @@ function Navigation($p) {
     $cnt=$p->dosql($sql);
     for ($i=0;$i<$cnt;$i++) {
         $d=$p->rtnrlt($i);
-        HTML("<li><a href='".路径("problem/index.php?caid={$d['caid']}")."' title='".sp2n(htmlspecialchars($d['memo']))."'>{$d['cname']}</a></li>");
+        HTML("<li style='width: 100px'><a href='".路径("problem/index.php?caid={$d['caid']}")."' title='".sp2n(htmlspecialchars($d['memo']))."'>{$d['cname']}</a></li>");
     }
     HTML("</ul>");
     HTML("</li>");
@@ -71,7 +71,7 @@ function Navigation($p) {
     HTML("<a href='#' class='dropdown-toggle' data-toggle='dropdown'>{$nickname}{$mails}<b class='caret'></b></a>");
     HTML("<ul class='dropdown-menu'>");
     if($uid = (int) $_SESSION['ID']) {
-        HTML("<li class='span3'><a href='".路径("user/detail.php?uid={$uid}")."'><span class='username'>".$d['nickname']."</span><span class='avatar'>".gravatar::showImage($d['email'],28)."</span></a></li>");
+        HTML("<li class='span2'><a href='".路径("user/detail.php?uid={$uid}")."'><span class='username'>".$d['nickname']."</span><span class='avatar'>".gravatar::showImage($d['email'],28)."</span></a></li>");
         列表("user/panel.php", "cog", "设置");
         列表("mail/index.php", "envelope", "信件".$mails);
         列表("user/dologout.php", "off", "退出");
@@ -88,8 +88,8 @@ function Navigation($p) {
 </form></li>
 <li class='divider'></li>
 <?
-列表("user/register.php", "", "注册");
-列表("user/lost.php", "", "忘记密码");
+列表("user/register.php", "user", "注册");
+列表("user/lost.php", "eye-open", "忘记密码");
 }
 HTML("</ul>");
 HTML("</li>");

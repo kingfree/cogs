@@ -11,7 +11,10 @@ $pid=(int)$_GET['pid'];
 <? if($pid && $_SESSION['ID']) { ?>
 <a class='btn btn-danger' href="comment.php?pid=<?=$pid?>">发表评论</a>
 <? } ?>
-<a class='btn' href="comments.php">全部评论</a>
+<? if($pid) { ?>
+<a class='btn' href="problem.php?pid=<?=$pid?>">返回原题</a>
+<a href="comments.php" class='btn pull-right'>全部评论</a>
+<? } ?>
 <div class='input-append pull-right'>
 <input name="key" type="text" class='search-query input-medium' value='<?=$_GET['key']?>' placeholder='搜索评论'/>
 <button type='submit' class='btn'><i class='icon icon-search'></i></button>
@@ -49,7 +52,11 @@ if ($cnt) {
 </td>
 </tr>
 <tr>
-<td><a href="../problem/problem.php?pid=<?=$d['pid']?>"><?=$d['pid']?>: <?=$d['probname'] ?></a></td>
+<td>
+<? if(!$pid) { ?>
+<a href="?pid=<?=$d['pid']?>"><?=$d['pid']?>: <?=$d['probname'] ?></a>
+<? } ?>
+</td>
 </tr>
 </table>
 </td>

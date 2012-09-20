@@ -350,22 +350,28 @@ if($cnt) {
 ?>
 <div class='modal-header'>
 <button class='close' data-dismiss='modal'>×</button>
-<h2>题目分类</h2>
+<h3>题目分类</h3>
 </div>
 <div class='modal-body'>
+<ul class='nav nav-pills'>
 <?php
 for ($i=0;$i<$cnt;$i++) {
 $f=$p->rtnrlt($i);
 ?>
-<span class='span2'>
+<li style='width: 120px'>
 <input name="cate[<?=$f['caid']?>]" type="hidden" value="0" />
 <label class='checkbox inline'>
-<input name="cate[<?=$f['caid']?>]" type="checkbox" id="cate[<?=$f[caid]?>]" value="1" <?php if ($hash[$f['caid']]) echo 'checked="checked"';?>/><?=$f['cname']?>
+<input name="cate[<?=$f['caid']?>]" type="checkbox" id="cate[<?=$f[caid]?>]" value="1" <?php if ($hash[$f['caid']]) echo 'checked="checked"';?>/>
+<label <?php if ($hash[$f['caid']]) echo 'class="label"';?>><?=$f['cname']?></label>
 </label>
-</span>
+</li>
 <? } ?>
+</ul>
 </div>
 <? } ?>
+<div class='modal-footer'>
+<button data-dismiss='modal' class='btn'>关闭</button>
+</div>
 </div>
 <div class='row'>
 <div class='span6'>

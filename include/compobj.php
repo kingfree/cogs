@@ -189,9 +189,18 @@ class Compiler
 
     public function unlock()
     {
-        $s['action']="unlock";
         $s['uid']=$this->info['uid'];
-        httpsocket($this->gds,$s);
+        for($i=0; $i<9; $i++) {
+            $s['action']="state";
+            $tmp=httpsocket($this->gds,$s);
+            $arra=array_decode($tmp);
+            if($arra['state']=="free") {
+                break;
+            } else {
+                $s['action']="unlock";
+                httpsocket($this->gds,$s);
+            }
+        }
     }
 
     public function lock()
@@ -206,23 +215,18 @@ class Compiler
 
         $ac=$this->ac==$this->info['datacnt']?1:0;
 
-        if ($this->info['rejudge']==1)
-        {
+        if ($this->info['rejudge']==1) {
             $sql="update submit set result='{$this->s_detail}' ,score='{$this->s_score}' ,memory='{$this->avgmemory}' ,accepted='{$ac}' ,runtime='{$this->totaltime}' where sid='{$this->info['sid']}'";
             $p->dosql($sql);
-        }
-        else
-        {
+        } else {
             $sql1="update userinfo set submited=submited+1";
             $sql="update problem set submitcnt=submitcnt+1";
-            if ($ac)
-            {
+            if ($ac) {
                 $sql.=",lastacid={$this->info['uid']}";
                 $sql2="select accepted from submit where pid='{$this->info['pid']}' and uid='{$this->info['uid']}' and accepted=1";
                 $first=$p->dosql($sql2)==0;
-                if ($first) //第一次AC
-                {
-                    $sql1.=" ,grade=grade+1";
+                if ($first) { //第一次AC
+                    $sql1.=" ,grade=grade+5";
                     $sql.=" ,acceptcnt=acceptcnt+1";
                 }
             }
