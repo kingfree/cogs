@@ -10,7 +10,7 @@ $q=new DataAccess();
 <?php } ?>
 
 <?php
-$sql="select page.*,groups.*,userinfo.nickname as name,userinfo.uid from page,groups,userinfo where";
+$sql="select page.*,groups.*,userinfo.nickname,userinfo.email,userinfo.realname from page,groups,userinfo where page.force<={$_SESSION['readforce']} and ";
 
 $sql.=" userinfo.uid=page.uid and groups.gid=page.group";
 
@@ -31,16 +31,14 @@ $st=检测页面($cnt, $_GET['page']);
 <table id="pagelist" class='table table-striped table-condensed table-bordered fiexd'>
 <thead><tr>
 <th>AID</th>
+<?php if(有此权限('修改页面')) { ?>
+<th class=admin>编辑</th>
+<?php } ?>
 <th width=50%>页面标题</th>
 <th>创建时间</th>
 <th>修改时间</th>
 <th>开放分组</th>
-<?php if(有此权限('查看页面')) { ?>
-<th class=admin>添加用户</th>
-<?php } ?>
-<?php if(有此权限('修改页面')) { ?>
-<th class=admin>编辑</th>
-<?php } ?>
+<th>作者</th>
 </tr></thead>
 <?php
 for ($i=$st;$i<$cnt && $i<$st+$SET['style_pagesize'] ;$i++) {
@@ -51,16 +49,17 @@ for ($i=$st;$i<$cnt && $i<$st+$SET['style_pagesize'] ;$i++) {
 ?>
 <tr>
 <td><?php echo $d['aid'] ?></td>
+<?php if(有此权限('修改页面')) { ?>
+<td><a href="editpage.php?action=edit&aid=<?=$d['aid']?>">修改</a></td>
+<?php } ?>
 <td align=left><b><a href="page.php?aid=<?=$d['aid'] ?>"><?=$d['title'] ?></b></td>
 <td><?=date('Y-m-d', $d['time']) ?></td>
 <td><?=date('Y-m-d', $d['etime']) ?></td>
 <td><a href="../user/index.php?gid=<?=$d['gid'] ?>" target="_blank"><?=$d['gname'] ?></a></td>
-<?php if(有此权限('查看页面')) { ?>
-<td><?=$d['name']?></td>
-<?php } ?>
-<?php if(有此权限('修改页面')) { ?>
-<td><a href="editpage.php?action=edit&aid=<?=$d['aid']?>">修改</a></td>
-<?php } ?>
+<td><a href='../user/detail.php?uid=<?=$d['uid']?>' target='_blank'>
+<?=gravatar::showImage($d['email']);?>
+<?if(有此权限("查看用户")) echo $d['realname']; else echo $d['nickname'];?>
+</a></td>
 </tr>
 <?php } ?>
 </table>

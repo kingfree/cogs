@@ -24,7 +24,7 @@ $q=new DataAccess();
 <button name='show' value='yes' class='btn btn-inverse'>显示分页记录</button>
 </form>
 <?php
-$sql="select submit.*,userinfo.nickname,userinfo.email,userinfo.realname,problem.probname from submit,userinfo,problem where submit.pid=problem.pid and submit.uid=userinfo.uid ";
+$sql="select submit.*,userinfo.nickname,userinfo.email,userinfo.realname,problem.probname from submit,userinfo,problem where problem.readforce<={$_SESSION['readforce']} and submit.pid=problem.pid and submit.uid=userinfo.uid ";
 if ($_GET['display']=='ac')
     $sql.=" and submit.accepted=1 ";
 if ($_GET['uid'])
@@ -32,7 +32,8 @@ if ($_GET['uid'])
 if ($_GET['pid'])
     $sql.=" and submit.pid={$_GET['pid']} ";
 $sql.=" order by submit.sid desc";
-if(!$_GET['show']) $sql .= " limit {$SET['style_pagesize']}";
+$limitt=$SET['style_pagesize']/2;
+if(!$_GET['show'] && !$_GET['pid']) $sql .= " limit {$limitt}";
 $cnt=$p->dosql($sql);
 $totalpage=(int)(($cnt-1)/$SET['style_pagesize'])+1;
 if(!$_GET['page']) {
@@ -86,7 +87,7 @@ echo "</a>"; ?></td>
 ?>
 </table>
 <?
-if($_GET['show'])
+if($_GET['show'] || $_GET['pid'])
     分页($cnt, $_GET['page'], '?pid='.$_GET['pid'].'&uid='.$_GET['uid'].'&display='.$_GET['display'].'&show='.$_GET['show'].'&');
 ?>
 </div>

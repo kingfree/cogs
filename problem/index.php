@@ -44,7 +44,7 @@ $sql="select problem.* from problem";
 if($_GET['caid'])
 $sql.=",tag where tag.pid=problem.pid and tag.caid={$_GET['caid']}";
 else
-$sql .= " where problem.readforce>=0";
+$sql .= " where problem.readforce<={$_SESSION['readforce']}";
 
 if ($_GET['key']!="")
 $sql.=" and (problem.probname like '%{$_GET[key]}%' or problem.pid ='{$_GET[key]}' or problem.filename like '%{$_GET[key]}%')";
@@ -99,6 +99,9 @@ function okic(name) {
 <table id="problist" class='table table-striped table-condensed table-bordered fiexd'>
 <thead><tr>
 <th width='20px'>PID</th>
+<?php if(有此权限('修改题目')) { ?>
+<th class=admin>编辑</th>
+<?php } ?>
 <th onclick="sortTable('problist', 0, 'int')">题目名称</th>
 <th>文件名称</th>
 <th>时间</th>
@@ -111,9 +114,6 @@ function okic(name) {
 <?php if(有此权限('查看题目')) { ?>
 <th class=admin>标识</th>
 <?php } ?>
-<?php if(有此权限('修改题目')) { ?>
-<th class=admin>编辑</th>
-<?php } ?>
 </tr></thead>
 <?php
 if (!$err) for ($i=$st;$i<$cnt && $i<$st+$SET['style_pagesize'] ;$i++) {
@@ -125,6 +125,9 @@ if (!$err) for ($i=$st;$i<$cnt && $i<$st+$SET['style_pagesize'] ;$i++) {
 ?>
 <tr>
 <td><?php echo $d['pid'] ?></td>
+<?php if(有此权限('修改题目')) { ?>
+<td><a href="editprob.php?action=edit&pid=<?=$d['pid']?>">修改</a></td>
+<?php } ?>
 <td><? 是否通过($d['pid'], $q);?><b><a href="problem.php?pid=<?=$d['pid'] ?>"><?=$d['probname'] ?></a></b></td>
 <td><code><?php echo $d['filename']; ?></code></td>
 <td><?php echo $d['timelimit']/1000 . " s"; ?></td>
@@ -140,9 +143,6 @@ if (!$err) for ($i=$st;$i<$cnt && $i<$st+$SET['style_pagesize'] ;$i++) {
 <?php if ($d['submitable']) echo "<span class='label label-success'>可用</span>"; else echo "<span class='label label-important'>禁用</span>"; ?>
 </a>
 </td>
-<?php } ?>
-<?php if(有此权限('修改题目')) { ?>
-<td><a href="editprob.php?action=edit&pid=<?=$d['pid']?>">修改</a></td>
 <?php } ?>
 </tr>
 <?php } ?>

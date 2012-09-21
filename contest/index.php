@@ -11,7 +11,7 @@ $q=new DataAccess();
 <?php } ?>
 <a href="recent.php" class='btn btn-success'><i class="icon-list-alt icon-white"></i>最近在线竞赛</a>
 <?
-$sql="select comptime.*,compbase.*,userinfo.realname,groups.* from comptime,compbase,userinfo,groups where comptime.cbid=compbase.cbid and userinfo.uid=compbase.ouid and comptime.group=groups.gid order by starttime desc";
+$sql="select comptime.*,compbase.*,userinfo.realname,groups.* from comptime,compbase,userinfo,groups where comptime.readforce<={$_SESSION['readforce']} and comptime.cbid=compbase.cbid and userinfo.uid=compbase.ouid and comptime.group=groups.gid order by starttime desc";
 $cnt=$p->dosql($sql);
 $st=检测页面($cnt, $_GET['page']);
 ?>

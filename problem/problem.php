@@ -59,16 +59,15 @@ if($cnt) {
 <td><?=$d['timelimit']; ?> ms (<?=$d['timelimit']/1000?> s)</td></tr>
 <tr><th>内存限制</th>
 <td><?=$d['memorylimit']; ?> MB </td></tr>
-<tr><th>测试方式</th>
+<tr><th><?php if(有此权限('查看数据')) { ?>
+<a href='testdata.php?problem=<?=$d['filename']?>'>测试数据</a>
+<? } else { ?>测试数据<? } ?></th>
 <td>
 <span class='badge badge-<?=$d['submitable']?"success":"important"?>'><?=$d['datacnt']?></span>
-<?php if(有此权限('查看数据')) { ?>
-<a href='testdata.php?problem=<?=$d['filename']?>'>查看数据</a>
-<? } ?>
 <span class='pull-right'><?=$STR['plugin'][$d['plugin']]?></span>
 </td></tr>
 <tr>
-<th>添加题目</th>
+<th>题目来源</th>
 <td>
 <?php if(有此权限('查看题目')) { 
     $sql="SELECT realname FROM userinfo WHERE uid ={$d['addid']} limit 1";
@@ -87,7 +86,7 @@ if($cnt) {
 <td><?php
 $acpid=0;
 if($_SESSION['ID']) {
-    $sql="SELECT * FROM submit WHERE pid ={$pid} AND uid ={$_SESSION['ID']} order by score desc limit 1";
+    $sql="select * from submit where sid in (SELECT sid FROM submit WHERE pid ={$pid} AND uid ={$_SESSION['ID']} order by score desc) order by sid desc";
     $ac=$q->dosql($sql);
     if ($ac) {
         $e=$q->rtnrlt(0);
@@ -98,7 +97,7 @@ if($_SESSION['ID']) {
         评测结果($e['result'], 20);
     }
 } ?></td></tr>
-<tr><th>所属分类</th>
+<tr><th>分类标签</th>
 <td><?php
 $sql="select category.cname,category.caid from category,tag where tag.pid={$_GET[pid]} and category.caid=tag.caid";
 $cnt2=$r->dosql($sql);
@@ -178,18 +177,21 @@ for ($i=0;$i<$cnt;$i++) {
 </table>
 <table id="singlerank" class='table table-striped table-condensed table-bordered fiexd'>
 <tr><td colspan=4>
-提交：<?php echo $d['acceptcnt']; ?>，
-通过：<?php echo $d['submitcnt']; ?>，
+通过：<?php echo $d['acceptcnt']; ?>，
+提交：<?php echo $d['submitcnt']; ?>，
 通过率：<?php echo @round($d['acceptcnt']/$d['submitcnt']*100,2); ?>%
 </td><tr>
 <?php
-$sql2="select submit.*,userinfo.nickname,userinfo.uid,userinfo.email from submit,userinfo where submit.pid={$pid} and submit.uid=userinfo.uid order by score desc, runtime asc, memory asc limit {$SET['style_single_ranksize']}";
+$sql2="select submit.*,userinfo.nickname,userinfo.realname,userinfo.uid,userinfo.email from submit,userinfo where submit.pid={$pid} and submit.uid=userinfo.uid order by score desc, runtime asc, memory asc limit {$SET['style_single_ranksize']}";
 $cnt=$q->dosql($sql2);
 for ($i=0;$i<$cnt;$i++) {
     $f=$q->rtnrlt($i);
 ?>
 <tr>
-<td><a href="../user/detail.php?uid=<?=$f['uid'] ?>"><?=gravatar::showImage($f['email']);?><?=$f['nickname'] ?></a></td>
+<td><a href="../user/detail.php?uid=<?=$f['uid'] ?>">
+<?=gravatar::showImage($f['email']);?>
+<?=有此权限('查看用户') ? $f['realname'] : $f['nickname'] ?>
+</a></td>
 <td align=center><span class="<?=$f['accepted']?'ok':'no'?>"><?=$f['score'] ?></span></td>
 <td align=right><?php printf("%.3f s",$f['runtime']/1000.0) ?></td>
 <td align=center><a href="../submit/code.php?id=<?=$f['sid'] ?>" target="_blank"><?=$STR['lang'][$f['lang']]?></a></td>
@@ -199,7 +201,7 @@ for ($i=0;$i<$cnt;$i++) {
 ?></table>
 <table id="Comments" class='table table-striped table-condensed table-bordered fiexd'>
 <tr><th colspan=3>
-<a href="comments.php?pid=<?=$pid?>"><b><?=$d['probname']; ?></b> 的讨论</a>
+<a href="comments.php?pid=<?=$pid?>">关于 <b><?=shortname($d['probname']); ?></b> 的讨论</a>
 <? if($_SESSION['ID']) { ?>
 <a href="comment.php?pid=<?=$pid?>" class="pull-right btn btn-mini btn-danger"><b>发表评论</b></a>
 <? } ?>
@@ -238,8 +240,8 @@ for ($i=0;$i<$cnt;$i++) {
 <center>
 <h1><?=$d['pid']?>. <?=$d['probname']?></h1>
 <?=难度($d['difficulty']); ?>&nbsp;&nbsp;
-输入文件：<?=$d['filename']?>.in&nbsp;&nbsp;
-输出文件：<?=$d['filename']?>.out&nbsp;&nbsp;
+输入文件：<code><?=$d['filename']?>.in</code>&nbsp;&nbsp;
+输出文件：<code><?=$d['filename']?>.out</code>&nbsp;&nbsp;
 <?=$STR['plugin'][$d['plugin']]?>
 <br />
 时间限制：<?=$d['timelimit']/1000?> s&nbsp;&nbsp;
