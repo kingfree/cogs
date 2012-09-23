@@ -5,20 +5,14 @@ gethead(1,"","题目评论");
 $p=new DataAccess();
 $q=new DataAccess();
 $pid=(int)$_GET['pid'];
-$aid=(int)$_GET['aid'];
-if($pid<0) { $aid=-$pid; $pid=0; }
 ?>
 <div class='row-fluid'>
 <form method="get" action="" class='form-search'>
 <? if($pid && $_SESSION['ID']) { ?>
 <a class='btn btn-danger' href="comment.php?pid=<?=$pid?>">发表评论</a>
-<? } else if($aid && $_SESSION['ID']) { ?>
-<a class='btn btn-danger' href="comment.php?aid=<?=$aid?>">发表评论</a>
 <? } ?>
 <? if($pid) { ?>
 <a class='btn' href="problem.php?pid=<?=$pid?>">返回原题</a>
-<? } else if($aid) { ?>
-<a class='btn' href="../page/page.php?aid=<?=$aid?>">返回原页</a>
 <? } ?>
 <div class='input-append pull-right'>
 <input name="key" type="text" class='search-query input-medium' value='<?=$_GET['key']?>' placeholder='搜索评论'/>
@@ -27,21 +21,11 @@ if($pid<0) { $aid=-$pid; $pid=0; }
 </div>
 </form>
 <?php
-if($pid > 0) {
-    $sql="select comments.*,userinfo.nickname,userinfo.email,userinfo.uid,problem.pid,problem.probname from comments,userinfo,problem where userinfo.uid=comments.uid and problem.pid=comments.pid";
-    $sql.=" and problem.pid=$pid";
-    if ($_GET['key']!="")
-        $sql.=" and (problem.probname like '%{$_GET[key]}%' or problem.pid ='{$_GET[key]}' or problem.filename like '%{$_GET[key]}%' or comments.detail like '%{$_GET[key]}%')";
-} else if($aid > 0) {
-    $sql="select comments.*,userinfo.nickname,userinfo.email,userinfo.uid,page.title from comments,userinfo,page where userinfo.uid=comments.uid";
-    $sql.=" and comments.pid=-$aid and page.aid=-comments.pid";
-    if ($_GET['key'])
-        $sql.=" and comments.detail like '%{$_GET[key]}%'";
-    $sql.=" order by comments.stime ";
-} else {
-    $sql="select comments.*,userinfo.nickname,userinfo.email,userinfo.uid from comments,userinfo where userinfo.uid=comments.uid order by comments.stime desc";
-}
-echo $sql;
+$sql="select comments.*,userinfo.nickname,userinfo.email,userinfo.uid,problem.pid,problem.probname from comments,userinfo,problem where userinfo.uid=comments.uid and problem.pid=comments.pid ";
+if($pid) $sql.=" and problem.pid=$pid";
+if ($_GET['key']!="")
+$sql.=" and (problem.probname like '%{$_GET[key]}%' or problem.pid ='{$_GET[key]}' or problem.filename like '%{$_GET[key]}%' or comments.detail like '%{$_GET[key]}%')";
+if($pid) $sql.=" order by comments.cid asc"; else $sql.=" order by comments.stime desc";
 $cnt=$p->dosql($sql);
 $st=检测页面($cnt, $_GET['page']);
 ?>
@@ -68,10 +52,8 @@ if ($cnt) {
 </tr>
 <tr>
 <td>
-<? if(!$pid && $d['pid'] > 0) { ?>
+<? if(!$pid) { ?>
 <a href="?pid=<?=$d['pid']?>"><?=$d['pid']?>: <?=$d['probname'] ?></a>
-<? } else if($d['pid'] < 0) { ?>
-<a href="?pid=<?=$d['pid']?>"><?=-$d['pid']?>: <?=$d['title'] ?></a>
 <? } ?>
 </td>
 </tr>

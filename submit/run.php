@@ -46,12 +46,16 @@ $Cp=new Compiler($info);
 <?php
 flush();
 $free=$Cp->getgds($_POST['judger']);
-if (!$free) 异常("当前没有空闲的评测机，请稍后重新提交。", 取路径("problem/problem.php?pid={$_POST['pid']}"));
+if (!$free) {
+//$Cp->unlock();
+    异常("当前没有空闲的评测机，请稍后重新提交。", 取路径("problem/problem.php?pid={$_POST['pid']}"));
+}
 $Cp->lock();
 $Cp->getdir();
 if ($_POST['rejudge']==1) {
 	$Cp->get_rejudge_src($src);
 } else if (!$Cp->getupload()) {
+    $Cp->unlock();
 	异常("源代码上传失败。请检查文件大小。", 取路径("problem/problem.php?pid={$_POST['pid']}"));
 }
 ?>

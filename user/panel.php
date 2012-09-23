@@ -45,7 +45,7 @@ $d=$p->rtnrlt(0);
   <tr>
     <th width='80px'>用户编号</th>
     <td><?=gravatar::showImage($d['email']);?><?=$d['uid'] ?></td>
-    <th width='300px'>用户头像</th>
+    <th width='220px'>用户头像</th>
   </tr>
   <tr>
     <th>用户名称</th>

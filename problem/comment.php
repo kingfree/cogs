@@ -18,7 +18,7 @@ if($pid) {
     } else
         异常("无此题目！", 取路径("problem/commentlist.php"));
 } else if($cid) {
-    $sql="select comments.* from comments where comments.cid={$cid} limit 1";
+    $sql="select comments.*,problem.probname from comments,problem where comments.cid={$cid} and problem.pid=comments.pid limit 1";
     $cnt=$p->dosql($sql);
     if($cnt) {
         $d=$p->rtnrlt(0);
