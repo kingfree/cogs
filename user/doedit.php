@@ -20,7 +20,7 @@ if ($_POST[action]=="edit") {
     $sql="select * from userinfo where usr='{$_POST['usr']}' and uid!={$_POST['uid']}";
     $cnt=$p->dosql($sql);
     if ($cnt==0) {
-        $sql="update userinfo set usr='{$_POST['usr']}',nickname='{$_POST['nickname']}',realname='{$_POST['realname']}',email='{$_POST['email']}',memo='{$_POST['memo']}',user_style='{$_POST['user_style']}' where uid={$_POST['uid']}";
+        $sql="update userinfo set usr='{$_POST['usr']}',nickname='{$_POST['nickname']}',realname='{$_POST['realname']}',email='{$_POST['email']}',memo='{$_POST['memo']}',user_style='{$_POST['user_style']}',style='{$_POST['style']}' where uid={$_POST['uid']}";
         $p->dosql($sql);
         $LIB->get_userinfo($_GET['uid']);
         提示("用户设置信息修改成功！", 取路径("user/panel.php"));

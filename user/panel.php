@@ -77,10 +77,13 @@ $d=$p->rtnrlt(0);
   <tr>
     <th>系统主题</th>
     <td><input name="user_style" type='text' value="<?=$d['user_style']?>" />
+    <label class='radio inline'><input type='radio' name='style' value='0' <?if(!$d['style']) echo "checked='checked'";?>/>浅色标题栏</label>
+    <label class='radio inline'><input type='radio' name='style' value='1' <?if($d['style']) echo "checked='checked'";?>/>深色标题栏</label>
 <?/*$ssss= glob("*.min.css");
 foreach($ssss as $sms) {
     echo str_replace(".min.css", "", $sms).", ";
 }*/?>
+<br />
 <b>bootstrap</b>,
 <b>spacelab</b>,
 <b>united</b>,

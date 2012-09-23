@@ -10,7 +10,9 @@ function 列表($path, $icon, $text) {
 }
 function Navigation($p) {
     global $SET;
-    HTML("<div id='nav' class='navbar'>");
+    $navbar="";
+    if($_SESSION['style']) $navbar="navbar-inverse";
+    HTML("<div id='nav' class='navbar $navbar'>");
     HTML("<div class='navbar-inner'>");
     HTML("<div class='container-fluid'>");
     HTML("<a href='".路径("index.php")."' class='brand'>COGS</a>");

@@ -20,6 +20,7 @@ if(!($_SESSION['ID'])) {
         $_SESSION['readforce']=0;
         $_SESSION['ID']=0;
         $_SESSION['user_style']=$SET["user_style"];
+        $_SESSION['navbar']=0;
     }
 }
 

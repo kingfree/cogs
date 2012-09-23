@@ -16,8 +16,9 @@ if($cid) {
 } else if($pid) {
     $sql="insert into comments(pid,uid,detail,stime,showcode) values({$pid},{$uid},'{$detail}',{$tm} ,{$showcode})";
 } else {
-    异常("发表评论失败！",取路径("problem/comments.php?pid={$_POST['pid']}"));
+    异常("发表评论失败！",取路径("problem/comments.php?pid={$pid}"));
 }
+echo $sql;
 $cnt=$p->dosql($sql);
-提示("发表评论成功！",取路径("problem/comments.php?pid={$_POST['pid']}"));
+提示("发表评论成功！",取路径("problem/comments.php?pid={$pid}"));
 ?>
