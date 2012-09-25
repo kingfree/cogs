@@ -2,6 +2,12 @@
 require_once("../include/header.php");
 gethead(8,"","");
 过滤();
+$_POST['usr']=htmlspecialchars($_POST['usr']);
+$_POST['nickname']=htmlspecialchars($_POST['nickname']);
+$_POST['realname']=htmlspecialchars($_POST['realname']);
+$_POST['email']=htmlspecialchars($_POST['email']);
+$_POST['user_style']=htmlspecialchars($_POST['user_style']);
+
 $p=new DataAccess();
 $LIB->cls_reg();
 $rc=new RegisterCheck;

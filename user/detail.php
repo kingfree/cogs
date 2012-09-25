@@ -42,7 +42,7 @@ $d=$p->rtnrlt(0);
 <td><a href="../user/index.php?gid=<?=$d['gid'] ?>"><?=$d['gname'] ?></a></td>
 </tr>
 <tr>
-<th>等级</th>
+<th>等级积分</th>
 <td><?=$d['grade'] ?></td>
 </tr>
 <tr>

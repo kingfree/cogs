@@ -1,6 +1,12 @@
 <?php
 require_once("../include/header.php");
 gethead(8,"sess","");
+过滤();
+$_POST['usr']=htmlspecialchars($_POST['usr']);
+$_POST['nickname']=htmlspecialchars($_POST['nickname']);
+$_POST['realname']=htmlspecialchars($_POST['realname']);
+$_POST['email']=htmlspecialchars($_POST['email']);
+$_POST['user_style']=htmlspecialchars($_POST['user_style']);
 
 if ($_POST[action]=="edit") {
     if($_FILES['file']['tmp_name']) {
@@ -27,8 +33,7 @@ if ($_POST[action]=="edit") {
         提示("用户设置信息修改成功！", 取路径("user/panel.php"));
     } else
         异常("用户 {$_POST['usr']} 已存在！",取路径("user/panel.php"));
-}
-if ($_POST[action]=="editpwd") {
+} else if ($_POST[action]=="editpwd") {
     if ($_POST[npwd1]==$_POST[npwd2]) {
         $p=new DataAccess();
         $sql="select pwdhash,nickname from userinfo where uid={$_GET[uid]}";
@@ -43,5 +48,20 @@ if ($_POST[action]=="editpwd") {
     } else {
         异常("两次输入的密码不匹配！", 取路径("user/panel.php"));
     }
+} else if ($_POST[action]=="editpwdans") {
+    $p=new DataAccess();
+    $sql="select pwdhash,nickname from userinfo where uid={$_GET[uid]}";
+    $p->dosql($sql);
+    $d=$p->rtnrlt(0);
+    $uid=(int)$_GET['uid'];
+    if ($d['pwdhash']==encode($_POST['opwd'])) {
+        $que=htmlspecialchars($_POST['qus']);
+        $ans=encode($_POST['ans']);
+        $sql="update userinfo set pwdtipques='{$que}',pwdtipanshash='{$ans}' where uid={$uid}";
+        $p->dosql($sql);
+        提示("用户 $nickname 的密码提示问题修改成功！", 取路径("user/panel.php"));
+    } else
+        异常("旧密码不正确！", 取路径("user/panel.php"));
 }
+
 ?>

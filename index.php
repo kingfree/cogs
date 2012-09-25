@@ -88,9 +88,6 @@ $d=$p->rtnrlt($i);
 <div style="margin-right:16px;">
 <?php echo 输出文本($SET['global_index']); ?>
 </div>
-<div class='alert alert-success'>
-<?php echo 输出文本($SET['global_tail']) ?>
-</div>
 </div>
 <div class='span3'>
 <table class='table table-striped table-condensed table-bordered fixed'>
@@ -98,7 +95,7 @@ $d=$p->rtnrlt($i);
 <tr>
 <th width='12px'></th>
 <th>用户</th>
-<th width='30px'>等级</th>
+<th width='30px'>积分</th>
 <th width='28px'>题目</th>
 </tr>
 </thead>
