@@ -85,9 +85,31 @@ $d=$p->rtnrlt($i);
 <div class='alert alert-info'>
 <?=输出文本($SET['global_bulletin']); ?>
 </div>
-<div style="margin-right:16px;">
+<div>
 <?php echo 输出文本($SET['global_index']); ?>
 </div>
+<table class='table table-striped table-condensed table-bordered fixed'>
+<thead><tr>
+<th width='100px'>题目</th>
+<th width='100px'>用户</th>
+<th>结果</th>
+<th width='40px'>得分</th>
+<th width='80px'>时间</th>
+</tr></thead>
+<?php 
+$cnt=$p->dosql("select submit.sid,submit.pid,submit.uid,submit.result,submit.score,submit.accepted,submit.subtime,problem.probname,userinfo.nickname,userinfo.realname,userinfo.email from submit,problem,userinfo where submit.uid=userinfo.uid and submit.pid=problem.pid order by submit.sid desc limit $sizee");
+for($i=0;$i<$cnt;$i++) {
+$d=$p->rtnrlt($i);
+?>
+<tr>
+<td><a href='problem/problem.php?pid=<?=$d['pid']?>'><?=shortname($d['probname'])?></a></td>
+<td><a href='user/detail.php?uid=<?=$d['uid']?>'><?=gravatar::showImage($d['email']);?><?php if(有此权限("查看用户")) echo $d['realname']; else echo $d['nickname'];?></a></td>
+<td><a href='submit/code.php?id=<?=$d['sid']?>'><?=评测结果($d['result'], 20)?></a></td>
+<td><span class="<?=$d['accepted']?'ok':'no'?>"><?=$d['score'] ?></span></td>
+<td><?php echo date('H:i:s',$d['subtime']); ?></td>
+</tr>
+<?php } ?>
+</table>
 </div>
 <div class='span3'>
 <table class='table table-striped table-condensed table-bordered fixed'>

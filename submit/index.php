@@ -49,14 +49,14 @@ if(!$_GET['page']) {
 <table id="submitlist" class='table table-striped table-condensed table-bordered fiexd'>
 <thead><tr>
 <th width='40px'>SID</th>
-<th onclick="sortTable('submitlist', 1, 'int')">题目</th>
-<th onclick="sortTable('submitlist', 2, 'int')">用户</th>
-<th onclick="sortTable('submitlist', 3)">结果</th>
-<th width='40px' onclick="sortTable('submitlist', 4, 'int')">得分</th>
+<th>题目</th>
+<th>用户</th>
+<th>结果</th>
+<th width='40px'>得分</th>
 <th width='40px'>语言</th>
-<th width='60px' onclick="sortTable('submitlist', 6, 'int')">用时</th>
-<th width='80px' onclick="sortTable('submitlist', 7, 'int')">内存</th>
-<th width='140px' onclick="sortTable('submitlist', 8)">时间</th>
+<th width='60px'>用时</th>
+<th width='80px'>内存</th>
+<th width='150px'>时间</th>
 </tr></thead>
 <?php if (!$err)
 for ($i=$st;$i<$cnt && $i<$st+$SET['style_pagesize'] ;$i++) {
