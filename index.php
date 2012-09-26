@@ -99,16 +99,16 @@ $d=$p->rtnrlt($i);
 <div class='span8'>
 <table class='table table-striped table-condensed table-bordered fixed'>
 <thead><tr>
-<th width='100px'>题目</th>
+<th>题目</th>
 <th width='100px'>用户</th>
-<th>评测结果</th>
-<th width='40px'>得分</th>
-<th width='80px'>提交时间</th>
+<th width='90px'>评测结果</th>
+<th width='30px'>得分</th>
+<th width='70px'>提交时间</th>
 </tr></thead>
 <?php 
-$cnt=$p->dosql("select submit.sid,submit.pid,submit.uid,submit.result,submit.score,submit.accepted,submit.subtime,problem.probname,userinfo.nickname,userinfo.realname,userinfo.email from submit,problem,userinfo where submit.score>0 and submit.uid=userinfo.uid and submit.pid=problem.pid order by submit.sid desc limit $sizee");
+$cnt=$p->dosql("select submit.sid,submit.pid,submit.uid,submit.result,submit.score,submit.accepted,submit.subtime,problem.probname,userinfo.nickname,userinfo.realname,userinfo.email from submit,problem,userinfo where submit.score>={$SET['index_submit_score']} and submit.uid=userinfo.uid and submit.pid=problem.pid order by submit.sid desc limit $sizee");
 for($i=0;$i<$cnt;$i++) {
-$d=$p->rtnrlt($i);
+    $d=$p->rtnrlt($i);
 ?>
 <tr>
 <td><a href='problem/problem.php?pid=<?=$d['pid']?>'><?=shortname($d['probname'])?></a></td>

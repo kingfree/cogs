@@ -306,14 +306,17 @@ padding: 10px;
 #index a:link, #index a:visited {
     color: #08c;
     text-decoration: none;
+    text-shadow: 2px 4px 8px #fff;
 }
 
 #index a:hover {
-    color: #00f;
+    color: #08c;
     text-decoration: none;
+    text-shadow: 2px 4px 8px #ccf;
 }
 
 #index a:active {
-    color: #6495ed;
+    color: #fff;
     text-decoration: none;
+    text-shadow: 2px 4px 8px #678;
 }

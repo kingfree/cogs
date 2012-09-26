@@ -68,7 +68,7 @@ $("#zhuce").submit(function() {
     return false;
   }
   $.get("checkname.php",{name: t},function(txt){
-    if(txt) {
+    if(txt != 0) {
       alert("用户名已被注册！");
       return false;
     }
