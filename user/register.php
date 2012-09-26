@@ -96,9 +96,9 @@ $("#zhuce").submit(function() {
     return false;
   }
   t = $("#realname").val();
-  e = /(\S{0,20})/;
+  e = /(\S{2,20})/;
   if(!e.test(t)) {
-    alert("真实姓名长度必须在[0,20]中。");
+    alert("真实姓名长度必须在[2,20]中。");
     return false;
   }
   t = $("#passwordtip").val();
