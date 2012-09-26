@@ -296,3 +296,24 @@ padding: 10px;
     padding: 4px 2px 4px 2px;
 }
 
+#index {
+    text-align: center;
+    font-size: 26px;
+    line-height: 34px;
+    font-weight: bold;
+}
+
+#index a:link, #index a:visited {
+    color: #08c;
+    text-decoration: none;
+}
+
+#index a:hover {
+    color: #00f;
+    text-decoration: none;
+}
+
+#index a:active {
+    color: #6495ed;
+    text-decoration: none;
+}

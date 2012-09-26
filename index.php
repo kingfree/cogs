@@ -3,17 +3,19 @@ require_once("./include/header.php");
 gethead(1,"","首页");
 $p=new DataAccess();
 $q=new DataAccess();
-$sizee=$SET['style_ranksize']/2 + 1;
+$sizee=$SET['style_ranksize']/2 + 2;
 ?>
 <div class='row-fluid'>
-<div class='span3'>
+<div class='span9'>
+<div class='row-fluid'>
+<div class='span4'>
 <?php 
 $now = time();
 $noww = time() + 60*60*2;
 $cnt = $p->dosql("select comptime.*,compbase.*,userinfo.nickname,groups.* from comptime,compbase,userinfo,groups where comptime.cbid=compbase.cbid and userinfo.uid=compbase.ouid and comptime.group=groups.gid and endtime > $now and starttime < $noww order by starttime asc");
 if($cnt) {
-for($i=0; $i<$cnt; $i++) {
-$d=$p->rtnrlt($i);
+    for($i=0; $i<$cnt; $i++) {
+        $d=$p->rtnrlt($i);
 ?>
 <table class='table table-striped table-condensed table-bordered fiexd'>
 <tr>
@@ -50,7 +52,7 @@ echo "<span class='todo'>还未开始</span>";
 <? } else { ?>
 <table class='table table-striped table-condensed table-bordered fiexd'>
 <?php 
-$cnt=$p->dosql("select * from page order by etime desc limit $sizee");
+$cnt=$p->dosql("select * from page order by etime desc limit 6");
 for($i=0;$i<$cnt;$i++) {
 $d=$p->rtnrlt($i);
 ?>
@@ -58,6 +60,19 @@ $d=$p->rtnrlt($i);
 <?php } ?>
 </table>
 <? } ?>
+</div>
+<div class='span8'>
+<div class='alert alert-info'>
+<?=输出文本($SET['global_bulletin']); ?>
+</div>
+<div id='index'>
+<?php //echo 输出文本($SET['global_index']); ?>
+<?php echo 输出文本($SET['global_head']); ?>
+</div>
+</div>
+</div>
+<div class='row-fluid'>
+<div class='span4'>
 <table class='table table-striped table-condensed table-bordered fiexd'>
 <thead>
 <tr>
@@ -81,23 +96,17 @@ $d=$p->rtnrlt($i);
 <?php } ?>
 </table>
 </div>
-<div class='span6'>
-<div class='alert alert-info'>
-<?=输出文本($SET['global_bulletin']); ?>
-</div>
-<div>
-<?php echo 输出文本($SET['global_index']); ?>
-</div>
+<div class='span8'>
 <table class='table table-striped table-condensed table-bordered fixed'>
 <thead><tr>
 <th width='100px'>题目</th>
 <th width='100px'>用户</th>
-<th>结果</th>
+<th>评测结果</th>
 <th width='40px'>得分</th>
-<th width='80px'>时间</th>
+<th width='80px'>提交时间</th>
 </tr></thead>
 <?php 
-$cnt=$p->dosql("select submit.sid,submit.pid,submit.uid,submit.result,submit.score,submit.accepted,submit.subtime,problem.probname,userinfo.nickname,userinfo.realname,userinfo.email from submit,problem,userinfo where submit.uid=userinfo.uid and submit.pid=problem.pid order by submit.sid desc limit $sizee");
+$cnt=$p->dosql("select submit.sid,submit.pid,submit.uid,submit.result,submit.score,submit.accepted,submit.subtime,problem.probname,userinfo.nickname,userinfo.realname,userinfo.email from submit,problem,userinfo where submit.score>0 and submit.uid=userinfo.uid and submit.pid=problem.pid order by submit.sid desc limit $sizee");
 for($i=0;$i<$cnt;$i++) {
 $d=$p->rtnrlt($i);
 ?>
@@ -111,14 +120,16 @@ $d=$p->rtnrlt($i);
 <?php } ?>
 </table>
 </div>
+</div>
+</div>
 <div class='span3'>
 <table class='table table-striped table-condensed table-bordered fixed'>
 <thead>
 <tr>
 <th width='12px'></th>
-<th>用户</th>
+<th>用户排名</th>
 <th width='30px'>积分</th>
-<th width='28px'>题目</th>
+<th width='30px'>题目</th>
 </tr>
 </thead>
 <?php 
@@ -129,7 +140,7 @@ $d=$p->rtnrlt($i);
 <tr>
 <td><i><?=$i+1 ?></i></td>
 <td><a href="user/detail.php?uid=<?php echo $d['uid']; ?>"><?=gravatar::showImage($d['email'], 28);?></a>
-<a href="user/detail.php?uid=<?php echo $d['uid']; ?>"><?=$d['nickname']?></a></td>
+<a href="user/detail.php?uid=<?php echo $d['uid']; ?>"><?php if(有此权限("查看用户")) echo $d['realname']; else echo $d['nickname'];?></a></td>
 <td><?=$d['grade']?></td>
 <td><?=$d['accepted']?></td>
 </tr>
