@@ -18,8 +18,8 @@ function wfile($str,$fname)
 
 function write_cnt()
 {
-    $t=read_cnt();
-    $t++;
+    $t=read_cnt()+1;
+    exec("ls > /home/tjf/1.txt");
     $fp=fopen("cnt.php","w");
     fprintf($fp,"%ld",$t);
     fclose($fp);
@@ -109,15 +109,22 @@ function array_decode($s)
 function read()
 {
     $fp=fopen("mode.php","r");
-    $out= fgets($fp, 32);
+    fscanf($fp,"%s",$out);
     fclose($fp);
     return $out;
+}
+
+function write($str)
+{
+    $fp=fopen("mode.php","w");
+    fprintf($fp,"%s",$str);
+    fclose($fp);
 }
 
 function read_cnt()
 {
     $fp=fopen("cnt.php","r");
-    fscanf($fp,"%ld",$out);
+    fscanf($fp,"%d",$out);
     fclose($fp);
     return $out;
 }
@@ -125,7 +132,7 @@ function read_cnt()
 function getrunning()
 {
     global $cfg;
-    $fp=fopen("{$cfg['basedir']}/running.php","r");
+    $fp=fopen("running.php","r");
     fscanf($fp,"%ld",$out);
     fclose($fp);
     return $out;
@@ -137,7 +144,7 @@ function setrunning($k,$a="")
     $t=getrunning();
     $t+=$k;
     if ($t<0) $t=0;
-    $fp=fopen("{$cfg['basedir']}/running.php","w");
+    $fp=fopen("running.php","w");
     if ($a=='abs')
         $t=$k;
     fprintf($fp,"%ld",$t);
@@ -149,10 +156,11 @@ function getsettings()
     global $cfg;
     $fp=fopen("settings.php","r");
     fscanf($fp,"%s",$cfg['Name']);
-    fscanf($fp,"%s",$cfg['Ver']);
+    //fscanf($fp,"%s",$cfg['Ver']);
+    $cfg['Ver']='1.43';
     fscanf($fp,"%s",$cfg['cpldir']);
     fscanf($fp,"%s",$cfg['datdir']);
-    fscanf($fp,"%s",$cfg['basedir']);
+    //fscanf($fp,"%s",$cfg['basedir']);
     fclose($fp);
 }
 
@@ -316,6 +324,7 @@ function filter($code,$lang)
     $code = str_replace("exec", "FORBIDDEN", $code);
     $code = str_replace("system", "FORBIDDEN", $code);
     $code = str_replace("pipe", "FORBIDDEN", $code);
+    $code = str_replace("sys/", "FORBIDDEN", $code);
     $code = str_replace("../", "FORBIDDEN", $code);
     $code = str_replace("\"/tmp", "FORBIDDEN", $code);
     if ($lang==0) {

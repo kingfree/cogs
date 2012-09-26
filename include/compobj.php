@@ -190,17 +190,8 @@ class Compiler
     public function unlock()
     {
         $s['uid']=$this->info['uid'];
-        for($i=0; $i<9; $i++) {
-            $s['action']="state";
-            $tmp=httpsocket($this->gds,$s);
-            $arra=array_decode($tmp);
-            if($arra['state']=="free") {
-                break;
-            } else {
-                $s['action']="unlock";
-                httpsocket($this->gds,$s);
-            }
-        }
+        $s['action']="unlock";
+        httpsocket($this->gds,$s);
     }
 
     public function lock()

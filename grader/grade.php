@@ -5,19 +5,11 @@ global $compiledir,$datadir;
 $compiledir=$cfg['cpldir'];
 $datadir=$cfg['datdir'];
 
-function write($str)
-{
-    $fp=fopen("mode.php","w");
-    fputs($fp,$str,strlen($str));
-    fclose($fp);
-}
-
 function getdir($query)
 {
     global $compiledir,$datadir;
     chdir($compiledir);
-    if (!file_exists($query['uid']))
-    {
+    if (!file_exists($query['uid'])) {
         mkdir($query['uid']);
         chmod($query['uid'],0775);
     }
@@ -26,8 +18,7 @@ function getdir($query)
 
 function getcompilecommand($query)
 {
-    switch ($query['language'])
-    {
+    switch ($query['language']) {
         case 0:
             return "fpc {$query['src']} -So -XS -v0 -O1 -o\"{$query['pname']}\" 2>&1";
         case 1:
@@ -231,9 +222,9 @@ function grade($query)
 }
 
 $now=read();
+$stt=read();
 
-switch ($query['action'])
-{
+switch ($query['action']) {
     case "state":
         $tmp['state']=$now;
         $tmp['name']=$cfg['Name'];
@@ -250,25 +241,37 @@ switch ($query['action'])
         echo array_encode($tmp);
         break;
     case "lock":
-        write("locked");
+        do {
+            write("locked");
+            $stt=read();
+        } while($stt != "locked");
         $tmp['state']="successful";
         echo array_encode($tmp);
         break;
     case "unlock":
-        write("free");
-        write_cnt();
+        do {
+            write("free");
+            write_cnt();
+            $run=getrunning();
+        } while($run > 0);
         chdir($compiledir);
         deldir($query['uid']);
         $tmp['state']="successful";
         echo array_encode($tmp);
         break;
     case "start":
-        write("free");
+        do {
+            write("free");
+            $stt=read();
+        } while($stt != "free");
         $tmp['state']="successful";
         echo array_encode($tmp);
         break;
     case "shutdown":
-        write("closed");
+        do {
+            write("closed");
+            $stt=read();
+        } while($stt != "closed");
         $tmp['state']="successful";
         echo array_encode($tmp);
         break;

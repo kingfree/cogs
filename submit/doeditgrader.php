@@ -30,7 +30,10 @@ if ($_REQUEST['action']=='start')
 	$d=$p->rtnrlt(0);
 	$s['action']="start";
 	httpsocket($d['address'],$s);
-    提示("启动评测机 {$_GET[grid]} 成功！", 取路径("submit/graderlist.php"));
+    if($s['state'] == "successful")
+        提示("启动评测机 {$_GET[grid]} 成功！", 取路径("submit/graderlist.php"));
+    else
+        异常("启动评测机 {$_GET[grid]} 失败！", 取路径("submit/graderlist.php"));
 }
 
 if ($_REQUEST['action']=='stop')
@@ -41,6 +44,9 @@ if ($_REQUEST['action']=='stop')
 	$d=$p->rtnrlt(0);
 	$s['action']="shutdown";
 	httpsocket($d['address'],$s);
-    提示("关闭评测机 {$_GET[grid]} 成功！", 取路径("submit/graderlist.php"));
+    if($s['state'] == "successful")
+        提示("关闭评测机 {$_GET[grid]} 成功！", 取路径("submit/graderlist.php"));
+    else
+        异常("关闭评测机 {$_GET[grid]} 失败！", 取路径("submit/graderlist.php"));
 }
 ?>

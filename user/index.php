@@ -136,7 +136,7 @@ function okdel(name) {
     <td ><?=$d['grade'] ?></td>
     <? if(有此权限('查看用户')) { ?>
     <td>
-    <a href="loginlog.php?uid=<?=$d['uid'] ?>"><?=$d['lastip'] ?></a>
+    <a href="http://www.youdao.com/smartresult-xml/search.s?type=ip&q=<?=$d['lastip'] ?>"><?=$d['lastip'] ?></a>
     </td><? } ?>
     <? if(有此权限('修改用户')) { ?><td>
     <? if(有此权限('修改权限')) { ?>
