@@ -101,4 +101,70 @@ HTML("</div>");
 HTML("</div>");
 HTML("</div>");
 }
+
+function Navigation_IE($p) {
+    global $SET;
+    $navbar="";
+    if($_SESSION['style']) $navbar="navbar-inverse";
+    HTML("<div id='nav' class='navbar $navbar'>");
+    HTML("<div class='navbar-inner'>");
+    HTML("<div class='container-fluid'>");
+    HTML("<a href='".路径("index.php")."' class='brand'>COGS</a>");
+    HTML("<a class='btn btn-navbar' data-toggle='collapse' data-target='.nav-collapse'><span class='icon-bar'></span><span class='icon-bar'></span><span class='icon-bar'></span></a>");
+    HTML("<div class='nav-collapse'>");
+    HTML("<ul class='nav'>");
+    if(strpos($SET['cur'],"comment")) $active['comment']='active';
+    else if(strpos($SET['cur'],"contest")) $active['contest']='active';
+    else if(strpos($SET['cur'],"problem")) $active['problem']='active';
+    else if(strpos($SET['cur'],"submit")) $active['submit']='active';
+    else if(strpos($SET['cur'],"page")) $active['page']='active';
+    else if(strpos($SET['cur'],"user")) $active['user']='active';
+    else if(strpos($SET['cur'],"docs")) $active['docs']='active';
+    else if(strpos($SET['cur'],"admin")) $active['admin']='active';
+    HTML("<li class='{$active['problem']}'><a href='".路径("problem/index.php")."'>题目</a></li>");
+    HTML("<li class='{$active['submit']}'><a href='".路径("submit/index.php")."'>记录</a></li>");
+    $context = "比赛";
+    $now = time();
+    $cnt2 = $p->dosql("select ctid from comptime where starttime < $now and endtime > $now");
+    if($cnt2) $context .= "<span class='doing'>($cnt2)</span>";
+    $cnt1 = $p->dosql("select ctid from comptime where starttime > $now and endtime > $now");
+    if($cnt1) $context .= "<span class='todo'>($cnt1)</span>";
+    HTML("<li class='{$active['contest']}'><a href='".路径("contest/index.php")."'>$context</a></li>");
+    HTML("<li class='{$active['page']}'><a href='".路径("page/index.php")."'>页面</a></li>");
+    HTML("<li class='{$active['user']}'><a href='".路径("user/index.php")."'>用户</a></li>");
+    HTML("</ul>");
+    HTML("<ul class='nav pull-right'>");
+    HTML("<li class='{$active['docs']}'><a href='".路径("docs/index.php")."'>帮助</a></li>");
+    if(有此权限('可以管理'))
+        HTML("<li class='{$active['admin']}'><a href='".路径("admin/index.php")."'>管理</a></li>");
+    HTML("<li class='divider-vertical'></li>");
+    HTML("<li class='dropdown'>");
+    if($uid = (int) $_SESSION['ID']) {
+        $sql="select * from userinfo where uid='{$uid}'";
+        $p->dosql($sql);
+        $d=$p->rtnrlt(0);
+        $nickname = $d['nickname'];
+        $cnt1 = $p->dosql("select mid from mail where readed = 0 and toid = {$uid}");
+        if($cnt1 > 0) $mails .= "<span class='doing'>($cnt1)</span>";
+        $cnt1 = $p->dosql("select mid from mail where readed = 0 and fromid = {$uid}");
+        if($cnt1 > 0) $mails .= "<span class='todo'>($cnt1)</span>";
+    } else $nickname = "登录";
+    if($uid = (int) $_SESSION['ID']) {
+    HTML("<li class=''><a href='".路径("user/detail.php?uid={$uid}")."'>{$nickname}{$mails}</a></li>");
+    //HTML("<li class=''><a href='".路径("user/panel.php")."'>设置</a></li>");
+    //HTML("<li class=''><a href='".路径("mail/index.php")."'>信件{$mails}</a></li>");
+    HTML("<li class=''><a href='".路径("user/dologout.php")."'>退出</a></li>");
+    } else {
+    HTML("<li class=''><a href='".路径("user/login.php")."'>登录</a></li>");
+    HTML("<li class=''><a href='".路径("user/register.php")."'>注册</a></li>");
+}
+HTML("</ul>");
+HTML("</li>");
+HTML("</ul>");
+HTML("</div>");
+HTML("</div>");
+HTML("</div>");
+HTML("</div>");
+}
+
 ?>

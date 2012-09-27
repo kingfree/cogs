@@ -40,6 +40,9 @@ function gethead($head,$check,$title,$userid=0) {
 <script type="text/javascript" src="/jQuery/jquery-1.8.0.min.js"></script>
 <script type="text/javascript" src="<?=路径("include/sortTable.js")?>"></script>
 <script type="text/javascript" src="/Bootstrap/js/bootstrap.min.js"></script>
+<!--[if IE 6]>
+<link href="/Bootstrap-IE6/ie6.min.css" type="text/css" rel="stylesheet">
+<![endif]-->
 <title><?php echo $title." - ".$SET['global_sitename'] ?></title>
 </head>
 <body>
@@ -52,7 +55,10 @@ else if($check=="advadmin") $check="超级用户";
 if(!有此权限($check)) 异常("没有权限 $check !");
 
 include(路径("include/navigation.php"));
-if($head != 8) Navigation($p);
+if($head != 8) {
+    if(strpos($_SERVER['HTTP_USER_AGENT'], 'MSIE 6.0') == false) Navigation($p);
+    else Navigation_IE($p);
+}
 ?>
 
 <div id="body" class='container-fluid'>
