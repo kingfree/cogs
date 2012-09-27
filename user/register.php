@@ -12,11 +12,11 @@ if ($_GET[accept]==1) {
 <table class='table-form'>
 <tr>
 <th width='100px'>用户名称</th>
-<td><input name="usr" type="text" id="usr" /> 4～24位数字或字母</td>
+<td><input name="usr" type="text" id="usr" /> 4~24位，遵循变量名命名规范</td>
 </tr>
 <tr>
 <th>密码</th>
-<td><input name="pwd" type="password" id="pwd"></td>
+<td><input name="pwd" type="password" id="pwd"> 4～24位，加密存储</td>
 </tr>
 <tr>
 <th>重复密码</th>
@@ -24,7 +24,7 @@ if ($_GET[accept]==1) {
 </tr>
 <tr>
 <th>用户昵称</th>
-<td><input name="nickname" type="text" id="nickname" /> 2～10位可显示字符</td>
+<td><input name="nickname" type="text" id="nickname" /> 2～10位，汉字、字母、假名、谚文等可显示字符</td>
 </tr>
 <tr>
 <th>电子邮件</th>
@@ -32,15 +32,15 @@ if ($_GET[accept]==1) {
 </tr>
 <tr>
 <th>提示问题</th>
-<td><input name="passwordtip" type="text" id="passwordtip" /> <b>不能更改！</b> 用于忘记密码时找回密码（4～64位字符）</td>
+<td><input name="passwordtip" type="text" id="passwordtip" /> 6～64位可显示字符，用于忘记密码时找回密码</td>
 </tr>
 <tr>
 <th>问题答案</th>
-<td><input name="passwordtipans" type="text" id="passwordtipans" /> 上述问题的答案（4～64位字符）</td>
+<td><input name="passwordtipans" type="text" id="passwordtipans" /> 4～64位，上述问题的答案，加密存储</td>
 </tr>
 <tr>
 <th>真实姓名</th>
-<td><input name="realname" type="text" id="realname"/> 4～64位字符</td>
+<td><input name="realname" type="text" id="realname"/> 2～8位汉字字符，不会公开</td>
 </tr>
 <tr>
 <th>个人介绍</th>
@@ -51,7 +51,7 @@ if ($_GET[accept]==1) {
 <td>
 <input name="VerifyCode" type="text" id="VerifyCode" size="8" maxlength="4" />
 <img src="../include/verifycode.php" />
-请输入这个只含有数字和字母的4位验证码以确认你是人
+请输入这个只含有数字和字母的4位验证码，以确认你是人
 </td>
 </tr>
 <tr><td></td><td>
@@ -70,6 +70,12 @@ $("#zhuce").submit(function() {
   $.get("checkname.php",{name: t},function(txt){
     if(txt != 0) {
       alert("用户名已被注册！");
+      return false;
+    }
+  });
+  $.get("checkname.php",{code: $("#VerifyCode").val()},function(txt) {
+    if(txt != 'right') {
+      alert("验证码 " + txt + " 错误，请一律小写。");
       return false;
     }
   });
@@ -96,9 +102,9 @@ $("#zhuce").submit(function() {
     return false;
   }
   t = $("#realname").val();
-  e = /(\S{2,20})/;
+  e = /(\S{2,8})/;
   if(!e.test(t)) {
-    alert("真实姓名长度必须在[2,20]中。");
+    alert("真实姓名长度必须在[2,8]中，应该是汉字。");
     return false;
   }
   t = $("#passwordtip").val();
@@ -113,12 +119,6 @@ $("#zhuce").submit(function() {
     alert("提示问题答案长度必须在[2,64]中。");
     return false;
   }
-  $.get("checkname.php",{code: $("#VerifyCode").val()},function(txt){
-    if(txt == 0) {
-      alert("验证码错误，请一律小写。");
-      return false;
-    }
-  });
   return true;
 });
 </script>

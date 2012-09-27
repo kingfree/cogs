@@ -8,6 +8,8 @@ $_POST['realname']=htmlspecialchars($_POST['realname']);
 $_POST['email']=htmlspecialchars($_POST['email']);
 $_POST['user_style']=htmlspecialchars($_POST['user_style']);
 
+if($_POST['VerifyCode'] != $_SESSION["IMGCODE"])
+异常("验证码错误！",取路径("user/register.php?accept=1"));
 $p=new DataAccess();
 $LIB->cls_reg();
 $rc=new RegisterCheck;
