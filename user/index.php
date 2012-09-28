@@ -150,7 +150,7 @@ function okdel(name) {
     }
 ?>
 </table>
-<? 分页($cnt, $_GET['page'], '?key='.$_GET['key'].'&sc'.$_GET['sc'].'&rank='.$_GET['rank'].'&caid='.$_GET['caid'].'&'); ?>
+<? 分页($cnt, $_GET['page'], '?key='.$_GET['key'].'&sc'.$_GET['sc'].'&rank='.$_GET['rank'].'&order='.$_GET['order'].'&caid='.$_GET['caid'].'&'); ?>
 </div>
 <?php
 include_once("../include/footer.php");

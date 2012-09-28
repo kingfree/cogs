@@ -15,3 +15,7 @@ KindEditor.ready(function(K) {
     });
 });
 </script>
+<!--<script type="text/javascript">
+    var ue = new UE.ui.Editor();
+    ue.render('<?=$edname?>');
+</script>-->

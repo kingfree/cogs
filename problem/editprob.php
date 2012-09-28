@@ -1,6 +1,6 @@
 <?php
 require_once("../include/header.php");
-gethead(1,"修改题目","修改题目");
+gethead(7,"修改题目","修改题目");
 $LIB->editor("detail");
 $LIB->htmldom();
 ?>
@@ -489,5 +489,6 @@ for ($j=0;$j<$c;$j++) {
 </div>
 </div>
 <?php
+//$LIB->editor("detail");
 include_once("../include/footer.php");
 ?>

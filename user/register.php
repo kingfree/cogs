@@ -59,7 +59,7 @@ if ($_GET[accept]==1) {
 </td></tr>
 </table>
 </form>
-<script language="javascript">
+<!--<script language="javascript">
 $("#zhuce").submit(function() {
   var t = $("#usr").val();
   var e = /([a-z0-9][_a-z0-9]{3,23})/;
@@ -121,7 +121,7 @@ $("#zhuce").submit(function() {
   }
   return true;
 });
-</script>
+</script>-->
 <?php
 } else {
 ?>

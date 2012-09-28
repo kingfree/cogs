@@ -101,8 +101,8 @@ $d=$p->rtnrlt($i);
 <thead><tr>
 <th>题目</th>
 <th width='100px'>用户</th>
-<th width='90px'>评测结果</th>
-<th width='30px'>得分</th>
+<th width='95px'>评测结果</th>
+<th width='40px'>得分</th>
 <th width='70px'>提交时间</th>
 </tr></thead>
 <?php 
@@ -113,7 +113,7 @@ for($i=0;$i<$cnt;$i++) {
 <tr>
 <td><a href='problem/problem.php?pid=<?=$d['pid']?>'><?=shortname($d['probname'])?></a></td>
 <td><a href='user/detail.php?uid=<?=$d['uid']?>'><?=gravatar::showImage($d['email']);?><?php if(有此权限("查看用户")) echo $d['realname']; else echo $d['nickname'];?></a></td>
-<td><a href='submit/code.php?id=<?=$d['sid']?>'><?=评测结果($d['result'], 20)?></a></td>
+<td><a href='submit/code.php?id=<?=$d['sid']?>'><?=评测结果($d['result'], 10)?></a></td>
 <td><span class="<?=$d['accepted']?'ok':'no'?>"><?=$d['score'] ?></span></td>
 <td><?php echo date('H:i:s',$d['subtime']); ?></td>
 </tr>
@@ -128,8 +128,8 @@ for($i=0;$i<$cnt;$i++) {
 <tr>
 <th width='12px'></th>
 <th>用户排名</th>
-<th width='30px'>积分</th>
-<th width='30px'>题目</th>
+<th width='40px'>积分</th>
+<th width='40px'>题目</th>
 </tr>
 </thead>
 <?php 
