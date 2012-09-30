@@ -3,7 +3,7 @@ require_once("./include/header.php");
 gethead(1,"","首页");
 $p=new DataAccess();
 $q=new DataAccess();
-$sizee=$SET['style_ranksize']/2 + 2;
+$sizee=$SET['style_ranksize'] - 7;
 ?>
 <div class='row-fluid'>
 <div class='span9'>
