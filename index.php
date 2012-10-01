@@ -83,7 +83,7 @@ $d=$p->rtnrlt($i);
 </thead>
 </tr>
 <?php 
-$cnt=$p->dosql("select * from problem where submitable=1 order by addtime desc limit $sizee");
+$cnt=$p->dosql("select * from problem where submitable=1 order by addtime desc limit {$SET['index_problem_size']}");
 for($i=0;$i<$cnt;$i++) {
 $d=$p->rtnrlt($i);
 ?>
@@ -106,7 +106,7 @@ $d=$p->rtnrlt($i);
 <th width='70px'>提交时间</th>
 </tr></thead>
 <?php 
-$cnt=$p->dosql("select submit.sid,submit.pid,submit.uid,submit.result,submit.score,submit.accepted,submit.subtime,problem.probname,userinfo.nickname,userinfo.realname,userinfo.email from submit,problem,userinfo where submit.score>={$SET['index_submit_score']} and submit.uid=userinfo.uid and submit.pid=problem.pid order by submit.sid desc limit $sizee");
+$cnt=$p->dosql("select submit.sid,submit.pid,submit.uid,submit.result,submit.score,submit.accepted,submit.subtime,problem.probname,userinfo.nickname,userinfo.realname,userinfo.email from submit,problem,userinfo where submit.score>={$SET['index_submit_score']} and submit.uid=userinfo.uid and submit.pid=problem.pid order by submit.sid desc limit {$SET['index_submit_size']}");
 for($i=0;$i<$cnt;$i++) {
     $d=$p->rtnrlt($i);
 ?>
