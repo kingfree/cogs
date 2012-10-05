@@ -9,15 +9,11 @@ for ($i=0;$i<$cnt;$i++) {
 
 $SET['cur']=$_SERVER['SCRIPT_FILENAME'];
 $SET['global_root']=$cfg['dir_root'];
-$SET['global_sitename']="COGS";
 $str=$_SERVER['DOCUMENT_ROOT'];
 if($str[strlen($str)-1] == '/') $hrl = ''; else $hrl = '/';
 $SET['base']=$_SERVER['DOCUMENT_ROOT'].$hrl.$SET['global_root'];
 $SET['URI']=base64_encode($_SERVER['REQUEST_URI']);
 
-?>
-
-<?php
 $cfg['Version']='2.6.4.0';
 ?>
 

@@ -1,7 +1,7 @@
 <?php
-error_reporting(E_ALL);
 require_once("lib.php");
 $LIB->cls_getsettings();
+   global $SET,$cfg,$LIB;
 if(!($_SESSION['ID'])) {
     if($_COOKIE['cogs_usr'] && $_COOKIE['cogs_pwd_hash']) {
         $p=new DataAccess();
@@ -13,6 +13,11 @@ if(!($_SESSION['ID'])) {
             $d=$p->rtnrlt(0);
             if($pwd==$d['pwdhash']) {
                 $LIB->get_userinfo($d['uid']);
+                $q=new DataAccess();
+                $sql="UPDATE `userinfo` SET `lastip` = '{$_SERVER['REMOTE_ADDR']}' WHERE `uid` ={$d['uid']}";
+                $q->dosql($sql);
+                $sql="insert into login(uid,ua,ip,ltime,version) values({$d['uid']},'".mysql_real_escape_string($_SERVER['HTTP_USER_AGENT'])."','{$_SERVER['REMOTE_ADDR']}',NOW(),'".mysql_real_escape_string($cfg['dir_root'])."')";
+                if($SET['login_log']) $q->dosql($sql);
             }
         }
     }
@@ -60,16 +65,16 @@ function gethead($head,$check,$title,$userid=0) {
 <body>
 <div id="alltext">
 <?
-$p=new DataAccess();
 if($check=="sess") $check="普通用户";
 else if($check=="admin") $check="管理用户";
 else if($check=="advadmin") $check="超级用户";
 if(!有此权限($check)) 异常("没有权限 $check !");
 
-include(路径("include/navigation.php"));
+$pi=new DataAccess();
+require_once(路径("include/navigation.php"));
 if($head != 8) {
-    if(strpos($_SERVER['HTTP_USER_AGENT'], 'MSIE 6.0') == false) Navigation($p);
-    else Navigation_IE($p);
+    if(strpos($_SERVER['HTTP_USER_AGENT'], 'MSIE') == false) Navigation($pi);
+    else Navigation_IE($pi);
 }
 ?>
 

@@ -9,7 +9,7 @@ global $Query_Times,$SET,$cfg,$time_Ls,$LIB;
 class lib {
     public function cls_getsettings() {
         global $SET,$cfg;
-        require_once("settings.php");
+        require_once("sets.php");
     }
     public function cls_reg() {
         require_once("registercheck.php");
