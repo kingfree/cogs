@@ -1,16 +1,29 @@
 <?php
 require_once("../include/header.php");
-gethead(1,"","比赛题目");
-$LIB->mathjax();
 $uid = (int) ($_GET['uid'] ? $_GET['uid'] : $_SESSION['ID']);
+$pid = (int) $_GET['pid'];
+$ctid = (int) $_GET['ctid'];
 $p=new DataAccess();
-$r=new DataAccess();
-$sql="select * from problem where pid={$_GET[pid]}";
+if(!$pid && $ctid) {
+    $sql="select compbase.cname,compbase.contains,comptime.starttime,comptime.endtime,comptime.showscore,comptime.intro,groups.* from comptime,compbase,groups where comptime.cbid=compbase.cbid and comptime.ctid={$ctid} and comptime.group=groups.gid";
+    $cnt=$p->dosql($sql);
+    if ($cnt) {
+        $d=$p->rtnrlt(0);
+        $contains=$d['contains'];
+    } else 异常("未查询到记录！",取路径("contest/index.php"));
+    if (time()<$d['starttime'] && !有此权限('查看比赛')) 
+        异常("比赛还未开始，题目暂不公布。",取路径("contest/index.php"));
+    else {
+        $pbs=explode(":",$contains);
+        $pid=(int) $pbs[0];
+    }
+}
+$sql="select * from problem where pid={$pid}";
 $cnt=$p->dosql($sql);
 if ($cnt) {
     $d=$p->rtnrlt(0);
     $q=new DataAccess();
-    $sql="select cname,starttime,endtime,contains,intro,groups.* from compbase,comptime,groups where comptime.cbid=compbase.cbid and comptime.ctid={$_GET[ctid]} and comptime.group=groups.gid";
+    $sql="select cname,starttime,endtime,contains,intro,groups.* from compbase,comptime,groups where comptime.cbid=compbase.cbid and comptime.ctid={$ctid} and comptime.group=groups.gid";
     $c=$q->dosql($sql);
     $e=$q->rtnrlt(0);
     
@@ -30,7 +43,7 @@ if ($cnt) {
     $pbs=explode(":",$e['contains']);
     $pb=0;
     foreach($pbs as $k=>$v) {
-        if ($v==$_GET['pid'])
+        if ($v==$pid)
             $pb=1;
     }
     if (!有此权限('查看比赛')) {
@@ -42,6 +55,8 @@ if ($cnt) {
             $uid = $_SESSION['ID'];
     }
 } else 异常("未查询到记录！",取路径("contest/index.php"));
+gethead(1,"","{$e['cname']} - {$d['pid']}. {$d['probname']}");
+$LIB->mathjax();
 ?>
 
 <div class='row-fluid'>
@@ -106,7 +121,8 @@ if(有此权限('查看比赛') || time()>$e['endtime']) echo "<a href='report.p
 <th>得分</th>
 </tr>
 <?
-$sql="select * from compscore,userinfo where userinfo.uid=compscore.uid and compscore.pid={$_GET['pid']} and compscore.ctid={$_GET[ctid]} order by compscore.score desc, compscore.runtime asc, compscore.memory asc";
+$r=new DataAccess();
+$sql="select * from compscore,userinfo where userinfo.uid=compscore.uid and compscore.pid={$pid} and compscore.ctid={$ctid} order by compscore.score desc, compscore.runtime asc, compscore.memory asc";
 $cnt=$r->dosql($sql);
 for ($i=0;$i<$cnt;$i++) {
     $f=$r->rtnrlt($i);
@@ -160,12 +176,12 @@ if($cnt) {
         $r->dosql($sql);
         $f=$r->rtnrlt(0);
         $pname=$f['probname'];
-        $sql="select * from compscore where uid='{$uid}' and compscore.pid={$v} and compscore.ctid={$_GET[ctid]}";
+        $sql="select * from compscore where uid='{$uid}' and compscore.pid={$v} and compscore.ctid={$ctid}";
         $cnt=$r->dosql($sql);
         if($cnt) $f=$r->rtnrlt(0);
 ?>
-<li class="<?=($v == $_GET['pid'])?"active":""?>">
-<a href="problem.php?pid=<?=$v?>&ctid=<?=$_GET['ctid']?>&uid=<?=$uid?>">
+<li class="<?=($v == $pid)?"active":""?>">
+<a href="problem.php?pid=<?=$v?>&ctid=<?=$ctid?>&uid=<?=$uid?>">
 <? echo $ppid . ". "; $ppid++; echo shortname($pname); ?></a>
 </li>
 <?  } ?>

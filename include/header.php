@@ -32,6 +32,13 @@ function gethead($head,$check,$title,$userid=0) {
 <!DOCTYPE html>
 <head>
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="author" content="CmYkRgB123, BYVoid; 王者自由, Kingfree" />
+<meta name="description" content="CmYkRgB123 Online Grading System，简称 COGS ，又称 COJS。是一款 OI 在线评测系统，基于 LAMP 技术，文件输入输出，支持评测插件和提交答案。" />
+<meta name="keywords" content="COGS, COJS, OJ, OI, NOI, ACM/ICPC" />
+<meta name="generator" content="Vim" />
+<meta name="revised" content="<?=$cfg['Version']?>" />
+<meta name="others" content="" />
+
 <link rel="Shortcut Icon" href="<?=路径("style/cogs.png")?>" />
 <link rel=stylesheet href="<?=路径("style/{$SET['style_profile']}")?>" />
 <?背景图片($userid ? $userid : $_SESSION['ID']);?>

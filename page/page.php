@@ -1,23 +1,17 @@
 <?php
 require_once("../include/header.php");
-$aid = (int)$_GET['aid'];
-$db = @mysql_connect($cfg['data_server'],$cfg['data_uid'],$cfg['data_pwd']);
-@mysql_select_db($cfg['data_database'],$db);
-@mysql_query("set names utf8");
-$res = @mysql_query("select title from page where aid=$aid");
-$ress = @mysql_fetch_object($res);
-$title = $ress->title;
-@mysql_close($db);
-gethead(1,"",$title);
-$LIB->mathjax();
-
 $p=new DataAccess();
-$q=new DataAccess();
-$r=new DataAccess();
-
+$aid = (int)$_GET['aid'];
 $sql="select page.*,groups.*,userinfo.nickname from page,groups,userinfo where aid=".(int)$_GET[aid]." and userinfo.uid=page.uid and groups.gid=page.group limit 1";
 $cnt=$p->dosql($sql);
 $d=$p->rtnrlt(0);
+$title = $d['title'];
+gethead(1,"",$title);
+
+$LIB->mathjax();
+
+$q=new DataAccess();
+$r=new DataAccess();
 
 if($cnt) {
     if ($d[force]>$_SESSION[readforce]) {

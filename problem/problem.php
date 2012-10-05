@@ -1,24 +1,19 @@
 <?php
 require_once("../include/header.php");
 
-$pid = (int)$_GET['pid'];
-$db = @mysql_connect($cfg['data_server'],$cfg['data_uid'],$cfg['data_pwd']);
-@mysql_select_db($cfg['data_database'],$db);
-@mysql_query("set names utf8");
-$res = @mysql_query("select probname from problem where pid=$pid");
-$ress = @mysql_fetch_object($res);
-$title = $ress->probname;
-@mysql_close($db);
-gethead(1,"",$pid.". ".$title);
-$LIB->mathjax();
-
 $p=new DataAccess();
-$q=new DataAccess();
-$r=new DataAccess();
-
+$pid = (int)$_GET['pid'];
 $sql="select problem.*,groups.* from problem,groups where pid=".(int)$_GET[pid]." and groups.gid=problem.group limit 1";
 $cnt=$p->dosql($sql);
 $d=$p->rtnrlt(0);
+
+$title = $d['probname'];
+gethead(1,"",$pid.". ".$title);
+
+$LIB->mathjax();
+
+$q=new DataAccess();
+$r=new DataAccess();
 
 if($cnt) {
     if ($d[readforce]>$_SESSION[readforce]) 

@@ -41,7 +41,7 @@ for ($i=$st;$i<$cnt && $i<$st+$SET['style_pagesize'] ;$i++) {
 		$d=$p->rtnrlt($i);
 ?>
 <tr>
-    <th><a href='comp.php?ctid=<?=$d[ctid] ?>'><?=$d[cname] ?></a></th>
+    <th><a href='problem.php?ctid=<?=$d[ctid] ?>'><?=$d[cname] ?></a></th>
     <td><?=nl2br(sp2n(htmlspecialchars($d[intro]))) ?></td>
     <td ><?php
 	 if (time()>$d[endtime]) echo "<span class='did'>结束</span>"; else

@@ -1,9 +1,6 @@
 <?php
 require_once("../include/header.php");
-gethead(1,"","提交代码");
-$LIB->hlighter();
 $p=new DataAccess();
-$q=new DataAccess();
 if(!$_GET['id']) {
     $sql = "select max(sid) as sid from submit";
     $p->dosql($sql);
@@ -22,6 +19,8 @@ if($cnt) {
         $code=stripslashes($code);
     $code=mb_convert_encoding($code, "utf-8", "gbk");
 } else 异常("提交记录不存在");
+gethead(1,"","{$d['probname']} - {$d['nickname']} - {$_GET['id']}");
+$LIB->hlighter();
 ?>
 <div class='row-fluid'>
 <table class='table table-striped table-condensed table-bordered fiexd'>
@@ -47,6 +46,7 @@ if($cnt) {
     <select name='judger' id='judger' >
     <option value=0 selected=selected>自动选择</option>
 <?
+$q=new DataAccess();
     $sql="select grid,address,memo from grader where enabled=1 order by priority desc";
     $cnt=$q->dosql($sql);
     for ($i=0;$i<$cnt;$i++) {
@@ -62,7 +62,7 @@ if($cnt) {
 </tr>
 <tr>
     <th>用户昵称</th>
-    <td><a href="../user/detail.php?uid=<?php echo $d['uid']; ?>" target="_blank"><?php echo $d['nickname']; ?></a></td>
+    <td><a href="../user/detail.php?uid=<?php echo $d['uid']; ?>" target="_blank"><?=有此权限('查看用户') ? $d['realname'] : $d['nickname'] ?></a></td>
     <th>是否通过</th>
     <td><?php echo $d['accepted']?"<span class='ok'>通过":"<span class='no'>未通过"; ?></span></td>
 </tr>

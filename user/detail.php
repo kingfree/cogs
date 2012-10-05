@@ -1,17 +1,14 @@
 <?php
 require_once("../include/header.php");
-gethead(1,"","用户信息", $_GET['uid']);
 $p=new DataAccess();
-$q=new DataAccess();
-?>
-<div class='row-fluid'>
-<div class='span4'>
-<?php
 $sql="select userinfo.*,groups.gname,groups.gid from userinfo,groups where userinfo.uid={$_GET['uid']} and userinfo.gbelong=groups.gid";
 $cnt=$p->dosql($sql);
 if(!$cnt) 异常("无此用户！");
 $d=$p->rtnrlt(0);
+gethead(1,"","{$d['nickname']}", $_GET['uid']);
 ?>
+<div class='row-fluid'>
+<div class='span4'>
 <table class='table table-striped table-condensed table-bordered fiexd'>
 <tr>
 <th width='60px'>用户编号</th>
@@ -62,6 +59,7 @@ $d=$p->rtnrlt(0);
     <th>用户权限</th>
     <td>
   <?
+$q=new DataAccess();
     $sql="select privilege.* from privilege where uid={$d['uid']} order by pri asc";
 	$cnt=$q->dosql($sql);
     if(!$cnt) echo array_search(0,$pri) . " ";

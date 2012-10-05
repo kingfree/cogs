@@ -103,12 +103,6 @@ $d=$p->rtnrlt(0);
     <td><input name="email" type="email" value="<?=$d['email']?>" id='email' /> 这个电子邮箱现在用于显示用户头像，请一律小写</td>
   </tr>
   <tr>
-    <th>等级</th>
-    <td><b><?=$d[grade] ?></b>
- = 求和(题目的最高得分 * 题目的难度 / 30)
-    </td>
-  </tr>
-  <tr>
     <th>系统主题</th>
     <td><input name="user_style" type='text' value="<?=$d['user_style']?>" />
     <label class='radio inline'><input type='radio' name='style' value='0' <?if(!$d['style']) echo "checked='checked'";?>/>浅色标题栏</label>
