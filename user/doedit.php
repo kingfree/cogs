@@ -32,6 +32,7 @@ if(!preg_match('/([a-z0-9][_a-z0-9]{3,23})/', $_POST['usr']))
     $cnt=$p->dosql($sql);
     if ($cnt==0) {
         $_POST['memo']=trim($_POST['memo']);
+        $_POST['user_style']=trim($_POST['user_style']);
 if(!preg_match('/(\S{2,20})/', $_POST['nickname']))
 异常("昵称长度必须在[2,20]中。", $regpage);
 if(!preg_match('/(\S*@\S*\.\S*)/', $_POST['email']))

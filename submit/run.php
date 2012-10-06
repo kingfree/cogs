@@ -165,6 +165,3 @@ $Cp->unlock();
 ?>
 </div>
 <script type="text/javascript">SyntaxHighlighter.all();</script>
-<?php
-include_once("../include/footer.php");
-?>

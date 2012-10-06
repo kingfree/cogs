@@ -100,10 +100,10 @@ $d=$p->rtnrlt($i);
 <table class='table table-striped table-condensed table-bordered fixed'>
 <thead><tr>
 <th>题目</th>
-<th width='100px'>用户</th>
+<th>用户</th>
 <th width='95px'>评测结果</th>
-<th width='40px'>得分</th>
-<th width='70px'>提交时间</th>
+<th width='36px'>得分</th>
+<th width='66px'>提交时间</th>
 </tr></thead>
 <?php 
 $cnt=$p->dosql("select submit.sid,submit.pid,submit.uid,submit.result,submit.score,submit.accepted,submit.subtime,problem.probname,userinfo.nickname,userinfo.realname,userinfo.email from submit,problem,userinfo where submit.score>={$SET['index_submit_score']} and submit.uid=userinfo.uid and submit.pid=problem.pid order by submit.sid desc limit {$SET['index_submit_size']}");
@@ -128,8 +128,8 @@ for($i=0;$i<$cnt;$i++) {
 <tr>
 <th width='12px'></th>
 <th>用户排名</th>
-<th width='40px'>积分</th>
-<th width='40px'>题目</th>
+<th width='34px'>积分</th>
+<th width='34px'>题目</th>
 </tr>
 </thead>
 <?php 
@@ -139,7 +139,7 @@ $d=$p->rtnrlt($i);
 ?>
 <tr>
 <td><i><?=$i+1 ?></i></td>
-<td><a href="user/detail.php?uid=<?php echo $d['uid']; ?>"><?=gravatar::showImage($d['email'], 28);?></a>
+<td><a href="user/detail.php?uid=<?php echo $d['uid']; ?>"><?=gravatar::showImage($d['email'], $SET['index_rank_icon']);?></a>
 <a href="user/detail.php?uid=<?php echo $d['uid']; ?>"><?php if(有此权限("查看用户")) echo $d['realname']; else echo $d['nickname'];?></a></td>
 <td><?=$d['grade']?></td>
 <td><?=$d['accepted']?></td>

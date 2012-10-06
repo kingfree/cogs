@@ -6,6 +6,7 @@ $cnt=$p->dosql($sql);
 if(!$cnt) 异常("无此用户！");
 $d=$p->rtnrlt(0);
 gethead(1,"","{$d['nickname']}", $_GET['uid']);
+$q=new DataAccess();
 ?>
 <div class='row-fluid'>
 <div class='span4'>
@@ -59,7 +60,6 @@ gethead(1,"","{$d['nickname']}", $_GET['uid']);
     <th>用户权限</th>
     <td>
   <?
-$q=new DataAccess();
     $sql="select privilege.* from privilege where uid={$d['uid']} order by pri asc";
 	$cnt=$q->dosql($sql);
     if(!$cnt) echo array_search(0,$pri) . " ";
@@ -108,7 +108,10 @@ if ($cnt) {
 ?>
 </div>
 <div class='span8'>
-<a href="../submit/index.php?uid=<?=$_GET['uid']?>" target="_blank" class='btn'>查看全部提交记录</a>
+<a href="../submit/index.php?uid=<?=$_GET['uid']?>" target="_blank" class='btn btn-link'>查看全部提交记录</a>
+<?php if(有此权限('查看用户') || $_SESSION['ID']==$d['uid']) { ?>
+<a href="export.php?uid=<?=$_GET['uid']?>" target="_blank" class='btn pull-right'>导出全部提交记录</a>
+<? } ?>
 <?php
 $accnt=0;
 $sql="select problem.pid,problem.probname,submit.accepted,submit.lang,submit.sid from submit,problem where submit.uid={$_GET['uid']} and submit.pid=problem.pid order by problem.pid asc, submit.score desc ";
