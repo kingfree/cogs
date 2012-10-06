@@ -7,7 +7,7 @@ gethead(1,"","帮助");
 <div class='page'>
 <?php echo 输出文本($SET['global_about']) ?>
 </div>
-<hr />
+<center><h3><a href="map.php">站点地图</a></h3></center>
 <table class='table table-striped table-condensed'>
 <? $s="APWTMECRD";
 for($i=0; $i<strlen($s); $i++) {?>
