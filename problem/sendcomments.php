@@ -18,7 +18,6 @@ if($cid) {
 } else {
     异常("发表评论失败！",取路径("problem/comments.php?pid={$pid}"));
 }
-echo $sql;
 $cnt=$p->dosql($sql);
 提示("发表评论成功！",取路径("problem/comments.php?pid={$pid}"));
 ?>

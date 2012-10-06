@@ -165,3 +165,11 @@ $Cp->unlock();
 ?>
 </div>
 <script type="text/javascript">SyntaxHighlighter.all();</script>
+</div>
+<div class='footer'>
+<?php echo 输出文本("进程运行 %processtime% s ，处理完成数据库 %querytimes% 次。") ?>
+由 <a href="https://github.com/KingFree/COGS-by-Kingfree" target="_blank">CmYkRgB123 在线评测系统</a> 强力驱动，版本 <?php echo $cfg['Version']; ?> 。
+</div>
+</div>
+</body>
+</html>

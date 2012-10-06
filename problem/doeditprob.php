@@ -15,15 +15,16 @@ if($_GET[action]=="change") {
 }
 
 if($_FILES['datafile']['size'] && !$_FILES['datafile']['error']) {
-    $cmd = "unzip -o {$_FILES['datafile']['tmp_name']} -d\"{$cfg['testdata']}\"";
+    $cmd = "unzip -ufo {$_FILES['datafile']['tmp_name']} -d\"{$cfg['testdata']}\"";
     $handle = popen($cmd, 'r');
     pclose($handle);
     $ff="<p>正在上传测试数据：<ul>";
     $dir="{$cfg['testdata']}/{$_POST['filename']}/";
+    chdir($dir);
     $pname=$_POST['filename'];
     $count=(int)$_POST['datacnt'];
-    if($data = (file_exists($dir."data.txt"))) {
-        $fp=fopen($dir."data.txt","r");
+    if($data = (file_exists("data.txt"))) {
+        $fp=fopen("data.txt","r");
         fscanf($fp,"%d\n",$start);
         $start--;
         fscanf($fp,"%s\n",$input);
@@ -32,9 +33,9 @@ if($_FILES['datafile']['size'] && !$_FILES['datafile']['error']) {
     }
     for($i=1; $i<=$count; $i++) {
         $now = (int) $start + $i;
-        rename($dir.str_replace("#", "{$now}", $input), "{$dir}{$_POST['filename']}{$i}.in");
-        rename($dir.str_replace("#", "{$now}", $answer), "{$dir}{$_POST['filename']}{$i}.ans");
-        if(file_exists("{$dir}{$_POST['filename']}{$i}.in") && file_exists("{$dir}{$_POST['filename']}{$i}.ans"))
+        rename(str_replace("#", "{$now}", $input), "{$_POST['filename']}{$i}.in");
+        rename(str_replace("#", "{$now}", $answer), "{$_POST['filename']}{$i}.ans");
+        if(file_exists("{$_POST['filename']}{$i}.in") && file_exists("{$_POST['filename']}{$i}.ans"))
             $ff.="<li><span class='label label-success'>第 $i 个</span>测试点上传成功！</li>";
         else
             $ff.="<li><span class='label label-important'>第 $i 个</span>测试点上传失败！！</li>";
