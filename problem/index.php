@@ -1,7 +1,16 @@
 <?php
 require_once("../include/header.php");
-gethead(1,"","题目列表");
 $p=new DataAccess();
+if ($_GET['caid']) {
+    $sql="select * from category where caid={$_GET['caid']}";
+    $cnt=$p->dosql($sql);
+    $d=$p->rtnrlt(0);
+    gethead(1,"","{$d['cname']} - 题目列表");
+} else if($_GET['key']) {
+    gethead(1,"","{$_GET['key']} - 题目列表");
+} else {
+    gethead(1,"","题目列表");
+}
 $q=new DataAccess();
 ?>
 
@@ -21,12 +30,8 @@ if (restore) selObj.selectedIndex=0;
 <a href="editprob.php?action=add" class="btn btn-info pull-left">添加新题目</a>
 <?php } ?>
 <a href="catelist.php" class='btn btn-success pull-left'><i class="icon-tags icon-white"></i>题目分类列表</a>
-<?php if ($_GET['caid']!="") {
-    $sql="select * from category where caid={$_GET['caid']}";
-    $cnt=$p->dosql($sql);
-    $d=$p->rtnrlt(0);
-?>
 
+<? if ($_GET['caid']) { ?>
 <span id="cate_detail"> 当前分类：
 <?php if(有此权限('修改分类')) { ?>
 <a href="editcate.php?action=edit&caid=<?php echo $d['caid'] ?>">
@@ -131,7 +136,7 @@ if (!$err) for ($i=$st;$i<$cnt && $i<$st+$SET['style_pagesize'] ;$i++) {
 <td><? 是否通过($d['pid'], $q);?><b><a href="problem.php?pid=<?=$d['pid'] ?>"><?=$d['probname'] ?></a></b></td>
 <td><code><?php echo $d['filename']; ?></code></td>
 <td><?php echo $d['timelimit']/1000 . " s"; ?></td>
-<td><?php echo $d['memorylimit'] . " MiB"; ?></td>
+<td><?php echo $d['memorylimit'] . " MB"; ?></td>
 <td><?php echo 难度($d['difficulty']); ?></td>
 <td><?=$STR['plugin'][$d['plugin']]?></td>
 <td><?php echo $d['acceptcnt']; ?></td>

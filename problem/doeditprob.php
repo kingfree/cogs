@@ -15,11 +15,13 @@ if($_GET[action]=="change") {
 }
 
 if($_FILES['datafile']['size'] && !$_FILES['datafile']['error']) {
-    $cmd = "unzip -ufo {$_FILES['datafile']['tmp_name']} -d\"{$cfg['testdata']}\"";
-    $handle = popen($cmd, 'r');
-    pclose($handle);
-    $ff="<p>正在上传测试数据：<ul>";
+    chdir($cfg['testdata']);
     $dir="{$cfg['testdata']}/{$_POST['filename']}/";
+    mkdir($dir);
+    $cmd = "unzip -uo {$_FILES['datafile']['tmp_name']} -d\"{$cfg['testdata']}\"";
+    exec($cmd);
+    exec("chmod 777 *");
+    $ff="<p>正在上传测试数据：<ul>";
     chdir($dir);
     $pname=$_POST['filename'];
     $count=(int)$_POST['datacnt'];

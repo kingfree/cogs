@@ -109,7 +109,7 @@ if ($cnt) {
 </div>
 <div class='span8'>
 <a href="../submit/index.php?uid=<?=$_GET['uid']?>" target="_blank" class='btn btn-link'>查看全部提交记录</a>
-<?php if(有此权限('查看用户') || $_SESSION['ID']==$d['uid']) { ?>
+<?php if(有此权限('查看用户') || $_SESSION['ID']==$_GET['uid']) { ?>
 <a href="export.php?uid=<?=$_GET['uid']?>" target="_blank" class='btn pull-right'>导出全部提交记录</a>
 <? } ?>
 <?php
