@@ -21,6 +21,7 @@ if($cnt) {
 } else 异常("提交记录不存在");
 gethead(1,"","{$d['probname']} - {$d['nickname']} - {$_GET['id']}");
 $LIB->hlighter();
+$q=new DataAccess();
 ?>
 <div class='row-fluid'>
 <table class='table table-striped table-condensed table-bordered fiexd'>
@@ -46,7 +47,6 @@ $LIB->hlighter();
     <select name='judger' id='judger' >
     <option value=0 selected=selected>自动选择</option>
 <?
-$q=new DataAccess();
     $sql="select grid,address,memo from grader where enabled=1 order by priority desc";
     $cnt=$q->dosql($sql);
     for ($i=0;$i<$cnt;$i++) {

@@ -241,6 +241,12 @@ for ($i=0;$i<$cnt;$i++) {
 <br />
 时间限制：<?=$d['timelimit']/1000?> s&nbsp;&nbsp;
 内存限制：<?=$d['memorylimit']; ?> MB
+<?php
+$Jia['url']="problem/problem.php?pid={$d['pid']}";
+$Jia['title']="{$d['pid']}. {$d['probname']}" . 难度($d['difficulty']) . "({$d['filename']})";
+$Jia['summary']=trim(strip_tags($d['detail']));
+//include("../include/jia.inc.php");
+?>
 <hr />
 </center>
 <dl class='problem'>

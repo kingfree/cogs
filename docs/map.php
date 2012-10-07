@@ -1,77 +1,69 @@
-<?php echo "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n"; ?>
 <?php
 require_once("../include/header.php");
+gethead(1,"","站点地图");
 $p=new DataAccess();
-$cogs="http://cojs.tk/cogs";
 ?>
-<urlset xmls="http://www.sitemaps.org/schemas/sitemap/0.9">
-<loc><?=$cogs?>/index.php</loc>
+<div class='row-fluid'>
+<div class='span12'>
+<div class='page'>
 
-<loc><?=$cogs?>/problem/catelist.php</loc>
+<h1>COGS 站点地图</h1>
+
+<h2><a href="../problem/catelist.php">分类</a></h2>
 <?php
 $sql="select caid, cname from category order by cname asc";
 $cnt=$p->dosql($sql);
 for($i=0;$i<$cnt;$i++) {
     $d=$p->rtnrlt($i);
-    echo "<loc>{$cogs}/problem/index.php?caid={$d['caid']}</loc>\n";
+    echo "<a href=\"../problem/index.php?caid={$d['caid']}\">{$d['cname']}</a>\n";
 }
 ?>
-<loc><?=$cogs?>/page/index.php</loc>
+<h2><a href="../page/index.php">页面</a></h2>
 <?php
 $sql="select aid, title from page order by title asc";
 $cnt=$p->dosql($sql);
 for($i=0;$i<$cnt;$i++) {
     $d=$p->rtnrlt($i);
-    if($i % $SET['style_pagesize'] == 0) {
-        $j = $i / $SET['style_pagesize'] + 1;
-        echo "<loc>{$cogs}/page/index.php?page={$j}</loc>\n";
-    }
-    echo "<loc>{$cogs}/page/page.php?aid={$d['aid']}</loc>\n";
+    echo "<a href=\"../page/page.php?aid={$d['aid']}\">{$d['title']}</a>\n";
 }
 ?>
-<loc><?=$cogs?>/problem/index.php</loc>
+<h2><a href="../problem/index.php">题目</a></h2>
 <?php
 $sql="select pid, probname, filename from problem order by acceptcnt desc";
 $cnt=$p->dosql($sql);
 for($i=0;$i<$cnt;$i++) {
     $d=$p->rtnrlt($i);
-    if($i % $SET['style_pagesize'] == 0) {
-        $j = $i / $SET['style_pagesize'] + 1;
-        echo "<loc>{$cogs}/problem/index.php?page={$j}</loc>\n";
-    }
-    echo "<loc>{$cogs}/problem/problem.php?pid={$d['pid']}</loc>\n";
-    echo "<loc>{$cogs}/problem/comments.php?pid={$d['pid']}</loc>\n";
+    echo "<a href=\"../problem/problem.php?pid={$d['pid']}\">{$d['probname']} ({$d['filename']})</a>\n";
 }
 ?>
-<loc><?=$cogs?>/contest/index.php</loc>
+<h2><a href="../contest/index.php">比赛</a></h2>
 <?php
 $sql="select comptime.cbid, comptime.ctid, compbase.cname, comptime.intro from comptime, compbase where comptime.cbid=compbase.cbid order by comptime.ctid desc";
 $cnt=$p->dosql($sql);
 for($i=0;$i<$cnt;$i++) {
     $d=$p->rtnrlt($i);
-    if($i % $SET['style_pagesize'] == 0) {
-        $j = $i / $SET['style_pagesize'] + 1;
-        echo "<loc>{$cogs}/contest/index.php?page={$j}</loc>\n";
-    }
-    echo "<loc>{$cogs}/contest/problem.php?ctid={$d['ctid']}</loc>\n";
+    echo "<span id='{$d['ctid']}'>";
+    echo "<a href=\"../contest/problem.php?ctid={$d['ctid']}\">{$d['cname']}</a>\n";
+    echo nl2br(sp2n(htmlspecialchars($d[intro])));
+    echo "</span>";
 }
 ?>
-<loc><?=$cogs?>/user/index.php</loc>
+<h2><a href="../user/index.php">用户</a></h2>
 <?php
 $sql="select uid, usr, nickname from userinfo order by grade desc";
 $cnt=$p->dosql($sql);
 for($i=0;$i<$cnt;$i++) {
     $d=$p->rtnrlt($i);
-    if($i % $SET['style_pagesize'] == 0) {
-        $j = $i / $SET['style_pagesize'] + 1;
-        echo "<loc>{$cogs}/user/index.php?page={$j}</loc>\n";
-    }
-    echo "<loc>{$cogs}/user/detail.php?uid={$d['uid']}</loc>\n";
+    echo "<a href=\"../user/detail.php?uid={$d['uid']}\">{$d['nickname']} ({$d['usr']})</a>\n";
 }
 ?>
-<loc><?=$cogs?>/docs/index.php</loc>
-<loc><?=$cogs?>/user/login.php</loc>
-<loc><?=$cogs?>/user/register.php</loc>
-</urlset>
-
-<?php //echo 输出文本($SET['global_map']) ?>
+<h2><a href="../docs/index.php">文档</a></h2>
+<a href="../user/login.php">登录</a>
+<a href="../user/register.php">注册</a>
+<h2><a href="../docs/map.php">地图</a></h2>
+<?php echo 输出文本($SET['global_map']) ?>
+</div>
+</div>
+<?php
+    include_once("../include/footer.php");
+?>

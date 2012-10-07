@@ -102,7 +102,7 @@ function okdel(name) {
     <th width='30px'></th>
     <th width='35px'>UID</th>
     <th width='120px'>昵称</th>
-    <? if(有此权限('查看用户')) { ?><th class='admin' width='50px'>姓名</th><? } ?>
+    <? if(有此权限('查看用户')) { ?><th class='admin' width='60px'>姓名</th><? } ?>
     <th>权限</th>
     <th width='40px'>阅读</th>
     <th width='140px'>分组</th>
@@ -136,7 +136,7 @@ function okdel(name) {
     <td ><?=$d['grade'] ?></td>
     <? if(有此权限('查看用户')) { ?>
     <td>
-    <a href="http://www.youdao.com/smartresult-xml/search.s?type=ip&q=<?=$d['lastip'] ?>"><?=$d['lastip'] ?></a>
+    <a href="loginlog.php?uid=<?=$d['uid'] ?>"><?=$d['lastip'] ?></a>
     </td><? } ?>
     <? if(有此权限('修改用户')) { ?><td>
     <? if(有此权限('修改权限')) { ?>
