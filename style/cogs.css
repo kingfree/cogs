@@ -113,7 +113,7 @@ th {
 
 .page {
 padding: 10px;
-    background-color: #fff;
+    background-color: rgba(255, 255, 255, 0.8);
   border: 1px solid #dddddd;
   -webkit-border-radius: 4px;
   -moz-border-radius: 4px;
@@ -210,6 +210,8 @@ padding: 10px;
     color: black;
     background: white;
     font-size: 16px;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
 }
 .problem h1 {
     font-family: sans-serif;
@@ -221,6 +223,8 @@ padding: 10px;
     background-color: PaleTurquoise;
     color: MidnightBlue;
     text-shadow: 2px 2px 10px Linen;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
 }
 .problem h2 {
     font-family: sans-serif;
@@ -232,6 +236,8 @@ padding: 10px;
     background-color: PowderBlue;
     color: MidnightBlue;
     text-shadow: 1px 1px 5px Azure;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
 }
 .problem dt, .problem h3 {
     font-family: sans-serif;
@@ -243,6 +249,8 @@ padding: 10px;
     margin: 0;
     padding: 2px 10px 2px 10px;
     text-shadow: 1px 1px 5px MediumBlue;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
 }
 .problem dd {
     font-family: serif;
@@ -320,3 +328,18 @@ padding: 10px;
     text-decoration: none;
     text-shadow: 2px 4px 8px #678;
 }
+
+.table {
+    background-color: rgba(255, 255, 255, 0.8);
+}
+
+.table-striped tbody tr:nth-child(odd) td,
+.table-striped tbody tr:nth-child(odd) th {
+    background-color: rgba(255, 255, 255, 0.8);
+}
+
+.table-hover tbody tr:hover td,
+.table-hover tbody tr:hover th {
+    background-color: rgba(200, 200, 200, 0.8);
+}
+

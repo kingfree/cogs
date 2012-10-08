@@ -107,7 +107,7 @@ for($i=0; $i<$cnt; $i++) {
 	$d=$p->rtnrlt($i);
 	echo "<tr>";
 	echo "<td>{$d['mid']}</td> <td>";
-	echo "<a href='../user/detail.php?uid={$d['formid']}' target='_blank'>".gravatar::showImage($d['email'])."{$d['nickname']}</a></td>";
+	echo "<a href='../user/detail.php?uid={$d['fromid']}' target='_blank'>".gravatar::showImage($d['email'])."{$d['nickname']}</a></td>";
     $url="<a href='#mail{$d['mid']}' data-toggle='modal' onclick='markread({$d['mid']})'>{$d['title']}</a>";
 	if($d['readed'] ==  0)
 	echo "<td><span class='label label-warning'>$url</span></td>";
@@ -126,11 +126,12 @@ for($i=0; $i<$cnt; $i++) {
 </div>
 <div class='modal-footer'>
 <span class='pull-left'>
-<a href='../user/detail.php?uid=<?=$d['formid']?>' target='_blank'>
+<a href='../user/detail.php?uid=<?=$d['fromid']?>' target='_blank'>
 <?=gravatar::showImage($d['email'])?>
 <?=$d['nickname']?></a>
 <?=date('Y-m-d h:i:s',$d['time'])?>
 </span>
+<a class='btn btn-success' href="#sendmail" data-toggle='modal'>回复</a>
 <button data-dismiss='modal' class='btn'>关闭</button>
 </div>
 </div>

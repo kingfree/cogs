@@ -378,7 +378,7 @@ $f=$p->rtnrlt($i);
 <div class='control-group'>
 <label class='control-label' for='pid'>PID</label>
 <div class='controls'>
-<span id='pid' class='uneditable-input' ><?=$_GET['pid'] ? $_GET['pid'] : "新建题目"?></span>
+<span id='pid' class='uneditable-input span2' ><?=$_GET['pid'] ? $_GET['pid'] : "新建题目"?></span>
 <input name='pid' type='hidden' value='<?=$_GET['pid'] ? $_GET['pid'] : "0"?>' />
 <input name="action" type="hidden" id="action" value="<?=$_GET['action'] ?>" />
 <a class='btn pull-right' href="#copy" data-toggle='modal'><i class='icon-barcode'></i>抄袭题目</a>
@@ -425,13 +425,13 @@ $f=$p->rtnrlt($i);
 <div class='control-group'>
 <label class='control-label' for='difficulty'>难度等级</label>
 <div class='controls'>
-<input name="difficulty" type="number" id="difficulty" value="<?=$d['difficulty'] ?>" />
+<input name="difficulty" type="number" id="difficulty" value="<?=$d['difficulty'] ?>" class='span4' />
 </div>
 </div>
 <div class='control-group'>
 <label class='control-label' for='readforce'>阅读权限</label>
 <div class='controls'>
-<input name="readforce" type="number" id="readforce" value="<?=$d['readforce'] ?>" />
+<input name="readforce" type="number" id="readforce" value="<?=$d['readforce'] ?>" class='span4' />
 <span class='help-inline'><label class='checkbox inline'>
 <input name="submitable" type="checkbox" id="submitable" value="1" <?php if ($d['submitable']) echo 'checked="checked"'; ?> />
 可否提交</label></span>
@@ -469,7 +469,7 @@ for ($j=0;$j<$c;$j++) {
 <div class='control-group'>
 <label class='control-label' for='datacnt'>测试数据</label>
 <div class='controls'>
-<input name="datacnt" type="number" id="datacnt" value="<?=$d['datacnt'] ?>" class='span2' />
+<input name="datacnt" type="number" id="datacnt" value="<?=$d['datacnt'] ?>" class='span4' />
 <input type="file" name="datafile" id="datafile" />
 </div>
 </div>

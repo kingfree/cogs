@@ -68,7 +68,7 @@ $d=$p->rtnrlt(0);
 </form>
 
 <div class='row-fluid'>
-<form id='xiugai' method="post" action="doedit.php?uid=<?=$_SESSION[ID] ?>" enctype="multipart/form-data" class='form-inline' >
+<form id='xiugai' method="post" action="doedit.php?uid=<?=$_SESSION[ID] ?>" enctype="multipart/form-data" class='form-inline page' >
 <input name="action" type="hidden" value="edit" />
 <input name="uid" type="hidden" value="<?=$d['uid']?>" />
 <table id="userpanel" class='table-form'>
