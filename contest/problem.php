@@ -57,6 +57,7 @@ if ($cnt) {
 } else 异常("未查询到记录！",取路径("contest/index.php"));
 gethead(1,"","{$e['cname']} - {$d['pid']}. {$d['probname']}");
 $LIB->mathjax();
+$r=new DataAccess();
 ?>
 
 <div class='row-fluid'>
@@ -121,7 +122,6 @@ if(有此权限('查看比赛') || time()>$e['endtime']) echo "<a href='report.p
 <th>得分</th>
 </tr>
 <?
-$r=new DataAccess();
 $sql="select * from compscore,userinfo where userinfo.uid=compscore.uid and compscore.pid={$pid} and compscore.ctid={$ctid} order by compscore.score desc, compscore.runtime asc, compscore.memory asc";
 $cnt=$r->dosql($sql);
 for ($i=0;$i<$cnt;$i++) {
@@ -143,7 +143,7 @@ for ($i=0;$i<$cnt;$i++) {
 </table>
 <? } else { ?>
 <?
-$sql="select * from compscore,userinfo where compscore.uid='{$uid}' and userinfo.uid='{$uid}' and compscore.pid={$_GET[pid]} and compscore.ctid={$_GET[ctid]}";
+$sql="select * from compscore,userinfo where compscore.uid='{$uid}' and userinfo.uid='{$uid}' and compscore.pid={$pid} and compscore.ctid={$ctid}";
 $cnt=$r->dosql($sql);
 if($cnt) {
     $f=$r->rtnrlt(0);
