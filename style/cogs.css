@@ -3,6 +3,22 @@ body {
     background-attachment: fixed;
 }
 
+h1 {
+  font-size: 36px;
+  line-height: 40px;
+}
+
+h2 {
+  font-size: 30px;
+  line-height: 34px;
+}
+
+h3 {
+  font-size: 24px;
+  line-height: 24px;
+}
+
+
 .textarea {
     width: 90%;
     height: 100px;
@@ -341,5 +357,15 @@ padding: 10px;
 .table-hover tbody tr:hover td,
 .table-hover tbody tr:hover th {
     background-color: rgba(200, 200, 200, 0.8);
+}
+
+.tou {
+    background-color: rgba(255, 255, 255, 0.4);
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+}
+
+.tou h1 {
+    background-color: rgba(255, 255, 255, 0.5);
 }
 

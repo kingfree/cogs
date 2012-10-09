@@ -62,24 +62,41 @@ $r=new DataAccess();
 
 <div class='row-fluid'>
 <div class='span4'>
-<div class='well'>
-<ul class='nav nav-list'>
-<li class='nav-header'>比赛：<?=$e['cname']?></li>
-<li class=''><?php echo nl2br(sp2n(htmlspecialchars($e['intro']))) ?></li>
-<li class=''>比赛状态：<?php
-if (time()>$e['endtime']) echo "<span class='did'>已结束</span>"; else
-if (time()<$e['endtime'] && time()>$e['starttime']) echo "<span class='doing'>正在进行</span>"; else
-echo "还未开始";
-if(有此权限('查看比赛') || time()>$e['endtime']) echo "<a href='report.php?ctid={$_GET['ctid']}'>查看比赛成绩列表</a>"; 
-?></li>
-<li class=''>开始时间：<?=date("Y-m-d H:i:s",$e['starttime']) ?></li>
-<li class=''>结束时间：<?=date("Y-m-d H:i:s",$e['endtime']) ?></li>
-</ul>
-</div>
+<table class='table table-striped table-condensed table-bordered fiexd'>
+<tr>
+<th width="60px">比赛名称</th>
+<th><?php echo $e[cname] ?></th>
+</tr>
+<tr>
+<th>比赛状态</th>
+<td><?php
+if (time()>$e[endtime]) echo "<span class='did'>已结束</span>"; else
+if (time()<$e[endtime] && time()>$e[starttime]) echo "<a href='contest/problem.php?ctid={$e[ctid]}'><span class='doing'>正在进行...</span></a>"; else
+echo "<span class='todo'>还未开始</span>"; 
+if(有此权限('查看比赛') || time()>$e['endtime']) echo "<a href='report.php?ctid={$ctid}' target='_blank' class='pull-right'>比赛成绩</a>";
+?></td>
+</tr>
+<tr>
+<th>开始时间</th>
+<td><?php echo date('Y-m-d H:i:s', $e[starttime]) ?></td>
+</tr>
+<tr>
+<th>结束时间</th>
+<td><?php echo date('Y-m-d H:i:s', $e[endtime]) ?></td>
+</tr>
+<tr>
+<th>开放分组</th>
+<td><a href="../user/index.php?gid=<?php echo $e['gid'] ?>"><?php echo $e['gname'] ?></a></td>
+</tr>
+<tr>
+<th>注释介绍</th>
+<td><?php echo nl2br(sp2n(htmlspecialchars($e[intro]))) ?></td>
+</tr>
+</table>
 <table id="probinfo" class='table table-striped table-condensed table-bordered fiexd'>
-<tr><th width=60px>题目名称</th>
+<tr><th width='60px'>题目名称</th>
 <td><b><?php echo $d['probname']; ?></b>
-<? if(time() > $e['endtime'] || 有此权限('查看比赛')) { ?><a href="../problem/problem.php?pid=<?=$_GET['pid']?>"><i class='icon-share'></i></a><? } ?>
+<? if(time() > $e['endtime'] || 有此权限('查看比赛')) { ?><a href="../problem/problem.php?pid=<?=$pid?>" target="_blank"><i class='icon-share'></i></a><? } ?>
 </td></tr>
 <tr><th>输入输出</th>
 <td><code><?php echo $d['filename']; ?>.in/out</code></td></tr>
@@ -153,11 +170,11 @@ if($cnt) {
 <td><a href="../user/detail.php?uid=<?=$uid?>"><?php echo $f['nickname']; ?></a></td></tr>
 <tr><th>提交时间</th>
 <td><?=date('Y-m-d H:i:s',$f['subtime']);?></td></tr>
-<tr><th>得分</th>
+<tr><th>评测得分</th>
 <td><?=$f['score']; ?></td></tr>
 <tr><th>评测结果</th>
 <td><?=评测结果($f['result']); ?></td></tr>
-<tr><th>代码</th>
+<tr><th>提交代码</th>
 <td><a href="code.php?csid=<?=$f[csid] ?>" target="_blank"><?=$STR[lang][$f[lang]] ?></a></td></tr>
 </table>
 <? } ?>
@@ -187,11 +204,11 @@ if($cnt) {
 <?  } ?>
 </ul>
 </div>
-<center>
+<center class="problem tou">
 <h1><?=$d['pid']?>. <?=$d['probname']?></h1>
 <?=难度($d['difficulty']); ?>&nbsp;&nbsp;
-输入文件：<?=$d['filename']?>.in&nbsp;&nbsp;
-输出文件：<?=$d['filename']?>.out&nbsp;&nbsp;
+输入文件：<code><?=$d['filename']?>.in</code>&nbsp;&nbsp;
+输出文件：<code><?=$d['filename']?>.out</code>&nbsp;&nbsp;
 <?=$STR['plugin'][$d['plugin']]?>
 <br />
 时间限制：<?=$d['timelimit']/1000?> s&nbsp;&nbsp;

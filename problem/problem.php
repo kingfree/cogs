@@ -271,7 +271,7 @@ for ($i=0;$i<$cnt;$i++) {
 </div>
 <div class='span8'>
 <div id="probdetail" class='page'>
-<center>
+<center class="problem tou">
 <h1><?=$d['pid']?>. <?=$d['probname']?></h1>
 <?=难度($d['difficulty']); ?>&nbsp;&nbsp;
 输入文件：<code><?=$d['filename']?>.in</code>&nbsp;&nbsp;

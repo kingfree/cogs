@@ -79,7 +79,8 @@ $pbs=explode(":",$d['contains']);
         if((有此权限('查看比赛') || $end))
             echo "<a href='code.php?csid={$rank[$v]['csid']}'>";
         if($rank[$v][result] == "") echo "未评测";
-        else 评测结果($rank[$v][result]);
+        else if((有此权限('查看比赛') || $end)) 评测结果($rank[$v][result]);
+        else echo "不显示";
         if((有此权限('查看比赛') || $end))
             echo "</a>";
     } ?></td>
