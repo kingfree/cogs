@@ -26,7 +26,7 @@ if($cnt) {
 <td>状态</td>
 <td><?php
 if (time()>$d[endtime]) echo "<span class='did'>已结束</span>"; else
-if (time()<$d[endtime] && time()>$d[starttime]) echo "<a href='contest/comp.php?ctid={$d[ctid]}&uid={$_SESSION['ID']}'><span class='doing'>正在进行...</span></a>"; else
+if (time()<$d[endtime] && time()>$d[starttime]) echo "<a href='contest/problem.php?ctid={$d[ctid]}'><span class='doing'>正在进行...</span></a>"; else
 echo "<span class='todo'>还未开始</span>"; 
 ?></td>
 </tr>
