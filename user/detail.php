@@ -97,7 +97,7 @@ if ($cnt) {
 ?>
     <tr>
     <td><b><?=$d['cname']?></b></td>
-    <td><a href="../contest/comp.php?ctid=<?=$d['ctid']?>&uid=<?=$_GET['uid']?>" target="_blank"><?echo date("Y-m-d",$d['subtime'])?></a></td>
+    <td><a href="../contest/problem.php?ctid=<?=$d['ctid']?>" target="_blank"><?echo date("Y-m-d",$d['subtime'])?></a></td>
     </tr>
 <?php
 	}

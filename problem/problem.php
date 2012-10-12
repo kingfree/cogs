@@ -92,44 +92,6 @@ if($_SESSION['ID']) {
         评测结果($e['result'], 20);
     }
 } ?>
-<? if($acpid && 1 == 2) { ?>
-<a class='btn btn-success btn-mini pull-right' href="#addsol" data-toggle='modal'><i class='icon-plus icon-white'></i>添加题解</a>
-<div id='addsol' class='modal hide fade in'>
-<form method="post" action="addsol.php" class='form-horizontal'>
-<fieldset>
-<div class='modal-header'>
-<button class='close' data-dismiss='modal'>×</button>
-<h3>添加题解</h3>
-</div>
-<input name="pid" type="hidden" id="pid" value="<?=$d['pid']?>" />
-<input name="uid" type="hidden" id="uid" value="<?=$_SESSION['ID']?>" />
-<div class='modal-body'>
-<div class='control-group'>
-<label class='control-label' for='title'>题解名称</label>
-<div class='controls'>
-<input name="title" type="text" id="title" value="" />
-</div>
-</div>
-<div class='control-group'>
-<label class='control-label' for='link'>题解链接</label>
-<div class='controls'>
-<input name="link" type="text" id="link" value="http://" />
-</div>
-</div>
-<div class='control-group'>
-<label class='control-label' for='memo'>题解说明</label>
-<div class='controls'>
-<textarea id='memo' name="memo" class="textarea"></textarea>
-</div>
-</div>
-<div class='modal-footer'>
-<button data-dismiss='modal' class='btn'>取消</button>
-<button type="submit" class='btn btn-primary'>添加题解</button>
-</div>
-</fieldset>
-</form>
-</div>
-<? } ?>
 </td></tr>
 <tr><th>分类标签</th>
 <td><?php

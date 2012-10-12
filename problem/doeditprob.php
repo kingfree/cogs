@@ -28,13 +28,13 @@ if($_FILES['datafile']['size'] && !$_FILES['datafile']['error']) {
     if($data = (file_exists("data.txt"))) {
         $fp=fopen("data.txt","r");
         fscanf($fp,"%d\n",$start);
-        $start--;
+        $start = (int) $start - 1;
         fscanf($fp,"%s\n",$input);
         fscanf($fp,"%s\n",$answer);
         fclose($fp);
     }
-    for($i=1; $i<=$count; $i++) {
-        $now = (int) $start + $i;
+    for($i=$count; $i>=1; $i--) {
+        $now = (int) ($start + $i);
         rename(str_replace("#", "{$now}", $input), "{$_POST['filename']}{$i}.in");
         rename(str_replace("#", "{$now}", $answer), "{$_POST['filename']}{$i}.ans");
         if(file_exists("{$_POST['filename']}{$i}.in") && file_exists("{$_POST['filename']}{$i}.ans"))
