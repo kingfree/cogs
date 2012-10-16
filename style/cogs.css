@@ -364,11 +364,6 @@ padding: 10px;
 color: #000;
 }
 
-.table a:link, .table a:visited {
-    color: #08c;
-}
-
-
 .table th {
     text-align: center;
 }
