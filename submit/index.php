@@ -1,6 +1,6 @@
 <?php
 require_once("../include/header.php");
-gethead(1,"","记录列表");
+gethead(1,"","记录列表", $_GET['uid']);
 
 $p=new DataAccess();
 $q=new DataAccess();

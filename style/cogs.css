@@ -387,20 +387,20 @@ padding: 10px;
 }
 
 .alert {
-  background-color: rgba(252, 248, 227, 0.8);
+  background-color: rgba(252, 248, 227, 0.9);
 }
 
 .alert-success {
-  background-color: rgba(223, 240, 216, 0.8);
+  background-color: rgba(223, 240, 216, 0.9);
 }
 
 .alert-danger,
 .alert-error {
-  background-color: rgba(242, 222, 222, 0.8);
+  background-color: rgba(242, 222, 222, 0.9);
 }
 
 .alert-info {
-  background-color: rgba(217, 237, 247, 0.8);
+  background-color: rgba(217, 237, 247, 0.9);
 }
 
 .label {
