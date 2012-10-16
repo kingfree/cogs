@@ -3,7 +3,9 @@ require_once("../include/header.php");
 gethead(1,"","生成等级");
 
 $rand_gen_data_access=new DataAccess();
-
+?>
+<div class='page'>
+<?
 $subcnt=array();
 $supcnt=array();
 $accnt=array();
@@ -66,7 +68,9 @@ for ($i=1;$i<=$probs;$i++) {
     $sql="update problem set acceptcnt='{$accnt[$i]}',submitcnt='{$subcnt[$i]}' where pid='{$i}'";
     $rand_gen_data_access->dosql($sql);
 }
-echo "<span class=ok>计算完成！</span>";
-
+?>
+<span class=ok>计算完成！</span>
+</div>
+<?
 require_once("../include/footer.php");
 ?>

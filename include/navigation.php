@@ -49,7 +49,7 @@ function Navigation($p) {
     HTML("<li class='{$active['contest']}'><a href='".路径("contest/index.php")."'>$context</a></li>");
     HTML("<li class='{$active['page']}'><a href='".路径("page/index.php")."'>页面</a></li>");
     HTML("<li class='{$active['user']}'><a href='".路径("user/index.php")."'>用户</a></li>");
-    //HTML("<li class='{$active['comment']}'><a href='".路径("problem/comments.php")."'>评论</a></li>");
+    HTML("<li class='{$active['comment']}'><a href='".路径("problem/comments.php")."'>评论</a></li>");
     HTML("<form class='navbar-search' method='get' action='".路径("problem/index.php")."'>");
     HTML("<input name='key' type='text' id='key' class='search-query span2' placeholder='搜索题目' />");
     HTML("</form>");
@@ -132,6 +132,7 @@ function Navigation_IE($p) {
     HTML("<li class='{$active['contest']}'><a href='".路径("contest/index.php")."'>$context</a></li>");
     HTML("<li class='{$active['page']}'><a href='".路径("page/index.php")."'>页面</a></li>");
     HTML("<li class='{$active['user']}'><a href='".路径("user/index.php")."'>用户</a></li>");
+    HTML("<li class='{$active['comment']}'><a href='".路径("problem/comments.php")."'>评论</a></li>");
     HTML("</ul>");
     HTML("<ul class='nav pull-right'>");
     HTML("<li class='{$active['docs']}'><a href='".路径("docs/index.php")."'>帮助</a></li>");

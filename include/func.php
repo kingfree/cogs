@@ -209,20 +209,26 @@ function 难度($K) {
     return $str;
 }
 
-function 评测结果($str, $mod=10) {
+function 评测结果($str, $mod=10, $end=false) {
     $res = "";
     for($i=0; $i<strlen($str); $i++) {
-        if($str[$i] == 'A') $res .= "<span style='color:#0000FF;'>A</span>";
-        else if($str[$i] == 'W') $res .= "<span style='color:#ff0000;'>W</span>";
-        else if($str[$i] == 'T') $res .= "<span style='background-color:#0033FF;color:#FFFF00;'>T</span>";
-        else if($str[$i] == 'M') $res .= "<span style='background-color:#00FF44;color:#000000;'>M</span>";
-        else if($str[$i] == 'E') $res .= "<span style='background-color:#000000;color:#FFFF00;'>E</span>";
-        else if($str[$i] == 'R') $res .= "<span style='background-color:#FFCC00;color:#006600;'>R</span>";
-        else if($str[$i] == 'C') $res .= "<span style='background-color:#FF0000;'>C</span>";
-        else if($str[$i] == 'D') $res .= "<span style='color:#fff;background-color:#000'>D</span>";
-        else if($str[$i] == 'N') $res .= "<span style='color:#FFFFFF;'>N</span>";
-        else if($str[$i] == 'P') $res .= "<span style='color:#B8860B;'>P</span>";
-        if(($i+1)>0 && ($i+1)%$mod==0) $res.="<br />";
+        if($str[$i] == 'A') $res .= "<span class='jA'>A</span>";
+        else if($str[$i] == 'W') $res .= "<span class='jW'>W</span>";
+        else if($str[$i] == 'T') $res .= "<span class='jT'>T</span>";
+        else if($str[$i] == 'M') $res .= "<span class='jM'>M</span>";
+        else if($str[$i] == 'E') $res .= "<span class='jE'>E</span>";
+        else if($str[$i] == 'R') $res .= "<span class='jR'>R</span>";
+        else if($str[$i] == 'C') $res .= "<span class='jC'>C</span>";
+        else if($str[$i] == 'D') $res .= "<span class='jD'>D</span>";
+        else if($str[$i] == 'N') $res .= "<span class='jN'>N</span>";
+        else if($str[$i] == 'P') $res .= "<span class='jP'>P</span>";
+        if(($i+1)>0 && ($i+1)%$mod==0) {
+            $res.="<br />";
+            if($end) {
+    echo "<span class='judge'>".$res."</span>";
+                return;
+            }
+        }
     }
     echo "<span class='judge'>".$res."</span>";
 }
@@ -230,16 +236,16 @@ function 评测信息a($str) {
     $res = "";
     if($str == "") return "未评测";
     for($i=0; $i<strlen($str); $i++) {
-        if($str[$i] == 'A') $res .= "<span style='color:#0000FF;'>答案正确</span>";
-        else if($str[$i] == 'W') $res .= "<span style='color:#ff0000;'>答案错误</span>";
-        else if($str[$i] == 'T') $res .= "<span style='background-color:#0033FF;color:#FFFF00;'>超过时间限制</span>";
-        else if($str[$i] == 'M') $res .= "<span style='background-color:#00FF44;color:#000000;'>超过内存限制</span>";
-        else if($str[$i] == 'E') $res .= "<span style='background-color:#000000;color:#FFFF00;'>运行时错误</span>";
-        else if($str[$i] == 'R') $res .= "<span style='background-color:#FFCC00;color:#006600;'>没有输出文件</span>";
-        else if($str[$i] == 'C') $res .= "<span style='background-color:#FF0000;'>编译错误</span>";
-        else if($str[$i] == 'D') $res .= "<span style='color:#fff;background-color:#000'>没有测试点数据</span>";
-        else if($str[$i] == 'N') $res .= "<span style='color:#FFFFFF;'>没有源代码</span>";
-        else if($str[$i] == 'P') $res .= "<span style='color:#B8860B;'>答案部分正确</span>";
+        if($str[$i] == 'A') $res .= "<span class='jA'>答案正确</span>";
+        else if($str[$i] == 'W') $res .= "<span class='jW'>答案错误</span>";
+        else if($str[$i] == 'T') $res .= "<span class='jT'>超过时间限制</span>";
+        else if($str[$i] == 'M') $res .= "<span class='jM'>超过内存限制</span>";
+        else if($str[$i] == 'E') $res .= "<span class='jE'>运行时错误</span>";
+        else if($str[$i] == 'R') $res .= "<span class='jR'>没有输出文件</span>";
+        else if($str[$i] == 'C') $res .= "<span class='jC'>编译错误</span>";
+        else if($str[$i] == 'D') $res .= "<span class='jD'>没有测试点数据</span>";
+        else if($str[$i] == 'N') $res .= "<span class='jN'>没有源代码</span>";
+        else if($str[$i] == 'P') $res .= "<span class='jP'>答案部分正确</span>";
         $res.="<br />";
     }
     return $res;

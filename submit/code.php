@@ -19,7 +19,7 @@ if($cnt) {
         $code=stripslashes($code);
     $code=mb_convert_encoding($code, "utf-8", "gbk");
 } else 异常("提交记录不存在");
-gethead(1,"","{$d['probname']} - {$d['nickname']} - {$_GET['id']}");
+gethead(1,"","{$d['probname']} - {$d['nickname']} - {$_GET['id']}", $d['uid']);
 $LIB->hlighter();
 $q=new DataAccess();
 ?>

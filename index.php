@@ -113,7 +113,7 @@ for($i=0;$i<$cnt;$i++) {
 <tr>
 <td><a href='problem/problem.php?pid=<?=$d['pid']?>'><?=shortname($d['probname'])?></a></td>
 <td><a href='user/detail.php?uid=<?=$d['uid']?>'><?=gravatar::showImage($d['email']);?><?php if(有此权限("查看用户")) echo $d['realname']; else echo $d['nickname'];?></a></td>
-<td><a href='submit/code.php?id=<?=$d['sid']?>'><?=评测结果($d['result'], 10)?></a></td>
+<td><a href='submit/code.php?id=<?=$d['sid']?>'><?=评测结果($d['result'], 10, true)?></a></td>
 <td><span class="<?=$d['accepted']?'ok':'no'?>"><?=$d['score'] ?></span></td>
 <td><?php echo date('H:i:s',$d['subtime']); ?></td>
 </tr>

@@ -1,10 +1,5 @@
 <?php
 require_once("../include/header.php");
-gethead(1,"sess","比赛代码");
-$LIB->hlighter();
-?>
-
-<?php
 $p=new DataAccess();
 $sql="select problem.pid,problem.filename,problem.probname,userinfo.uid,userinfo.nickname,userinfo.realname,comptime.endtime,compscore.* from problem,compscore,comptime,userinfo where compscore.pid=problem.pid and comptime.ctid=compscore.ctid and userinfo.uid=compscore.uid and compscore.csid={$_GET[csid]}";
 $cnt=$p->dosql($sql);
@@ -22,6 +17,8 @@ if ($cnt) {
 	fclose($fp);
     $code=mb_convert_encoding($code, "utf-8", "gbk");
 } else 异常("提交记录不存在");
+gethead(1,"sess","比赛代码", $d['uid']);
+$LIB->hlighter();
 
 ?>
 <div class='row-fluid'>
