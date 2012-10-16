@@ -72,14 +72,14 @@ $csucc=$Cp->compile();
 flush();
 if ($csucc) {
 ?>开始运行
-<table border='1'>
+<table class='table table-condensed'>
 <tr>
-<td>测试点</td>
-<td>结果</td>
-<td>得分</td>
-<td>运行时间</td>
-<td>内存使用</td>
-<td>退出代码</td>
+<th>点</th>
+<th>结果</th>
+<th>得分</th>
+<th>运行时间</th>
+<th>内存使用</th>
+<th>返回</th>
 </tr>
 <tr>
 <?php
@@ -104,9 +104,9 @@ if ($csucc) {
 <div class='span6'>
 <div class='alert'>
 <p>运行时间 <?php printf ("%.3f",$Cp->gettotaltime()/1000.0) ?> s</p>
-<p>平均内存 <?php printf("%.2f",$Cp->getmemory()/1024) ?> MiB</p>
+<p>平均内存 <?php printf("%.2f",$Cp->getmemory()/1024) ?> MB</p>
 <p>测试点通过状况 <a href="../submit/code.php?id=<?=$info['sid']?>"><?=评测结果($Cp->s_detail, 30) ?></a></p>
-<p>得分：<?=$Cp->getscore(); ?></p>
+<p>得分：<b><?=$Cp->getscore(); ?></b></p>
 <p><a href="../problem/problem.php?pid=<?=$_POST['pid'] ?>">返回原题 “<?=$ptitle?>”</a></p>
 <?php if ($Cp->ac==$d['datacnt']) {
     $AC = 1;

@@ -149,6 +149,7 @@ padding: 10px;
   border-radius: 4px;
     font-size: 16px;
     line-height: 20px;
+color: #000;
 }
 
 .form-horizontal {
@@ -360,7 +361,13 @@ padding: 10px;
 
 .table {
     background-color: rgba(255, 255, 255, 0.8);
+color: #000;
 }
+
+.table a:link, .table a:visited {
+    color: #08c;
+}
+
 
 .table th {
     text-align: center;
@@ -388,18 +395,22 @@ padding: 10px;
 
 .alert {
   background-color: rgba(252, 248, 227, 0.9);
+  color: #c09853;
 }
 
 .alert-success {
+  color: #468847;
   background-color: rgba(223, 240, 216, 0.9);
 }
 
 .alert-danger,
 .alert-error {
+  color: #b94a48;
   background-color: rgba(242, 222, 222, 0.9);
 }
 
 .alert-info {
+  color: #3a87ad;
   background-color: rgba(217, 237, 247, 0.9);
 }
 

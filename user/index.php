@@ -99,18 +99,20 @@ function okdel(name) {
 <table id="userlist" class='table table-striped table-condensed table-bordered fiexd'>
 <thead>
   <tr>
-    <th width='30px'></th>
-    <th width='35px'>UID</th>
-    <th width='120px'>昵称</th>
-    <? if(有此权限('查看用户')) { ?><th class='admin' width='60px'>姓名</th><? } ?>
+    <th style="width: 3ex;"></th>
+    <th style="width: 3ex;">UID</th>
+    <th>昵称</th>
+    <? if(有此权限('查看用户')) { ?>
+    <th class='admin' style="width: 4em;">姓名</th>
+    <th style="width: 4ex;">阅读</th>
+    <? } ?>
     <th>权限</th>
-    <th width='40px'>阅读</th>
-    <th width='140px'>分组</th>
-    <th width='40px'>通过</th>
-    <th width='50px'>通过率</th>
-    <th width='40px'>等级</th>
-    <? if(有此权限('查看用户')) { ?><th class='admin' width='100px'>IP</th><? } ?>
-    <? if(有此权限('修改用户')) { ?><th class='admin' width='100px'>操作</th><? } ?>
+    <th>分组</th>
+    <th style="width: 4ex;">通过</th>
+    <th style="width: 6ex;">通过率</th>
+    <th style="width: 6ex;">等级</th>
+    <? if(有此权限('查看用户')) { ?><th class='admin' style="width: 8em;">IP</th><? } ?>
+    <? if(有此权限('修改用户')) { ?><th class='admin' style="width: 4em;">操作</th><? } ?>
   </tr>
 </thead>
 <?php
@@ -118,10 +120,13 @@ function okdel(name) {
         $d=$p->rtnrlt($i);
 ?>
   <tr>
-    <th class='center'><?=$i+1?></th>
+    <td><i><?=$i+1?></i></td>
     <td><?=$d['uid'] ?></td>
     <td><a href="detail.php?uid=<?=$d['uid'] ?>"><?=gravatar::showImage($d['email']);?><?=$d['nickname'] ?></a></td>
-    <? if(有此权限('查看用户')) { ?><td ><?=$d['realname'] ?></td><? } ?>
+    <? if(有此权限('查看用户')) { ?>
+    <td ><?=$d['realname'] ?></td>
+    <td ><?=$d['readforce'] ?></td>
+    <? } ?>
     <td><?
     $sql="select privilege.* from privilege where uid={$d['uid']} order by pri asc";
 	$cnt1=$r->dosql($sql);
@@ -129,10 +134,9 @@ function okdel(name) {
 		$e=$r->rtnrlt($i1);
         echo array_search($e['pri'],$pri) . " ";
     } ?></td>
-    <td ><?=$d['readforce'] ?></td>
     <td ><?="<a href='?gid={$d['gbelong']}'>{$d['gname']}</a>"; ?></td>
     <td ><?=$d['accepted'] ?></td>
-    <td ><?=@round($d['accepted']/$d['submited']*100,2); ?>%</td>
+    <td ><?=@round($d['accepted']/$d['submited']*100,1); ?>%</td>
     <td ><?=$d['grade'] ?></td>
     <? if(有此权限('查看用户')) { ?>
     <td>
@@ -140,10 +144,10 @@ function okdel(name) {
     </td><? } ?>
     <? if(有此权限('修改用户')) { ?><td>
     <? if(有此权限('修改权限')) { ?>
-    <a href='privilege.php?way=edit&uid=<?=$d['uid']?>'>权限</a>
+    <a href='privilege.php?way=edit&uid=<?=$d['uid']?>'>权</a>
     <? } ?>
-    <a href="edituser.php?uid=<?=$d['uid'] ?>">修改</a>
-    <a href="doedituser.php?uid=<?=$d['uid'] ?>&action=del" onclick="return okdel('<?=$d['nickname']?>')">删除</a>
+    <a href="edituser.php?uid=<?=$d['uid'] ?>">改</a>
+    <a href="doedituser.php?uid=<?=$d['uid'] ?>&action=del" onclick="return okdel('<?=$d['nickname']?>')">删</a>
     </td><? } ?>
   </tr>
 <?php

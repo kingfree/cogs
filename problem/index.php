@@ -103,9 +103,9 @@ function okic(name) {
 </script>
 <table id="problist" class='table table-striped table-condensed table-bordered fiexd'>
 <thead><tr>
-<th width='20px'>PID</th>
+<th style="width: 4ex;">PID</th>
 <?php if(有此权限('修改题目')) { ?>
-<th class=admin>编辑</th>
+<th class=admin style="width: 4ex;">编辑</th>
 <?php } ?>
 <th onclick="sortTable('problist', 0, 'int')">题目名称</th>
 <th>文件名称</th>
@@ -117,7 +117,7 @@ function okic(name) {
 <th onclick="sortTable('problist', 7, 'int')">提交</th>
 <th onclick="sortTable('problist', 8, 'int')">通过率</th>
 <?php if(有此权限('查看题目')) { ?>
-<th class=admin>标识</th>
+<th class=admin style="width: 4ex;">标识</th>
 <?php } ?>
 </tr></thead>
 <?php

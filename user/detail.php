@@ -12,16 +12,16 @@ $q=new DataAccess();
 <div class='span4'>
 <table class='table table-striped table-condensed table-bordered fiexd'>
 <tr>
-<th width='60px'>用户编号</th>
+<th style="width: 5em;">用户编号</th>
 <td><?=$d['uid'] ?></td>
-</tr>
-<tr>
-<th>头像</th>
-<td><?=gravatar::showImage($d['email'], 200);?></td>
 </tr>
 <tr>
 <th>用户名称</th>
 <td><?=$d['usr'] ?></td>
+</tr>
+<tr>
+<th>用户头像</th>
+<td><?=gravatar::showImage($d['email'], 200);?></td>
 </tr>
 <tr>
 <th>用户昵称</th>
@@ -71,7 +71,7 @@ $q=new DataAccess();
     </td>
   </tr>
   <tr>
-    <th>登录IP</th>
+    <th>登录 IP</th>
     <td><?=$d['lastip'] ?></td>
   </tr>
   <?php } ?>

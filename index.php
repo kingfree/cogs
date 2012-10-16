@@ -19,11 +19,11 @@ if($cnt) {
 ?>
 <table class='table table-striped table-condensed table-bordered fiexd'>
 <tr>
-<th width="40px">比赛</th>
-<th><?php echo $d[cname] ?></th>
+<th style="width: 3em;">比赛</th>
+<td><b><?php echo $d[cname] ?></b></td>
 </tr>
 <tr>
-<td>状态</td>
+<th>状态</th>
 <td><?php
 if (time()>$d[endtime]) echo "<span class='did'>已结束</span>"; else
 if (time()<$d[endtime] && time()>$d[starttime]) echo "<a href='contest/problem.php?ctid={$d[ctid]}'><span class='doing'>正在进行...</span></a>"; else
@@ -31,19 +31,19 @@ echo "<span class='todo'>还未开始</span>";
 ?></td>
 </tr>
 <tr>
-<td>开始</td>
+<th>开始</th>
 <td><?php echo date('Y-m-d H:i:s', $d[starttime]) ?></td>
 </tr>
 <tr>
-<td>结束</td>
+<th>结束</th>
 <td><?php echo date('Y-m-d H:i:s', $d[endtime]) ?></td>
 </tr>
 <tr>
-<td>分组</td>
+<th>分组</th>
 <td><a href="../user/index.php?gid=<?php echo $d['gid'] ?>"><?php echo $d['gname'] ?></a></td>
 </tr>
 <tr>
-<td>介绍</td>
+<th>介绍</th>
 <td><?php echo nl2br(sp2n(htmlspecialchars($d[intro]))) ?></td>
 </tr>
 </table>
@@ -76,7 +76,7 @@ $d=$p->rtnrlt($i);
 <table class='table table-striped table-condensed table-bordered fiexd'>
 <thead>
 <tr>
-<th width="40px">PID</th>
+<th style="width: 4ex;">PID</th>
 <th>最新题目
 <a href="problem/random.php" title="随机选择一道你没有通过的题目" class='btn btn-danger btn-mini pull-right' >随机题目</a>
 </th>
@@ -101,9 +101,9 @@ $d=$p->rtnrlt($i);
 <thead><tr>
 <th>题目</th>
 <th>用户</th>
-<th width='95px'>评测结果</th>
-<th width='36px'>得分</th>
-<th width='66px'>提交时间</th>
+<th style="width: 12ex;">评测结果</th>
+<th style="width: 5ex;">得分</th>
+<th style="width: 10ex;">提交时间</th>
 </tr></thead>
 <?php 
 $cnt=$p->dosql("select submit.sid,submit.pid,submit.uid,submit.result,submit.score,submit.accepted,submit.subtime,problem.probname,userinfo.nickname,userinfo.realname,userinfo.email from submit,problem,userinfo where submit.score>={$SET['index_submit_score']} and submit.uid=userinfo.uid and submit.pid=problem.pid order by submit.sid desc limit {$SET['index_submit_size']}");
@@ -126,10 +126,10 @@ for($i=0;$i<$cnt;$i++) {
 <table class='table table-striped table-condensed table-bordered fixed'>
 <thead>
 <tr>
-<th width='12px'></th>
+<th style="width: 2ex;"></th>
 <th>用户排名</th>
-<th width='34px'>积分</th>
-<th width='34px'>题目</th>
+<th style="width: 5ex;">积分</th>
+<th style="width: 4ex;">题目</th>
 </tr>
 </thead>
 <?php 

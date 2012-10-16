@@ -48,15 +48,15 @@ if(!$_GET['page']) {
 ?>
 <table id="submitlist" class='table table-striped table-condensed table-bordered fiexd'>
 <thead><tr>
-<th width='40px'>SID</th>
+<th style="width: 6ex;">SID</th>
 <th>题目</th>
 <th>用户</th>
-<th>结果</th>
-<th width='40px'>得分</th>
-<th width='40px'>语言</th>
-<th width='60px'>用时</th>
-<th width='80px'>内存</th>
-<th width='150px'>时间</th>
+<th style="width: 20ex;">结果</th>
+<th style="width: 5ex;">得分</th>
+<th style="width: 6ex;">语言</th>
+<th style="width: 10ex;">用时</th>
+<th style="width: 10ex;">内存</th>
+<th style="width: 20ex;">时间</th>
 </tr></thead>
 <?php if (!$err)
 for ($i=$st;$i<$cnt && $i<$st+$SET['style_pagesize'] ;$i++) {
@@ -79,7 +79,7 @@ echo "</a>"; ?></td>
 <td><span class="<?=$d['accepted']?'ok':'no'?>"><?=$d['score'] ?></span></td>
 <td><a href='code.php?id=<?=$d['sid']?>'><?=$STR['lang'][$d['lang']]?></a></td>
 <td><?php printf("%.3f",$d['runtime']/1000.0) ?> s </td>
-<td><?php printf("%.2f",$d['memory']/1024) ?> MiB </td>
+<td><?php printf("%.2f",$d['memory']/1024) ?> MB </td>
 <td><?php echo date('Y-m-d H:i:s',$d['subtime']); ?></td>
 </tr>
 <?php

@@ -40,7 +40,7 @@ if($cnt) {
 <div class='row-fluid'>
 <div class='span4'>
 <table class='table table-striped table-condensed table-bordered fiexd'>
-<tr><th width='80px'>题目名称</th>
+<tr><th style="width: 5em;">题目名称</th>
 <td><?=$d['pid']?>. <b><?=$d['probname']; ?></b></td></tr>
 <tr><th>输入输出</th>
 <td><code><?=$d['filename']?>.in/out</code></td></tr>

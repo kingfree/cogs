@@ -20,8 +20,8 @@ $pbs=explode(":",$d['contains']);
 <div class='row-fluid'>
 <table id="contest_report" class='table table-striped table-condensed table-bordered fiexd'>
   <tr>
-    <th width="40px"><a href="javascript:qsort('rank')">名次</a></th>
-    <th width="100px">用户</th>
+    <th style="width: 5ex;"><a href="javascript:qsort('rank')">名次</a></th>
+    <th>用户</th>
 <?php
     $cnt_prob=0;
     foreach($pbs as $k=>$v) {
@@ -33,12 +33,12 @@ $pbs=explode(":",$d['contains']);
         $d=$p->rtnrlt(0);
         $cnt_prob++;
 ?>
-    <th width="150px"><a href="problem.php?pid=<?=$v?>&ctid=<?=$_GET[ctid]?>" target="_blank"><?=shortname($d['probname'])?></a></th>
-    <th width="40px"><a href="javascript:qsort('score<?=$v ?>_')">得分</a></th>
+    <th><a href="problem.php?pid=<?=$v?>&ctid=<?=$_GET[ctid]?>" target="_blank"><?=shortname($d['probname'])?></a></th>
+    <th style="width: 5ex;"><a href="javascript:qsort('score<?=$v ?>_')">得分</a></th>
 <?php
     }
 ?>
-    <th width="50px"><a href="javascript:qsort('sum')">总分</a></th>
+    <th style="width: 6ex;"><a href="javascript:qsort('sum')">总分</a></th>
   </tr>
 <?php 
     $sql="select userinfo.uid,userinfo.nickname,userinfo.realname,userinfo.email from userinfo,compscore where compscore.uid=userinfo.uid and compscore.ctid=$_GET[ctid] order by uid";

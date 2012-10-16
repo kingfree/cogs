@@ -64,7 +64,7 @@ $r=new DataAccess();
 <div class='span4'>
 <table class='table table-striped table-condensed table-bordered fiexd'>
 <tr>
-<th width="60px">比赛名称</th>
+<th style="width: 5em;">比赛名称</th>
 <th><?php echo $e[cname] ?></th>
 </tr>
 <tr>
@@ -94,7 +94,7 @@ if(有此权限('查看比赛') || time()>$e['endtime']) echo "<a href='report.p
 </tr>
 </table>
 <table id="probinfo" class='table table-striped table-condensed table-bordered fiexd'>
-<tr><th width='60px'>题目名称</th>
+<tr><th style="width: 5em;">题目名称</th>
 <td><b><?php echo $d['probname']; ?></b>
 <? if(time() > $e['endtime'] || 有此权限('查看比赛')) { ?><a href="../problem/problem.php?pid=<?=$pid?>" target="_blank"><i class='icon-share'></i></a><? } ?>
 </td></tr>
@@ -166,7 +166,7 @@ if($cnt) {
     $f=$r->rtnrlt(0);
 ?>
 <table id="probinfo" class='table table-striped table-condensed table-bordered fiexd'>
-<tr><th width=60px><b><?php echo $f['realname']; ?></b></th>
+<tr><th style="width: 5em;"><b><?php echo $f['realname']; ?></b></th>
 <td><a href="../user/detail.php?uid=<?=$uid?>"><?php echo $f['nickname']; ?></a></td></tr>
 <tr><th>提交时间</th>
 <td><?=date('Y-m-d H:i:s',$f['subtime']);?></td></tr>

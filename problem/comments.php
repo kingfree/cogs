@@ -64,7 +64,7 @@ if ($cnt) {
     </td>
   </tr>
   <tr>
-	<td class="CommentsCode"><?php if ($d['showcode']){
+	<td class="CommentsCode" style="width: 6em;"><?php if ($d['showcode']){
 	$sql="select sid from submit where uid='{$d['uid']}' and pid='{$d['pid']}' order by subtime desc";
 	$q->dosql($sql);
 	$e=$q->rtnrlt(0);
@@ -74,8 +74,8 @@ if ($cnt) {
 	</div>
     </td>
 	<td class="CommentsTime">发表时间：<?php echo date('Y-m-d H:i:s',$d['stime']);?></td>
-	<td class="CommentsTime">帖子编号：<?=$d['cid']?></td>
-	<td class="CommentsTime">楼层编号：<?=($i+1)?></td>
+	<td class="CommentsTime" style="width: 8em;">帖子编号：<?=$d['cid']?></td>
+	<td class="CommentsTime" style="width: 8em;">楼层编号：<?=($i+1)?></td>
   </di></tr>
 </table>
 <?php

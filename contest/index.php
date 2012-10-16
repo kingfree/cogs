@@ -20,20 +20,20 @@ $st=检测页面($cnt, $_GET['page']);
 </div>
 <table id="contestlist" class='table table-striped table-condensed table-bordered fiexd'>
 <thead><tr>
-    <th width='110px'>比赛</th>
+    <th style="width: 8em;">比赛</th>
     <th>场次介绍</th>
-    <th width='40px'>状态</th>
-    <th width='40px'>成绩</th>
-    <th width='120px'>开始时间</th>
-    <th width='120px'>结束时间</th>
-    <th width='120px'>开放分组</th>
+    <th style="width: 5ex;">状态</th>
+    <th style="width: 5ex;">成绩</th>
+    <th style="width: 16ex;">开始时间</th>
+    <th style="width: 16ex;">结束时间</th>
+    <th style="width: 8em;">开放分组</th>
 <?php if(有此权限('查看比赛')) { ?>
-    <th class=admin width='40px'>评测</th>
-    <th class=admin width='60px'>组织者</th>
+    <th class=admin style="width: 5ex;">评测</th>
+    <th class=admin style="width: 4em;">组织者</th>
 <? } ?>
 <?php if(有此权限('修改比赛')) { ?>
-    <th class=admin width='40px'>比赛</th>
-    <th class=admin width='40px'>场次</th>
+    <th class=admin style="width: 5ex;">比赛</th>
+    <th class=admin style="width: 5ex;">场次</th>
 <? } ?>
 </tr></thead>
 <?
@@ -41,7 +41,7 @@ for ($i=$st;$i<$cnt && $i<$st+$SET['style_pagesize'] ;$i++) {
 		$d=$p->rtnrlt($i);
 ?>
 <tr>
-    <th><a href='problem.php?ctid=<?=$d[ctid] ?>'><?=$d[cname] ?></a></th>
+    <td><b><a href='problem.php?ctid=<?=$d[ctid] ?>'><?=$d[cname] ?></a></b></td>
     <td><?=nl2br(sp2n(htmlspecialchars($d[intro]))) ?></td>
     <td ><?php
 	 if (time()>$d[endtime]) echo "<span class='did'>结束</span>"; else
