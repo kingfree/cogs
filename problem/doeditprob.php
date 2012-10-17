@@ -37,6 +37,8 @@ if($_FILES['datafile']['size'] && !$_FILES['datafile']['error']) {
         $now = (int) ($start + $i);
         rename(str_replace("#", "{$now}", $input), "{$_POST['filename']}{$i}.in");
         rename(str_replace("#", "{$now}", $answer), "{$_POST['filename']}{$i}.ans");
+        if(!file_exists("{$_POST['filename']}{$i}.ans") && file_exists("{$_POST['filename']}{$i}.out"))
+            rename("{$_POST['filename']}{$i}.out", "{$_POST['filename']}{$i}.ans");
         if(file_exists("{$_POST['filename']}{$i}.in") && file_exists("{$_POST['filename']}{$i}.ans"))
             $ff.="<li><span class='label label-success'>第 $i 个</span>测试点上传成功！</li>";
         else
