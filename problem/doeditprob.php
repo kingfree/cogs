@@ -9,9 +9,9 @@ if($_GET[action]=="change") {
         $p=new DataAccess();
         $sql="update problem set submitable=1-submitable where pid={$pid}";
         $p->dosql($sql);
-        提示("修改可用与否成功！", 取路径("problem/index.php"));
+        提示("修改可用与否成功！", 取路径("problem/index.php?order=asc&rank=submitable"));
     } else
-        异常("没有权限修改或查看题目！", 取路径("problem/index.php"));
+        异常("没有权限修改或查看题目！", 取路径("problem/index.php?order=asc&rank=submitable"));
 }
 
 if($_FILES['datafile']['size'] && !$_FILES['datafile']['error']) {

@@ -81,6 +81,7 @@ $st=检测页面($cnt, $_GET['page']);
 <button type='submit' class='btn'><i class='icon icon-search'></i></button>
 </div>
 <div class='btn-group'>排序方法：
+<button name="rank" class='btn' value='pid'>PID</button>
 <button name="rank" class='btn' value='probname'>题目名称</button>
 <button name="rank" class='btn' value='filename'>文件名称</button>
 <button name="rank" class='btn' value='timelimit'>时间限制</button>

@@ -63,7 +63,7 @@ class Compiler
     public function getupload()
     {
         $this->srcname.='.'.time();
-        if ($_FILES['file']['size']>1024*1024 || $_FILES['file']['size']==0)
+        if($_FILES['file']['size']>1024*100 || $_FILES['file']['size']<=0)
             return false;
         move_uploaded_file($_FILES['file']['tmp_name'],$this->srcname);
         chmod($this->srcname,0664);

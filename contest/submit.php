@@ -5,6 +5,9 @@ gethead(8,"普通用户","");
 if(!有此权限("查看比赛") && time() > $_POST['endtime'])
 异常("比赛已经结束，不可再提交！",取路径("contest/problem.php?pid={$_POST['pid']}&ctid={$_POST['ctid']}"));
 
+if($_FILES['file']['size']>1024*100 || $_FILES['file']['size']<=0)
+异常("源代码上传失败。请检查文件大小。",取路径("contest/problem.php?pid={$_POST['pid']}&ctid={$_POST['ctid']}"));
+
 $fname=$_POST[filename];
 switch ($_POST[lang]) {
     case 'pas':
