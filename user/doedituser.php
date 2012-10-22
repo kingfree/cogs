@@ -14,7 +14,7 @@ if ($_GET[action]=="del") {
     提示("删除用户成功！",取路径("user/index.php"));
 } else if ($_GET[action]=="edit") {
     $tt="";
-    $sql="update userinfo set nickname='{$_POST[nickname]}' ,readforce={$_POST[readforce]} ,email='{$_POST[email]}',grade={$_POST[grade]},memo='{$_POST[memo]}',realname='{$_POST[realname]}',gbelong={$_POST[gbelong]} where uid={$_GET[uid]}";
+    $sql="update userinfo set nickname='{$_POST[nickname]}' ,readforce={$_POST[readforce]} ,email='{$_POST[email]}',memo='{$_POST[memo]}',realname='{$_POST[realname]}',gbelong={$_POST[gbelong]} where uid={$_GET[uid]}";
     $p->dosql($sql);
     if ($_POST['reset'] == "reset") {
         $sql="update userinfo set pwdhash='".encode("")."' where uid={$_GET[uid]}";
