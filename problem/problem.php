@@ -95,11 +95,11 @@ if($_SESSION['ID']) {
 </td></tr>
 <tr><th>分类标签</th>
 <td><?php
-$sql="select category.cname,category.caid from category,tag where tag.pid={$_GET[pid]} and category.caid=tag.caid";
+$sql="select category.cname,category.memo,category.caid from category,tag where tag.pid={$_GET[pid]} and category.caid=tag.caid";
 $cnt2=$r->dosql($sql);
 for ($i=0;$i<=$cnt2-1;$i++) {
     $e=$r->rtnrlt($i);
-    HTML(" <a href='index.php?caid={$e['caid']}' target='_blank' class='btn btn-mini'>{$e['cname']}</a> ");
+    HTML(" <a href='index.php?caid={$e['caid']}' target='_blank' title='{$e['memo']}' class='btn btn-mini'>{$e['cname']}</a> ");
 } ?>
 <? if($acpid) { ?>
 <a class='btn btn-success btn-mini' href="#addcate" data-toggle='modal'><i class='icon-plus icon-white'></i>添加分类</a>

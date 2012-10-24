@@ -21,7 +21,7 @@ $pid=(int)$_GET['pid'];
 </div>
 </form>
 <?php
-$sql="select comments.*,userinfo.nickname,userinfo.email,userinfo.uid,problem.pid,problem.probname from comments,userinfo,problem where userinfo.uid=comments.uid and problem.pid=comments.pid ";
+$sql="select comments.*,userinfo.nickname,userinfo.memo,userinfo.email,userinfo.uid,problem.pid,problem.probname from comments,userinfo,problem where userinfo.uid=comments.uid and problem.pid=comments.pid ";
 if($pid) $sql.=" and problem.pid=$pid";
 if ($_GET['key']!="")
 $sql.=" and (problem.probname like '%{$_GET[key]}%' or problem.pid ='{$_GET[key]}' or problem.filename like '%{$_GET[key]}%' or comments.detail like '%{$_GET[key]}%')";
@@ -53,6 +53,7 @@ if ($cnt) {
 <td>
 <? if(!$pid) { ?>
 <a href="?pid=<?=$d['pid']?>"><?=$d['pid']?>: <?=$d['probname'] ?></a>
+<a href='problem.php?pid=<?=$d['pid']?>' target='_blank'><span class='icon-share'></span></a>
 <? } ?>
 </td>
 </tr>
@@ -61,6 +62,7 @@ if ($cnt) {
     <td colspan=4 class="CommentsK">
     <? if($_SESSION['ID']==$d['uid']) echo "<a href='comment.php?cid={$d['cid']}' class='pull-right btn btn-mini btn-warning'>修改</a>";?>
     <?php echo nl2br(sp2n(htmlspecialchars($d['detail'])))?>
+    <div class='muted pull-right'><?php echo nl2br(sp2n(htmlspecialchars($d['memo'])))?></div>
     </td>
   </tr>
   <tr>
