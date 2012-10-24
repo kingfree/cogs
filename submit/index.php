@@ -32,7 +32,7 @@ if ($_GET['uid'])
 if ($_GET['pid'])
     $sql.=" and submit.pid={$_GET['pid']} ";
 $sql.=" order by submit.sid desc";
-$limitt=$SET['style_pagesize']/2;
+$limitt=(int)$SET['style_pagesize']/2;
 if(!$_GET['show'] && !$_GET['pid']) $sql .= " limit {$limitt}";
 $cnt=$p->dosql($sql);
 $totalpage=(int)(($cnt-1)/$SET['style_pagesize'])+1;

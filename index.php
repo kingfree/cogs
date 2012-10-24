@@ -113,13 +113,13 @@ for($i=0;$i<$cnt;$i++) {
 <tr>
 <td><?php if(!$_GET['pid']) {
     是否通过($d['pid'], $q);
-    echo "<a href='submit/?pid={$d['pid']}&uid={$_GET['uid']}'>".shortname($d['probname'])."</a>";
+    echo "<a href='submit/?pid={$d['pid']}'>".shortname($d['probname'])."</a>";
     echo "<a href='problem/problem.php?pid={$d['pid']}' target='_blank'><span class='icon-share'></span></a>";
 } else
     echo "<a href='problem/problem.php?pid={$d['pid']}' target='_blank'>".shortname($d['probname'])."</a>";
 ?></td>
 <td><a href='user/detail.php?uid=<?=$d['uid']?>' target='_blank'><?=gravatar::showImage($d['email']);?></a>
-<?php echo "<a href='submit/?uid={$d[uid]}&pid={$_GET['pid']}'>";
+<?php echo "<a href='submit/?uid={$d[uid]}'>";
 if(有此权限("查看用户")) echo $d['realname']; else echo $d['nickname'];
 echo "</a>"; ?></td>
 <td><a href='submit/code.php?id=<?=$d['sid']?>'><?=评测结果($d['result'], 10, true)?></a></td>
@@ -149,7 +149,7 @@ $d=$p->rtnrlt($i);
 <tr>
 <td><i><?=$i+1 ?></i></td>
 <td><a href="user/detail.php?uid=<?php echo $d['uid']; ?>"><?=gravatar::showImage($d['email'], $SET['index_rank_icon']);?></a>
-<a href="user/detail.php?uid=<?php echo $d['uid']; ?>"><?php if(有此权限("查看用户")) echo $d['realname']; else echo $d['nickname'];?></a></td>
+<a href="user/detail.php?uid=<?php echo $d['uid']; ?>" title="<?=(sp2n(htmlspecialchars($d['memo'])))?>"><?php if(有此权限("查看用户")) echo $d['realname']; else echo $d['nickname'];?></a></td>
 <td><?=$d['grade']?></td>
 <td><?=$d['accepted']?></td>
 </tr>

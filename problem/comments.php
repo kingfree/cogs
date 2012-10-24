@@ -21,7 +21,7 @@ $pid=(int)$_GET['pid'];
 </div>
 </form>
 <?php
-$sql="select comments.*,userinfo.nickname,userinfo.memo,userinfo.email,userinfo.uid,problem.pid,problem.probname from comments,userinfo,problem where userinfo.uid=comments.uid and problem.pid=comments.pid ";
+$sql="select comments.*,userinfo.*,problem.pid,problem.probname from comments,userinfo,problem where userinfo.uid=comments.uid and problem.pid=comments.pid ";
 if($pid) $sql.=" and problem.pid=$pid";
 if ($_GET['key']!="")
 $sql.=" and (problem.probname like '%{$_GET[key]}%' or problem.pid ='{$_GET[key]}' or problem.filename like '%{$_GET[key]}%' or comments.detail like '%{$_GET[key]}%')";
@@ -41,17 +41,18 @@ if ($cnt) {
 ?>
 <table class='Comments table table-condensed table-bordered fiexd'>
   <tr>
-    <td class="CommentsU" rowspan=2 valign='top'><table>
+    <td class="CommentsU" rowspan=2 valign='top'>
+    <table border=0>
 <tr>
 <td rowspan=2 width='65px'><?=gravatar::showImage($d['email'], 64);?></td>
 <td>
 <a href="<?=路径("mail/index.php")?>?toid=<?=$d['uid']?>" title="给<?=$d['nickname']?>发送信件"><span class="icon-envelope"></span></a>
-<a href="<?php echo 路径("user/detail.php?uid={$d['uid']}");?>"><b><?php echo $d['nickname'];?></b></a>
+<a href="<?php echo 路径("user/detail.php?uid={$d['uid']}");?>" title="<?=(sp2n(htmlspecialchars($d['memo'])))?>"><b><?php echo $d['nickname'];?></b></a>
 </td>
 </tr>
 <tr>
 <td>
-<? if(!$pid) { ?>
+<? if(!$pid) { 是否通过($d['pid'], $q); ?>
 <a href="?pid=<?=$d['pid']?>"><?=$d['pid']?>: <?=$d['probname'] ?></a>
 <a href='problem.php?pid=<?=$d['pid']?>' target='_blank'><span class='icon-share'></span></a>
 <? } ?>
@@ -62,10 +63,10 @@ if ($cnt) {
     <td colspan=4 class="CommentsK">
     <? if($_SESSION['ID']==$d['uid']) echo "<a href='comment.php?cid={$d['cid']}' class='pull-right btn btn-mini btn-warning'>修改</a>";?>
     <?php echo nl2br(sp2n(htmlspecialchars($d['detail'])))?>
-    <div class='muted pull-right'><?php echo nl2br(sp2n(htmlspecialchars($d['memo'])))?></div>
+    <div class='muted pull-right'><small><?php echo nl2br(sp2n(htmlspecialchars($d['memo'])))?></div></div>
     </td>
   </tr>
-  <tr>
+  <tr class="CommentsBar">
 	<td class="CommentsCode" style="width: 6em;"><?php if ($d['showcode']){
 	$sql="select sid from submit where uid='{$d['uid']}' and pid='{$d['pid']}' order by subtime desc";
 	$q->dosql($sql);
@@ -78,7 +79,7 @@ if ($cnt) {
 	<td class="CommentsTime">发表时间：<?php echo date('Y-m-d H:i:s',$d['stime']);?></td>
 	<td class="CommentsTime" style="width: 8em;">帖子编号：<?=$d['cid']?></td>
 	<td class="CommentsTime" style="width: 8em;">楼层编号：<?=($i+1)?></td>
-  </di></tr>
+  </tr>
 </table>
 <?php
 	}

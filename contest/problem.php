@@ -65,7 +65,7 @@ $r=new DataAccess();
 <table class='table table-striped table-condensed table-bordered fiexd'>
 <tr>
 <th style="width: 5em;">比赛名称</th>
-<th><?php echo $e[cname] ?></th>
+<td><b><?php echo $e[cname] ?></b></td>
 </tr>
 <tr>
 <th>比赛状态</th>

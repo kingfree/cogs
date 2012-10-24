@@ -122,7 +122,7 @@ function okdel(name) {
   <tr>
     <td><i><?=$i+1?></i></td>
     <td><?=$d['uid'] ?></td>
-    <td><a href="detail.php?uid=<?=$d['uid'] ?>"><?=gravatar::showImage($d['email']);?><?=$d['nickname'] ?></a></td>
+    <td><a href="detail.php?uid=<?=$d['uid'] ?>" title="<?=(sp2n(htmlspecialchars($d['memo'])))?>"><?=gravatar::showImage($d['email']);?><?=$d['nickname'] ?></a></td>
     <? if(有此权限('查看用户')) { ?>
     <td ><?=$d['realname'] ?></td>
     <td ><?=$d['readforce'] ?></td>

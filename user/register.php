@@ -44,7 +44,7 @@ if ($_GET[accept]==1) {
 </tr>
 <tr>
 <th>个人介绍</th>
-<td><textarea name="memo" class='textarea' id="memo">这家伙很懒，什么都没写</textarea></td>
+<td><textarea name="memo" class='textarea' id="memo">写写你的座右铭、个人宣言、联系方式什么的都可以</textarea></td>
 </tr>
 <tr>
 <th>验证码</th>

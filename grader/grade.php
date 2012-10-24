@@ -255,7 +255,7 @@ switch ($query['action']) {
             $run=getrunning();
         } while($run > 0);
         chdir($compiledir);
-        deldir($query['uid']);
+        //deldir($query['uid']);
         $tmp['state']="successful";
         echo array_encode($tmp);
         break;
