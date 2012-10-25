@@ -44,7 +44,7 @@ echo "<span class='todo'>还未开始</span>";
 </tr>
 <tr>
 <th>介绍</th>
-<td><?php echo nl2br(sp2n(htmlspecialchars($d[intro]))) ?></td>
+<td><?php echo nl2br(BBCode(sp2n(htmlspecialchars($d[intro])))) ?></td>
 </tr>
 </table>
 <?php } ?>

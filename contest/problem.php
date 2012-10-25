@@ -90,7 +90,7 @@ if(有此权限('查看比赛') || time()>$e['endtime']) echo "<a href='report.p
 </tr>
 <tr>
 <th>注释介绍</th>
-<td><?php echo nl2br(sp2n(htmlspecialchars($e[intro]))) ?></td>
+<td><?php echo nl2br(BBCode(sp2n(htmlspecialchars($e[intro])))) ?></td>
 </tr>
 </table>
 <table id="probinfo" class='table table-striped table-condensed table-bordered fiexd'>
