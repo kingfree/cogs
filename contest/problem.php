@@ -103,7 +103,7 @@ if(有此权限('查看比赛') || time()>$e['endtime']) echo "<a href='report.p
 <tr><th>时间限制</th>
 <td><?php echo $d['timelimit']; ?> ms (<?=$d['timelimit']/1000?> s)</td></tr>
 <tr><th>内存限制</th>
-<td><?php echo $d['memorylimit']; ?> MiB </td></tr>
+<td><?php echo $d['memorylimit']; ?> MB </td></tr>
 <tr><th>测试点数</th>
 <td><span class='badge badge-success'><?=$d['datacnt']?></span>
 <span class='pull-right'><?=$STR['plugin'][$d['plugin']]?></span>
@@ -212,7 +212,7 @@ if($cnt) {
 <?=$STR['plugin'][$d['plugin']]?>
 <br />
 时间限制：<?=$d['timelimit']/1000?> s&nbsp;&nbsp;
-内存限制：<?=$d['memorylimit']; ?> MiB
+内存限制：<?=$d['memorylimit']; ?> MB
 <hr />
 </center>
 <dl class='problem'>

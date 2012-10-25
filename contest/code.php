@@ -1,7 +1,7 @@
 <?php
 require_once("../include/header.php");
 $p=new DataAccess();
-$sql="select problem.pid,problem.filename,problem.probname,userinfo.uid,userinfo.nickname,userinfo.realname,comptime.endtime,compscore.* from problem,compscore,comptime,userinfo where compscore.pid=problem.pid and comptime.ctid=compscore.ctid and userinfo.uid=compscore.uid and compscore.csid={$_GET[csid]}";
+$sql="select compbase.cname,problem.pid,problem.filename,problem.probname,userinfo.uid,userinfo.nickname,userinfo.realname,comptime.endtime,compscore.* from problem,compscore,comptime,compbase,userinfo where compscore.pid=problem.pid and comptime.ctid=compscore.ctid and userinfo.uid=compscore.uid and compscore.csid={$_GET[csid]} and compbase.cbid=comptime.cbid";
 $cnt=$p->dosql($sql);
 if ($cnt) {
 	$d=$p->rtnrlt(0);
@@ -25,13 +25,13 @@ $LIB->hlighter();
 <table class='table table-striped table-condensed table-bordered fiexd'>
 <tr>
     <th width="60px">比赛</th>
-    <td><?=$_GET['csid']?></td>
+    <td><b><?=$d['cname']?></b></td>
     <th width="60px">评测结果</th>
     <td class='wrap'><?php 评测结果($d['result'], 100) ?></td>
 </tr>
 <tr>
     <th>题目名称</th>
-    <td><a href="../problem/problem.php?pid=<?php echo $d['pid']; ?>" target="_blank"><?php echo $d['probname']; ?></a></td>
+    <td><a href="problem.php?ctid=<?=$d['ctid']?>&pid=<?php echo $d['pid']; ?>"><?php echo $d['probname']; ?></a></td>
     <th>最终得分</th>
     <td><?php echo $d['score'] ?></td>
 </tr>

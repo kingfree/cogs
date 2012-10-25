@@ -68,12 +68,12 @@ if ($cnt) {
     </td>
   </tr>
   <tr class="CommentsBar">
-	<td class="CommentsCode" style="width: 6em;"><?php if ($d['showcode']){
-	$sql="select sid from submit where uid='{$d['uid']}' and pid='{$d['pid']}' order by subtime desc";
+	<td class="CommentsCode"><?php if ($d['showcode']){
+	$sql="select sid,result from submit where uid='{$d['uid']}' and pid='{$d['pid']}' order by subtime desc";
 	$q->dosql($sql);
 	$e=$q->rtnrlt(0);
 	?>
-	<a href="../submit/code.php?id=<?=$e['sid']?>"><i class='icon icon-download'></i>查看代码</a>
+	<a href="../submit/code.php?id=<?=$e['sid']?>"><i class='icon icon-download'></i><?=评测结果($e['result'], 10, true)?></a>
 	<?php } ?>
 	</div>
     </td>
