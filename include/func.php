@@ -446,4 +446,43 @@ function getip($ip) {
     $loc=$xml->product->location;
     return $loc;
 }
+
+function BBCode($string) {
+    $search = array(
+        '/\[b\](.*?)\[\/b\]/is',
+        '/\[i\](.*?)\[\/i\]/is',
+        '/\[u\](.*?)\[\/u\]/is',
+        '/\[img\](.*?)\[\/img\]/is',
+        '/\[url\](.*?)\[\/url\]/is',
+        '/\[url\=(.*?)\](.*?)\[\/url\]/is',
+        '/\[color\=(.*?)\](.*?)\[\/color\]/is',
+        '/\[size\=(.*?)\](.*?)\[\/size\]/is',
+        '/\[code\](.*?)\[\/code\]/is',
+        '/\[code=c\](.*?)\[\/code\]/is',
+        '/\[code=cpp\](.*?)\[\/code\]/is',
+        '/\[code=pas\](.*?)\[\/code\]/is',
+        '/\[label\](.*?)\[\/label\]/is',
+        '/\[label\=(.*?)\](.*?)\[\/label\]/is',
+        '/\[quote\](.*?)\[\/quote\]/is'
+    );
+    $replace = array(
+        '<strong>\\1</strong>',
+        '<em>\\1</em>',
+        '<u>\\1</u>',
+        '<img src="\\1">',
+        '<a href="\\1" target="blank">\\1</a>',
+        '<a href="\\1" target="blank">\\2</a>',
+        '<span style="color:\\1;">\\2</span>',
+        '<span style="font-size:\\1px;">\\2</span>',
+        '<code>\\1</code>',
+        '<pre class="syntax c">\\1</pre>',
+        '<pre class="syntax cpp">\\1</pre>',
+        '<pre class="syntax pascal">\\1</pre>',
+        '<span class="label">\\1</span>',
+        '<span class="label label-\\1">\\2</span>',
+        '<blockquote>\\1</blockquote>'
+    );
+    return preg_replace($search, $replace, $string);
+}
+
 ?>

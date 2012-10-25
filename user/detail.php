@@ -49,7 +49,7 @@ $q=new DataAccess();
 </tr>
 <tr>
 <th>个人介绍</th>
-<td class='wrap'><?=nl2br(sp2n(htmlspecialchars($d['memo']))) ?></td>
+<td class='wrap'><?=nl2br(BBCode(sp2n(htmlspecialchars($d['memo'])))) ?></td>
 </tr>
   <?php if(有此权限('查看用户') || $_SESSION['ID']==$d['uid']) { ?>
   <tr>

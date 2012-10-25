@@ -42,7 +42,7 @@ class lib {
         require("hlighter.inc.php");
     }
     public function editor($edname) {
-        global $SET;
+        global $SET, $bbcode;
         require("editor.inc.php");
     }
     public function mathjax($edname) {

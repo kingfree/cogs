@@ -1,6 +1,7 @@
 <?php
 require_once("../include/header.php");
 gethead(1,"","题目评论");
+$LIB->hlighter();
 
 $p=new DataAccess();
 $q=new DataAccess();
@@ -62,8 +63,8 @@ if ($cnt) {
 </td>
     <td colspan=4 class="CommentsK">
     <? if($_SESSION['ID']==$d['uid']) echo "<a href='comment.php?cid={$d['cid']}' class='pull-right btn btn-mini btn-warning'>修改</a>";?>
-    <?php echo nl2br(sp2n(htmlspecialchars($d['detail'])))?>
-    <div class='muted pull-right'><small><?php echo nl2br(sp2n(htmlspecialchars($d['memo'])))?></div></div>
+    <?php echo nl2br(BBCode(sp2n(htmlspecialchars($d['detail']))))?>
+    <div class='muted pull-right'><small><?php echo nl2br(BBCode(sp2n(htmlspecialchars($d['memo']))))?></div></div>
     </td>
   </tr>
   <tr class="CommentsBar">

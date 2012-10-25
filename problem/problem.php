@@ -10,6 +10,7 @@ $d=$p->rtnrlt(0);
 $title = $d['probname'];
 gethead(1,"",$pid.". ".$title);
 
+$LIB->hlighter();
 $LIB->mathjax();
 
 $q=new DataAccess();
@@ -224,7 +225,7 @@ for ($i=0;$i<$cnt;$i++) {
     </tr>
     <tr><td colspan=3 class="CommentsK">
     <? if($_SESSION['ID']==$e['uid']) echo "<a href='comment.php?cid={$e['cid']}' class='pull-right btn btn-mini btn-warning'>修改</a>";?>
-    <?php echo nl2br(sp2n(htmlspecialchars($e['detail'])))?>
+    <?php echo nl2br(BBCode(sp2n(htmlspecialchars($e['detail']))))?>
     </td></tr>
 <?
 }
