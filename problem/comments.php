@@ -2,6 +2,7 @@
 require_once("../include/header.php");
 gethead(1,"","题目评论");
 $LIB->hlighter();
+$LIB->mathjax();
 
 $p=new DataAccess();
 $q=new DataAccess();

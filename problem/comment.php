@@ -2,6 +2,7 @@
 require_once("../include/header.php");
 gethead(1,"","题目评论");
 $LIB->hlighter();
+$LIB->mathjax();
 $p=new DataAccess();
 $uid=(int)$_SESSION['ID'];
 $pid=(int)$_GET['pid'];
@@ -80,8 +81,7 @@ function showBBCode($txt, $str) {
     echo nl2br(BBCode(sp2n(htmlspecialchars($str))))."</div>\n";
     echo "<pre class='prettyprint'>".htmlspecialchars($str)."</pre>\n";
 }
-showBBCode('常规样式', '[b]加粗[/b]、[i]倾斜[/i]和[u]下划线[/u]');
-showBBCode('色彩与大小', '[size=25]大点的字体[/size] [color=red]红色字[/color]和[color=#d0d]自定义颜色[/color]');
+showBBCode('常规样式', '[b]加粗[/b]、[i]倾斜[/i]和[u]下划线[/u] [size=25]大点的字体[/size] [color=red]红色字[/color]和[color=#d0d]自定义颜色[/color]');
 showBBCode('超链接', '直接包含[url]http://cojs.tk/cogs[/url]，或者显示文本[url=http://cojs.tk/cogs]COGS[/url]');
 showBBCode('图片', '原大小：[img]http://cojs.tk/cogs/style/cogs.png[/img]，缩放到宽度：[img width=80]http://cojs.tk/cogs/style/cogs.png[/img]');
 showBBCode('代码', '这个是[code]行内代码[/code]，你可以嵌入语言代码（c, cpp, pas）如
@@ -94,6 +94,21 @@ showBBCode('标签', '标签有六种：[label]默认[/label]、[label=success]�
 showBBCode('引用', '[quote]21世紀、世界の麻雀競技人口は一億人の大台を突破。
 日本でも大規模な全国大会が毎年開催され、プロに直結する成績を残すべく高校麻雀部員達が覇を競っていた。
 これはその頂点を目指す少女達の軌跡……。[/quote]');
+showBBCode('数学式子', '行内公式：$ a^2 + b^2 = c^2 $, $ \sqrt{2} $, $O(n \lg n)$, $ f[i][j] = \min\{f[i][j], f[i][k] + f[k][j]\} $。
+行间公式：\[ \sum_{i=i 下标}^{n 上标} {i 求和} = 1 + 2 + \cdots 省略号 + n = \frac{n(1 + n)}{2 分数}\]
+矩阵和括号：\[
+{\bf{A}} = \left(\begin{array}{lll}
+1 & 1 & 1\\\\
+0 & 1 & 0\\\\
+1 & 0 & 0\\\\
+\end{array}\right)
+\quad 空格 \quad
+f_{i,j} = \min\left\{\begin{array}{l}
+f_{i,j}\\\\
+f_{i,k} + f_{k,j}
+\end{array}\right.
+\]
+');
 ?>
 </div>
 

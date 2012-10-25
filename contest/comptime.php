@@ -40,7 +40,7 @@ $d=$p->rtnrlt(0);
   </tr>
   <tr>
     <td>场次介绍</td>
-    <td><?php echo nl2br(sp2n(htmlspecialchars($d[intro]))) ?></td>
+    <td><?php echo nl2br(BBCode(sp2n(htmlspecialchars($d[intro])))) ?></td>
     <td>修改场次信息</td>
     <td><a href="editcomptime.php?action=edit&ctid=<?php echo $d[ctid] ?>">修改</a></td>
   </tr>
