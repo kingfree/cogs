@@ -449,11 +449,14 @@ function getip($ip) {
 
 function BBCode($string) {
     $search = array(
+        '/@(\S{1,20})/',
+        '/@\[(.*?)\](\S{1,20})/',
+        '/@(\S{1,20})\[(.*?)\]/',
         '/\[b\](.*?)\[\/b\]/is',
         '/\[i\](.*?)\[\/i\]/is',
         '/\[u\](.*?)\[\/u\]/is',
         '/\[img\](.*?)\[\/img\]/is',
-        '/\[img&nbsp;(.*?)\](.*?)\[\/img\]/is',
+        '/\[img (.*?)\](.*?)\[\/img\]/is',
         '/\[url\](.*?)\[\/url\]/is',
         '/\[url\=(.*?)\](.*?)\[\/url\]/is',
         '/\[color\=(.*?)\](.*?)\[\/color\]/is',
@@ -467,13 +470,16 @@ function BBCode($string) {
         '/\[quote\](.*?)\[\/quote\]/is'
     );
     $replace = array(
+        '<a href="../user/detail.php?user=\\1" target="_blank" title="\\1">@\\1</a>',
+        '<a href="../user/detail.php?user=\\1" target="_blank" title="\\1">@\\2</a>',
+        '<a href="../user/detail.php?user=\\2" target="_blank" title="\\2">@\\1</a>',
         '<strong>\\1</strong>',
         '<em>\\1</em>',
         '<u>\\1</u>',
         '<img src="\\1">',
         '<img src="\\2" \\1>',
-        '<a href="\\1" target="blank">\\1</a>',
-        '<a href="\\1" target="blank">\\2</a>',
+        '<a href="\\1" target="blank" title="\\1">\\1</a>',
+        '<a href="\\1" target="blank" title="\\1">\\2</a>',
         '<span style="color:\\1;">\\2</span>',
         '<span style="font-size:\\1px;">\\2</span>',
         '<code>\\1</code>',
@@ -484,7 +490,8 @@ function BBCode($string) {
         '<span class="label label-\\1">\\2</span>',
         '<blockquote>\\1</blockquote>'
     );
-    return preg_replace($search, $replace, $string);
+    $string = htmlspecialchars($string);
+    return nl2br(preg_replace($search, $replace, $string));
 }
 
 ?>

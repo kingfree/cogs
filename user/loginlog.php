@@ -1,7 +1,9 @@
 <?php
 require_once("../include/header.php");
-gethead(1,"查看用户","登录日志");
+gethead(1,"sess","登录日志");
 $p=new DataAccess();
+if($_GET['uid'] != $_SESSION['ID'] && !有此权限("查看用户"))
+异常("不是本人并且没有权限查看！", 取路径("user/detail.php?uid={$_GET['uid']}"));
 ?>
 
 <form action="" method="get" class='form-inline center'>
@@ -32,7 +34,7 @@ for ($i=$st;$i<$cnt && $i<$st+$SET['style_pagesize'] ;$i++) {
 ?>
 <tr>
 <td><?=$d['lid']?></td>
-<td><a href="detail.php?uid=<?=$d['uid']?>" target=_blank><?=gravatar::showImage($d['email']);?><?=$d['realname']?></a></td>
+<td><a href="?uid=<?=$d['uid']?>"><?=gravatar::showImage($d['email']);?><?=$d['realname']?></a></td>
 <td><?=$d['ip']?></td>
 <td><?=$d['ua']?></td>
 <td><?=$d['version']?></td>

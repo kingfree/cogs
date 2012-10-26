@@ -56,7 +56,7 @@ if ($cnt) {
 <td>
 <? if(!$pid) { 是否通过($d['pid'], $q); ?>
 <a href="?pid=<?=$d['pid']?>"><?=$d['pid']?>. <?=shortname($d['probname']) ?></a>
-<a href='problem.php?pid=<?=$d['pid']?>' target='_blank'><span class='icon-share'></span></a>
+<a href='problem.php?pid=<?=$d['pid']?>' title="<?=$d['probname']?>" target='_blank'><span class='icon-share'></span></a>
 <? } ?>
 </td>
 </tr>
@@ -64,8 +64,8 @@ if ($cnt) {
 </td>
     <td colspan=4 class="CommentsK">
     <? if($_SESSION['ID']==$d['uid']) echo "<a href='comment.php?cid={$d['cid']}' class='pull-right btn btn-mini btn-warning'>修改</a>";?>
-    <?php echo nl2br(BBCode(sp2n(htmlspecialchars($d['detail']))))?>
-    <div class='muted pull-right'><small><?php echo nl2br(BBCode(sp2n(htmlspecialchars($d['memo']))))?></div></div>
+    <?php echo BBCode($d['detail'])?>
+    <div class='muted pull-right'><small><?php echo BBCode($d['memo'])?></div></div>
     </td>
   </tr>
   <tr class="CommentsBar">
@@ -74,7 +74,7 @@ if ($cnt) {
 	$q->dosql($sql);
 	$e=$q->rtnrlt(0);
 	?>
-	<a href="../submit/code.php?id=<?=$e['sid']?>"><i class='icon icon-download'></i><?=评测结果($e['result'], 10, true)?></a>
+	<a href="../submit/code.php?id=<?=$e['sid']?>" title="<?=$e['result']?>"><i class='icon icon-download'></i><?=评测结果($e['result'], 10, true)?></a>
 	<?php } ?>
 	</div>
     </td>

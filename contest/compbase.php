@@ -13,7 +13,7 @@ function MM_jumpMenu(targ,selObj,restore){ //v3.0
 <?php
 	$p=new DataAccess();
 	$q=new DataAccess();
-	$sql="select compbase.*,userinfo.nickname from compbase,userinfo where userinfo.uid=compbase.ouid order by compbase.cbid desc";
+	$sql="select compbase.*,userinfo.nickname,userinfo.realname,userinfo.email from compbase,userinfo where userinfo.uid=compbase.ouid order by compbase.cbid desc";
 	
 $cnt=$p->dosql($sql);
 $st=检测页面($cnt, $_GET['page']);
@@ -68,7 +68,10 @@ for ($i=$st;$i<$cnt && $i<$st+$SET['style_pagesize'] ;$i++) {
 <option value="editcomptime.php?action=add&cbid=<?php echo $d['cbid'] ?>">[添加新场次]</option>
 		</select>
 	</td>
-    <td><?php echo "<a href='../user/detail.php?uid={$d['ouid']}' target='_blank'>{$d['nickname']}</a>" ?></td>
+<td><a href='../user/detail.php?uid=<?=$d['ouid']?>' target='_blank'>
+<?=gravatar::showImage($d['email']);?>
+<?if(有此权限("查看用户")) echo $d['realname']; else echo $d['nickname'];?>
+</a></td>
     <td><a href="editcompbase.php?action=edit&cbid=<?php echo $d['cbid'] ?>">修改比赛</a></td>
   </tr>
 <?php

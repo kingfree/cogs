@@ -1,11 +1,17 @@
 <?php
 require_once("../include/header.php");
 $p=new DataAccess();
-$sql="select userinfo.*,groups.gname,groups.gid from userinfo,groups where userinfo.uid={$_GET['uid']} and userinfo.gbelong=groups.gid";
+$uid = (int) $_GET['uid'];
+$user = $_GET['user'];
+if($uid)
+$sql="select userinfo.*,groups.gname,groups.gid from userinfo,groups where userinfo.uid={$uid} and userinfo.gbelong=groups.gid";
+else
+$sql="select userinfo.*,groups.gname,groups.gid from userinfo,groups where (userinfo.uid='$user' OR userinfo.nickname='$user' OR userinfo.realname='$user' OR userinfo.usr='$user') and userinfo.gbelong=groups.gid";
 $cnt=$p->dosql($sql);
-if(!$cnt) 异常("无此用户！");
+if(!$cnt) 异常("无此用户！", 取路径("user/index.php"));
 $d=$p->rtnrlt(0);
-gethead(1,"","{$d['nickname']}", $_GET['uid']);
+$uid=$d['uid'];
+gethead(1,"","{$d['nickname']}", $uid);
 $q=new DataAccess();
 ?>
 <div class='row-fluid'>
@@ -29,7 +35,7 @@ $q=new DataAccess();
 </tr>
 <tr>
 <th>E-mail</th>
-<td><?=$d['email'] ?></td>
+<td><a href="mailto:<?=$d['email']?>" target="_blank"><?=$d['email'] ?></a></td>
 </tr>
 <tr>
 <th>阅读权限</th>
@@ -37,7 +43,7 @@ $q=new DataAccess();
 </tr>
 <tr>
 <th>所属分组</th>
-<td><a href="../user/index.php?gid=<?=$d['gid'] ?>"><?=$d['gname'] ?></a></td>
+<td><a href="../user/index.php?gid=<?=$d['gid'] ?>" class='btn btn-mini btn-warning'><?=$d['gname'] ?></a></td>
 </tr>
 <tr>
 <th>等级积分</th>
@@ -49,7 +55,7 @@ $q=new DataAccess();
 </tr>
 <tr>
 <th>个人介绍</th>
-<td class='wrap'><?=nl2br(BBCode(sp2n(htmlspecialchars($d['memo'])))) ?></td>
+<td class='wrap'><?=BBCode($d['memo']) ?></td>
 </tr>
   <?php if(有此权限('查看用户') || $_SESSION['ID']==$d['uid']) { ?>
   <tr>
@@ -72,13 +78,13 @@ $q=new DataAccess();
   </tr>
   <tr>
     <th>登录 IP</th>
-    <td><?=$d['lastip'] ?></td>
+    <td><a href="loginlog.php?uid=<?=$d['uid']?>"><?=$d['lastip'] ?></a></td>
   </tr>
   <?php } ?>
 </table>
 
 <?php
-$sql="select compbase.cbid,compbase.cname,compscore.subtime,comptime.ctid from compscore,comptime,compbase where compscore.uid={$_GET['uid']} and comptime.ctid=compscore.ctid and comptime.cbid=compbase.cbid order by comptime.endtime desc";
+$sql="select compbase.cbid,compbase.cname,compscore.subtime,comptime.ctid from compscore,comptime,compbase where compscore.uid={$uid} and comptime.ctid=compscore.ctid and comptime.cbid=compbase.cbid order by comptime.endtime desc";
 $cnt=$p->dosql($sql);
 if ($cnt) {
 ?>
@@ -108,13 +114,13 @@ if ($cnt) {
 ?>
 </div>
 <div class='span8'>
-<a href="../submit/index.php?uid=<?=$_GET['uid']?>" target="_blank" class='btn btn-link'>查看全部提交记录</a>
-<?php if(有此权限('查看用户') || $_SESSION['ID']==$_GET['uid']) { ?>
-<a href="export.php?uid=<?=$_GET['uid']?>" target="_blank" class='btn pull-right'>导出全部提交记录</a>
+<a href="../submit/index.php?uid=<?=$uid?>" target="_blank" class='btn btn-link'>查看全部提交记录</a>
+<?php if(有此权限('查看用户') || $_SESSION['ID']==$uid) { ?>
+<a href="export.php?uid=<?=$uid?>" target="_blank" class='btn pull-right'>导出全部提交记录</a>
 <? } ?>
 <?php
 $accnt=0;
-$sql="select problem.pid,problem.probname,submit.accepted,submit.lang,submit.sid from submit,problem where submit.uid={$_GET['uid']} and submit.pid=problem.pid order by problem.pid asc, submit.score desc ";
+$sql="select problem.pid,problem.probname,submit.accepted,submit.lang,submit.sid from submit,problem where submit.uid={$uid} and submit.pid=problem.pid order by problem.pid asc, submit.score desc ";
 $cnt=$p->dosql($sql);
 if ($cnt) {
 ?>
