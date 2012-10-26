@@ -14,6 +14,6 @@ if($str[strlen($str)-1] == '/') $hrl = ''; else $hrl = '/';
 $SET['base']=$_SERVER['DOCUMENT_ROOT'].$hrl.$SET['global_root'];
 $SET['URI']=base64_encode($_SERVER['REQUEST_URI']);
 
-$cfg['Version']='2.6.5.0';
+$cfg['Version']='2.6.5.1';
 ?>
 

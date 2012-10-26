@@ -148,8 +148,7 @@ $d=$p->rtnrlt($i);
 ?>
 <tr>
 <td><i><?=$i+1 ?></i></td>
-<td><a href="user/detail.php?uid=<?php echo $d['uid']; ?>"><?=gravatar::showImage($d['email'], $SET['index_rank_icon']);?></a>
-<a href="user/detail.php?uid=<?php echo $d['uid']; ?>" title="<?=(sp2n(htmlspecialchars($d['memo'])))?>"><?php if(有此权限("查看用户")) echo $d['realname']; else echo $d['nickname'];?></a></td>
+<td><a href="user/detail.php?uid=<?php echo $d['uid']; ?>" title="<?=(sp2n(htmlspecialchars($d['memo'])))?>"><?=gravatar::showImage($d['email'], $SET['index_rank_icon']);?><?php if(有此权限("查看用户")) echo $d['realname']; else echo $d['nickname'];?></a></td>
 <td><?=$d['grade']?></td>
 <td><?=$d['accepted']?></td>
 </tr>

@@ -55,7 +55,7 @@ if ($cnt) {
 <tr>
 <td>
 <? if(!$pid) { 是否通过($d['pid'], $q); ?>
-<a href="?pid=<?=$d['pid']?>"><?=$d['pid']?>: <?=$d['probname'] ?></a>
+<a href="?pid=<?=$d['pid']?>"><?=$d['pid']?>. <?=shortname($d['probname']) ?></a>
 <a href='problem.php?pid=<?=$d['pid']?>' target='_blank'><span class='icon-share'></span></a>
 <? } ?>
 </td>
