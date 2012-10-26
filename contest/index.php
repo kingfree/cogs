@@ -42,7 +42,7 @@ for ($i=$st;$i<$cnt && $i<$st+$SET['style_pagesize'] ;$i++) {
 ?>
 <tr>
     <td><b><a href='problem.php?ctid=<?=$d[ctid] ?>'><?=$d[cname] ?></a></b></td>
-    <td><?=BBCode($d[intro]) ?></td>
+    <td class="wrap"><?=BBCode($d[intro]) ?></td>
     <td ><?php
 	 if (time()>$d[endtime]) echo "<span class='did'>结束</span>"; else
 	 if (time()<$d[endtime] && time()>$d[starttime]) echo "<span class='doing'>进行</span>"; else

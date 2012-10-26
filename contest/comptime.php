@@ -88,7 +88,7 @@ if ($cnt) {
 		$tu=$d[uid];
 ?>
   <tr>
-    <td><a target="_blank" href="../user/detail.php?uid=<?php echo $d[uid] ?>"><? echo gravatar::showImage($d['email'], 28); echo "<br />"; if(有此权限("查看用户")) echo $d['realname']; else echo $d['nickname'];?></a></td>
+    <td><a target="_blank" href="../user/detail.php?uid=<?php echo $d[uid] ?>"><? echo gravatar::showImage($d['email'], 64); echo "<br />"; if(有此权限("查看用户")) echo $d['realname']; else echo $d['nickname'];?></a></td>
     <td>
 	
 <table class='table table-striped table-condensed table-bordered fiexd'>
@@ -115,7 +115,7 @@ if ($cnt) {
         <td><a target="_blank" href="problem.php?ctid=<?=$_GET[ctid]?>&pid=<?php echo $e[pid] ?>&uid=<?=$d[uid]?>"><?php echo shortname($e[probname]) ?></a></td>
         <td><a href="code.php?csid=<?php echo $e[csid] ?>" target="_blank"><?php echo $STR[lang][$e[lang]] ?></a></td>
         <td><?php echo date("m/d H:i:s",$e[subtime]) ?></td>
-        <td><?php echo 评测结果($e[result]) ?></td>
+        <td><?php echo 评测结果($e[result], 50) ?></td>
         <td><?php echo $e[score] ?></td>
         </tr>
         <?php

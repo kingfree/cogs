@@ -102,9 +102,11 @@ margin: 0;
 }
 
 
-.center {
+.center, .center td {
     text-align: center;
 }
+
+
 
 th {
     text-align: center;

@@ -91,13 +91,13 @@ function Finish() {
 当前第<span id="nowp">0</span>个 共<?=$cnt ?>个 </p>
 <table class='table table-striped table-condensed table-bordered fiexd'>
   <tr>
-    <th width="60px">CSID</th>
-    <th width="60px">真实姓名</th>
-    <th width="120px">题目名</th>
-    <th width="120px">文件名</th>
-    <th width="50px">代码</th>
-    <th width="50px">得分</th>
+    <th>CSID</th>
+    <th>真实姓名</th>
+    <th>题目名</th>
+    <th>文件名</th>
+    <th>代码</th>
     <th>测试点</th>
+    <th>得分</th>
   </tr>
 <?php 
     $p=new DataAccess();
@@ -112,11 +112,11 @@ function Finish() {
   <tr>
     <td><?=$d[csid] ?></td>
     <td><a href="../user/detail.php?uid=<?=$d[uid] ?>" target="_blank"><?=$d[realname] ?></a></td>
-    <td><a href="problem.php?pid=<?=$d[pid] ?>&ctid=<?=$d[ctid] ?>" target="_blank"><?=$d[probname] ?></a></td>
-    <td><?=$d[filename] ?></td>
+    <td><a href="problem.php?pid=<?=$d[pid] ?>&ctid=<?=$d[ctid] ?>" target="_blank"><?=shortname($d[probname]) ?></a></td>
+    <td><code><?=$d[filename] ?></code></td>
     <td><a href="code.php?csid=<?=$d[csid] ?>" target="_blank"><?=$STR[lang][$d[lang]] ?></a></td>
+    <td id="result<?=$d[csid] ?>"><?=评测结果($d[result], 50) ?></td>
     <td id="score<?=$d[csid] ?>"><?=$d[score] ?></td>
-    <td id="result<?=$d[csid] ?>"><?=评测结果($d[result]) ?></td>
   </tr>
 <?php 
     }

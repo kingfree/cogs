@@ -90,13 +90,13 @@ if(有此权限('查看比赛') || time()>$e['endtime']) echo "<a href='report.p
 </tr>
 <tr>
 <th>注释介绍</th>
-<td><?php echo nl2br(BBCode(sp2n(htmlspecialchars($e[intro])))) ?></td>
+<td class="wrap"><?php echo BBCode($e[intro]) ?></td>
 </tr>
 </table>
 <table id="probinfo" class='table table-striped table-condensed table-bordered fiexd'>
 <tr><th style="width: 5em;">题目名称</th>
-<td><b><?php echo $d['probname']; ?></b>
-<? if(time() > $e['endtime'] || 有此权限('查看比赛')) { ?><a href="../problem/problem.php?pid=<?=$pid?>" target="_blank"><i class='icon-share'></i></a><? } ?>
+<td><b><?php echo shortname($d['probname']); ?></b>
+<? if(time() > $e['endtime'] || 有此权限('查看比赛')) { ?><a href="../problem/problem.php?pid=<?=$pid?>" target="_blank" title="跳转到题目 <?=$d['probname']?>"><i class='icon-share'></i></a><? } ?>
 </td></tr>
 <tr><th>输入输出</th>
 <td><code><?php echo $d['filename']; ?>.in/out</code></td></tr>
@@ -205,7 +205,11 @@ if($cnt) {
 </ul>
 </div>
 <center class="problem tou">
-<h1><?=$d['pid']?>. <?=$d['probname']?></h1>
+<h1><?=$d['pid']?>. <?=shortname($d['probname'])?>
+<?php if(有此权限('修改题目')) { ?>
+<a href="../problem/editprob.php?action=edit&pid=<?=$d['pid']?>" title="修改题目 <?=$d['probname']?>" class="pull-right"><i class="icon icon-edit"></i></a>
+<?php } ?>
+</h1>
 <?=难度($d['difficulty']); ?>&nbsp;&nbsp;
 输入文件：<code><?=$d['filename']?>.in</code>&nbsp;&nbsp;
 输出文件：<code><?=$d['filename']?>.out</code>&nbsp;&nbsp;

@@ -44,7 +44,7 @@ echo "<span class='todo'>还未开始</span>";
 </tr>
 <tr>
 <th>介绍</th>
-<td><?php echo nl2br(BBCode(sp2n(htmlspecialchars($d[intro])))) ?></td>
+<td><?php echo BBCode($d[intro]) ?></td>
 </tr>
 </table>
 <?php } ?>
@@ -78,7 +78,7 @@ $d=$p->rtnrlt($i);
 <tr>
 <th style="width: 4ex;">PID</th>
 <th>最新题目
-<a href="problem/random.php" title="随机选择一道你没有通过的题目" class='btn btn-danger btn-mini pull-right' >随机题目</a>
+<a href="problem/random.php" title="随机选择一道你没有通过的题目" class='btn btn-danger btn-mini pull-right' ><i class='icon icon-random icon-white'></i></a>
 </th>
 </thead>
 </tr>

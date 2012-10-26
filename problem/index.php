@@ -66,7 +66,7 @@ $cnt=$p->dosql($sql);
 $st=检测页面($cnt, $_GET['page']);
 ?>
 <form method="get" action="" class='form-search center'>
-<a href="random.php" title="随机选择一道你没有通过的题目" class='btn btn-danger' >随机题目</a>
+<a href="random.php" title="随机选择一道你没有通过的题目" class='btn btn-danger' >随机题目<i class='icon icon-random icon-white'></i></a>
 <input name="caid" type="hidden" value="<?=$_GET['caid']?>" />
 <input name="order" type="hidden" value="<?=$_GET['order']=='asc'?'desc':'asc'?>" />
 难度 
@@ -105,9 +105,6 @@ function okic(name) {
 <table id="problist" class='table table-striped table-condensed table-bordered fiexd'>
 <thead><tr>
 <th style="width: 4ex;">PID</th>
-<?php if(有此权限('修改题目')) { ?>
-<th class=admin style="width: 4ex;">编辑</th>
-<?php } ?>
 <th onclick="sortTable('problist', 0, 'int')">题目名称</th>
 <th>文件名称</th>
 <th>时间</th>
@@ -118,7 +115,7 @@ function okic(name) {
 <th onclick="sortTable('problist', 7, 'int')">提交</th>
 <th onclick="sortTable('problist', 8, 'int')">通过率</th>
 <?php if(有此权限('查看题目')) { ?>
-<th class=admin style="width: 4ex;">标识</th>
+<th class=admin style="width: 4ex;"><i class='icon icon-question-sign'></i></th>
 <?php } ?>
 </tr></thead>
 <?php
@@ -131,10 +128,13 @@ if (!$err) for ($i=$st;$i<$cnt && $i<$st+$SET['style_pagesize'] ;$i++) {
 ?>
 <tr>
 <td><?php echo $d['pid'] ?></td>
+<td>
 <?php if(有此权限('修改题目')) { ?>
-<td><a href="editprob.php?action=edit&pid=<?=$d['pid']?>">修改</a></td>
+<a href="editprob.php?action=edit&pid=<?=$d['pid']?>" title="修改题目 <?=$d['probname']?>" class="pull-right"><i class="icon icon-edit"></i></a>
 <?php } ?>
-<td><? 是否通过($d['pid'], $q);?><b><a href="problem.php?pid=<?=$d['pid'] ?>"><?=$d['probname'] ?></a></b></td>
+<? 是否通过($d['pid'], $q);?>
+<b><a href="problem.php?pid=<?=$d['pid'] ?>"><?=$d['probname']?></a></b>
+</td>
 <td><code><?php echo $d['filename']; ?></code></td>
 <td><?php echo $d['timelimit']/1000 . " s"; ?></td>
 <td><?php echo $d['memorylimit'] . " MB"; ?></td>
@@ -144,9 +144,9 @@ if (!$err) for ($i=$st;$i<$cnt && $i<$st+$SET['style_pagesize'] ;$i++) {
 <td><?php echo $d['submitcnt']; ?></td>
 <td><?php echo @round($d['acceptcnt']/$d['submitcnt']*100,2); ?>%</td>
 <?php if(有此权限('查看题目')) { ?>
-<td>
-<a href="doeditprob.php?action=change&pid=<?=$d['pid']?>" onclick="return okic('<?=$d['probname']?>')">
-<?php if ($d['submitable']) echo "<span class='label label-success'>可用</span>"; else echo "<span class='label label-important'>禁用</span>"; ?>
+<td class="center">
+<a href="doeditprob.php?action=change&pid=<?=$d['pid']?>" title="更改题目 <?=shortname($d['probname'])?> 的可用性" onclick="return okic('<?=$d['probname']?>')">
+<?php if ($d['submitable']) echo "<span class='label label-success'><i class='icon icon-ok-circle icon-white'></i></span>"; else echo "<span class='label label-important'><i class='icon icon-ban-circle icon-white'></i></span>"; ?>
 </a>
 </td>
 <?php } ?>

@@ -31,9 +31,6 @@ $st=检测页面($cnt, $_GET['page']);
 <table id="pagelist" class='table table-striped table-condensed table-bordered fiexd'>
 <thead><tr>
 <th>AID</th>
-<?php if(有此权限('修改页面')) { ?>
-<th class=admin>编辑</th>
-<?php } ?>
 <th width=50%>页面标题</th>
 <th>创建时间</th>
 <th>修改时间</th>
@@ -49,10 +46,12 @@ for ($i=$st;$i<$cnt && $i<$st+$SET['style_pagesize'] ;$i++) {
 ?>
 <tr>
 <td><?php echo $d['aid'] ?></td>
+<td align=left>
+<b><a href="page.php?aid=<?=$d['aid'] ?>"><?=$d['title'] ?></b>
 <?php if(有此权限('修改页面')) { ?>
-<td><a href="editpage.php?action=edit&aid=<?=$d['aid']?>">修改</a></td>
+<a href="editpage.php?action=edit&aid=<?=$d['aid']?>" title="修改页面 <?=$d['title']?>" class="pull-right"><i class="icon icon-edit"></i></a>
 <?php } ?>
-<td align=left><b><a href="page.php?aid=<?=$d['aid'] ?>"><?=$d['title'] ?></b></td>
+</td>
 <td><?=date('Y-m-d', $d['time']) ?></td>
 <td><?=date('Y-m-d', $d['etime']) ?></td>
 <td><a href="../user/index.php?gid=<?=$d['gid'] ?>" target="_blank"><?=$d['gname'] ?></a></td>

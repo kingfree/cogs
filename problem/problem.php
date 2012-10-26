@@ -73,7 +73,7 @@ if($cnt) {
 <? } ?>
 <?=date('Y-m-d', $d['addtime']) ?>
 <?php if(有此权限('修改题目')) { ?>
-<a href="editprob.php?action=edit&pid=<?=$d['pid']?>" class='btn btn-info btn-mini pull-right' >修改该题</a>
+<a href="editprob.php?action=edit&pid=<?=$d['pid']?>" class='btn btn-info btn-mini pull-right' title="修改题目 <?=$d['probname']?>" >修改该题<i class="icon icon-edit icon-white"></i></a>
 <? } ?>
 </td></tr>
 <tr><th>开放分组</th>
@@ -223,8 +223,8 @@ for ($i=0;$i<$cnt;$i++) {
     <td>
     #<?=$cnt-$i?></td>
     </tr>
-    <tr><td colspan=3 class="CommentsK">
-    <? if($_SESSION['ID']==$e['uid']) echo "<a href='comment.php?cid={$e['cid']}' class='pull-right btn btn-mini btn-warning'>修改</a>";?>
+    <tr><td colspan=3 class="CommentsK wrap">
+    <? if($_SESSION['ID']==$e['uid']) echo "<a href='comment.php?cid={$e['cid']}' class='pull-right btn btn-mini btn-warning'><i class='icon icon-edit icon-white'></i></a>";?>
     <?php echo BBCode($e['detail'])?>
     </td></tr>
 <?
@@ -235,7 +235,11 @@ for ($i=0;$i<$cnt;$i++) {
 <div class='span8'>
 <div id="probdetail" class='page'>
 <center class="problem tou">
-<h1><?=$d['pid']?>. <?=$d['probname']?></h1>
+<h1><?=$d['pid']?>. <?=$d['probname']?>
+<?php if(有此权限('修改题目')) { ?>
+<a href="editprob.php?action=edit&pid=<?=$d['pid']?>" title="修改题目 <?=$d['probname']?>" class="pull-right"><i class="icon icon-edit"></i></a>
+<?php } ?>
+</h1>
 <?=难度($d['difficulty']); ?>&nbsp;&nbsp;
 输入文件：<code><?=$d['filename']?>.in</code>&nbsp;&nbsp;
 输出文件：<code><?=$d['filename']?>.out</code>&nbsp;&nbsp;

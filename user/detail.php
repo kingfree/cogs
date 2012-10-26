@@ -26,7 +26,13 @@ $q=new DataAccess();
 <td><?=$d['usr'] ?></td>
 </tr>
 <tr>
-<th>用户头像</th>
+<th>用户头像
+<p>&nbsp;</p>
+<?php if($_SESSION['ID'] == $uid) { ?>
+<a href="../mail" class="btn btn-success" title="信件"><span class='icon-envelope icon-white'></span></a>
+<p style="line-height: 2px;">&nbsp;</p>
+<a href="panel.php" class="btn btn-primary" title="设置"><span class='icon-cog icon-white'></span></a>
+<? } ?></th>
 <td><?=gravatar::showImage($d['email'], 200);?></td>
 </tr>
 <tr>
@@ -82,7 +88,6 @@ $q=new DataAccess();
   </tr>
   <?php } ?>
 </table>
-
 <?php
 $sql="select compbase.cbid,compbase.cname,compscore.subtime,comptime.ctid from compscore,comptime,compbase where compscore.uid={$uid} and comptime.ctid=compscore.ctid and comptime.cbid=compbase.cbid order by comptime.endtime desc";
 $cnt=$p->dosql($sql);
@@ -114,7 +119,7 @@ if ($cnt) {
 ?>
 </div>
 <div class='span8'>
-<a href="../submit/index.php?uid=<?=$uid?>" target="_blank" class='btn btn-link'>查看全部提交记录</a>
+<a href="../submit/index.php?uid=<?=$uid?>" target="_blank">查看全部提交记录</a>
 <?php if(有此权限('查看用户') || $_SESSION['ID']==$uid) { ?>
 <a href="export.php?uid=<?=$uid?>" target="_blank" class='btn pull-right'>导出全部提交记录</a>
 <? } ?>

@@ -143,11 +143,11 @@ function okdel(name) {
     <a href="loginlog.php?uid=<?=$d['uid'] ?>"><?=$d['lastip'] ?></a>
     </td><? } ?>
     <? if(有此权限('修改用户')) { ?><td>
+    <a href="edituser.php?uid=<?=$d['uid'] ?>" title="修改用户信息"><i class="icon icon-wrench"></i></a>
     <? if(有此权限('修改权限')) { ?>
-    <a href='privilege.php?way=edit&uid=<?=$d['uid']?>'>权</a>
+    <a href='privilege.php?way=edit&uid=<?=$d['uid']?>' title="赋予权限"><i class="icon icon-book"></i></a>
     <? } ?>
-    <a href="edituser.php?uid=<?=$d['uid'] ?>">改</a>
-    <a href="doedituser.php?uid=<?=$d['uid'] ?>&action=del" onclick="return okdel('<?=$d['nickname']?>')">删</a>
+    <a href="doedituser.php?uid=<?=$d['uid'] ?>&action=del" onclick="return okdel('<?=$d['nickname']?>')" title="删除用户账号"><i class="icon icon-remove"></i></a>
     </td><? } ?>
   </tr>
 <?php

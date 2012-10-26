@@ -79,7 +79,7 @@ $d=$p->rtnrlt(0);
   </tr>
   <tr>
     <th>用户名称</th>
-    <td><input name="usr" value="<?=$d['usr']?>" id='usr' type='text'/> 登录时输入的用户名</td>
+    <td><input name="usr" value="<?=$d['usr']?>" id='usr' type='text'/></td>
     <td rowspan='8' class='center'>
     <?=gravatar::showImage($d['email'], 200);?><br />
     <p />
@@ -92,48 +92,38 @@ $d=$p->rtnrlt(0);
   </tr>
   <tr>
     <th>用户昵称</th>
-    <td><input name="nickname" value="<?=$d['nickname']?>" type='text' id='nickname'/> 不要太长，否则会导致在首页上显示得很难看</td>
+    <td><input name="nickname" value="<?=$d['nickname']?>" type='text' id='nickname'/></td>
   </tr>
   <tr>
     <th>真实姓名</th>
-    <td><input name="realname" type='text' value="<?=$d['realname']?>" id='realname' /> 如果以前没有填过或者填的不是的话请注意修改</td>
+    <td><input name="realname" type='text' value="<?=$d['realname']?>" id='realname' /></td>
   </tr>
   <tr>
     <th>E-mail</th>
-    <td><input name="email" type="email" value="<?=$d['email']?>" id='email' /> 这个电子邮箱现在用于显示用户头像，请一律小写</td>
+    <td><input name="email" type="email" value="<?=$d['email']?>" id='email' /></td>
   </tr>
   <tr>
     <th>系统主题</th>
-    <td><input name="user_style" type='text' value="<?=$d['user_style']?>" />
+    <td>
+    <select name="user_style"><? $dir="../../Bootstrap/css/";
+$ssss= glob("$dir*.min.css");
+foreach($ssss as $sms) {
+    $zhuti = str_replace(".min.css", "", str_replace($dir, "", $sms));
+    echo "<option value='$zhuti' ";
+    if($d['user_style'] == $zhuti) echo "selected='selected'";
+    echo ">$zhuti</option>";
+}?><select>
     <label class='radio inline'><input type='radio' name='style' value='0' <?if(!$d['style']) echo "checked='checked'";?>/>浅色标题栏</label>
     <label class='radio inline'><input type='radio' name='style' value='1' <?if($d['style']) echo "checked='checked'";?>/>深色标题栏</label>
-<?/*$ssss= glob("*.min.css");
-foreach($ssss as $sms) {
-    echo str_replace(".min.css", "", $sms).", ";
-}*/?>
-<br />
-<b>bootstrap</b>,
-<b>spacelab</b>,
-<b>united</b>,
-amelia,
-cerulean,
-cyborg,
-journal,
-readable,
-simplex,
-slate,
-spruce,
-superhero
-为可用的主题
     </td>
   </tr>
   <tr>
     <th>背景图片</th>
-    <td><input type="file" name="file" /> 在此选择系统背景图片，请手动清除浏览器缓存</td>
+    <td><input type="file" name="file" /></td>
   </tr>
   <tr>
     <th>个人介绍</th>
-    <td><textarea name="memo" class='span8' ><?=$d['memo'] ?> </textarea></td>
+    <td><textarea name="memo" class='span12' ><?=$d['memo']?></textarea></td>
   </tr>
   <tr>
     <th></th>

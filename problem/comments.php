@@ -31,6 +31,7 @@ if($pid) $sql.=" order by comments.cid asc"; else $sql.=" order by comments.stim
 $cnt=$p->dosql($sql);
 $st=检测页面($cnt, $_GET['page']);
 ?>
+<table class='Comments table table-condensed table-bordered fiexd'>
 <?
 if ($cnt) {
 	for ($i=$st;$i<$cnt && $i<$st+$SET['style_pagesize'];$i++) {
@@ -41,12 +42,11 @@ if ($cnt) {
 			$sc=$d['showcode'];
 		}
 ?>
-<table class='Comments table table-condensed table-bordered fiexd'>
   <tr>
     <td class="CommentsU" rowspan=2 valign='top'>
-    <table border=0>
+    <table class="clear">
 <tr>
-<td rowspan=2 width='65px'><?=gravatar::showImage($d['email'], 64);?></td>
+<td rowspan=2><?=gravatar::showImage($d['email'], 64);?></td>
 <td>
 <a href="<?=路径("mail/index.php")?>?toid=<?=$d['uid']?>" title="给<?=$d['nickname']?>发送信件"><span class="icon-envelope"></span></a>
 <a href="<?php echo 路径("user/detail.php?uid={$d['uid']}");?>" title="<?=(sp2n(htmlspecialchars($d['memo'])))?>"><b><?php echo $d['nickname'];?></b></a>
@@ -62,8 +62,8 @@ if ($cnt) {
 </tr>
 </table>
 </td>
-    <td colspan=4 class="CommentsK">
-    <? if($_SESSION['ID']==$d['uid']) echo "<a href='comment.php?cid={$d['cid']}' class='pull-right btn btn-mini btn-warning'>修改</a>";?>
+    <td colspan=4 class="CommentsK wrap">
+    <? if($_SESSION['ID']==$d['uid']) echo "<a href='comment.php?cid={$d['cid']}' class='pull-right btn btn-mini btn-warning'><i class='icon icon-edit icon-white'></i>修改</a>";?>
     <?php echo BBCode($d['detail'])?>
     <div class='muted pull-right'><small><?php echo BBCode($d['memo'])?></div></div>
     </td>
@@ -82,13 +82,13 @@ if ($cnt) {
 	<td class="CommentsTime" style="width: 8em;">帖子编号：<?=$d['cid']?></td>
 	<td class="CommentsTime" style="width: 8em;">楼层编号：<?=($i+1)?></td>
   </tr>
-</table>
 <?php
 	}
 } else {
 	echo "<div class='alert'>还没有人发表评论！</div>";
 }
 ?>
+</table>
 <? 分页($cnt, $_GET['page'], '?key='.$_GET['key'].'&'); ?>
 </div>
 <?php

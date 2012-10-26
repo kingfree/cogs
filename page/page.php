@@ -38,7 +38,11 @@ if($cnt) {
 <div class='row-fluid'>
 <div class='page'>
 <center>
-<h1><?=$d['title']?></h1>
+<h1><?=$d['title']?>
+<?php if(有此权限('修改页面')) { ?>
+<a href="editpage.php?action=edit&aid=<?=$d['aid']?>" title="修改页面 <?=$d['title']?>" class="pull-right"><i class="icon icon-edit"></i></a>
+<?php } ?>
+</h1>
 由 <a href="../user/detail.php?uid=<?=$d['uid']; ?>" target="_blank"><?=$d['nickname']?></a> 在 <?=date('Y-m-d', $d['time']) ?> 创建
 开放分组：<a href="../user/index.php?gid=<?=$d['gid'] ?>" target="_blank"><?=$d['gname'] ?></a>
 上次编辑时间：<?=date('Y-m-d', $d['etime'])?>
