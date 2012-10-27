@@ -42,6 +42,9 @@ if(!preg_match('/(.{2,64})/', $_POST['passwordtipans']))
         $d=$p->rtnrlt(0);
     else
         异常("用户 {$_POST['usr']} 注册失败！",取路径("user/register.php?accept=1"));
+    $tm = time()+7776000;
+    setcookie("cogs_usr", $_POST[usr], $tm, "/");
+    setcookie("cogs_pwd_hash",encode($_POST[pwd]), $tm, "/");
     提示("用户 {$_POST['usr']} 注册成功，可以登录了！",取路径("index.php"));
 } else
 异常("用户 {$_POST['usr']} 已存在！",取路径("user/register.php?accept=1"));

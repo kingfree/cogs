@@ -12,7 +12,7 @@ if ($_GET[accept]==1) {
 <table class='table-form'>
 <tr>
 <th width='100px'>用户名称</th>
-<td><input name="usr" type="text" id="usr" /> 4~24位，遵循变量名命名规范</td>
+<td><input name="usr" type="text" id="usr" /> 4～24位，遵循变量名命名规范</td>
 </tr>
 <tr>
 <th>密码</th>
@@ -40,7 +40,7 @@ if ($_GET[accept]==1) {
 </tr>
 <tr>
 <th>真实姓名</th>
-<td><input name="realname" type="text" id="realname"/> 2～8位汉字字符，不会公开</td>
+<td><input name="realname" type="text" id="realname"/> 2～8位汉字字符，不会公开，<b>如果你实在不想写的话写可以代表你的昵称也可以</b></td>
 </tr>
 <tr>
 <th>个人介绍</th>
