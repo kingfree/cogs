@@ -61,7 +61,7 @@ $r=new DataAccess();
 ?>
 
 <div class='row-fluid'>
-<div class='span4'>
+<div id='leftbar' class='span4'>
 <table class='table table-striped table-condensed table-bordered fiexd'>
 <tr>
 <th style="width: 5em;">比赛名称</th>
@@ -180,7 +180,7 @@ if($cnt) {
 <? } ?>
 <? } ?>
 </div>
-<div class='span8'>
+<div id='rightbar' class='span8'>
 <div class='page'>
 <div class='tabbable'>
 <ul class='nav nav-tabs'>
@@ -205,6 +205,7 @@ if($cnt) {
 </ul>
 </div>
 <center class="problem tou">
+<a id="chbar" title="隐藏左边栏" class="pull-left" style="cursor:pointer"><i id="chbaricon" class="icon icon-indent-left"></i></a>
 <h1><?=$d['pid']?>. <?=shortname($d['probname'])?>
 <?php if(有此权限('修改题目')) { ?>
 <a href="../problem/editprob.php?action=edit&pid=<?=$d['pid']?>" title="修改题目 <?=$d['probname']?>" class="pull-right"><i class="icon icon-edit"></i></a>
@@ -222,6 +223,28 @@ if($cnt) {
 <dl class='problem'>
 <?=$d['detail']?>
 </dl>
+
+<? if(有此权限('查看比赛') || ($_SESSION['ID'] && time() < $e['endtime'] && time() > $e['starttime'])) { ?>
+<form action="submit.php" method="post" enctype="multipart/form-data" class='form-inline'>
+<td colspan=2>
+<input type="file" name="file" title='选择程序源文件' />
+<? if($d['plugin'] == 3 || $d['plugin'] == 4) { ?>
+<input type='hidden' name='lang' value='zip' />
+请提交一个 zip 压缩包，里面<b>直接</b>有 <?=$d['datacnt']?> 个 <?=$d['filename']?>#.out 文件
+<a href="../problem/downinput.php?file=<?=$d['filename']?>&data=<?=$d['datacnt']?>" class="btn btn-success btn-mini">下载测试数据</a>
+<?php } else { ?>
+<label class='radio inline'><input type='radio' name='lang' value='pas' />Pascal</label>
+<label class='radio inline'><input type='radio' name='lang' value='c' />C</label>
+<label class='radio inline'><input type='radio' name='lang' value='cpp' checked='checked'/>C++</label>
+<? } ?>
+<button type='submit' class='btn btn-primary' >提交代码</button>
+<input name="pid" type="hidden" value="<?=$d['pid']?>" />
+<input name="filename" type="hidden" value="<?=$d['filename']?>" />
+<input name="ctid" type="hidden" value="<?=$_GET['ctid']?>" />
+<input name="endtime" type="hidden" value="<?=$e['endtime']?>" />
+</form>
+<? } ?>
+
 </div>
 </div>
 </div>

@@ -39,7 +39,7 @@ if($cnt) {
 ?>
 
 <div class='row-fluid'>
-<div class='span4'>
+<div id="leftbar" class='span4'>
 <table class='table table-striped table-condensed table-bordered fiexd'>
 <tr><th style="width: 5em;">题目名称</th>
 <td><?=$d['pid']?>. <b><?=$d['probname']; ?></b></td></tr>
@@ -232,9 +232,10 @@ for ($i=0;$i<$cnt;$i++) {
 ?>
 </table>
 </div>
-<div class='span8'>
+<div id="rightbar" class='span8'>
 <div id="probdetail" class='page'>
 <center class="problem tou">
+<a id="chbar" title="隐藏左边栏" class="pull-left" style="cursor:pointer"><i id="chbaricon" class="icon icon-indent-left"></i></a>
 <h1><?=$d['pid']?>. <?=$d['probname']?>
 <?php if(有此权限('修改题目')) { ?>
 <a href="editprob.php?action=edit&pid=<?=$d['pid']?>" title="修改题目 <?=$d['probname']?>" class="pull-right"><i class="icon icon-edit"></i></a>
@@ -258,6 +259,40 @@ $Jia['summary']=trim(strip_tags($d['detail']));
 <dl class='problem'>
 <?=$d['detail']?>
 </dl>
+<? if($_SESSION['ID']) { ?>
+<form action="../submit/run.php" method="post" enctype="multipart/form-data" class='form-inline'>
+<input name="pid" type="hidden" id="pid" value="<?=$d['pid']?>" />
+<input type="file" name="file" title='选择程序源文件' />
+<select name='judger' class='input-medium'>
+<option value=0 selected=selected>自动选择评测机</option>
+<?
+$sql="select grid,address,memo from grader where enabled=1 order by priority desc";
+$cnt=$q->dosql($sql);
+for ($i=0;$i<$cnt;$i++) {
+    $e=$q->rtnrlt($i);
+    echo "<option value={$e['grid']} >{$e['memo']}</option>";
+}
+?>       
+</select>
+<?php if(有此权限('测试题目')) { ?>
+<label class='checkbox inline'>
+<input name="testmode" type="checkbox" value="1" />不写入数据库
+</label>
+<?php } ?>
+<br />
+<button type='submit' class='btn btn-primary' >提交代码</button>
+<? if($d['plugin'] == 3 || $d['plugin'] == 4) { ?>
+<input type='hidden' name='lang' value='zip' />
+请提交一个 zip 压缩包，里面直接有 <?=$d['datacnt']?> 个 <?=$d['filename']?>#.out 文件
+<a href="downinput.php?file=<?=$d['filename']?>&data=<?=$d['datacnt']?>" class="btn btn-success btn-mini">下载测试数据</a>
+<?php } else { ?>
+<label class='radio inline'><input type='radio' name='lang' value='pas' />Pascal</label>
+<label class='radio inline'><input type='radio' name='lang' value='c' />C</label>
+<label class='radio inline'><input type='radio' name='lang' value='cpp' checked='checked'/>C++</label>
+<? } ?>
+</form>
+<? } ?>
+
 </div>
 </div>
 </div>

@@ -1,4 +1,26 @@
 </div>
+
+<script>
+$('#chbar').click(function() {
+  if($('#rightbar').hasClass('span8')) {
+    $('#leftbar').hide();
+    $('#rightbar').removeClass('span8');
+    $('#chbaricon').removeClass('icon-indent-left');
+    $('#chbaricon').addClass('icon-align-left');
+    $('#chbar').attr('title', '显示左边栏');
+  } else {
+    $('#leftbar').show();
+    $('#rightbar').addClass('span8');
+    $('#chbaricon').removeClass('icon-align-left');
+    $('#chbaricon').addClass('icon-indent-left');
+    $('#chbar').attr('title', '隐藏左边栏');
+  }
+});
+</script>
+
+
+
+
 <div class='footer'>
 <div class='btn-group buttons-radio pull-right'>
 <a class='btn btn-small' onclick="document.getElementById('trad').innerHTML='中文正體';document.getElementById('alltext').innerHTML = TradSimp.getTrad(document.getElementById('alltext').innerHTML);" id="trad">中文繁體</a>
