@@ -1,25 +1,26 @@
 </div>
 
 <script>
-    $('#leftbar').hide();
-    $('#rightbar').removeClass('span8');
-    $('#chbaricon').removeClass('icon-indent-left');
-    $('#chbaricon').addClass('icon-align-left');
-    $('#chbar').attr('title', '显示左边栏');
-$('#chbar').click(function() {
-  if($('#rightbar').hasClass('span8')) {
-    $('#leftbar').hide();
-    $('#rightbar').removeClass('span8');
-    $('#chbaricon').removeClass('icon-indent-left');
-    $('#chbaricon').addClass('icon-align-left');
-    $('#chbar').attr('title', '显示左边栏');
-  } else {
-    $('#leftbar').show();
-    $('#rightbar').addClass('span8');
-    $('#chbaricon').removeClass('icon-align-left');
-    $('#chbaricon').addClass('icon-indent-left');
-    $('#chbar').attr('title', '隐藏左边栏');
-  }
+$(document).ready(function() {
+  $('#fenlei').hide();
+  $('#fenleito').click(function() {
+    $('#fenlei').slideToggle();
+  });
+  $('#chbar').click(function() {
+    if($('#rightbar').hasClass('span8')) {
+      $('#leftbar').hide();
+      $('#rightbar').removeClass('span8');
+      $('#chbaricon').removeClass('icon-indent-left');
+      $('#chbaricon').addClass('icon-align-left');
+      $('#chbar').attr('title', '显示左边栏');
+    } else {
+      $('#leftbar').show();
+      $('#rightbar').addClass('span8');
+      $('#chbaricon').removeClass('icon-align-left');
+      $('#chbaricon').addClass('icon-indent-left');
+      $('#chbar').attr('title', '隐藏左边栏');
+    }
+  });
 });
 </script>
 

@@ -95,13 +95,13 @@ if($_SESSION['ID']) {
 } ?>
 </td></tr>
 <tr><th>分类标签</th>
-<td><?php
+<td id="fenleito" title="单击以显示或隐藏分类标签"><div id="fenlei"><?php
 $sql="select category.cname,category.memo,category.caid from category,tag where tag.pid={$_GET[pid]} and category.caid=tag.caid";
 $cnt2=$r->dosql($sql);
 for ($i=0;$i<=$cnt2-1;$i++) {
     $e=$r->rtnrlt($i);
     HTML(" <a href='index.php?caid={$e['caid']}' target='_blank' title='{$e['memo']}' class='btn btn-mini'>{$e['cname']}</a> ");
-} ?>
+} ?></div>
 <? if($acpid) { ?>
 <a class='btn btn-success btn-mini' href="#addcate" data-toggle='modal'><i class='icon-plus icon-white'></i>添加分类</a>
 <div id='addcate' class='modal hide fade in'>
