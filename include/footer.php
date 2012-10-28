@@ -1,6 +1,11 @@
 </div>
 
 <script>
+    $('#leftbar').hide();
+    $('#rightbar').removeClass('span8');
+    $('#chbaricon').removeClass('icon-indent-left');
+    $('#chbaricon').addClass('icon-align-left');
+    $('#chbar').attr('title', '显示左边栏');
 $('#chbar').click(function() {
   if($('#rightbar').hasClass('span8')) {
     $('#leftbar').hide();
