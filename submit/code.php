@@ -87,7 +87,7 @@ $q=new DataAccess();
 if(有此权限('查看代码') || $d['uid']==$_SESSION['ID'])
     $forcetocode=1;
 else {
-    $sql="select showcode from comments where uid={$d['uid']} and pid={$d['pid']}";
+    $sql="select showcode from comments where uid={$d['uid']} and pid={$d['pid']} order by showcode desc limit 1";
     $cnt=$p->dosql($sql);
     if ($cnt) {
         $f=$p->rtnrlt(0);
