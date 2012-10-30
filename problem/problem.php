@@ -73,7 +73,7 @@ if($cnt) {
 <? } ?>
 <?=date('Y-m-d', $d['addtime']) ?>
 <?php if(有此权限('修改题目')) { ?>
-<a href="editprob.php?action=edit&pid=<?=$d['pid']?>" class='btn btn-info btn-mini pull-right' title="修改题目 <?=$d['probname']?>" >修改该题<i class="icon icon-edit icon-white"></i></a>
+<a href="editprob.php?action=edit&pid=<?=$d['pid']?>" class='btn btn-info btn-mini pull-right' title="修改题目 <?=$d['probname']?>" >修改该题</a>
 <? } ?>
 </td></tr>
 <tr><th>开放分组</th>
@@ -94,16 +94,20 @@ if($_SESSION['ID']) {
     }
 } ?>
 </td></tr>
-<tr><th>分类标签</th>
-<td id="fenleito" title="单击以显示或隐藏分类标签"><div id="fenlei"><?php
+<tr><th id="fenleito" title="单击以显示或隐藏分类标签" style="cursor:pointer">分类标签</th>
+<td><div id="fenlei"><?php
 $sql="select category.cname,category.memo,category.caid from category,tag where tag.pid={$_GET[pid]} and category.caid=tag.caid";
 $cnt2=$r->dosql($sql);
 for ($i=0;$i<=$cnt2-1;$i++) {
     $e=$r->rtnrlt($i);
     HTML(" <a href='index.php?caid={$e['caid']}' target='_blank' title='{$e['memo']}' class='btn btn-mini'>{$e['cname']}</a> ");
-} ?></div>
-<? if($acpid) { ?>
-<a class='btn btn-success btn-mini' href="#addcate" data-toggle='modal'><i class='icon-plus icon-white'></i>添加分类</a>
+} ?>
+<? if(!$acpid) { ?>
+<script>
+  $('#fenlei').hide();
+</script>
+<? } else { ?>
+<a class='btn btn-success btn-mini pull-right' href="#addcate" data-toggle='modal' title="添加分类标签"><i class='icon-plus icon-white'></i></a>
 <div id='addcate' class='modal hide fade in'>
 <form method="post" action="addcate.php" class='form-horizontal'>
 <fieldset>
@@ -133,7 +137,7 @@ for ($i=0;$i<=$cnt2-1;$i++) {
 </fieldset>
 </form>
 </div>
-<? } ?>
+<? } ?></div>
 </td></tr>
 <? if($_SESSION['ID']) { ?>
 <tr><form action="../submit/run.php" method="post" enctype="multipart/form-data" class='form-inline'>

@@ -2,7 +2,6 @@
 
 <script>
 $(document).ready(function() {
-  $('#fenlei').hide();
   $('#fenleito').click(function() {
     $('#fenlei').slideToggle();
   });

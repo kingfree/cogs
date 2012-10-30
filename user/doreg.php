@@ -7,6 +7,7 @@ $_POST['nickname']=htmlspecialchars($_POST['nickname']);
 $_POST['realname']=htmlspecialchars($_POST['realname']);
 $_POST['email']=htmlspecialchars($_POST['email']);
 $_POST['user_style']=htmlspecialchars($_POST['user_style']);
+$_POST['memo']=htmlspecialchars($_POST['memo']);
 
 $regpage=取路径("user/register.php?accept=1");
 
@@ -34,7 +35,7 @@ if(!preg_match('/(.{2,64})/', $_POST['passwordtip']))
 异常("提示问题长度必须在[2,64]中。", $regpage);
 if(!preg_match('/(.{2,64})/', $_POST['passwordtipans']))
 异常("提示问题答案长度必须在[2,64]中。", $regpage);
-    $sql="insert into userinfo(uid,usr,nickname,readforce,admin,regtime,pwdhash,pwdtipques,pwdtipanshash,memo,realname,email,gbelong) values (0, '{$_POST[usr]}','{$_POST[nickname]}','{$SET['reg_readforce']}',0, ". time() .",'". encode($_POST[pwd]) ."' ,'{$_POST[passwordtip]}' , '". encode($_POST[passwordtipans]) ."', '{$_POST[memo]}','{$_POST['realname']}','{$_POST['email']}','{$SET['reg_defgroup']}')";
+    $sql="insert into userinfo(uid,usr,nickname,readforce,admin,regtime,pwdhash,pwdtipques,pwdtipanshash,memo,realname,email,gbelong,user_style,style) values (0, '{$_POST[usr]}','{$_POST[nickname]}','{$SET['reg_readforce']}',0, ". time() .",'". encode($_POST[pwd]) ."' ,'{$_POST[passwordtip]}' , '". encode($_POST[passwordtipans]) ."', '{$_POST[memo]}','{$_POST['realname']}','{$_POST['email']}','{$SET['reg_defgroup']}','{$SET['user_style']}', 0)";
     $p->dosql($sql);
     $sql="select * from userinfo where usr='".$_POST['usr']."'";
     $cnt2=$p->dosql($sql);
@@ -45,7 +46,7 @@ if(!preg_match('/(.{2,64})/', $_POST['passwordtipans']))
     $tm = time()+7776000;
     setcookie("cogs_usr", $_POST[usr], $tm, "/");
     setcookie("cogs_pwd_hash",encode($_POST[pwd]), $tm, "/");
-    提示("用户 {$_POST['usr']} 注册成功，可以登录了！",取路径("index.php"));
+    提示("用户 {$_POST['usr']} 注册成功！生成头像缓存需要一定时间等耐心等待……<p>之后你可以更改你的个人信息看看。",取路径("user/panel.php"));
 } else
 异常("用户 {$_POST['usr']} 已存在！",取路径("user/register.php?accept=1"));
 ?>
