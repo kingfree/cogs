@@ -225,17 +225,17 @@ if($cnt) {
 </dl>
 
 <? if(有此权限('查看比赛') || ($_SESSION['ID'] && time() < $e['endtime'] && time() > $e['starttime'])) { ?>
-<form action="submit.php" method="post" enctype="multipart/form-data" class='form-inline'>
+<form action="submit.php" method="post" enctype="multipart/form-data" class='form-inline' id="tijiao">
 <td colspan=2>
-<input type="file" name="file" title='选择程序源文件' />
+<input id="source" type="file" name="file" title='选择程序源文件' />
 <? if($d['plugin'] == 3 || $d['plugin'] == 4) { ?>
 <input type='hidden' name='lang' value='zip' />
 请提交一个 zip 压缩包，里面<b>直接</b>有 <?=$d['datacnt']?> 个 <?=$d['filename']?>#.out 文件
 <a href="../problem/downinput.php?file=<?=$d['filename']?>&data=<?=$d['datacnt']?>" class="btn btn-success btn-mini">下载测试数据</a>
 <?php } else { ?>
-<label class='radio inline'><input type='radio' name='lang' value='pas' />Pascal</label>
-<label class='radio inline'><input type='radio' name='lang' value='c' />C</label>
-<label class='radio inline'><input type='radio' name='lang' value='cpp' checked='checked'/>C++</label>
+<label class='radio inline'><input type='radio' name='lang' value='pas' id='pas'/>Pascal</label>
+<label class='radio inline'><input type='radio' name='lang' value='c' id='c'/>C</label>
+<label class='radio inline'><input type='radio' name='lang' value='cpp' id='cpp' checked='checked'/>C++</label>
 <? } ?>
 <button type='submit' class='btn btn-primary' >提交代码</button>
 <input name="pid" type="hidden" value="<?=$d['pid']?>" />

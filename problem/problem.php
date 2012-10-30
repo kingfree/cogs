@@ -264,9 +264,9 @@ $Jia['summary']=trim(strip_tags($d['detail']));
 <?=$d['detail']?>
 </dl>
 <? if($_SESSION['ID']) { ?>
-<form action="../submit/run.php" method="post" enctype="multipart/form-data" class='form-inline'>
+<form action="../submit/run.php" method="post" enctype="multipart/form-data" class='form-inline' id="tijiao">
 <input name="pid" type="hidden" id="pid" value="<?=$d['pid']?>" />
-<input type="file" name="file" title='选择程序源文件' />
+<input id="source" type="file" name="file" title='选择程序源文件' />
 <select name='judger' class='input-medium'>
 <option value=0 selected=selected>自动选择评测机</option>
 <?
@@ -280,7 +280,7 @@ for ($i=0;$i<$cnt;$i++) {
 </select>
 <?php if(有此权限('测试题目')) { ?>
 <label class='checkbox inline'>
-<input name="testmode" type="checkbox" value="1" />不写入数据库
+<input id="testmode" name="testmode" type="checkbox" value="1" />不写入数据库
 </label>
 <?php } ?>
 <br />
@@ -290,9 +290,9 @@ for ($i=0;$i<$cnt;$i++) {
 请提交一个 zip 压缩包，里面直接有 <?=$d['datacnt']?> 个 <?=$d['filename']?>#.out 文件
 <a href="downinput.php?file=<?=$d['filename']?>&data=<?=$d['datacnt']?>" class="btn btn-success btn-mini">下载测试数据</a>
 <?php } else { ?>
-<label class='radio inline'><input type='radio' name='lang' value='pas' />Pascal</label>
-<label class='radio inline'><input type='radio' name='lang' value='c' />C</label>
-<label class='radio inline'><input type='radio' name='lang' value='cpp' checked='checked'/>C++</label>
+<label class='radio inline'><input type='radio' name='lang' value='pas' id='pas'/>Pascal</label>
+<label class='radio inline'><input type='radio' name='lang' value='c' id='c'/>C</label>
+<label class='radio inline'><input type='radio' name='lang' value='cpp' id='cpp' checked='checked'/>C++</label>
 <? } ?>
 </form>
 <? } ?>

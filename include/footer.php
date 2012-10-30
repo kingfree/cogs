@@ -1,28 +1,5 @@
 </div>
 
-<script>
-$(document).ready(function() {
-  $('#fenleito').click(function() {
-    $('#fenlei').slideToggle();
-  });
-  $('#chbar').click(function() {
-    if($('#rightbar').hasClass('span8')) {
-      $('#leftbar').hide();
-      $('#rightbar').removeClass('span8');
-      $('#chbaricon').removeClass('icon-indent-left');
-      $('#chbaricon').addClass('icon-align-left');
-      $('#chbar').attr('title', '显示左边栏');
-    } else {
-      $('#leftbar').show();
-      $('#rightbar').addClass('span8');
-      $('#chbaricon').removeClass('icon-align-left');
-      $('#chbaricon').addClass('icon-indent-left');
-      $('#chbar').attr('title', '隐藏左边栏');
-    }
-  });
-});
-</script>
-
 
 
 
@@ -47,3 +24,62 @@ $(document).ready(function() {
 */ ?>
 </body>
 </html>
+
+<script>
+$(document).ready(function() {
+  $('#fenleito').click(fenlei);
+  $('#chbar').click(chbar);
+});
+function fenlei() {
+    $('#fenlei').slideToggle();
+};
+function chbar() {
+    if($('#rightbar').hasClass('span8')) {
+      $('#leftbar').hide();
+      $('#rightbar').removeClass('span8');
+      $('#chbaricon').removeClass('icon-indent-left');
+      $('#chbaricon').addClass('icon-align-left');
+      $('#chbar').attr('title', '显示左边栏');
+    } else {
+      $('#leftbar').show();
+      $('#rightbar').addClass('span8');
+      $('#chbaricon').removeClass('icon-align-left');
+      $('#chbaricon').addClass('icon-indent-left');
+      $('#chbar').attr('title', '隐藏左边栏');
+    }
+  };
+function pagedown() {
+  $('body').animate({scrollTop:$('body').scrollTop()+400});
+};
+function pageup() {
+  $('body').animate({scrollTop:$('body').scrollTop()-400});
+};
+//快捷键操作
+$(document).keydown(function(key) {
+    //alert(key.which);
+    if(key.which == 72) // h
+      chbar();
+    else if(key.which == 74) // j
+      pagedown();
+    else if(key.which == 75) // k
+      pageup();
+    else if(key.which == 84) // t
+      fenlei();
+    else if(key.which == 65) // a
+      $('#source').click();
+    else if(key.ctrlKey && key.which == 13) // Ctrl + Enter
+      $('#tijiao').submit();
+    else if(key.which == 13) // Enter
+      $('#addcate form').submit();
+    else if(key.which == 80) // p
+      $('#pas').attr('checked', true);
+    else if(key.which == 67) // c
+      $('#c').attr('checked', true);
+    else if(key.which == 187) // +
+      $('#cpp').attr('checked', true);
+    else if(key.which == 85) // u
+      $('#testmode').attr('checked', !$('#testmode').attr('checked'));
+});
+</script>
+
+

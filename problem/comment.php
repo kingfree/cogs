@@ -42,7 +42,7 @@ if($pid) {
 }
 ?>
 <div class='container-fluid'>
-<form method="post" action="sendcomments.php" class='form-horizontal'>
+<form method="post" action="sendcomments.php" class='form-horizontal' id="tijiao">
 <div class='modal-header'>
 <h3>发表
 <? if($pid) { ?>
