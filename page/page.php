@@ -37,7 +37,7 @@ if($cnt) {
 
 <div class='row-fluid'>
 <div class='page'>
-<center>
+<center class="problem tou">
 <h1><?=$d['title']?>
 <?php if(有此权限('修改页面')) { ?>
 <a href="editpage.php?action=edit&aid=<?=$d['aid']?>" title="修改页面 <?=$d['title']?>" class="pull-right"><i class="icon icon-edit"></i></a>
@@ -51,7 +51,9 @@ if($cnt) {
 <? } ?>
 <hr />
 </center>
+<dl class='problem'>
 <?=$d['text'] ?>
+</dl>
 </div>
 </div>
 

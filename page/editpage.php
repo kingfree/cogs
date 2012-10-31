@@ -1,7 +1,7 @@
 <?php
 require_once("../include/header.php");
 gethead(1,"修改页面","修改页面");
-$LIB->editor("editor_id");
+$LIB->editor("detail");
 ?>
 
 <script type = "text/javascript">
@@ -44,7 +44,7 @@ if ($cnt) {
 }
 ?>
 <div class='row-fluid'>
-<form action="doeditpage.php" method="post" class='form-inline'>
+<form action="doeditpage.php" method="post" class='form-inline' id="tijiao">
 <dl class='dl-horizontal'>
 <dt>AID</dt>
 <dd><?=$d['aid'] ?>
@@ -67,7 +67,7 @@ $e=$q->rtnrlt($j);
 </select></dd>
 <dt>页面内容</dt>
 <dd>
-<textarea id="editor_id" name="text" style="width:90%; height:500px;"><?=$dtext?></textarea>
+<textarea id="detail" name="text" class='pagearea'><?=htmlspecialchars($d['text'])?></textarea>
 </dd>
 <dd><button type="submit" class='btn btn-primary'>单击此处提交对该页面的修改</button>
 <input name="action" type="hidden" id="action" value="<?=$_GET['action']?>" />

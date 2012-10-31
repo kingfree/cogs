@@ -333,7 +333,7 @@ if($_GET['oj']=='poj' && $_GET['id']>=1000) {
 </div>
 
 <div class='row-fluid'>
-<form action="doeditprob.php" method="post" enctype="multipart/form-data" class='form-horizontal'>
+<form action="doeditprob.php" method="post" enctype="multipart/form-data" class='form-horizontal' id="tijiao">
 <div id='cates' class='modal hide fade in' style='width:940px; margin-left:-470px;'>
 <?php
 if ($_GET['pid']) {
@@ -481,7 +481,7 @@ for ($j=0;$j<$c;$j++) {
 <label class='control-label' for='detail'>题目内容
 </label>
 <div class='controls'>
-<textarea id="detail" name="detail" class='pagearea'><?=$d['detail']?></textarea>
+<textarea id="detail" name="detail" class='pagearea'><?=htmlspecialchars($d['detail'])?></textarea>
 </div>
 </div>
 </div>
