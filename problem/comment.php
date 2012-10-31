@@ -83,7 +83,11 @@ function showBBCode($txt, $str) {
 }
 showBBCode('常规样式', '[b]加粗[/b]、[i]倾斜[/i]和[u]下划线[/u] [size=25]大点的字体[/size] [color=red]红色字[/color]和[color=#d0d]自定义颜色[/color]');
 showBBCode('超链接和@', '直接包含[url]http://cojs.tk/cogs[/url]，或者显示文本[url=http://cojs.tk/cogs]COGS[/url]。还可以用 UID @524 、用户昵称 @王者自由 、姓名或其他称号 @[Kingfree]KF 来提及别人，注意后面要有空格来分隔，目前被提及人还不能收到提示。');
-showBBCode('图片', '原大小：[img]http://cojs.tk/cogs/style/cogs.png[/img]，缩放到宽度：[img width=80]http://cojs.tk/cogs/style/cogs.png[/img]');
+$ddd="";
+for($i=1;$i<=100;$i++)
+$ddd.=$i>9?"(bgm$i)":"(bgm0$i)";
+showBBCode('图片', '原大小：[img]http://cojs.tk/cogs/style/cogs.png[/img]，缩放到宽度：[img width=80]http://cojs.tk/cogs/style/cogs.png[/img]。
+表情暂时有'.$ddd);
 showBBCode('代码', '这个是[code]行内代码[/code]，你可以嵌入语言代码（c, cpp, pas）如
 [code=cpp]#include <cstdio>
 int main() {

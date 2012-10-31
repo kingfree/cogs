@@ -467,7 +467,8 @@ function BBCode($string) {
         '/\[code=pas\](.*?)\[\/code\]/is',
         '/\[label\](.*?)\[\/label\]/is',
         '/\[label\=(.*?)\](.*?)\[\/label\]/is',
-        '/\[quote\](.*?)\[\/quote\]/is'
+        '/\[quote\](.*?)\[\/quote\]/is',
+        '/\((\D{2,5})(\d{1,5})\)/is',
     );
     $replace = array(
         '<a href="../user/detail.php?user=\\1" target="_blank" title="\\1">@\\1</a>',
@@ -488,7 +489,8 @@ function BBCode($string) {
         '<pre class="syntax pascal">\\1</pre>',
         '<span class="label">\\1</span>',
         '<span class="label label-\\1">\\2</span>',
-        '<blockquote>\\1</blockquote>'
+        '<blockquote>\\1</blockquote>',
+        '<img src="../images/\\1/\\2.gif" title="(\\1\\2)">'
     );
     $string = htmlspecialchars($string);
     return nl2br(preg_replace($search, $replace, $string));
