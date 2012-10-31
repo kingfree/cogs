@@ -1,6 +1,6 @@
 <?php
 require_once("../include/header.php");
-gethead(1,"sess","登录日志");
+gethead(1,"sess","登录日志",$_GET['uid']);
 $p=new DataAccess();
 if($_GET['uid'] != $_SESSION['ID'] && !有此权限("查看用户"))
 异常("不是本人并且没有权限查看！", 取路径("user/detail.php?uid={$_GET['uid']}"));

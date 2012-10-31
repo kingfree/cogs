@@ -20,7 +20,7 @@ function Navigation($p) {
     HTML("<div class='nav-collapse'>");
     HTML("<ul class='nav'>");
     HTML("<li class='dropdown'>");
-    HTML("<a href='#' class='dropdown-toggle' data-toggle='dropdown'><b class='caret'></b></a>");
+    HTML("<a id='fenleibar' href='#' class='dropdown-toggle' data-toggle='dropdown'><b class='caret'></b></a>");
     HTML("<ul class='dropdown-menu span11' id='catebar'>");
     $sql="select * from category order by cname";
     $cnt=$p->dosql($sql);
@@ -73,7 +73,7 @@ function Navigation($p) {
     HTML("<a href='#' class='dropdown-toggle' data-toggle='dropdown'>{$nickname}{$mails}<b class='caret'></b></a>");
     HTML("<ul class='dropdown-menu'>");
     if($uid = (int) $_SESSION['ID']) {
-        HTML("<li class='span2'><a href='".路径("user/detail.php?uid={$uid}")."'><span class='username'>".$d['nickname']."</span><span class='avatar'>".gravatar::showImage($d['email'], 28)."</span></a></li>");
+        HTML("<li class='span2'><a id='userbar' href='".路径("user/detail.php?uid={$uid}")."'><span class='username'>".$d['nickname']."</span><span class='avatar'>".gravatar::showImage($d['email'], 28)."</span></a></li>");
         列表("user/panel.php", "cog", "设置");
         列表("mail/index.php", "envelope", "信件".$mails);
         列表("user/dologout.php", "off", "退出");

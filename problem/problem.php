@@ -107,7 +107,7 @@ for ($i=0;$i<=$cnt2-1;$i++) {
   $('#fenlei').hide();
 </script>
 <? } else { ?>
-<a class='btn btn-success btn-mini pull-right' href="#addcate" data-toggle='modal' title="添加分类标签"><i class='icon-plus icon-white'></i></a>
+<a id="addfenlei" class='btn btn-success btn-mini pull-right' href="#addcate" data-toggle='modal' title="添加分类标签"><i class='icon-plus icon-white'></i></a>
 <div id='addcate' class='modal hide fade in'>
 <form method="post" action="addcate.php" class='form-horizontal'>
 <fieldset>

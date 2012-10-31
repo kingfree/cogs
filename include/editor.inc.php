@@ -8,14 +8,22 @@ $SS=路径("style/");
 var editor;
 KindEditor.ready(function(K) {
     editor = K.create('#<?=$edname?>', {
-        cssPath : '<?=$SS?>cogs.css',
-        uploadJson : '<?=$SH?>upload_json.inc.php',
+        cssPath: '<?=$SS?>cogs.css',
+        bodyClass: 'problem',
+        uploadJson: '<?=$SH?>upload_json.inc.php',
         //fileManagerJson : '../php/file_manager_json.php',
         //allowFileManager : true,
+        width: '100%',
+        syncType: 'form',
+        filterMode: false,
+        themeType: 'simple',
+        wellFormatMode: true,
+        indentChar: '',
+        shadowMode: false,
+        imageTabIndex: 1,
+        pasteType: 1,
+        items: ['source', 'preview', '|', 'undo', 'redo', '|', 'plainpaste', 'wordpaste', '|', 'formatblock', 'code', 'link', 'unlink', '|', 'fontsize', 'bold', 'italic', 'underline', 'forecolor', 'hilitecolor', '|', 'image', 'emoticons', 'table', 'insertfile', '|', 'clearhtml', 'about', 'fullscreen'],
     });
 });
 </script>
-<!--<script type="text/javascript">
-    var ue = new UE.ui.Editor();
-    ue.render('<?=$edname?>');
-</script>-->
+

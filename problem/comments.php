@@ -26,7 +26,7 @@ $pid=(int)$_GET['pid'];
 $sql="select comments.*,userinfo.*,problem.pid,problem.probname from comments,userinfo,problem where userinfo.uid=comments.uid and problem.pid=comments.pid ";
 if($pid) $sql.=" and problem.pid=$pid";
 if ($_GET['key']!="")
-$sql.=" and (problem.probname like '%{$_GET[key]}%' or problem.pid ='{$_GET[key]}' or problem.filename like '%{$_GET[key]}%' or comments.detail like '%{$_GET[key]}%')";
+$sql.=" and (problem.probname like '%{$_GET[key]}%' or problem.pid ='{$_GET[key]}' or problem.filename like '%{$_GET[key]}%' or comments.detail like '%{$_GET[key]}%' or userinfo.nickname like '%{$_GET[key]}%' or userinfo.usr like '%{$_GET[key]}%' or userinfo.realname like '%{$_GET[key]}%')";
 if($pid) $sql.=" order by comments.cid asc"; else $sql.=" order by comments.stime desc";
 $cnt=$p->dosql($sql);
 $st=检测页面($cnt, $_GET['page']);

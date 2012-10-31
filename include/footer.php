@@ -65,6 +65,8 @@ $(document).keydown(function(key) {
       pageup();
     else if(key.which == 84) // t
       fenlei();
+    else if(key.which == 82) // r
+      $('#addfenlei').click();
     else if(key.which == 65) // a
       $('#source').click();
     else if(key.ctrlKey && key.which == 13) // Ctrl + Enter
@@ -79,6 +81,10 @@ $(document).keydown(function(key) {
       $('#cpp').attr('checked', true);
     else if(key.which == 85) // u
       $('#testmode').attr('checked', !$('#testmode').attr('checked'));
+    else if(key.which == 27) // Esc
+      $('.modal').modal('hide');
+    else if(key.which == 70) // f
+      $('#fenleibar').click();
 });
 </script>
 
