@@ -8,7 +8,7 @@ $SS=路径("style/");
 var editor;
 KindEditor.ready(function(K) {
     editor = K.create('#<?=$edname?>', {
-        cssPath: '<?=$SS?>cogs.css',
+        cssPath: ['/Bootstrap/css/<?=$_SESSION['user_style']?>.min.css', '<?=$SS?>cogs.css', '/kindeditor/plugins/code/prettify.css'],
         bodyClass: 'problem',
         uploadJson: '<?=$SH?>upload_json.inc.php',
         //fileManagerJson : '../php/file_manager_json.php',

@@ -112,7 +112,7 @@ if ($forcetocode) {
 <?
     } else {
 ?>
-<pre class="syntax <?=$langstr?>"><?=htmlspecialchars($code)?></pre>
+<pre class="prettyprint linenums lang-<?=$langstr?>"><?=htmlspecialchars($code)?></pre>
 <?php } } else {
 ?>
     <h1>您没有权限查看代码。</h1>

@@ -52,11 +52,6 @@ function gethead($head,$check,$title,$userid=0) {
 <script type="text/javascript" src="/jQuery/jquery-1.8.0.min.js"></script>
 <script type="text/javascript" src="<?=路径("include/sortTable.js")?>"></script>
 <script type="text/javascript" src="/Bootstrap/js/bootstrap.min.js"></script>
-<? if($head == 7) { ?>
-<script type="text/javascript" src="/UEditor/editor_config.js"></script>
-<script type="text/javascript" src="/UEditor/editor_all_min.js"></script>
-<link rel="stylesheet" href="/UEditor/themes/default/ueditor.css">
-<? } ?>
 <!--[if IE 6]>
 <link href="/Bootstrap-IE6/ie6.min.css" type="text/css" rel="stylesheet">
 <![endif]-->

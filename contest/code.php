@@ -58,7 +58,7 @@ $LIB->hlighter();
     else if($d['lang']==1) $langstr="c";
     else if($d['lang']==2) $langstr="cpp";
 ?>
-<pre class="syntax <?=$langstr?>"><?=htmlspecialchars($code)?></pre>
+<pre class="prettyprint linenums lang-<?=$langstr?>"><?=htmlspecialchars($code)?></pre>
 </div>
 <?php
 	include_once("../include/footer.php");

@@ -462,13 +462,11 @@ function BBCode($string) {
         '/\[color\=(.*?)\](.*?)\[\/color\]/is',
         '/\[size\=(.*?)\](.*?)\[\/size\]/is',
         '/\[code\](.*?)\[\/code\]/is',
-        '/\[code=c\](.*?)\[\/code\]/is',
-        '/\[code=cpp\](.*?)\[\/code\]/is',
-        '/\[code=pas\](.*?)\[\/code\]/is',
+        '/\[code=([a-z]{1,5})\](.*?)\[\/code\]/is',
         '/\[label\](.*?)\[\/label\]/is',
         '/\[label\=(.*?)\](.*?)\[\/label\]/is',
         '/\[quote\](.*?)\[\/quote\]/is',
-        '/\((\D{2,5})(\d{1,5})\)/is',
+        '/\(([a-z]{2,5})(\d{1,5})\)/is',
     );
     $replace = array(
         '<a href="../user/detail.php?user=\\1" target="_blank" title="\\1">@\\1</a>',
@@ -484,16 +482,20 @@ function BBCode($string) {
         '<span style="color:\\1;">\\2</span>',
         '<span style="font-size:\\1px;">\\2</span>',
         '<code>\\1</code>',
-        '<pre class="syntax c">\\1</pre>',
-        '<pre class="syntax cpp">\\1</pre>',
-        '<pre class="syntax pascal">\\1</pre>',
+        '<pre class="prettyprint linenums lang-\\1">\\2</pre>',
         '<span class="label">\\1</span>',
         '<span class="label label-\\1">\\2</span>',
         '<blockquote>\\1</blockquote>',
         '<img src="../images/\\1/\\2.gif" title="(\\1\\2)">'
     );
     $string = htmlspecialchars($string);
-    return nl2br(preg_replace($search, $replace, $string));
+    $string = preg_replace($search, $replace, $string);
+    return nl2br($string);
 }
 
+    function gettexts($string, $long) {
+        if($long+3 >= strlen($string))
+            return $string;
+        return substr($string, 0, $long) . "...";
+    }
 ?>

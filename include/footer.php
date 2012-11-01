@@ -83,8 +83,6 @@ $(document).keydown(function(key) {
       $('#testmode').attr('checked', !$('#testmode').attr('checked'));
     else if(key.which == 27) // Esc
       $('.modal').modal('hide');
-    else if(key.which == 70) // f
-      $('#fenleibar').click();
 });
 </script>
 
