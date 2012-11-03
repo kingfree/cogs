@@ -8,7 +8,7 @@ $sizee=$SET['style_ranksize'] - 7;
 <div class='row-fluid'>
 <div class='span9'>
 <div class='row-fluid'>
-<div class='span4'>
+<div class='span4' id="index_page">
 <?php 
 $now = time();
 $noww = time() + 60*60*2;
@@ -61,7 +61,7 @@ $d=$p->rtnrlt($i);
 </table>
 <? } ?>
 </div>
-<div class='span8'>
+<div class='span8' id="index_title">
 <div>
 <?=输出文本($SET['global_bulletin']); ?>
 </div>
@@ -74,7 +74,7 @@ $d=$p->rtnrlt($i);
 </div>
 </div>
 <div class='row-fluid'>
-<div class='span4'>
+<div class='span4' id="index_problem">
 <table class='table table-striped table-condensed table-bordered fiexd'>
 <thead>
 <tr>
@@ -98,7 +98,7 @@ $d=$p->rtnrlt($i);
 <?php } ?>
 </table>
 </div>
-<div class='span8'>
+<div class='span8' id="index_submit">
 <table class='table table-striped table-condensed table-bordered fixed'>
 <thead><tr>
 <th>题目</th>
@@ -133,7 +133,7 @@ echo "</a>"; ?></td>
 </div>
 </div>
 </div>
-<div class='span3'>
+<div class='span3' id="index_user">
 <table class='table table-striped table-condensed table-bordered fixed'>
 <thead>
 <tr>
