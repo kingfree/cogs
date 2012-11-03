@@ -342,27 +342,28 @@ padding: 10px;
 
 #index {
     text-align: center;
-    font-size: 26px;
+    font-size: 24px;
     line-height: 34px;
     font-weight: bold;
+    margin: 0 0 10px 0;
 }
 
 #index a:link, #index a:visited {
-    color: #08c;
+    color: black;
     text-decoration: none;
-    text-shadow: 2px 4px 8px #fff;
+    text-shadow: 2px 4px 8px white;
 }
 
 #index a:hover {
-    color: #08c;
+    color: black;
     text-decoration: none;
-    text-shadow: 2px 4px 8px #ccf;
+    text-shadow: 2px 4px 8px yellow;
 }
 
 #index a:active {
-    color: #fff;
+    color: black;
     text-decoration: none;
-    text-shadow: 2px 4px 8px #678;
+    text-shadow: 2px 4px 8px red;
 }
 
 .table {

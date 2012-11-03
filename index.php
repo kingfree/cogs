@@ -62,12 +62,14 @@ $d=$p->rtnrlt($i);
 <? } ?>
 </div>
 <div class='span8'>
-<div class='alert alert-info'>
+<div>
 <?=输出文本($SET['global_bulletin']); ?>
 </div>
 <div id='index'>
-<?php //echo 输出文本($SET['global_index']); ?>
 <?php echo 输出文本($SET['global_head']); ?>
+</div>
+<div>
+<?php echo 输出文本($SET['global_index']); ?>
 </div>
 </div>
 </div>

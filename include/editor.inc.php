@@ -22,7 +22,15 @@ KindEditor.ready(function(K) {
         shadowMode: false,
         imageTabIndex: 1,
         pasteType: 1,
-        items: ['source', 'preview', '|', 'undo', 'redo', '|', 'plainpaste', 'wordpaste', '|', 'formatblock', 'code', 'link', 'unlink', '|', 'fontsize', 'bold', 'italic', 'underline', 'forecolor', 'hilitecolor', '|', 'image', 'emoticons', 'table', 'insertfile', '|', 'clearhtml', 'about', 'fullscreen'],
+        items: ['source', 'preview', '|',
+        'undo', 'redo', '|',
+        'plainpaste', 'wordpaste', '|',
+        'formatblock', 'code', 'link', 'unlink', '|',
+        'fontsize', 'bold', 'italic', 'underline',
+        'forecolor', 'hilitecolor', '|',
+        'image', 'emoticons', 'table', 'insertfile', '|',
+        'clearhtml', 'about', 'fullscreen'],
+        //afterChange: MathJax.Hub,
     });
 });
 </script>

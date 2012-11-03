@@ -82,7 +82,7 @@ if($cnt) {
 <td><?php
 $acpid=0;
 if($_SESSION['ID']) {
-    $sql="select * from submit where sid in (SELECT sid FROM submit WHERE pid ={$pid} AND uid ={$_SESSION['ID']} order by score desc) order by sid desc";
+    $sql="(SELECT * FROM submit WHERE pid ={$pid} AND uid ={$_SESSION['ID']} order by sid desc) order by score desc";
     $ac=$q->dosql($sql);
     if ($ac) {
         $e=$q->rtnrlt(0);
