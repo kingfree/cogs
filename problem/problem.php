@@ -200,7 +200,7 @@ for ($i=0;$i<$cnt;$i++) {
 <?php 
 }
 ?></table>
-<table id="Comments" class='table table-striped table-condensed table-bordered fiexd'>
+<table class='table table-striped table-condensed table-bordered fiexd'>
 <tr><th colspan=3>
 <a href="comments.php?pid=<?=$pid?>">关于 <b><?=shortname($d['probname']); ?></b> 的讨论</a>
 <? if($_SESSION['ID']) { ?>

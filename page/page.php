@@ -8,6 +8,7 @@ $d=$p->rtnrlt(0);
 $title = $d['title'];
 gethead(1,"",$title);
 
+$LIB->hlighter();
 $LIB->mathjax();
 
 $q=new DataAccess();
@@ -55,6 +56,36 @@ if($cnt) {
 <?=$d['text'] ?>
 </dl>
 </div>
+<table class='table table-striped table-condensed table-bordered fiexd'>
+<tr><th colspan=3>
+<a href="../problem/comments.php?aid=<?=$aid?>">关于 <b><?=shortname($d['title']); ?></b> 的讨论</a>
+<? if($_SESSION['ID']) { ?>
+<a href="../problem/comment.php?aid=<?=$aid?>" class="pull-right btn btn-mini btn-danger"><b>发表评论</b></a>
+<? } ?>
+</th></tr>
+<?
+$sql="SELECT comments.*, userinfo.uid, userinfo.nickname, userinfo.realname, userinfo.email, userinfo.accepted, userinfo.submited, userinfo.grade, userinfo.memo FROM comments, userinfo WHERE userinfo.uid = comments.uid ";
+$sql.="AND $aid = comments.aid ";
+$sql.="ORDER BY comments.cid desc";
+$cnt=$q->dosql($sql);
+for ($i=0;$i<$cnt;$i++) {
+    $e=$q->rtnrlt($i);
+?>
+    <tr class="CommentsU">
+    <td><a href="../user/detail.php?uid=<?=$e['uid'] ?>"><?=gravatar::showImage($e['email']);?><?=$e['nickname'] ?></a></td>
+    <td><?=date('y/m/d H:i',$e['stime'])?>
+   </td>
+    <td>
+    #<?=$cnt-$i?></td>
+    </tr>
+    <tr><td colspan=3 class="CommentsK wrap">
+    <? if($_SESSION['ID']==$e['uid']) echo "<a href='../problem/comment.php?cid={$e['cid']}' class='pull-right btn btn-mini btn-warning'><i class='icon icon-edit icon-white'></i></a>";?>
+    <?php echo BBCode($e['detail'])?>
+    </td></tr>
+<?
+}
+?>
+</table>
 </div>
 
 <?php

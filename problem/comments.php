@@ -7,14 +7,26 @@ $LIB->mathjax();
 $p=new DataAccess();
 $q=new DataAccess();
 $pid=(int)$_GET['pid'];
+$aid=(int)$_GET['aid'];
+$ctid=(int)$_GET['ctid'];
 ?>
 <div class='row-fluid'>
 <form method="get" action="" class='form-search'>
-<? if($pid && $_SESSION['ID']) { ?>
+<? if($_SESSION['ID']) { ?>
+<? if($pid) { ?>
 <a class='btn btn-danger' href="comment.php?pid=<?=$pid?>">发表评论</a>
+<? } else if($aid) { ?>
+<a class='btn btn-danger' href="comment.php?aid=<?=$aid?>">发表评论</a>
+<? } else if($ctid) { ?>
+<a class='btn btn-danger' href="comment.php?ctid=<?=$ctid?>">发表评论</a>
+<? } ?>
 <? } ?>
 <? if($pid) { ?>
 <a class='btn' href="problem.php?pid=<?=$pid?>">返回原题</a>
+<? } else if($aid) { ?>
+<a class='btn' href="../page/page.php?aid=<?=$aid?>">返回原页</a>
+<? } else if($ctid) { ?>
+<a class='btn' href="../contest/problem.php?ctid=<?=$ctid?>">返回比赛</a>
 <? } ?>
 <div class='input-append pull-right'>
 <input name="key" type="text" class='search-query input-medium' value='<?=$_GET['key']?>' placeholder='搜索评论'/>
@@ -23,17 +35,33 @@ $pid=(int)$_GET['pid'];
 </div>
 </form>
 <?php
-$sql="select comments.*,userinfo.*,problem.pid,problem.probname from comments,userinfo,problem where userinfo.uid=comments.uid and problem.pid=comments.pid ";
+/*$sql="select comments.*,userinfo.*,problem.pid,problem.probname from comments,userinfo,problem where userinfo.uid=comments.uid and problem.pid=comments.pid ";
 if($pid) $sql.=" and problem.pid=$pid";
 if ($_GET['key']!="")
 $sql.=" and (problem.probname like '%{$_GET[key]}%' or problem.pid ='{$_GET[key]}' or problem.filename like '%{$_GET[key]}%' or comments.detail like '%{$_GET[key]}%' or userinfo.nickname like '%{$_GET[key]}%' or userinfo.usr like '%{$_GET[key]}%' or userinfo.realname like '%{$_GET[key]}%')";
-if($pid) $sql.=" order by comments.cid asc"; else $sql.=" order by comments.stime desc";
+if($pid) $sql.=" order by comments.cid asc"; else $sql.=" order by comments.stime desc";*/
+$key=mysql_real_escape_string($_GET['key']);
+$sql="SELECT comments.*, userinfo.uid, userinfo.nickname, userinfo.realname, userinfo.email, userinfo.accepted, userinfo.submited, userinfo.grade, userinfo.memo FROM comments, userinfo WHERE userinfo.uid = comments.uid ";
+if($key) $sql.="AND (comments.detail LIKE '%$key%' OR userinfo.nickname LIKE '%$key%' OR userinfo.usr LIKE '%$key%' OR userinfo.realname LIKE '%$key%') ";
+if($pid) {
+    $sql.="AND $pid = comments.pid ";
+    $sql.="ORDER BY comments.cid asc";
+} else if($aid) {
+    $sql.="AND $aid = comments.aid ";
+    $sql.="ORDER BY comments.cid asc";
+} else if($ctid) {
+    $sql.="AND $ctid = comments.ctid ";
+    $sql.="ORDER BY comments.cid asc";
+} else {
+    $sql.="ORDER BY comments.stime desc";
+}
+//echo "<pre>".$sql."</pre>";
 $cnt=$p->dosql($sql);
 $st=检测页面($cnt, $_GET['page']);
 ?>
-<table class='Comments table table-condensed table-bordered fiexd'>
+<table class='table table-striped table-condensed table-bordered fiexd'>
 <?
-if ($cnt) {
+if($cnt) {
 	for ($i=$st;$i<$cnt && $i<$st+$SET['style_pagesize'];$i++) {
 		$d=$p->rtnrlt($i);
 		if ($d['uid']==$_SESSION['ID']) {
@@ -42,46 +70,50 @@ if ($cnt) {
 			$sc=$d['showcode'];
 		}
 ?>
-  <tr>
-    <td class="CommentsU" rowspan=2 valign='top'>
-    <table class="clear">
 <tr>
-<td rowspan=2><?=gravatar::showImage($d['email'], 64);?></td>
-<td>
+<td valign='top' style="width:64px;">
+<a href="<?php echo 路径("user/detail.php?uid={$d['uid']}");?>" title="<?=(sp2n(htmlspecialchars($d['memo'])))?>">
+<?=gravatar::showImage($d['email'], 64);?>
+</a>
+</td>
+<td valign='top' style="width:120px;">
+<div>
 <a href="<?=路径("mail/index.php")?>?toid=<?=$d['uid']?>" title="给<?=$d['nickname']?>发送信件"><span class="icon-envelope"></span></a>
 <a href="<?php echo 路径("user/detail.php?uid={$d['uid']}");?>" title="<?=(sp2n(htmlspecialchars($d['memo'])))?>"><b><?php echo $d['nickname'];?></b></a>
+</div>
+积分：<?=$d['grade']?><br />
+提交：<?=$d['accepted']?> / <?=$d['submited']?>
+</td>
+<td colspan=4 class="wrap">
+<? if($_SESSION['ID']==$d['uid']) echo "<a href='comment.php?cid={$d['cid']}' class='pull-right btn btn-mini btn-warning'><i class='icon icon-edit icon-white'></i>修改</a>";?>
+<?php echo BBCode($d['detail'])?>
+<div class='muted pull-right'><small><?php echo BBCode($d['memo'])?></div></div>
 </td>
 </tr>
-<tr>
-<td>
-<? if(!$pid) { 是否通过($d['pid'], $q); ?>
-<a href="?pid=<?=$d['pid']?>"><?=$d['pid']?>. <?=shortname($d['probname']) ?></a>
-<a href='problem.php?pid=<?=$d['pid']?>' title="<?=$d['probname']?>" target='_blank'><span class='icon-share'></span></a>
+<tr class="<?=$d['pid']?"info":"success"?>">
+<td colspan=2>
+<span class="pull-right">
+<? if($d['pid']) { ?>
+<a href="?pid=<?=$d['pid']?>">题目 <?=$d['pid']?></a>
+<a href='problem.php?pid=<?=$d['pid']?>' target='_blank'><span class='icon-share'></span></a>
+<? } else if($d['aid']) { ?>
+<a href="?aid=<?=$d['aid']?>">页面 <?=$d['aid']?></a>
+<a href='../page/page.php?aid=<?=$d['aid']?>' target='_blank'><span class='icon-share'></span></a>
 <? } ?>
+</span>
 </td>
-</tr>
-</table>
-</td>
-    <td colspan=4 class="CommentsK wrap">
-    <? if($_SESSION['ID']==$d['uid']) echo "<a href='comment.php?cid={$d['cid']}' class='pull-right btn btn-mini btn-warning'><i class='icon icon-edit icon-white'></i>修改</a>";?>
-    <?php echo BBCode($d['detail'])?>
-    <div class='muted pull-right'><small><?php echo BBCode($d['memo'])?></div></div>
-    </td>
-  </tr>
-  <tr class="CommentsBar">
-	<td class="CommentsCode"><?php if ($d['showcode']){
+<td><?php if ($d['showcode']){
 	$sql="select sid,result from submit where uid='{$d['uid']}' and pid='{$d['pid']}' order by subtime desc";
 	$q->dosql($sql);
 	$e=$q->rtnrlt(0);
-	?>
-	<a href="../submit/code.php?id=<?=$e['sid']?>" title="<?=$e['result']?>"><i class='icon icon-download'></i><?=评测结果($e['result'], 10, true)?></a>
-	<?php } ?>
-	</div>
-    </td>
-	<td class="CommentsTime">发表时间：<?php echo date('Y-m-d H:i:s',$d['stime']);?></td>
-	<td class="CommentsTime" style="width: 8em;">帖子编号：<?=$d['cid']?></td>
-	<td class="CommentsTime" style="width: 8em;">楼层编号：<?=($i+1)?></td>
-  </tr>
+?>
+<a href="../submit/code.php?id=<?=$e['sid']?>" title="<?=$e['result']?>"><i class='icon icon-download'></i><?=评测结果($e['result'], 10, true)?></a>
+<?php } ?>
+</td>
+<td>发表时间：<?php echo date('Y-m-d H:i:s',$d['stime']);?></td>
+<td style="width: 8em;">帖子编号：<?=$d['cid']?></td>
+<td style="width: 4em;"><span class="pull-right">#<?=($i+1)?></span></td>
+</tr>
 <?php
 	}
 } else {

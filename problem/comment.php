@@ -7,36 +7,42 @@ $p=new DataAccess();
 $uid=(int)$_SESSION['ID'];
 $pid=(int)$_GET['pid'];
 $aid=(int)$_GET['aid'];
-if($pid<0) { $aid=-$pid; $pid=0; }
 $cid=(int)$_GET['cid'];
 if(!$uid)
     异常("非注册用户！", 取路径("problem/comments.php?pid={$pid}"));
+
+if($cid) {
+    $sql="select comments.* from comments where comments.cid=$cid limit 1";
+    $cnt=$p->dosql($sql);
+    if($cnt) {
+        $d=$p->rtnrlt(0);
+        $pid=$d['pid'];
+        $aid=$d['aid'];
+        if($uid != $d['uid']) {
+            if($pid) {
+            异常("不可更改他人评论！", 取路径("problem/comments.php?pid={$pid}"));
+            } else {
+            异常("不可更改他人评论！", 取路径("problem/comments.php?aid={$aid}"));
+            }
+        }
+    } else
+        异常("无此评论！", 取路径("problem/comments.php?pid={$pid}"));
+}
 
 if($pid) {
     $sql="select probname from problem where pid={$pid} limit 1";
     $cnt=$p->dosql($sql);
     if($cnt) {
-        $d=$p->rtnrlt(0);
+        $e=$p->rtnrlt(0);
     } else
         异常("无此题目！", 取路径("problem/commentlist.php"));
-} else if($cid) {
-    $sql="select comments.*,problem.probname from comments,problem where comments.cid={$cid} and problem.pid=comments.pid limit 1";
-    $cnt=$p->dosql($sql);
-    if($cnt) {
-        $d=$p->rtnrlt(0);
-        $pid=$d['pid'];
-        if($uid != $d['uid'])
-            异常("不可更改他人评论！", 取路径("problem/comments.php?pid={$pid}"));
-    } else
-        异常("无此评论！", 取路径("problem/comments.php?pid={$pid}"));
 } else if($aid) {
     $sql="select title from page where aid={$aid} limit 1";
     $cnt=$p->dosql($sql);
     if($cnt) {
-        $d=$p->rtnrlt(0);
+        $e=$p->rtnrlt(0);
     } else
         异常("无此页面！", 取路径("page/index.php"));
-    $pid=0;
 } else {
     异常("什么也没找到！");
 }
@@ -46,9 +52,9 @@ if($pid) {
 <div class='modal-header'>
 <h3>发表
 <? if($pid) { ?>
-<a href="problem.php?pid=<?=$pid?>" target="_blank"><?=$d['probname']?></a>
+<a href="problem.php?pid=<?=$pid?>" target="_blank"><?=$e['probname']?></a>
 <? } else if($aid) { ?>
-<a href="../page/page.php?aid=<?=$aid?>" target="_blank"><?=$d['title']?></a>
+<a href="../page/page.php?aid=<?=$aid?>" target="_blank"><?=$e['title']?></a>
 <? } ?>
 的评论</h3>
 </div>
@@ -58,12 +64,13 @@ if($pid) {
 <? if($pid) { ?>
     <label><input id="showcode" name="showcode" type="checkbox" value="1" <?php if($d['showcode']){ ?> checked="checked" <?php } ?> />允许查看你提交的代码</label>
 <? } else { ?>
-    <input name="showcode" type="hidden"  value="0" />
+    <input name="showcode" type="hidden" value="0" />
 <? } ?>
 </div>
 <div class='modal-footer'>
-<input name="pid" type="hidden" id="pid" value="<?php echo $pid?$pid:-$aid ?>" />
-<input name="cid" type="hidden" id="cid" value="<?php echo $cid ?>" />
+<input name="pid" type="hidden" value="<?=$pid?>" />
+<input name="aid" type="hidden" value="<?=$aid?>" />
+<input name="cid" type="hidden" value="<?=$cid?>" />
 <? if($pid) { ?>
 <a class='btn' href='comments.php?pid=<?=$pid?>'>返回评论列表</a>
 <? } else if($aid) { ?>
