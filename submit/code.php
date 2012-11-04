@@ -108,10 +108,15 @@ if ($forcetocode) {
     else if($d['lang']==1) $langstr="c";
     else if($d['lang']==2) $langstr="cpp";
     if($d['lang'] == 3) {
-?>
-<?
     } else {
 ?>
+<a href="#code" class="btn btn-mini pull-right" data-toggle="modal">显示代码纯文本</a>
+<div id="code" class="modal hide">
+<button class='close' data-dismiss='modal'>×</button>
+<div class='modal-body'>
+<pre><?=htmlspecialchars($code)?></pre>
+</div>
+</div>
 <pre class="prettyprint linenums lang-<?=$langstr?>"><?=htmlspecialchars($code)?></pre>
 <?php } } else {
 ?>
