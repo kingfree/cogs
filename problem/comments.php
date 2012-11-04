@@ -85,7 +85,7 @@ if($cnt) {
 提交：<?=$d['accepted']?> / <?=$d['submited']?>
 </td>
 <td colspan=4 class="wrap">
-<? if($_SESSION['ID']==$d['uid']) echo "<a href='comment.php?cid={$d['cid']}' class='pull-right btn btn-mini btn-warning'><i class='icon icon-edit icon-white'></i>修改</a>";?>
+<? if($_SESSION['ID']==$d['uid']) echo "<a href='comment.php?cid={$d['cid']}' class='pull-right btn btn-mini btn-warning'><i class='icon icon-edit icon-white'></i></a>";?>
 <?php echo BBCode($d['detail'])?>
 <div class='muted pull-right'><small><?php echo BBCode($d['memo'])?></div></div>
 </td>

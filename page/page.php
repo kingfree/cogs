@@ -56,13 +56,12 @@ if($cnt) {
 <?=$d['text'] ?>
 </dl>
 </div>
-<table class='table table-striped table-condensed table-bordered fiexd'>
-<tr><th colspan=5>
-<a href="../problem/comments.php?aid=<?=$aid?>">关于 <b><?=shortname($d['title']); ?></b> 的讨论</a>
+<div class="tou">
 <? if($_SESSION['ID']) { ?>
-<a href="../problem/comment.php?aid=<?=$aid?>" class="pull-left btn btn-danger">发表评论</a>
+<a href="../problem/comment.php?aid=<?=$aid?>" class="pull-right btn btn-danger">发表评论</a>
 <? } ?>
-</th></tr>
+<h4><a href="../problem/comments.php?aid=<?=$aid?>">关于 <b><?=shortname($d['title']); ?></b> 的讨论</a></h4>
+<table class='table table-striped table-condensed table-bordered fiexd'>
 <?
 $sql="SELECT comments.*, userinfo.uid, userinfo.nickname, userinfo.realname, userinfo.email, userinfo.accepted, userinfo.submited, userinfo.grade, userinfo.memo FROM comments, userinfo WHERE userinfo.uid = comments.uid ";
 $sql.="AND $aid = comments.aid ";
@@ -85,7 +84,7 @@ for ($i=0;$i<$cnt;$i++) {
 提交：<?=$d['accepted']?> / <?=$d['submited']?>
 </td>
 <td colspan=3 class="wrap">
-<? if($_SESSION['ID']==$d['uid']) echo "<a href='comment.php?cid={$d['cid']}' class='pull-right btn btn-mini btn-warning'><i class='icon icon-edit icon-white'></i>修改</a>";?>
+<? if($_SESSION['ID']==$d['uid']) echo "<a href='../problem/comment.php?cid={$d['cid']}' class='pull-right btn btn-mini btn-warning'><i class='icon icon-edit icon-white'></i></a>";?>
 <?php echo BBCode($d['detail'])?>
 <div class='muted pull-right'><small><?php echo BBCode($d['memo'])?></div></div>
 </td>
@@ -102,6 +101,7 @@ for ($i=0;$i<$cnt;$i++) {
 }
 ?>
 </table>
+</div>
 </div>
 
 <?php

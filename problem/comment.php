@@ -50,7 +50,7 @@ if($pid) {
 <div class='container-fluid'>
 <form method="post" action="sendcomments.php" class='form-horizontal' id="tijiao">
 <div class='modal-header'>
-<h3>发表
+<h3><?=($cid)?"修改":"发表"?> 
 <? if($pid) { ?>
 <a href="problem.php?pid=<?=$pid?>" target="_blank"><?=$e['probname']?></a>
 <? } else if($aid) { ?>

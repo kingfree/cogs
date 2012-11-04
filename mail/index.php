@@ -13,12 +13,12 @@ if($_GET['toid']) $_POST['title'] = "给".$_GET['toid']."的邮件";
 <div class='center'>
 <a class='btn btn-success' href="#sendmail" data-toggle='modal'><i class='icon-envelope icon-white'></i>发送信件</a>
 </div>
-<div id='sendmail' class='modal <?if(!isset($_POST['title'])) echo "hide"?> fade in'>
+<div id='sendmail' class='modal hide fade in'>
 <form method="post" action="send.php" class='form-horizontal'>
 <fieldset>
 <div class='modal-header'>
 <button class='close' data-dismiss='modal'>×</button>
-<h2>发送信件</h2>
+<h3>发送信件</h3>
 </div>
 <div class='modal-body'>
 <input name="fromid" type="hidden" value="<?=$uid?>" />
@@ -44,6 +44,7 @@ if($_GET['toid']) $_POST['title'] = "给".$_GET['toid']."的邮件";
 </div>
 
 <script>
+<?if($_POST['title']) echo "$('#sendmail').modal('show');";?>
 function markread(id) {
   $.get("markread.php",{mid: id},function(txt){});
 }
