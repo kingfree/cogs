@@ -204,11 +204,11 @@ for ($i=0;$i<$cnt;$i++) {
 <tr><th colspan=3>
 <a href="comments.php?pid=<?=$pid?>">关于 <b><?=shortname($d['probname']); ?></b> 的讨论</a>
 <? if($_SESSION['ID']) { ?>
-<a href="comment.php?pid=<?=$pid?>" class="pull-right btn btn-mini btn-danger"><b>发表评论</b></a>
+<a href="comment.php?pid=<?=$pid?>" class="pull-right btn btn-mini btn-danger">发表评论</a>
 <? } ?>
 </th></tr>
 <?
-$sql="select comments.*,userinfo.nickname,userinfo.uid,userinfo.email from comments,userinfo where userinfo.uid=comments.uid and comments.pid='{$d['pid']}' order by comments.cid desc";
+$sql="select comments.*,userinfo.nickname,userinfo.uid,userinfo.email from comments,userinfo where userinfo.uid=comments.uid and comments.pid='{$d['pid']}' order by comments.cid asc";
 $cnt=$q->dosql($sql);
 for ($i=0;$i<$cnt;$i++) {
     $e=$q->rtnrlt($i);
@@ -224,8 +224,8 @@ for ($i=0;$i<$cnt;$i++) {
 	<a href="../submit/code.php?id=<?=$f['sid']?>" title="查看该用户最后一次提交的代码"><i class='icon icon-download'></i></a>
 	<?php } ?>
  </td>
-    <td>
-    #<?=$cnt-$i?></td>
+    <td><span class="pull-right">
+    #<?=($i+1)?></span></td>
     </tr>
     <tr><td colspan=3 class="CommentsK wrap">
     <? if($_SESSION['ID']==$e['uid']) echo "<a href='comment.php?cid={$e['cid']}' class='pull-right btn btn-mini btn-warning'><i class='icon icon-edit icon-white'></i></a>";?>

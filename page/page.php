@@ -57,31 +57,47 @@ if($cnt) {
 </dl>
 </div>
 <table class='table table-striped table-condensed table-bordered fiexd'>
-<tr><th colspan=3>
+<tr><th colspan=5>
 <a href="../problem/comments.php?aid=<?=$aid?>">关于 <b><?=shortname($d['title']); ?></b> 的讨论</a>
 <? if($_SESSION['ID']) { ?>
-<a href="../problem/comment.php?aid=<?=$aid?>" class="pull-right btn btn-mini btn-danger"><b>发表评论</b></a>
+<a href="../problem/comment.php?aid=<?=$aid?>" class="pull-left btn btn-danger">发表评论</a>
 <? } ?>
 </th></tr>
 <?
 $sql="SELECT comments.*, userinfo.uid, userinfo.nickname, userinfo.realname, userinfo.email, userinfo.accepted, userinfo.submited, userinfo.grade, userinfo.memo FROM comments, userinfo WHERE userinfo.uid = comments.uid ";
 $sql.="AND $aid = comments.aid ";
-$sql.="ORDER BY comments.cid desc";
+$sql.="ORDER BY comments.cid asc";
 $cnt=$q->dosql($sql);
 for ($i=0;$i<$cnt;$i++) {
-    $e=$q->rtnrlt($i);
+    $d=$q->rtnrlt($i);
 ?>
-    <tr class="CommentsU">
-    <td><a href="../user/detail.php?uid=<?=$e['uid'] ?>"><?=gravatar::showImage($e['email']);?><?=$e['nickname'] ?></a></td>
-    <td><?=date('y/m/d H:i',$e['stime'])?>
-   </td>
-    <td>
-    #<?=$cnt-$i?></td>
-    </tr>
-    <tr><td colspan=3 class="CommentsK wrap">
-    <? if($_SESSION['ID']==$e['uid']) echo "<a href='../problem/comment.php?cid={$e['cid']}' class='pull-right btn btn-mini btn-warning'><i class='icon icon-edit icon-white'></i></a>";?>
-    <?php echo BBCode($e['detail'])?>
-    </td></tr>
+<tr>
+<td valign='top' style="width:64px;">
+<a href="<?php echo 路径("user/detail.php?uid={$d['uid']}");?>">
+<?=gravatar::showImage($d['email'], 64);?>
+</a>
+</td>
+<td valign='top' style="width:120px;">
+<div>
+<a href="<?php echo 路径("user/detail.php?uid={$d['uid']}");?>"><b><?php echo $d['nickname'];?></b></a>
+</div>
+积分：<?=$d['grade']?><br />
+提交：<?=$d['accepted']?> / <?=$d['submited']?>
+</td>
+<td colspan=3 class="wrap">
+<? if($_SESSION['ID']==$d['uid']) echo "<a href='comment.php?cid={$d['cid']}' class='pull-right btn btn-mini btn-warning'><i class='icon icon-edit icon-white'></i>修改</a>";?>
+<?php echo BBCode($d['detail'])?>
+<div class='muted pull-right'><small><?php echo BBCode($d['memo'])?></div></div>
+</td>
+</tr>
+<tr class="success">
+<td colspan=2>
+<?if(有此权限("查看用户")) echo $d['realname'];?>
+</td>
+<td><span class="pull-right">发表时间：<?php echo date('Y-m-d H:i:s',$d['stime']);?></span></td>
+<td style="width: 8em;"><span class="pull-right">帖子编号：<?=$d['cid']?></span></td>
+<td style="width: 4em;"><span class="pull-right">#<?=($i+1)?></span></td>
+</tr>
 <?
 }
 ?>

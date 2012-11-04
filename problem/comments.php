@@ -72,14 +72,14 @@ if($cnt) {
 ?>
 <tr>
 <td valign='top' style="width:64px;">
-<a href="<?php echo 路径("user/detail.php?uid={$d['uid']}");?>" title="<?=(sp2n(htmlspecialchars($d['memo'])))?>">
+<a href="<?php echo 路径("user/detail.php?uid={$d['uid']}");?>">
 <?=gravatar::showImage($d['email'], 64);?>
 </a>
 </td>
 <td valign='top' style="width:120px;">
 <div>
-<a href="<?=路径("mail/index.php")?>?toid=<?=$d['uid']?>" title="给<?=$d['nickname']?>发送信件"><span class="icon-envelope"></span></a>
-<a href="<?php echo 路径("user/detail.php?uid={$d['uid']}");?>" title="<?=(sp2n(htmlspecialchars($d['memo'])))?>"><b><?php echo $d['nickname'];?></b></a>
+<a href="<?=路径("mail/index.php")?>?toid=<?=$d['uid']?>" title="给<?=$d['nickname']?>发送信件" class="pull-right"><span class="icon-envelope"></span></a>
+<a href="<?php echo 路径("user/detail.php?uid={$d['uid']}");?>"><b><?php echo $d['nickname'];?></b></a>
 </div>
 积分：<?=$d['grade']?><br />
 提交：<?=$d['accepted']?> / <?=$d['submited']?>
@@ -92,6 +92,7 @@ if($cnt) {
 </tr>
 <tr class="<?=$d['pid']?"info":"success"?>">
 <td colspan=2>
+<?if(有此权限("查看用户")) echo $d['realname'];?>
 <span class="pull-right">
 <? if($d['pid']) { ?>
 <a href="?pid=<?=$d['pid']?>">题目 <?=$d['pid']?></a>
@@ -110,7 +111,7 @@ if($cnt) {
 <a href="../submit/code.php?id=<?=$e['sid']?>" title="<?=$e['result']?>"><i class='icon icon-download'></i><?=评测结果($e['result'], 10, true)?></a>
 <?php } ?>
 </td>
-<td>发表时间：<?php echo date('Y-m-d H:i:s',$d['stime']);?></td>
+<td><span class="pull-right">发表时间：<?php echo date('Y-m-d H:i:s',$d['stime']);?></span></td>
 <td style="width: 8em;">帖子编号：<?=$d['cid']?></td>
 <td style="width: 4em;"><span class="pull-right">#<?=($i+1)?></span></td>
 </tr>
