@@ -52,20 +52,19 @@ function markread(id) {
 
 <div class='row-fluid'>
 <div class='span6'>
-<table class='table table-striped table-condensed table-bordered fiexd'>
+<table class='table table-condensed table-bordered fiexd'>
 <tr>
-<th>ID</th>
-<th>收件人</th>
-<th>标题</th>
+<td>ID</td>
+<td>收件人</td>
+<td>发件箱</td>
 </tr>
 <?
 $sql = "select mail.*,userinfo.* from mail,userinfo where mail.fromid = $uid and mail.toid = userinfo.uid order by mid desc";
 $cnt = $p->dosql($sql);
 for($i=0; $i<$cnt; $i++) {
 	$d=$p->rtnrlt($i);
-	echo "<tr>";
+	if($d['readed'] ==  0) echo "<tr class='success'>"; else echo "<tr>";
 	echo "<td>{$d['mid']}</td> <td>";
-	if($d['readed'] ==  0) echo "❤";
 	echo "<a href='../user/detail.php?uid={$d['toid']}' target='_blank'>".gravatar::showImage($d['email'])."{$d['nickname']}</a></td>";
     echo "<td><a href='#mail{$d['mid']}' data-toggle='modal'>{$d['title']}</a></td>";
 	echo "</tr>";
@@ -76,7 +75,7 @@ for($i=0; $i<$cnt; $i++) {
 <h3><?=$d['title']?></h3>
 </div>
 <div class='modal-body'>
-<?=nl2br(sp2n(htmlspecialchars($d['msg'])))?>
+<?=BBCode($d['msg'])?>
 </div>
 <div class='modal-footer'>
 <span class='pull-left'>
@@ -94,25 +93,22 @@ for($i=0; $i<$cnt; $i++) {
 </table>
 </div>
 <div class='span6'>
-<table class='table table-striped table-condensed table-bordered fiexd'>
-<tr>
-<th>ID</th>
-<th>发件人</th>
-<th>标题</th>
-<th width=80px>发送时间</th>
+<table class='table table-condensed table-bordered fiexd'>
+<tr class='info'>
+<td>ID</td>
+<td>发件人</td>
+<td><b>收件箱</b></td>
+<td width=80px>收到时间</td>
 </tr>
 <?
 $sql = "select mail.*,userinfo.* from mail,userinfo where mail.toid = $uid and mail.fromid = userinfo.uid order by mid desc";
 $cnt = $p->dosql($sql);
 for($i=0; $i<$cnt; $i++) {
 	$d=$p->rtnrlt($i);
-	echo "<tr>";
+	if($d['readed'] ==  0) echo "<tr class='error'>"; else echo "<tr>";
 	echo "<td>{$d['mid']}</td> <td>";
 	echo "<a href='../user/detail.php?uid={$d['fromid']}' target='_blank'>".gravatar::showImage($d['email'])."{$d['nickname']}</a></td>";
     $url="<a href='#mail{$d['mid']}' data-toggle='modal' onclick='markread({$d['mid']})'>{$d['title']}</a>";
-	if($d['readed'] ==  0)
-	echo "<td><span class='label label-warning'>$url</span></td>";
-	else
 	echo "<td>$url</td>";
 	echo "<td>".date('Y-m-d',$d['time'])."</td>";
 	echo "</tr>";
@@ -123,7 +119,7 @@ for($i=0; $i<$cnt; $i++) {
 <h3><?=$d['title']?></h3>
 </div>
 <div class='modal-body'>
-<?=nl2br(sp2n(htmlspecialchars($d['msg'])))?>
+<?=BBCode($d['msg'])?>
 </div>
 <div class='modal-footer'>
 <span class='pull-left'>

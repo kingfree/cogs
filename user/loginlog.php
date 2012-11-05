@@ -36,7 +36,7 @@ for ($i=$st;$i<$cnt && $i<$st+$SET['style_pagesize'] ;$i++) {
 <td><?=$d['lid']?></td>
 <td><a href="?uid=<?=$d['uid']?>"><?=gravatar::showImage($d['email']);?><?=$d['realname']?></a></td>
 <td><?=$d['ip']?></td>
-<td><?=$d['ua']?></td>
+<td class="wrap"><?=$d['ua']?></td>
 <td><?=$d['version']?></td>
 <td><?=$d['ltime']?></td>
 </tr>

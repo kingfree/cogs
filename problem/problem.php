@@ -1,21 +1,17 @@
 <?php
 require_once("../include/header.php");
-
+$uid = (int) $_SESSION['ID'];
+$pid = (int) $_GET['pid'];
 $p=new DataAccess();
-$pid = (int)$_GET['pid'];
 $sql="select problem.*,groups.* from problem,groups where pid=".(int)$_GET[pid]." and groups.gid=problem.group limit 1";
 $cnt=$p->dosql($sql);
 $d=$p->rtnrlt(0);
-
 $title = $d['probname'];
 gethead(1,"",$pid.". ".$title);
-
 $LIB->hlighter();
 $LIB->mathjax();
-
 $q=new DataAccess();
 $r=new DataAccess();
-
 if($cnt) {
     if ($d[readforce]>$_SESSION[readforce]) 
         异常("没有阅读权限！", 取路径("problem/index.php"));
@@ -81,16 +77,22 @@ if($cnt) {
 <tr><th><a href="../submit/index.php?pid=<?=$pid; ?>">提交状态</a></th>
 <td><?php
 $acpid=0;
-if($_SESSION['ID']) {
-    $sql="(SELECT * FROM submit WHERE pid ={$pid} AND uid ={$_SESSION['ID']} order by sid desc) order by score desc";
+if($uid) {
+    $sql="(SELECT max(score) AS score FROM submit WHERE pid ={$pid} AND uid ={$uid})";
     $ac=$q->dosql($sql);
     if ($ac) {
         $e=$q->rtnrlt(0);
-        $acpid=$e['accepted'];
-        echo "<a href='../submit/code.php?id={$e['sid']}'>";
-        echo $STR['lang'][$e['lang']];
-        echo "</a> ";
-        评测结果($e['result'], 20);
+        $score=(int)$e['score'];
+        $sql="SELECT sid,lang,result,accepted FROM submit WHERE pid={$pid} AND uid={$uid} AND score={$score} order by sid desc";
+        $ac=$q->dosql($sql);
+        if ($ac) {
+            $e=$q->rtnrlt(0);
+            $acpid=$e['accepted'];
+            echo "<a href='../submit/code.php?id={$e['sid']}'>";
+            echo $STR['lang'][$e['lang']];
+            echo "</a> ";
+            评测结果($e['result'], 20);
+        }
     }
 } ?>
 </td></tr>
@@ -139,7 +141,7 @@ for ($i=0;$i<=$cnt2-1;$i++) {
 </div>
 <? } ?></div>
 </td></tr>
-<? if($_SESSION['ID']) { ?>
+<? if($uid) { ?>
 <tr><form action="../submit/run.php" method="post" enctype="multipart/form-data" class='form-inline'>
 <td colspan=2>
 <input name="pid" type="hidden" id="pid" value="<?=$d['pid']?>" />
@@ -203,7 +205,7 @@ for ($i=0;$i<$cnt;$i++) {
 <table class='table table-striped table-condensed table-bordered fiexd'>
 <tr><th colspan=3>
 <a href="comments.php?pid=<?=$pid?>">关于 <b><?=shortname($d['probname']); ?></b> 的讨论</a>
-<? if($_SESSION['ID']) { ?>
+<? if($uid) { ?>
 <a href="comment.php?pid=<?=$pid?>" class="pull-right btn btn-mini btn-danger">发表评论</a>
 <? } ?>
 </th></tr>
@@ -228,7 +230,7 @@ for ($i=0;$i<$cnt;$i++) {
     #<?=($i+1)?></span></td>
     </tr>
     <tr><td colspan=3 class="CommentsK wrap">
-    <? if($_SESSION['ID']==$e['uid']) echo "<a href='comment.php?cid={$e['cid']}' class='pull-right btn btn-mini btn-warning'><i class='icon icon-edit icon-white'></i></a>";?>
+    <? if($uid==$e['uid']) echo "<a href='comment.php?cid={$e['cid']}' class='pull-right btn btn-mini btn-warning'><i class='icon icon-edit icon-white'></i></a>";?>
     <?php echo BBCode($e['detail'])?>
     </td></tr>
 <?
@@ -263,7 +265,7 @@ $Jia['summary']=trim(strip_tags($d['detail']));
 <dl class='problem'>
 <?=$d['detail']?>
 </dl>
-<? if($_SESSION['ID']) { ?>
+<? if($uid) { ?>
 <form action="../submit/run.php" method="post" enctype="multipart/form-data" class='form-inline' id="tijiao">
 <input name="pid" type="hidden" id="pid" value="<?=$d['pid']?>" />
 <input id="source" type="file" name="file" title='选择程序源文件' />

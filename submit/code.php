@@ -1,13 +1,15 @@
 <?php
 require_once("../include/header.php");
+$uid = (int) $_SESSION['ID'];
+$sid = (int) $_GET['id'];
 $p=new DataAccess();
-if(!$_GET['id']) {
+if(!$sid) {
     $sql = "select max(sid) as sid from submit";
     $p->dosql($sql);
     $d=$p->rtnrlt(0);
-    $_GET['id'] = $d['sid'];
+    $sid = $d['sid'];
 }
-$sql="select submit.*,userinfo.nickname,userinfo.realname,submit.subtime,problem.probname,problem.filename from submit,userinfo,problem where submit.pid=problem.pid and submit.uid=userinfo.uid and submit.sid={$_GET['id']}";
+$sql="select submit.*,userinfo.nickname,userinfo.realname,submit.subtime,problem.probname,problem.filename from submit,userinfo,problem where submit.pid=problem.pid and submit.uid=userinfo.uid and submit.sid={$sid}";
 $cnt=$p->dosql($sql);
 if($cnt) {
     $d=$p->rtnrlt(0);
@@ -19,7 +21,7 @@ if($cnt) {
         $code=stripslashes($code);
     $code=mb_convert_encoding($code, "utf-8", "gbk");
 } else 异常("提交记录不存在");
-gethead(1,"","{$d['probname']} - {$d['nickname']} - {$_GET['id']}", $d['uid']);
+gethead(1,"","{$d['probname']} - {$d['nickname']} - {$sid}", $d['uid']);
 $LIB->hlighter();
 $q=new DataAccess();
 ?>
@@ -38,7 +40,7 @@ $q=new DataAccess();
     <td><?php echo $d['score'] ?></td>
     <th rowspan='3' width="60px">重新评测</th>
     <td rowspan='3'>
-<? if($_SESSION['ID'] == $d['uid'] || 有此权限('测试题目')) { ?>
+<? if($uid == $d['uid'] || 有此权限('测试题目')) { ?>
     <form method="post" action="../submit/run.php" class='form-inline'>
         <input name="pid" type="hidden" id="pid" value="<?=$d['pid']; ?>" />
         <input name="sid" type="hidden" id="sid" value="<?=$d['sid']; ?>" />
@@ -84,7 +86,7 @@ $q=new DataAccess();
 </tr>
 </table>
 <?php
-if(有此权限('查看代码') || $d['uid']==$_SESSION['ID'])
+if(有此权限('查看代码') || $d['uid']==$uid)
     $forcetocode=1;
 else {
     $sql="select showcode from comments where uid={$d['uid']} and pid={$d['pid']} order by showcode desc limit 1";
@@ -95,7 +97,7 @@ else {
     }
 
     if(!$forcetocode) {
-        $sql = "select accepted from submit where uid={$_SESSION['ID']} and pid={$d['pid']} order by score desc limit 1";
+        $sql = "select accepted from submit where uid={$uid} and pid={$d['pid']} order by score desc limit 1";
         $cnt=$p->dosql($sql);
         if ($cnt) {
             $f=$p->rtnrlt(0);

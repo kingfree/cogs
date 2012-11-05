@@ -19,8 +19,9 @@ $pbs=explode(":",$d['contains']);
 ?>
 <div class='row-fluid'>
 <table id="contest_report" class='table table-striped table-condensed table-bordered fiexd'>
+<thead>
   <tr>
-    <th style="width: 5ex;"><a href="javascript:qsort('rank')">名次</a></th>
+    <th style="width: 5ex;">名次</th>
     <th>用户</th>
 <?php
     $cnt_prob=0;
@@ -33,13 +34,16 @@ $pbs=explode(":",$d['contains']);
         $d=$p->rtnrlt(0);
         $cnt_prob++;
 ?>
-    <th><a href="problem.php?pid=<?=$v?>&ctid=<?=$_GET[ctid]?>" target="_blank"><?=shortname($d['probname'])?></a></th>
-    <th style="width: 5ex;"><a href="javascript:qsort('score<?=$v ?>_')">得分</a></th>
+    <th><a href="problem.php?pid=<?=$v?>&ctid=<?=$_GET[ctid]?>" target="_blank"><?=shortname($d['probname'])?></a>
+    <? if($end || 有此权限('查看比赛')) { ?><a href="../problem/problem.php?pid=<?=$v?>" target="_blank" title="跳转到题目 <?=$d['probname']?>"><i class='icon-share'></i></a><? } ?>
+    </th>
+    <th onclick="sortTable('contest_report', <?=$cnt_prob*2+1?>, 'int')" style="width: 5ex; cursor: pointer; color:navy;">得分</th>
 <?php
     }
 ?>
-    <th style="width: 6ex;"><a href="javascript:qsort('sum')">总分</a></th>
+    <th onclick="sortTable('contest_report', <?=$cnt_prob*2+2?>, 'int')" style="width: 6ex; cursor: pointer; color:navy;">总分</th>
   </tr>
+</thead>
 <?php 
     $sql="select userinfo.uid,userinfo.nickname,userinfo.realname,userinfo.email from userinfo,compscore where compscore.uid=userinfo.uid and compscore.ctid=$_GET[ctid] order by uid";
     $cnt=$p->dosql($sql);
@@ -52,7 +56,7 @@ $pbs=explode(":",$d['contains']);
         $luid=$d[uid];
 ?>
   <tr>
-    <th id="rank<?=$rowcnt ?>">&nbsp;</th>
+    <td id="rank<?=$rowcnt?>"></td>
     <td id="nickname<?=$rowcnt ?>"><a href="../user/detail.php?uid=<?=$d['uid'] ?>" target="_blank">
 <?=gravatar::showImage($d['email'], 14);?>
 <?=有此权限('查看用户') ? $d['realname'] : $d['nickname'] ?>
@@ -84,11 +88,11 @@ $pbs=explode(":",$d['contains']);
         if((有此权限('查看比赛') || $end))
             echo "</a>";
     } ?></td>
-    <td id="score<?=$v ?>_<?=$rowcnt ?>" ><?=$rank[$v][score]; ?></td>
+    <td id="score<?=$v ?>_<?=$rowcnt ?>" ><?if($end || (有此权限('查看比赛'))) echo $rank[$v][score]; ?></td>
 <?php
         }
 ?>
-    <td id="sum<?=$rowcnt ?>" ><?=$sum ?></td>
+    <td id="sum<?=$rowcnt ?>" ><?if($end || (有此权限('查看比赛'))) echo $sum; ?></td>
   </tr>
 <?php 
     }
