@@ -31,6 +31,15 @@ h3 {
   line-height: 24px;
 }
 
+pre {
+    border-radius: 0px;
+}
+
+blockquote {
+    font-size: small;
+    line-height: 1.2em;
+    color: #333;
+}
 
 .textarea {
     width: 90%;
@@ -244,10 +253,15 @@ padding: 10px;
 }
 .problem {
     color: black;
+    border-style: solid;
+    border-width: 1px;
+    border-color: white;
     background: white;
     font-size: 16px;
-  -webkit-border-radius: 4px;
-  -moz-border-radius: 4px;
+}
+.problem p {
+    margin: 0px 10px 0px 10px;
+    padding: 3px;
 }
 .problem h1 {
     font-family: sans-serif;
@@ -257,10 +271,7 @@ padding: 10px;
     padding: 10px 10px 10px 10px;
     margin: 8px;
     background-color: PaleTurquoise;
-    color: MidnightBlue;
-    text-shadow: 2px 2px 10px Linen;
-  -webkit-border-radius: 4px;
-  -moz-border-radius: 4px;
+    color: black;
 }
 .problem h2 {
     font-family: sans-serif;
@@ -270,23 +281,20 @@ padding: 10px;
     padding: 10px 10px 10px 10px;
     margin: 6px;
     background-color: PowderBlue;
-    color: MidnightBlue;
-    text-shadow: 1px 1px 5px Azure;
-  -webkit-border-radius: 4px;
-  -moz-border-radius: 4px;
+    color: black;
 }
 .problem dt, .problem h3 {
     font-family: sans-serif;
     font-size: 20px;
     line-height: 25px;
     font-weight: bold;
-    color: white;
-    background-color: CornflowerBlue;
-    margin: 5px;
+    color: black;
+    border-style: solid;
+    border-width: 1px;
+    border-color: LightSteelBlue;
+    background-color: AliceBlue;
+    margin: 10px 0px 10px 0px;
     padding: 2px 10px 2px 10px;
-    text-shadow: 1px 1px 5px MediumBlue;
-  -webkit-border-radius: 4px;
-  -moz-border-radius: 4px;
 }
 .problem dd {
     font-family: serif;
@@ -304,10 +312,15 @@ padding: 10px;
     line-height: 16px;
     font-weight: normal;
     color: black;
-    background-color: LavenderBlush;
     outline-width: 2px;
     margin: 0;
     padding: 10px;
+}
+.problem h3 + pre {
+    margin: -10px 10px 0px 10px;
+    padding: 10px;
+    border-top-style: none;
+    border-radius: 0px;
 }
 .problem table {
     border-collapse: collapse;
@@ -357,13 +370,13 @@ padding: 10px;
 #index a:hover {
     color: black;
     text-decoration: none;
-    text-shadow: 2px 4px 8px yellow;
+    text-shadow: 1px 1px 10px LightSkyBlue;
 }
 
 #index a:active {
     color: black;
     text-decoration: none;
-    text-shadow: 2px 4px 8px red;
+    text-shadow: 2px 2px 8px red;
 }
 
 .table {
@@ -386,13 +399,16 @@ color: #000;
 }
 
 .tou {
-    background-color: rgba(255, 255, 255, 0.4);
-  -webkit-border-radius: 4px;
-  -moz-border-radius: 4px;
+    text-align: center;
+    background-color: rgba(255, 255, 255, 0.3);
+    border-radius: 4px;
+    border-style: none;
+    padding: 0px;
+    margin: 0px 0px -40px 0px;
 }
 
 .tou h1 {
-    background-color: rgba(255, 255, 255, 0.5);
+    background-color: rgba(255, 255, 255, 0);
 }
 
 .alert {
@@ -459,6 +475,7 @@ color: #000;
 
 /* Remove spacing between an example and it's code */
 .bs-docs-example + .prettyprint {
+    font-size: small;
   margin-top: -20px;
   padding-top: 15px;
 }

@@ -32,7 +32,7 @@ class gravatar
 	public static function showImage($email,$size=14,$default="mm")
 	{
 		$url = self::getGravatarURL($email,$size,$default);
-		return "<img src=\"{$url}\" alt=\"Gravatar\" border=0 width=\"{$size}\" height=\"{$size}\" />";
+		return "<img src=\"{$url}\" alt=\"Gravatar\" width=\"{$size}\" height=\"{$size}\" />";
 	}
 	/**
 	 *

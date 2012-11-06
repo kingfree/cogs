@@ -22,14 +22,15 @@ KindEditor.ready(function(K) {
         shadowMode: false,
         imageTabIndex: 1,
         pasteType: 1,
-        items: ['source', 'preview', '|',
+        //newlineTag: 'br',
+        items: ['fullscreen', 'preview', 'source', '|',
         'undo', 'redo', '|',
         'plainpaste', 'wordpaste', '|',
         'formatblock', 'code', 'link', 'unlink', '|',
         'fontsize', 'bold', 'italic', 'underline',
         'forecolor', 'hilitecolor', '|',
         'image', 'emoticons', 'table', 'insertfile', '|',
-        'clearhtml', 'about', 'fullscreen'],
+        'clearhtml', 'about'],
         //afterChange: MathJax.Hub,
     });
 });

@@ -149,8 +149,8 @@ for ($i=0;$i<$cnt;$i++) {
 <?=gravatar::showImage($f['email'], 14);?>
 <?=有此权限('查看用户') ? $f['realname'] : $f['nickname'] ?>
 </a></td>
-<td><a href="code.php?csid=<?=$f['csid']?>" target="_blank"><?=评测结果($f['result'])?></a></td>
-<td align=right><?php printf("%.3f",$f['runtime']/1000.0) ?></td>
+<td class="wrap"><a href="code.php?csid=<?=$f['csid']?>" target="_blank"><?=评测结果($f['result'], 10)?></a></td>
+<td><?php printf("%.3f",$f['runtime']/1000.0) ?></td>
 <td><?php printf("%.2f",$f['memory']/1024)?></td>
 <td><span class="<?=$f['score']>=100?'ok':'no'?>"><?=$f['score'] ?></span></td>
 </tr>
@@ -204,7 +204,7 @@ if($cnt) {
 <?  } ?>
 </ul>
 </div>
-<center class="problem tou">
+<div class="problem tou">
 <a id="chbar" title="隐藏左边栏" class="pull-left" style="cursor:pointer"><i id="chbaricon" class="icon icon-indent-left"></i></a>
 <h1><?=$d['pid']?>. <?=shortname($d['probname'])?>
 <?php if(有此权限('修改题目')) { ?>
@@ -219,7 +219,7 @@ if($cnt) {
 时间限制：<?=$d['timelimit']/1000?> s&nbsp;&nbsp;
 内存限制：<?=$d['memorylimit']; ?> MB
 <hr />
-</center>
+</div>
 <dl class='problem'>
 <?=$d['detail']?>
 </dl>

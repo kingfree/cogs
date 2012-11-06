@@ -195,9 +195,9 @@ for ($i=0;$i<$cnt;$i++) {
 <?=gravatar::showImage($f['email']);?>
 <?=有此权限('查看用户') ? $f['realname'] : $f['nickname'] ?>
 </a></td>
-<td align=center><span class="<?=$f['accepted']?'ok':'no'?>"><?=$f['score'] ?></span></td>
-<td align=right><?php printf("%.3f s",$f['runtime']/1000.0) ?></td>
-<td align=center><a href="../submit/code.php?id=<?=$f['sid'] ?>" target="_blank"><?=$STR['lang'][$f['lang']]?></a></td>
+<td><span class="<?=$f['accepted']?'ok':'no'?>"><?=$f['score'] ?></span></td>
+<td><?php printf("%.3f s",$f['runtime']/1000.0) ?></td>
+<td><a href="../submit/code.php?id=<?=$f['sid'] ?>" target="_blank"><?=$STR['lang'][$f['lang']]?></a></td>
 </tr>
 <?php 
 }

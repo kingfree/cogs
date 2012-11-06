@@ -87,7 +87,7 @@ if($cnt) {
 <td colspan=4 class="wrap">
 <? if($_SESSION['ID']==$d['uid']) echo "<a href='comment.php?cid={$d['cid']}' class='pull-right btn btn-mini btn-warning'><i class='icon icon-edit icon-white'></i></a>";?>
 <?php echo BBCode($d['detail'])?>
-<div class='muted pull-right'><small><?php echo BBCode($d['memo'])?></div></div>
+<div class='muted pull-right'><small><?php echo BBCode($d['memo'])?></small></div>
 </td>
 </tr>
 <tr class="<?=$d['pid']?"info":"success"?>">
@@ -108,7 +108,7 @@ if($cnt) {
 	$q->dosql($sql);
 	$e=$q->rtnrlt(0);
 ?>
-<a href="../submit/code.php?id=<?=$e['sid']?>" title="<?=$e['result']?>"><i class='icon icon-download'></i><?=评测结果($e['result'], 10, true)?></a>
+<a href="../submit/code.php?id=<?=$e['sid']?>" title="<?=$e['result']?>"><i class='icon icon-download'></i><?=评测结果($e['result'], 30, true)?></a>
 <?php } ?>
 </td>
 <td><span class="pull-right">发表时间：<?php echo date('Y-m-d H:i:s',$d['stime']);?></span></td>

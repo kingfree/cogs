@@ -74,12 +74,19 @@ $d=$p->rtnrlt(0);
 <table id="userpanel" class='table-form'>
   <tr>
     <th width='80px'>用户编号</th>
-    <td><?=gravatar::showImage($d['email']);?><?=$d['uid'] ?></td>
+    <td>
+    <?=$d['uid'] ?>
+    <td width="100px">
+    <?=gravatar::showImage($d['email']);?>
+    </td>
     <th width='220px'>用户头像</th>
   </tr>
   <tr>
     <th>用户名称</th>
     <td><input name="usr" value="<?=$d['usr']?>" id='usr' type='text'/></td>
+    <td rowspan=4>
+<?=gravatar::showImage($d['email'], 64);?>
+    </td>
     <td rowspan='8' class='center'>
     <?=gravatar::showImage($d['email'], 200);?><br />
     <p />
@@ -99,12 +106,12 @@ $d=$p->rtnrlt(0);
     <td><input name="realname" type='text' value="<?=$d['realname']?>" id='realname' /></td>
   </tr>
   <tr>
-    <th>E-mail</th>
+    <th>电子邮件</th>
     <td><input name="email" type="email" value="<?=$d['email']?>" id='email' /></td>
   </tr>
   <tr>
     <th>系统主题</th>
-    <td>
+    <td colspan=2>
     <select name="user_style"><? $dir="../../Bootstrap/css/";
 $ssss= glob("$dir*.min.css");
 foreach($ssss as $sms) {
@@ -119,15 +126,15 @@ foreach($ssss as $sms) {
   </tr>
   <tr>
     <th>背景图片</th>
-    <td><input type="file" name="file" /></td>
+    <td colspan=2><input type="file" name="file" /></td>
   </tr>
   <tr>
     <th>个人介绍</th>
-    <td><textarea name="memo" class='span12' ><?=$d['memo']?></textarea></td>
+    <td colspan=2><textarea name="memo" class='span12' ><?=$d['memo']?></textarea></td>
   </tr>
   <tr>
     <th></th>
-    <td>
+    <td colspan=2>
     <a class='btn' href="#editpwd" data-toggle='modal'>修改密码</a>
     <a class='btn' href="#editpwdans" data-toggle='modal'>修改密码提示问题</a>
     <input type='submit' class='btn btn-primary pull-right' value='确认以上修改' />

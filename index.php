@@ -56,7 +56,7 @@ $cnt=$p->dosql("select * from page order by etime desc limit 6");
 for($i=0;$i<$cnt;$i++) {
 $d=$p->rtnrlt($i);
 ?>
-<tr><td><a href="page/page.php?aid=<?=$d['aid']?>" title="<?=$d['title']?>"><?=shortname($d['title'])?></a></td></td>
+<tr><td><a href="page/page.php?aid=<?=$d['aid']?>" title="<?=$d['title']?>"><?=shortname($d['title'])?></a></td></tr>
 <?php } ?>
 </table>
 <? } ?>
@@ -91,8 +91,7 @@ $d=$p->rtnrlt($i);
 ?>
 <tr>
 <td><?php echo $d['pid']; ?></td>
-<td>
-<? 是否通过($d['pid'], $q); ?>
+<td><? 是否通过($d['pid'], $q); ?>
 <a href="problem/problem.php?pid=<?php echo $d['pid']; ?>" title="<?=$d['probname']?>"><?php echo shortname($d['probname']); ?></a></td>
 </tr>
 <?php } ?>

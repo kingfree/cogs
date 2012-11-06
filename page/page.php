@@ -86,7 +86,7 @@ for ($i=0;$i<$cnt;$i++) {
 <td colspan=3 class="wrap">
 <? if($_SESSION['ID']==$d['uid']) echo "<a href='../problem/comment.php?cid={$d['cid']}' class='pull-right btn btn-mini btn-warning'><i class='icon icon-edit icon-white'></i></a>";?>
 <?php echo BBCode($d['detail'])?>
-<div class='muted pull-right'><small><?php echo BBCode($d['memo'])?></div></div>
+<div class='muted pull-right'><small><?php echo BBCode($d['memo'])?></small></div>
 </td>
 </tr>
 <tr class="success">
