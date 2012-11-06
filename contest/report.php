@@ -75,7 +75,7 @@ $pbs=explode(":",$d['contains']);
         }
         foreach($pbs as $k=>$v) {
 ?>
-    <td id="result<?=$v?>_<?=$rowcnt?>" >
+    <td id="result<?=$v?>_<?=$rowcnt?>" class='wrap'>
     <?php
     if($rank[$v][result] =="N")
         评测信息($rank[$v][result]);
@@ -83,7 +83,7 @@ $pbs=explode(":",$d['contains']);
         if((有此权限('查看比赛') || $end))
             echo "<a href='code.php?csid={$rank[$v]['csid']}'>";
         if($rank[$v][result] == "") echo "未评测";
-        else if((有此权限('查看比赛') || $end)) 评测结果($rank[$v][result]);
+        else if((有此权限('查看比赛') || $end)) 评测结果($rank[$v][result], 30);
         else echo "不显示";
         if((有此权限('查看比赛') || $end))
             echo "</a>";

@@ -48,6 +48,12 @@ if($_GET['toid']) $_POST['title'] = "给".$_GET['toid']."的邮件";
 function markread(id) {
   $.get("markread.php",{mid: id},function(txt){});
 }
+function reply(uid, tit) {
+  $('#toid').attr('value', uid);
+  $('#title').attr('value', '回(' + tit + '): ');
+  $('.modal').modal('hide');
+  $('#sendmail').modal('show');
+};
 </script>
 
 <div class='row-fluid'>
@@ -128,7 +134,7 @@ for($i=0; $i<$cnt; $i++) {
 <?=$d['nickname']?></a>
 <?=date('Y-m-d h:i:s',$d['time'])?>
 </span>
-<a class='btn btn-success' href="#sendmail" data-toggle='modal'>回复</a>
+<a class='btn btn-success' onclick="reply(<?=$d['fromid']?>, <?=$d['mid']?>)">回复</a>
 <button data-dismiss='modal' class='btn'>关闭</button>
 </div>
 </div>
