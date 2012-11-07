@@ -218,7 +218,6 @@ if($cnt) {
 <br />
 时间限制：<?=$d['timelimit']/1000?> s&nbsp;&nbsp;
 内存限制：<?=$d['memorylimit']; ?> MB
-<hr />
 </div>
 <dl class='problem'>
 <?=$d['detail']?>

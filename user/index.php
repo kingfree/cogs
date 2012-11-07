@@ -104,7 +104,7 @@ function okdel(name) {
     <th>昵称</th>
     <? if(有此权限('查看用户')) { ?>
     <th class='admin' style="width: 4em;">姓名</th>
-    <th style="width: 4ex;">阅读</th>
+    <th style="width: 6ex;">阅读</th>
     <? } ?>
     <th>权限</th>
     <th>分组</th>
@@ -124,8 +124,12 @@ function okdel(name) {
     <td><?=$d['uid'] ?></td>
     <td><a href="detail.php?uid=<?=$d['uid'] ?>" title="<?=(sp2n(htmlspecialchars($d['memo'])))?>"><?=gravatar::showImage($d['email']);?><?=$d['nickname'] ?></a></td>
     <? if(有此权限('查看用户')) { ?>
-    <td ><?=$d['realname'] ?></td>
-    <td ><?=$d['readforce'] ?></td>
+    <td>
+        <?=$d['realname'] ?></td>
+    <td>
+        <a href="dodelimg.php?email=<?=md5($d['email'])?>" title="重建头像缓存"><i class="icon icon-picture"></i></a>
+    <?=$d['readforce'] ?>
+    </td>
     <? } ?>
     <td><?
     $sql="select privilege.* from privilege where uid={$d['uid']} order by pri asc";

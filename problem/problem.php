@@ -240,7 +240,7 @@ for ($i=0;$i<$cnt;$i++) {
 </div>
 <div id="rightbar" class='span8'>
 <div id="probdetail" class='page'>
-<center class="problem tou">
+<div class="problem tou">
 <a id="chbar" title="隐藏左边栏" class="pull-left" style="cursor:pointer"><i id="chbaricon" class="icon icon-indent-left"></i></a>
 <h1><?=$d['pid']?>. <?=$d['probname']?>
 <?php if(有此权限('修改题目')) { ?>
@@ -260,8 +260,7 @@ $Jia['title']="{$d['pid']}. {$d['probname']}" . 难度($d['difficulty']) . "({$d
 $Jia['summary']=trim(strip_tags($d['detail']));
 //include("../include/jia.inc.php");
 ?>
-<hr />
-</center>
+</div>
 <dl class='problem'>
 <?=$d['detail']?>
 </dl>

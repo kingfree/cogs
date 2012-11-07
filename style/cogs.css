@@ -252,6 +252,7 @@ padding: 10px;
     color: black;
 }
 .problem {
+    font-family: serif;
     color: black;
     border-style: solid;
     border-width: 1px;
@@ -260,6 +261,7 @@ padding: 10px;
     font-size: 16px;
 }
 .problem p {
+    font-family: serif;
     margin: 0px 10px 0px 10px;
     padding: 3px;
 }
@@ -283,7 +285,7 @@ padding: 10px;
     background-color: PowderBlue;
     color: black;
 }
-.problem dt, .problem h3 {
+.problem h3 {
     font-family: sans-serif;
     font-size: 20px;
     line-height: 25px;
@@ -295,16 +297,6 @@ padding: 10px;
     background-color: AliceBlue;
     margin: 10px 0px 10px 0px;
     padding: 2px 10px 2px 10px;
-}
-.problem dd {
-    font-family: serif;
-    font-size: 16px;
-    line-height: 18px;
-    font-weight: normal;
-    color: black;
-    background-color: Azure;
-    margin: 0;
-    padding: 10px 30px 10px 30px;
 }
 .problem pre {
     font-family: monospace;
@@ -321,6 +313,9 @@ padding: 10px;
     padding: 10px;
     border-top-style: none;
     border-radius: 0px;
+}
+.problem h3 + p {
+    margin-top: -10px;
 }
 .problem table {
     border-collapse: collapse;
@@ -404,9 +399,11 @@ color: #000;
     border-radius: 4px;
     border-style: none;
     padding: 0px;
-    margin: 0px 0px -40px 0px;
+    margin: -10px 0px -10px 0px;
 }
-
+.tabbable + .tou {
+    margin-top: -30px;
+}
 .tou h1 {
     background-color: rgba(255, 255, 255, 0);
 }

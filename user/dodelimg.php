@@ -9,11 +9,9 @@ for($i=0; $i<=200; $i++) {
 	$file = $path.$email."s{$i}";
 	if(file_exists($file)) {
 		unlink($file);
-        gravatar::showImage($d['email'], $i);
-        $txt .= "<p>清除 ".$file." ， 重建 $i 中...</p>";
+        $txt .= "<p>清除 ".$file." 中... </p>";
     }
 }
-
 
 提示($txt."重建头像缓存完成！", 取路径("user/panel.php"));
 
