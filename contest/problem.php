@@ -149,7 +149,7 @@ for ($i=0;$i<$cnt;$i++) {
 <?=gravatar::showImage($f['email'], 14);?>
 <?=有此权限('查看用户') ? $f['realname'] : $f['nickname'] ?>
 </a></td>
-<td class="wrap"><a href="code.php?csid=<?=$f['csid']?>" target="_blank"><?=评测结果($f['result'], 10)?></a></td>
+<td class="wrap"><a href="code.php?csid=<?=$f['csid']?>" target="_blank"><?=评测结果($f['result'], 20)?></a></td>
 <td><?php printf("%.3f",$f['runtime']/1000.0) ?></td>
 <td><?php printf("%.2f",$f['memory']/1024)?></td>
 <td><span class="<?=$f['score']>=100?'ok':'no'?>"><?=$f['score'] ?></span></td>
@@ -173,7 +173,7 @@ if($cnt) {
 <tr><th>评测得分</th>
 <td><?=$f['score']; ?></td></tr>
 <tr><th>评测结果</th>
-<td><?=评测结果($f['result']); ?></td></tr>
+<td class="wrap"><?=评测结果($f['result'], 60); ?></td></tr>
 <tr><th>提交代码</th>
 <td><a href="code.php?csid=<?=$f[csid] ?>" target="_blank"><?=$STR[lang][$f[lang]] ?></a></td></tr>
 </table>

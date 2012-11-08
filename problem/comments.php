@@ -7,6 +7,7 @@ $LIB->mathjax();
 $p=new DataAccess();
 $q=new DataAccess();
 $pid=(int)$_GET['pid'];
+$uid=(int)$_GET['uid'];
 $aid=(int)$_GET['aid'];
 $ctid=(int)$_GET['ctid'];
 ?>
@@ -33,6 +34,13 @@ $ctid=(int)$_GET['ctid'];
 <button type='submit' class='btn'><i class='icon icon-search'></i></button>
 <a href="comments.php" class='btn'>全部评论</a>
 </div>
+<span>
+题目PID
+<input name="pid" type="number" value="<?=$_GET['pid']?>" class='span1' />
+用户UID
+<input name="uid" type="number" value="<?=$_GET['uid']?>" class='span1' />
+<button type="submit" class='btn btn-primary'>检索</button>
+</span>
 </form>
 <?php
 /*$sql="select comments.*,userinfo.*,problem.pid,problem.probname from comments,userinfo,problem where userinfo.uid=comments.uid and problem.pid=comments.pid ";
@@ -49,9 +57,9 @@ if($pid) {
 } else if($aid) {
     $sql.="AND $aid = comments.aid ";
     $sql.="ORDER BY comments.cid asc";
-} else if($ctid) {
-    $sql.="AND $ctid = comments.ctid ";
-    $sql.="ORDER BY comments.cid asc";
+} else if($uid) {
+    $sql.="AND $uid = comments.uid ";
+    $sql.="ORDER BY comments.stime desc";
 } else {
     $sql.="ORDER BY comments.stime desc";
 }
@@ -79,7 +87,7 @@ if($cnt) {
 <td valign='top' style="width:120px;">
 <div>
 <a href="<?=路径("mail/index.php")?>?toid=<?=$d['uid']?>" title="给<?=$d['nickname']?>发送信件" class="pull-right"><span class="icon-envelope"></span></a>
-<a href="<?php echo 路径("user/detail.php?uid={$d['uid']}");?>"><b><?php echo $d['nickname'];?></b></a>
+<a href="?uid=<?=$d['uid']?>"><b><?php echo $d['nickname'];?></b></a>
 </div>
 积分：<?=$d['grade']?><br />
 提交：<?=$d['accepted']?> / <?=$d['submited']?>

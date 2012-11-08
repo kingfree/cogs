@@ -112,14 +112,14 @@ for($i=0;$i<$cnt;$i++) {
     $d=$p->rtnrlt($i);
 ?>
 <tr>
-<td><?php if(!$_GET['pid']) {
+<td class="wrap"><?php if(!$_GET['pid']) {
     是否通过($d['pid'], $q);
     echo "<a href='submit/?pid={$d['pid']}'>".shortname($d['probname'])."</a>";
     echo "<a href='problem/problem.php?pid={$d['pid']}' title='{$d['probname']}' target='_blank'><span class='icon-share'></span></a>";
 } else
     echo "<a href='problem/problem.php?pid={$d['pid']}' title='{$d['probname']}' target='_blank'>".shortname($d['probname'])."</a>";
 ?></td>
-<td><a href='user/detail.php?uid=<?=$d['uid']?>' title="<?=(sp2n(htmlspecialchars($d['memo'])))?>" target='_blank'><?=gravatar::showImage($d['email']);?></a>
+<td class="wrap"><a href='user/detail.php?uid=<?=$d['uid']?>' title="<?=(sp2n(htmlspecialchars($d['memo'])))?>" target='_blank'><?=gravatar::showImage($d['email']);?></a>
 <?php echo "<a href='submit/?uid={$d[uid]}'>";
 if(有此权限("查看用户")) echo $d['realname']; else echo $d['nickname'];
 echo "</a>"; ?></td>
