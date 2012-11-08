@@ -1,15 +1,18 @@
 <?php
 require_once("../include/header.php");
-gethead(1,"","题目评论");
+$pid=(int)$_GET['pid'];
+$uid=(int)$_GET['uid'];
+$aid=(int)$_GET['aid'];
+$ctid=(int)$_GET['ctid'];
+if($uid)
+    gethead(1,"","题目评论", $uid);
+else 
+    gethead(1,"","题目评论");
 $LIB->hlighter();
 $LIB->mathjax();
 
 $p=new DataAccess();
 $q=new DataAccess();
-$pid=(int)$_GET['pid'];
-$uid=(int)$_GET['uid'];
-$aid=(int)$_GET['aid'];
-$ctid=(int)$_GET['ctid'];
 ?>
 <div class='row-fluid'>
 <form method="get" action="" class='form-search'>
