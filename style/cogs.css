@@ -357,21 +357,21 @@ padding: 10px;
 }
 
 #index a:link, #index a:visited {
-    color: black;
+    color: #333;
     text-decoration: none;
-    text-shadow: 2px 4px 8px white;
+    text-shadow: 2px 4px 2px #EEE;
 }
 
 #index a:hover {
-    color: black;
+    color: #333;
     text-decoration: none;
-    text-shadow: 1px 1px 10px LightSkyBlue;
+    text-shadow: 1px 1px 4px #CCC;
 }
 
 #index a:active {
     color: black;
     text-decoration: none;
-    text-shadow: 2px 2px 8px red;
+    text-shadow: 2px 2px 5px #DDD;
 }
 
 .table {
