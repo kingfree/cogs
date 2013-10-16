@@ -1,6 +1,23 @@
 <?php
 require_once("../include/header.php");
-gethead(7,"修改题目","修改题目");
+$uid = (int) $_SESSION['ID'];
+if($pid = (int) $_GET['pid'])
+    gethead(7,"","修改题目");
+else
+    gethead(7,"","新建题目");
+$p=new DataAccess();
+$q=new DataAccess();
+if($pid) {
+    $sql="select * from problem where pid={$pid}";
+    $cnt=$p->dosql($sql);
+    if($cnt) {
+        $d=$p->rtnrlt(0);
+        if(!有此权限("查看题目") && $uid != $d['addid'])
+            异常("没有阅读权限！", 取路径("problem/index.php"));
+    } else {
+        异常("无此题目！！", 取路径("problem/index.php"));
+    }
+}
 $LIB->editor("detail");
 $LIB->htmldom();
 ?>
@@ -26,19 +43,10 @@ if ($_GET[action]=='del') {
     echo "确认要删除该题目及与该题目相关所有内容吗(无法恢复)？<p><a href='doeditprob.php?action=del&pid={$_GET[pid]}'>确认删除</a>";
     exit;
 }
-$p=new DataAccess();
-$q=new DataAccess();
-if ($_GET['action']=='edit') {
-    $sql="select * from problem where pid={$_GET['pid']}";
-    $cnt=$p->dosql($sql);
-}
-if ($cnt) {
-    $d=$p->rtnrlt(0);
-    $d['detail'];
-} else {
+if (!$cnt) {
     if ($_GET['action']=='add') {
         $d=array();
-        $d['submitable']=1;
+        $d['submitable']=0;
         $d['datacnt']=10;
         $d['timelimit']=$SET['prob_deftimelimit'] ? $SET['prob_deftimelimit'] : 1000;
         $d['memorylimit']=$SET['prob_defmemorylimit'] ? $SET['prob_defmemorylimit'] : 128;
@@ -336,8 +344,8 @@ if($_GET['oj']=='poj' && $_GET['id']>=1000) {
 <form action="doeditprob.php" method="post" enctype="multipart/form-data" class='form-horizontal' id="tijiao">
 <div id='cates' class='modal hide fade in' style='width:940px; margin-left:-470px;'>
 <?php
-if ($_GET['pid']) {
-    $sql="select caid from tag where pid={$_GET['pid']}";
+if ($pid) {
+    $sql="select caid from tag where pid={$pid}";
     $cnt=$p->dosql($sql);
     for ($i=0;$i<=$cnt-1;$i++) {
         $f=$p->rtnrlt($i);
@@ -429,6 +437,7 @@ $f=$p->rtnrlt($i);
 </div>
 </div>
 <div class='control-group'>
+<? if(有此权限("查看题目")) { ?>
 <label class='control-label' for='readforce'>阅读权限</label>
 <div class='controls'>
 <input name="readforce" type="number" id="readforce" value="<?=$d['readforce'] ?>" class='span4' />
@@ -436,6 +445,7 @@ $f=$p->rtnrlt($i);
 <input name="submitable" type="checkbox" id="submitable" value="1" <?php if ($d['submitable']) echo 'checked="checked"'; ?> />
 可否提交</label></span>
 </div>
+<? } ?>
 </div>
 <div class='control-group'>
 <label class='control-label' for='plugin'>评测方式</label>

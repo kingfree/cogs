@@ -26,9 +26,9 @@ if (restore) selObj.selectedIndex=0;
 }
 </script>
 
-<?php if(有此权限('修改题目')) { ?>
+<?php //if(有此权限('修改题目')) { ?>
 <a href="editprob.php?action=add" class="btn btn-info pull-left">添加新题目</a>
-<?php } ?>
+<?php //} ?>
 <a href="catelist.php" class='btn btn-success pull-left'><i class="icon-tags icon-white"></i>题目分类列表</a>
 
 <? if ($_GET['caid']) { ?>

@@ -15,11 +15,12 @@ $r=new DataAccess();
 if($cnt) {
     if ($d[readforce]>$_SESSION[readforce]) 
         异常("没有阅读权限！", 取路径("problem/index.php"));
-    if (!$d[submitable] && !有此权限('查看题目')) 
+    if (!$d[submitable] && !有此权限('查看题目') && $d['addid'] != $uid) 
         异常("该题目不可提交！", 取路径("problem/index.php"));
     $subgroup=$LIB->getsubgroup($q,$d['gid']);
     $subgroup[0]=$d['gid'];
     $promise=false;
+    if($uid == $d['addid']) $promise=true;
     foreach($subgroup as $value) {
         if ($value==(int)$_SESSION['group']) {
             $promise=true;
@@ -61,14 +62,14 @@ if($cnt) {
 <tr>
 <th>题目来源</th>
 <td>
-<?php if(有此权限('查看题目')) { 
+<?php if(有此权限('查看题目') || $uid == $d['addid']) { 
     $sql="SELECT realname FROM userinfo WHERE uid ={$d['addid']} limit 1";
     $ac=$q->dosql($sql);
     $e=$q->rtnrlt(0); ?>
 <a href="../user/detail.php?uid=<?=$d['addid']; ?>"><?=$e['realname']?></a>
 <? } ?>
 <?=date('Y-m-d', $d['addtime']) ?>
-<?php if(有此权限('修改题目')) { ?>
+<?php if(有此权限('修改题目') || $d['addid'] == $uid) { ?>
 <a href="editprob.php?action=edit&pid=<?=$d['pid']?>" class='btn btn-info btn-mini pull-right' title="修改题目 <?=$d['probname']?>" >修改该题</a>
 <? } ?>
 </td></tr>
