@@ -147,9 +147,10 @@ for ($i=0;$i<=$cnt2-1;$i++) {
 <td colspan=2>
 <input name="pid" type="hidden" id="pid" value="<?=$d['pid']?>" />
 <input type="file" name="file" title='选择程序源文件' /><br />
-<?php if(有此权限('测试题目')) { ?>
+<?php if(有此权限('测试题目') || $d['addid'] == $uid) { ?>
 <label class='checkbox inline pull-right'>
-<input name="testmode" type="checkbox" value="1" />不写入数据库
+<? if($d['addid'] == $uid && $d['submitable'] != 1) $tmm=1; else $tmm=0; ?>
+<input name="testmode" type="checkbox" <?if($tmm) echo "checked"?> value="<?=$tmm?>" />不写入数据库
 </label>
 <?php } ?>
 <select name='judger' class='input-medium'>
@@ -244,7 +245,7 @@ for ($i=0;$i<$cnt;$i++) {
 <div class="problem tou">
 <a id="chbar" title="隐藏左边栏" class="pull-left" style="cursor:pointer"><i id="chbaricon" class="icon icon-indent-left"></i></a>
 <h1><?=$d['pid']?>. <?=$d['probname']?>
-<?php if(有此权限('修改题目')) { ?>
+<?php if(有此权限('修改题目') || $d['addid'] == $uid) { ?>
 <a href="editprob.php?action=edit&pid=<?=$d['pid']?>" title="修改题目 <?=$d['probname']?>" class="pull-right"><i class="icon icon-edit"></i></a>
 <?php } ?>
 </h1>
@@ -280,9 +281,10 @@ for ($i=0;$i<$cnt;$i++) {
 }
 ?>       
 </select>
-<?php if(有此权限('测试题目')) { ?>
+<?php if(有此权限('测试题目') || $d['addid'] == $uid) { ?>
 <label class='checkbox inline'>
-<input id="testmode" name="testmode" type="checkbox" value="1" />不写入数据库
+<? if($d['addid'] == $uid && $d['submitable'] != 1) $tmm=1; else $tmm=0; ?>
+<input id="testmode" name="testmode" type="checkbox" <?if($tmm) echo "checked"?> value="<?=$tmm?>" />不写入数据库
 </label>
 <?php } ?>
 <br />

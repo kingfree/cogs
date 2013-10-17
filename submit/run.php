@@ -10,7 +10,7 @@ $q=new DataAccess();
 $sql="select * from problem where pid={$_POST['pid']}";
 $p->dosql($sql);
 $d=$p->rtnrlt(0);
-if(!$d['submitable'] && !有此权限('查看题目'))
+if(!$d['submitable'] && !有此权限('查看题目') && !($d['addid'] == $_SESSION['ID']))
     异常("不可提交！",取路径("problem/index.php"));
 $lang=langstrtonum($_POST['lang']);
 $info=array();
@@ -135,9 +135,11 @@ if($AC == -1) { ?>
 </form>
 <?php } ?>
 <?php
-if($nodata == false && ($_POST['testmode'] != 1 || !有此权限('测试题目'))) {
+if($nodata || $_POST['testmode'] && (有此权限('测试题目') || $d['addid'] == $_SESSION['ID'])) {
+    echo "<p class=no>没有写入数据库</p>";
+} else {
 	$Cp->writedb_single();
-} else echo "<p class=no>没有写入数据库</p>";
+}
 ?>
 </div>
 </div>

@@ -2,9 +2,9 @@
 require_once("../include/header.php");
 $uid = (int) $_SESSION['ID'];
 if($pid = (int) $_GET['pid'])
-    gethead(7,"","修改题目");
+    gethead(7,"sess","修改题目");
 else
-    gethead(7,"","新建题目");
+    gethead(7,"sess","新建题目");
 $p=new DataAccess();
 $q=new DataAccess();
 if($pid) {

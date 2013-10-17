@@ -98,6 +98,30 @@ $d=$p->rtnrlt($i);
 </table>
 </div>
 <div class='span8' id="index_submit">
+<?
+$uid=(int)$_SESSION['ID'];
+if(有此权限("修改题目") && 有此权限("查看题目")) {
+    $cnt=$p->dosql("select * from problem where submitable!=1 order by addtime desc limit 5");
+    if($cnt) {
+        echo "<div class='alert'><h4>用户提交待审核的题目：</h4><ul>";
+        for($i=0;$i<$cnt;$i++) {
+            $d=$p->rtnrlt($i);
+            echo "<li><a href='problem/problem.php?pid={$d['pid']}'>{$d['pid']}. {$d['probname']}</a> <a href='problem/editprob.php?action=edit&pid={$d['pid']}'>[编辑]</a></li>";
+        }
+        echo "</ul></div>";
+    }
+} else {
+    $cnt=$p->dosql("select * from problem where addid=$uid and submitable!=1 order by addtime desc");
+    if($cnt) {
+        echo "<div class='alert'><h4>已提交正在审核的题目：</h4><ul>";
+        for($i=0;$i<$cnt;$i++) {
+            $d=$p->rtnrlt($i);
+            echo "<li><a href='problem/problem.php?pid={$d['pid']}'>{$d['pid']}. {$d['probname']}</a> <a href='problem/editprob.php?action=edit&pid={$d['pid']}'>[编辑]</a></li>";
+        }
+        echo "</ul></div>";
+    }
+}
+?>
 <table class='table table-striped table-condensed table-bordered fixed'>
 <thead><tr>
 <th>题目</th>
