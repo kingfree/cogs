@@ -6,6 +6,7 @@ $pwd = $_REQUEST['pwdhash'];
 if(!$usr) $usr = $_COOKIE['cogs_usr'];
 if(!$pwd) $pwd = $_COOKIE['cogs_pwd_hash'];
 $sql="select * from userinfo where usr='$usr'";
+echo "$usr";
 $cnt=$p->dosql($sql);
 if ($cnt==0)
     i异常("用户不存在！", 取路径("user/login.php"));

@@ -59,7 +59,7 @@ class DataAccess
 
     public function __destruct() 
     {
-        @mysql_close($this->conn);
+        //@mysql_close($this->conn);
     }
 
     public function dosql($SQL)
