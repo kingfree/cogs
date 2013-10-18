@@ -100,9 +100,11 @@ $d=$p->rtnrlt($i);
 <div class='span8' id="index_submit">
 <?
 $uid=(int)$_SESSION['ID'];
+$hasaa=$SET['index_submit_size'];
 if(有此权限("修改题目") && 有此权限("查看题目")) {
     $cnt=$p->dosql("select * from problem where submitable!=1 order by addtime desc limit 5");
     if($cnt) {
+$hasaa=$SET['index_submit_size'] - $cnt;
         echo "<div class='alert'><h4>用户提交待审核的题目：</h4><ul>";
         for($i=0;$i<$cnt;$i++) {
             $d=$p->rtnrlt($i);
@@ -113,6 +115,7 @@ if(有此权限("修改题目") && 有此权限("查看题目")) {
 } else {
     $cnt=$p->dosql("select * from problem where addid=$uid and submitable!=1 order by addtime desc");
     if($cnt) {
+$hasaa=$SET['index_submit_size'] - $cnt;
         echo "<div class='alert'><h4>已提交正在审核的题目：</h4><ul>";
         for($i=0;$i<$cnt;$i++) {
             $d=$p->rtnrlt($i);
@@ -131,7 +134,7 @@ if(有此权限("修改题目") && 有此权限("查看题目")) {
 <th style="width: 10ex;">提交时间</th>
 </tr></thead>
 <?php 
-$cnt=$p->dosql("select submit.sid,submit.pid,submit.uid,submit.result,submit.score,submit.accepted,submit.subtime,problem.probname,userinfo.nickname,userinfo.realname,userinfo.email,userinfo.memo from submit,problem,userinfo where submit.score>={$SET['index_submit_score']} and submit.uid=userinfo.uid and submit.pid=problem.pid order by submit.sid desc limit {$SET['index_submit_size']}");
+$cnt=$p->dosql("select submit.sid,submit.pid,submit.uid,submit.result,submit.score,submit.accepted,submit.subtime,problem.probname,userinfo.nickname,userinfo.realname,userinfo.email,userinfo.memo from submit,problem,userinfo where submit.score>={$SET['index_submit_score']} and submit.uid=userinfo.uid and submit.pid=problem.pid order by submit.sid desc limit {$hasaa}");
 for($i=0;$i<$cnt;$i++) {
     $d=$p->rtnrlt($i);
 ?>

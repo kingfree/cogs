@@ -12,11 +12,11 @@ if ($_GET[accept]==1) {
 <table class='table-form'>
 <tr>
 <th width='100px'>用户名称</th>
-<td><input name="usr" type="text" id="usr" /> 4～24位，遵循变量名命名规范</td>
+<td><input name="usr" type="text" id="usr" /> 1～24位，遵循变量名命名规范</td>
 </tr>
 <tr>
 <th>密码</th>
-<td><input name="pwd" type="password" id="pwd"> 4～24位，加密存储</td>
+<td><input name="pwd" type="password" id="pwd"> 0～24位，加密存储</td>
 </tr>
 <tr>
 <th>重复密码</th>
@@ -24,7 +24,7 @@ if ($_GET[accept]==1) {
 </tr>
 <tr>
 <th>用户昵称</th>
-<td><input name="nickname" type="text" id="nickname" /> 2～10位，汉字、字母、假名、谚文等可显示字符</td>
+<td><input name="nickname" type="text" id="nickname" /> 1～8位，汉字、字母、假名、谚文等可显示字符</td>
 </tr>
 <tr>
 <th>电子邮件</th>
@@ -32,15 +32,15 @@ if ($_GET[accept]==1) {
 </tr>
 <tr>
 <th>提示问题</th>
-<td><input name="passwordtip" type="text" id="passwordtip" /> 6～64位可显示字符，用于忘记密码时找回密码</td>
+<td><input name="passwordtip" type="text" id="passwordtip" /> 0～64位可显示字符，用于忘记密码时找回密码</td>
 </tr>
 <tr>
 <th>问题答案</th>
-<td><input name="passwordtipans" type="text" id="passwordtipans" /> 4～64位，上述问题的答案，加密存储</td>
+<td><input name="passwordtipans" type="text" id="passwordtipans" /> 0～64位，上述问题的答案，加密存储</td>
 </tr>
 <tr>
 <th>真实姓名</th>
-<td><input name="realname" type="text" id="realname"/> 2～8位汉字字符，不会公开，<b>如果你实在不想写的话写可以代表你的昵称也可以</b></td>
+<td><input name="realname" type="text" id="realname"/> 0～8位汉字字符，不会公开，<b>如果你实在不想写的话写可以代表你的昵称也可以</b></td>
 </tr>
 <tr>
 <th>个人介绍</th>
@@ -62,9 +62,9 @@ if ($_GET[accept]==1) {
 <script language="javascript">
 $("#zhuce").submit(function() {
   var t = $("#usr").val();
-  var e = /([a-z0-9][_a-z0-9]{3,23})/;
+  var e = /([_a-z0-9]{1,24})/;
   if(!e.test(t)) {
-    alert("用户名长度必须在[4,24]中且只能使用英文字母、数字以及_，并且首字符必须为字母或数字。");
+    alert("用户名长度必须在[1,24]中且只能使用英文字母、数字以及_。");
     return false;
   }
   $.get("checkname.php",{name: t},function(txt){
@@ -80,9 +80,9 @@ $("#zhuce").submit(function() {
     }
   });
   t = $("#pwd").val();
-  e = /(.{4,24})/;
+  e = /(.{0,24})/;
   if(!e.test(t)) {
-    alert("密码长度必须在[4,24]中。");
+    alert("密码长度必须在[0,24]中。");
     return false;
   }
   if($("#pwd").val() != $("#repwd").val()) {
@@ -90,9 +90,9 @@ $("#zhuce").submit(function() {
     return false;
   }
   t = $("#nickname").val();
-  e = /(\S{2,20})/;
+  e = /(\S{1,20})/;
   if(!e.test(t)) {
-    alert("昵称长度必须在[2,20]中。");
+    alert("昵称长度必须在[1,20]中。");
     return false;
   }
   t = $("#email").val();
@@ -102,21 +102,21 @@ $("#zhuce").submit(function() {
     return false;
   }
   t = $("#realname").val();
-  e = /(\S{2,8})/;
+  e = /(\S{0,8})/;
   if(!e.test(t)) {
-    alert("真实姓名长度必须在[2,8]中，应该是汉字。");
+    alert("真实姓名长度必须在[0,8]中，应该是汉字。");
     return false;
   }
   t = $("#passwordtip").val();
-  e = /(.{2,64})/;
+  e = /(.{0,64})/;
   if(!e.test(t)) {
-    alert("提示问题长度必须在[2,64]中。");
+    alert("提示问题长度必须在[0,64]中。");
     return false;
   }
   t = $("#passwordtipans").val();
-  e = /(.{2,64})/;
+  e = /(.{0,64})/;
   if(!e.test(t)) {
-    alert("提示问题答案长度必须在[2,64]中。");
+    alert("提示问题答案长度必须在[0,64]中。");
     return false;
   }
   return true;

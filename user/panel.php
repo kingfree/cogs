@@ -145,9 +145,9 @@ foreach($ssss as $sms) {
 <script language="javascript">
 $("#xiugai").submit(function() {
   var t = $("#usr").val();
-  var e = /([a-z0-9][_a-z0-9]{3,23})/;
+  var e = /([_a-z0-9]{1,24})/;
   if(!e.test(t)) {
-    alert("用户名长度必须在[4,24]中且只能使用英文字母、数字以及_，并且首字符必须为字母或数字。");
+    alert("用户名长度必须在[1,24]中且只能使用英文字母、数字以及_。");
     return false;
   }
   $.get("checkname.php",{name: t},function(txt){
@@ -157,9 +157,9 @@ $("#xiugai").submit(function() {
     }
   });
   t = $("#nickname").val();
-  e = /(\S{2,20})/;
+  e = /(\S{1,20})/;
   if(!e.test(t)) {
-    alert("昵称长度必须在[2,20]中。");
+    alert("昵称长度必须在[1,20]中。");
     return false;
   }
   t = $("#email").val();
@@ -169,9 +169,9 @@ $("#xiugai").submit(function() {
     return false;
   }
   t = $("#realname").val();
-  e = /(\S{2,20})/;
+  e = /(\S{0,20})/;
   if(!e.test(t)) {
-    alert("真实姓名长度必须在[2,20]中。");
+    alert("真实姓名长度必须在[0,20]中。");
     return false;
   }
   return true;
