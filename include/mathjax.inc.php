@@ -1,10 +1,4 @@
 <script type="text/x-mathjax-config">
-//
-//  Do NOT use this page as a template for your own pages.  It includes 
-//  code that is needed for testing your site's installation of MathJax,
-//  and that should not be used in normal web pages.  Use sample.html as
-//  the example for how to call MathJax in your own pages.
-//
   MathJax.HTML.Cookie.Set("menu",{});
   MathJax.Hub.Config({
     extensions: ["tex2jax.js"],

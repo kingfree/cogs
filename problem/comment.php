@@ -59,7 +59,11 @@ if($pid) {
 的评论</h3>
 </div>
 <div class='modal-body'>
-<textarea name="detail" class='textarea' style='height:10em'><?php echo $d['detail'] ?></textarea>
+<textarea name="detail" class='textarea' style='height:10em'>
+<?php 
+if($_GET['user']) echo "回复 @".$_GET['user']." : \n";
+echo $d['detail'];
+?></textarea>
 <br />
 <? if($pid) { ?>
     <label><input id="showcode" name="showcode" type="checkbox" value="1" <?php if($d['showcode']){ ?> checked="checked" <?php } ?> />允许查看你提交的代码</label>

@@ -6,7 +6,15 @@ li.L0, li.L1, li.L2, li.L3, li.L4, li.L5, li.L6, li.L7, li.L8, li.L9 {
     margin-left: 2ex;
 }
 </style>
+
+<script type="text/javascript" src="/highlight.js/highlight.min.js"></script>
+<link rel=stylesheet type="text/css" href="/highlight.js/default.min.css" />
 <script type="text/javascript">
 jQuery(function($) {
   prettyPrint();
-});</script>
+  $('pre code').each(function(i, e) {
+      hljs.highlightBlock(e, '    ', true)
+  });
+});
+</script>
+

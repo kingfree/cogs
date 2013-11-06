@@ -35,7 +35,9 @@ $q=new DataAccess();
 <div class='input-append pull-right'>
 <input name="key" type="text" class='search-query input-medium' value='<?=$_GET['key']?>' placeholder='搜索评论'/>
 <button type='submit' class='btn'><i class='icon icon-search'></i></button>
-<a href="comments.php" class='btn'>全部评论</a>
+<? if(!($_GET['show'] || $pid || $aid || $uid)) { ?>
+<a href="comments.php?show=yes" class='btn btn-inverse'>全部评论</a>
+<? } ?>
 </div>
 <span>
 题目PID
@@ -66,6 +68,9 @@ if($pid) {
 } else {
     $sql.="ORDER BY comments.stime desc";
 }
+$limitt=(int)$SET['style_pagesize'];
+if(!($_GET['show'] || $pid || $aid || $uid))
+    $sql .= " limit {$limitt}";
 //echo "<pre>".$sql."</pre>";
 $cnt=$p->dosql($sql);
 $st=检测页面($cnt, $_GET['page']);
@@ -96,7 +101,7 @@ if($cnt) {
 提交：<?=$d['accepted']?> / <?=$d['submited']?>
 </td>
 <td colspan=4 class="wrap">
-<? if($_SESSION['ID']==$d['uid']) echo "<a href='comment.php?cid={$d['cid']}' class='pull-right btn btn-mini btn-warning'><i class='icon icon-edit icon-white'></i></a>";?>
+<? if($_SESSION['ID']==$d['uid']) echo "<a href='comment.php?cid={$d['cid']}' class='pull-right btn btn-mini btn-warning'>修改</a>";?>
 <?php echo BBCode($d['detail'])?>
 <div class='muted pull-right'><small><?php echo BBCode($d['memo'])?></small></div>
 </td>
@@ -119,12 +124,18 @@ if($cnt) {
 	$q->dosql($sql);
 	$e=$q->rtnrlt(0);
 ?>
-<a href="../submit/code.php?id=<?=$e['sid']?>" title="<?=$e['result']?>"><i class='icon icon-download'></i><?=评测结果($e['result'], 30, true)?></a>
+<a href="../submit/code.php?id=<?=$e['sid']?>" target="_blank" title="<?=$e['result']?>"><i class='icon icon-download'></i><?=评测结果($e['result'], 30, true)?></a>
 <?php } ?>
 </td>
-<td><span class="pull-right">发表时间：<?php echo date('Y-m-d H:i:s',$d['stime']);?></span></td>
-<td style="width: 8em;">帖子编号：<?=$d['cid']?></td>
-<td style="width: 4em;"><span class="pull-right">#<?=($i+1)?></span></td>
+<td><span class="pull-right"><?php echo date('Y-m-d H:i:s',$d['stime']);?></span></td>
+<td style="width: 6em;">
+<? if($_GET['show'] || $pid || $aid || $uid) { ?>
+<span class="pull-right"><?=($i+1)?>楼</span>
+<? } ?>
+</td>
+<td style="width: 4em;">
+<a class='btn btn-mini btn-danger pull-right' href="comment.php?ccid=<?=$d['cid']?>&pid=<?=$d['pid']?>&aid=<?=$d['aid']?>&user=<?=$d['nickname']?>">回复</a>
+</td>
 </tr>
 <?php
 	}
@@ -132,8 +143,17 @@ if($cnt) {
 	echo "<div class='alert'>还没有人发表评论！</div>";
 }
 ?>
+<? if(!($_GET['show'] || $pid || $aid || $uid)) { ?>
+<tr class="danger">
+<td colspan=6><center>
+<a href="comments.php?show=yes">全部评论</a>
+</center></td></tr>
+<? } ?>
 </table>
-<? 分页($cnt, $_GET['page'], '?key='.$_GET['key'].'&'); ?>
+<?
+if($cnt > $limitt && ($_GET['show'] || $pid || $aid || $uid))
+    分页($cnt, $_GET['page'], '?show='.$_GET['show'].'?key='.$_GET['key'].'&');
+?>
 </div>
 <?php
 include_once("../include/footer.php");
