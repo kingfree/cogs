@@ -53,11 +53,13 @@ if($cnt) {
 </dl>
 </div>
 <div class="tou">
+<table class='table table-condensed table-bordered fiexd'>
+<tr><th colspan=5>
+<a href="../problem/comments.php?pid=<?=$pid?>">关于 <b><?=shortname($d['title']); ?></b> 的讨论</a>
 <? if($_SESSION['ID']) { ?>
-<a href="../problem/comment.php?aid=<?=$aid?>" class="pull-right btn btn-danger">发表评论</a>
+<a href="../problem/comment.php?pid=<?=$pid?>" class="pull-right btn btn-mini btn-danger">发表评论</a>
 <? } ?>
-<h4><a href="../problem/comments.php?aid=<?=$aid?>">关于 <b><?=shortname($d['title']); ?></b> 的讨论</a></h4>
-<table class='table table-striped table-condensed table-bordered fiexd'>
+</th></tr>
 <?
 $sql="SELECT comments.*, userinfo.uid, userinfo.nickname, userinfo.realname, userinfo.email, userinfo.accepted, userinfo.submited, userinfo.grade, userinfo.memo FROM comments, userinfo WHERE userinfo.uid = comments.uid ";
 $sql.="AND $aid = comments.aid ";
@@ -89,9 +91,13 @@ for ($i=0;$i<$cnt;$i++) {
 <td colspan=2>
 <?if(有此权限("查看用户")) echo $d['realname'];?>
 </td>
-<td><span class="pull-right">发表时间：<?php echo date('Y-m-d H:i:s',$d['stime']);?></span></td>
-<td style="width: 8em;"><span class="pull-right">帖子编号：<?=$d['cid']?></span></td>
-<td style="width: 4em;"><span class="pull-right">#<?=($i+1)?></span></td>
+<td><span class="pull-right"><?php echo date('Y-m-d H:i:s',$d['stime']);?></span></td>
+<td style="width: 6em;">
+<span class="pull-right"><?=($i+1)?>楼</span>
+</td>
+<td style="width: 4em;">
+<a class='btn btn-mini btn-danger pull-right' href="comment.php?ccid=<?=$d['cid']?>&pid=<?=$d['pid']?>&aid=<?=$d['aid']?>&user=<?=$d['nickname']?>">回复</a>
+</td>
 </tr>
 <?
 }

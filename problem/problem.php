@@ -204,8 +204,8 @@ for ($i=0;$i<$cnt;$i++) {
 <?php 
 }
 ?></table>
-<table class='table table-striped table-condensed table-bordered fiexd'>
-<tr><th colspan=3>
+<table class='table table-condensed table-bordered fiexd'>
+<tr><th colspan=5>
 <a href="comments.php?pid=<?=$pid?>">关于 <b><?=shortname($d['probname']); ?></b> 的讨论</a>
 <? if($uid) { ?>
 <a href="comment.php?pid=<?=$pid?>" class="pull-right btn btn-mini btn-danger">发表评论</a>
@@ -217,9 +217,14 @@ $cnt=$q->dosql($sql);
 for ($i=0;$i<$cnt;$i++) {
     $e=$q->rtnrlt($i);
 ?>
+    <tr><td colspan=5 class="CommentsK wrap">
+    <? if($uid==$e['uid']) echo "<a href='comment.php?cid={$e['cid']}' class='pull-right btn btn-mini btn-warning'>修改</a>";?>
+    <?php echo BBCode($e['detail'])?>
+    </td></tr>
     <tr class="CommentsU">
     <td><a href="../user/detail.php?uid=<?=$e['uid'] ?>"><?=gravatar::showImage($e['email']);?><?=$e['nickname'] ?></a></td>
-    <td><?=date('y/m/d H:i',$e['stime'])?>
+    <td style="width: 7em;"><?=date('y/m/d H:i',$e['stime'])?></td>
+    <td style="width: 1em;">
    <?php if($e['showcode']) {
 	$sql="select sid from submit where uid='{$e['uid']}' and pid='{$d['pid']}' order by subtime desc";
 	$r->dosql($sql);
@@ -228,13 +233,13 @@ for ($i=0;$i<$cnt;$i++) {
 	<a href="../submit/code.php?id=<?=$f['sid']?>" title="查看该用户最后一次提交的代码"><i class='icon icon-download'></i></a>
 	<?php } ?>
  </td>
-    <td><span class="pull-right">
-    #<?=($i+1)?></span></td>
-    </tr>
-    <tr><td colspan=3 class="CommentsK wrap">
-    <? if($uid==$e['uid']) echo "<a href='comment.php?cid={$e['cid']}' class='pull-right btn btn-mini btn-warning'><i class='icon icon-edit icon-white'></i></a>";?>
-    <?php echo BBCode($e['detail'])?>
-    </td></tr>
+<td style="width: 2em;">
+<span class="pull-right"><?=($i+1)?>楼</span>
+</td>
+<td style="width: 3em;">
+<a class='btn btn-mini btn-danger pull-right' href="comment.php?ccid=<?=$e['cid']?>&pid=<?=$d['pid']?>&user=<?=$e['nickname']?>">回复</a>
+</td>
+</tr>
 <?
 }
 ?>

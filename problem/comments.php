@@ -75,7 +75,7 @@ if(!($_GET['show'] || $pid || $aid || $uid))
 $cnt=$p->dosql($sql);
 $st=检测页面($cnt, $_GET['page']);
 ?>
-<table class='table table-striped table-condensed table-bordered fiexd'>
+<table class='table table-condensed table-bordered fiexd'>
 <?
 if($cnt) {
 	for ($i=$st;$i<$cnt && $i<$st+$SET['style_pagesize'];$i++) {
