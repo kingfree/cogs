@@ -57,7 +57,7 @@ if($cnt) {
 <tr><th colspan=5>
 <a href="../problem/comments.php?pid=<?=$pid?>">关于 <b><?=shortname($d['title']); ?></b> 的讨论</a>
 <? if($_SESSION['ID']) { ?>
-<a href="../problem/comment.php?pid=<?=$pid?>" class="pull-right btn btn-mini btn-danger">发表评论</a>
+<a href="../problem/comment.php?aid=<?=$aid?>" class="pull-right btn btn-mini btn-danger">发表评论</a>
 <? } ?>
 </th></tr>
 <?
