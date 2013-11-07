@@ -17,7 +17,7 @@ $sql.=" userinfo.uid=page.uid and groups.gid=page.group";
 if ($_GET['key']!="")
 $sql.=" and (page.text like '%{$_GET[key]}%' or page.title like '%{$_GET[key]}%')";
 
-$sql .= " order by title asc";
+$sql .= " order by aid desc";
 
 $cnt=$p->dosql($sql);
 $st=检测页面($cnt, $_GET['page']);

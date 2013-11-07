@@ -55,7 +55,7 @@ if($cnt) {
 <div class="tou">
 <table class='table table-condensed table-bordered fiexd'>
 <tr><th colspan=5>
-<a href="../problem/comments.php?pid=<?=$pid?>">关于 <b><?=shortname($d['title']); ?></b> 的讨论</a>
+<a href="../problem/comments.php?aid=<?=$aid?>">关于 <b><?=shortname($d['title']); ?></b> 的讨论</a>
 <? if($_SESSION['ID']) { ?>
 <a href="../problem/comment.php?aid=<?=$aid?>" class="pull-right btn btn-mini btn-danger">发表评论</a>
 <? } ?>
@@ -82,7 +82,6 @@ for ($i=0;$i<$cnt;$i++) {
 提交：<?=$d['accepted']?> / <?=$d['submited']?>
 </td>
 <td colspan=3 class="wrap">
-<? if($_SESSION['ID']==$d['uid']) echo "<a href='../problem/comment.php?cid={$d['cid']}' class='pull-right btn btn-mini btn-warning'><i class='icon icon-edit icon-white'></i></a>";?>
 <?php echo BBCode($d['detail'])?>
 <div class='muted pull-right'><small><?php echo BBCode($d['memo'])?></small></div>
 </td>
@@ -96,7 +95,11 @@ for ($i=0;$i<$cnt;$i++) {
 <span class="pull-right"><?=($i+1)?>楼</span>
 </td>
 <td style="width: 4em;">
-<a class='btn btn-mini btn-danger pull-right' href="comment.php?ccid=<?=$d['cid']?>&pid=<?=$d['pid']?>&aid=<?=$d['aid']?>&user=<?=$d['nickname']?>">回复</a>
+<? if($_SESSION['ID'] == $d['uid']) { ?>
+<a href='comment.php?cid=<?=$d['cid']?>' class='pull-right btn btn-mini btn-warning'>修改</a>
+<? } else if($_SESSION['ID']) { ?>
+<a class='btn btn-mini btn-danger pull-right' href="comment.php?ccid=<?=$d['cid']?>&aid=<?=$d['aid']?>&user=<?=$d['nickname']?>">回复</a>
+<? } ?>
 </td>
 </tr>
 <?

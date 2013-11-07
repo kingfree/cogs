@@ -68,7 +68,7 @@ if($pid) {
 } else {
     $sql.="ORDER BY comments.stime desc";
 }
-$limitt=(int)$SET['style_pagesize'];
+$limitt=(int) ((int)$SET['style_pagesize'] / 6);
 if(!($_GET['show'] || $pid || $aid || $uid))
     $sql .= " limit {$limitt}";
 //echo "<pre>".$sql."</pre>";
@@ -92,16 +92,17 @@ if($cnt) {
 <?=gravatar::showImage($d['email'], 64);?>
 </a>
 </td>
-<td valign='top' style="width:120px;">
+<td valign='top' style="width:8em;">
 <div>
+<? if($_SESSION['ID']) { ?>
 <a href="<?=路径("mail/index.php")?>?toid=<?=$d['uid']?>" title="给<?=$d['nickname']?>发送信件" class="pull-right"><span class="icon-envelope"></span></a>
+<? } ?>
 <a href="?uid=<?=$d['uid']?>"><b><?php echo $d['nickname'];?></b></a>
 </div>
 积分：<?=$d['grade']?><br />
 提交：<?=$d['accepted']?> / <?=$d['submited']?>
 </td>
 <td colspan=4 class="wrap">
-<? if($_SESSION['ID']==$d['uid']) echo "<a href='comment.php?cid={$d['cid']}' class='pull-right btn btn-mini btn-warning'>修改</a>";?>
 <?php echo BBCode($d['detail'])?>
 <div class='muted pull-right'><small><?php echo BBCode($d['memo'])?></small></div>
 </td>
@@ -134,7 +135,11 @@ if($cnt) {
 <? } ?>
 </td>
 <td style="width: 4em;">
+<? if($_SESSION['ID'] && $_SESSION['ID'] == $d['uid']) { ?>
+<a href='comment.php?cid=<?=$d['cid']?>' class='pull-right btn btn-mini btn-warning'>修改</a>
+<? } else if($_SESSION['ID']) { ?>
 <a class='btn btn-mini btn-danger pull-right' href="comment.php?ccid=<?=$d['cid']?>&pid=<?=$d['pid']?>&aid=<?=$d['aid']?>&user=<?=$d['nickname']?>">回复</a>
+<? } ?>
 </td>
 </tr>
 <?php
@@ -144,7 +149,7 @@ if($cnt) {
 }
 ?>
 <? if(!($_GET['show'] || $pid || $aid || $uid)) { ?>
-<tr class="danger">
+<tr class="warning">
 <td colspan=6><center>
 <a href="comments.php?show=yes">全部评论</a>
 </center></td></tr>

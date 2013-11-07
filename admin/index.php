@@ -50,12 +50,13 @@ $q=new DataAccess();
 </ul>
 </ul>
 <ul class='nav nav-list span2'>
+<li class='nav-header'>其他</li>
+<li class=''><a href="gen_acrank.php"><i class='icon-retweet'></i>生成等级</a></li>
+<li class=''><a href="clear_record.php"><i class='icon-repeat'></i>清理垃圾</a></li>
 <li class='nav-header'>系统</li>
 <li class=''><a href="settings.php"><i class='icon-cog'></i>参数设置</a></li>
 <li class=''><a href="/phpmyadmin"><i class='icon-music'></i>phpMyAdmin</a></li>
-<li class='nav-header'>系统</li>
-<li class=''><a href="gen_acrank.php"><i class='icon-retweet'></i>生成等级</a></li>
-<li class=''><a href="clear_record.php"><i class='icon-repeat'></i>清理垃圾</a></li>
+<!--<li class=''><a href="backup.php"><i class='icon-hdd'></i>备份与恢复</a></li>-->
 </ul>
 </div>
 </div>
