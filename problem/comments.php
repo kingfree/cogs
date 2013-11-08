@@ -75,7 +75,7 @@ if(!($_GET['show'] || $pid || $aid || $uid))
 $cnt=$p->dosql($sql);
 $st=检测页面($cnt, $_GET['page']);
 ?>
-<table class='table table-condensed table-bordered fiexd'>
+<table class='table table-striped table-condensed table-bordered fiexd'>
 <?
 if($cnt) {
 	for ($i=$st;$i<$cnt && $i<$st+$SET['style_pagesize'];$i++) {
@@ -87,61 +87,62 @@ if($cnt) {
 		}
 ?>
 <tr>
-<td valign='top' style="width:64px;">
-<a href="<?php echo 路径("user/detail.php?uid={$d['uid']}");?>">
+<td valign='top' style="width: 14em;">
+<a class="pull-left" href="<?php echo 路径("user/detail.php?uid={$d['uid']}");?>">
 <?=gravatar::showImage($d['email'], 64);?>
 </a>
-</td>
-<td valign='top' style="width:8em;">
-<div>
+<div style="margin-left:72px;">
 <? if($_SESSION['ID']) { ?>
 <a href="<?=路径("mail/index.php")?>?toid=<?=$d['uid']?>" title="给<?=$d['nickname']?>发送信件" class="pull-right"><span class="icon-envelope"></span></a>
 <? } ?>
-<a href="?uid=<?=$d['uid']?>"><b><?php echo $d['nickname'];?></b></a>
-</div>
+<a href="?uid=<?=$d['uid']?>"
+<?if(有此权限("查看用户")) echo "title='".$d['realname']."'";?>>
+<b><?php echo $d['nickname'];?></b>
+</a>
+<br />
 积分：<?=$d['grade']?><br />
 提交：<?=$d['accepted']?> / <?=$d['submited']?>
+</div>
 </td>
-<td colspan=4 class="wrap">
+<td>
+<div>
 <?php echo BBCode($d['detail'])?>
-<div class='muted pull-right'><small><?php echo BBCode($d['memo'])?></small></div>
-</td>
-</tr>
-<tr class="<?=$d['pid']?"info":"success"?>">
-<td colspan=2>
-<?if(有此权限("查看用户")) echo $d['realname'];?>
-<span class="pull-right">
+<div class='tou muted wrap' style="text-align: right; width: 50%; position:relative; left: 50%;"><small>
+<?php echo BBCode($d['memo'])?>
+</small></div>
+</div>
+<br />
+<div style="vertical-align:text-bottom;">
+<span class="pull-left">
 <? if($d['pid']) { ?>
-<a href="?pid=<?=$d['pid']?>">题目 <?=$d['pid']?></a>
 <a href='problem.php?pid=<?=$d['pid']?>' target='_blank'><span class='icon-share'></span></a>
+<a href="?pid=<?=$d['pid']?>">题目 <?=$d['pid']?></a>
 <? } else if($d['aid']) { ?>
-<a href="?aid=<?=$d['aid']?>">页面 <?=$d['aid']?></a>
 <a href='../page/page.php?aid=<?=$d['aid']?>' target='_blank'><span class='icon-share'></span></a>
+<a href="?aid=<?=$d['aid']?>">页面 <?=$d['aid']?></a>
 <? } ?>
-</span>
-</td>
-<td><?php if ($d['showcode']){
+</span><?php if ($d['showcode']) {
 	$sql="select sid,result from submit where uid='{$d['uid']}' and pid='{$d['pid']}' order by subtime desc";
 	$q->dosql($sql);
 	$e=$q->rtnrlt(0);
 ?>
 <a href="../submit/code.php?id=<?=$e['sid']?>" target="_blank" title="<?=$e['result']?>"><i class='icon icon-download'></i><?=评测结果($e['result'], 30, true)?></a>
 <?php } ?>
-</td>
-<td><span class="pull-right"><?php echo date('Y-m-d H:i:s',$d['stime']);?></span></td>
-<td style="width: 6em;">
+<div class="pull-right">
+<span class="muted"><?php echo date('Y-m-d H:i:s',$d['stime']);?></span>
 <? if($_GET['show'] || $pid || $aid || $uid) { ?>
-<span class="pull-right"><?=($i+1)?>楼</span>
+<span><?=($i+1)?>楼</span>
 <? } ?>
-</td>
-<td style="width: 4em;">
 <? if($_SESSION['ID'] && $_SESSION['ID'] == $d['uid']) { ?>
-<a href='comment.php?cid=<?=$d['cid']?>' class='pull-right btn btn-mini btn-warning'>修改</a>
+<a href='comment.php?cid=<?=$d['cid']?>' class='btn btn-mini btn-warning'>修改</a>
 <? } else if($_SESSION['ID']) { ?>
-<a class='btn btn-mini btn-danger pull-right' href="comment.php?ccid=<?=$d['cid']?>&pid=<?=$d['pid']?>&aid=<?=$d['aid']?>&user=<?=$d['nickname']?>">回复</a>
+<a class='btn btn-mini btn-danger' href="comment.php?ccid=<?=$d['cid']?>&pid=<?=$d['pid']?>&aid=<?=$d['aid']?>&user=<?=$d['nickname']?>">回复</a>
 <? } ?>
+</div>
+</div>
 </td>
 </tr>
+
 <?php
 	}
 } else {

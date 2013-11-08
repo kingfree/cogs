@@ -1,4 +1,5 @@
 <?php
+date_default_timezone_set('PRC');
 require_once("lib.php");
 $LIB->cls_getsettings();
    global $SET,$cfg,$LIB;

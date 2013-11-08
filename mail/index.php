@@ -88,7 +88,7 @@ for($i=0; $i<$cnt; $i++) {
 <a href='../user/detail.php?uid=<?=$d['toid']?>' target='_blank'>
 <?=gravatar::showImage($d['email'])?>
 <?=$d['nickname']?></a>
-<?=date('Y-m-d h:i:s',$d['time'])?>
+<?=date('Y-m-d H:i:s',$d['time'])?>
 </span>
 <button data-dismiss='modal' class='btn'>关闭</button>
 </div>
@@ -132,7 +132,7 @@ for($i=0; $i<$cnt; $i++) {
 <a href='../user/detail.php?uid=<?=$d['fromid']?>' target='_blank'>
 <?=gravatar::showImage($d['email'])?>
 <?=$d['nickname']?></a>
-<?=date('Y-m-d h:i:s',$d['time'])?>
+<?=date('Y-m-d H:i:s',$d['time'])?>
 </span>
 <a class='btn btn-success' onclick="reply(<?=$d['fromid']?>, <?=$d['mid']?>)">回复</a>
 <button data-dismiss='modal' class='btn'>关闭</button>

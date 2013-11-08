@@ -69,37 +69,44 @@ for ($i=0;$i<$cnt;$i++) {
     $d=$q->rtnrlt($i);
 ?>
 <tr>
-<td valign='top' style="width:64px;">
-<a href="<?php echo 路径("user/detail.php?uid={$d['uid']}");?>">
+<td valign='top' style="width: 14em;">
+<a class="pull-left" href="<?php echo 路径("user/detail.php?uid={$d['uid']}");?>">
 <?=gravatar::showImage($d['email'], 64);?>
 </a>
-</td>
-<td valign='top' style="width:120px;">
-<div>
-<a href="<?php echo 路径("user/detail.php?uid={$d['uid']}");?>"><b><?php echo $d['nickname'];?></b></a>
-</div>
+<div style="margin-left:72px;">
+<? if($_SESSION['ID']) { ?>
+<a href="<?=路径("mail/index.php")?>?toid=<?=$d['uid']?>" title="给<?=$d['nickname']?>发送信件" class="pull-right"><span class="icon-envelope"></span></a>
+<? } ?>
+<a href="?uid=<?=$d['uid']?>"
+<?if(有此权限("查看用户")) echo "title='".$d['realname']."'";?>>
+<b><?php echo $d['nickname'];?></b>
+</a>
+<br />
 积分：<?=$d['grade']?><br />
 提交：<?=$d['accepted']?> / <?=$d['submited']?>
+</div>
 </td>
-<td colspan=3 class="wrap">
+<td>
+<div>
 <?php echo BBCode($d['detail'])?>
-<div class='muted pull-right'><small><?php echo BBCode($d['memo'])?></small></div>
-</td>
-</tr>
-<tr class="success">
-<td colspan=2>
-<?if(有此权限("查看用户")) echo $d['realname'];?>
-</td>
-<td><span class="pull-right"><?php echo date('Y-m-d H:i:s',$d['stime']);?></span></td>
-<td style="width: 6em;">
-<span class="pull-right"><?=($i+1)?>楼</span>
-</td>
-<td style="width: 4em;">
-<? if($_SESSION['ID'] == $d['uid']) { ?>
-<a href='comment.php?cid=<?=$d['cid']?>' class='pull-right btn btn-mini btn-warning'>修改</a>
-<? } else if($_SESSION['ID']) { ?>
-<a class='btn btn-mini btn-danger pull-right' href="comment.php?ccid=<?=$d['cid']?>&aid=<?=$d['aid']?>&user=<?=$d['nickname']?>">回复</a>
+<div class='tou muted wrap' style="text-align: right; width: 50%; position:relative; left: 50%;"><small>
+<?php echo BBCode($d['memo'])?>
+</small></div>
+</div>
+<br />
+<div style="vertical-align:text-bottom;">
+<div class="pull-right">
+<span class="muted"><?php echo date('Y-m-d H:i:s',$d['stime']);?></span>
+<? if($_GET['show'] || $pid || $aid || $uid) { ?>
+<span><?=($i+1)?>楼</span>
 <? } ?>
+<? if($_SESSION['ID'] && $_SESSION['ID'] == $d['uid']) { ?>
+<a href='../problem/comment.php?cid=<?=$d['cid']?>' class='btn btn-mini btn-warning'>修改</a>
+<? } else if($_SESSION['ID']) { ?>
+<a class='btn btn-mini btn-danger' href="../problem/comment.php?ccid=<?=$d['cid']?>&aid=<?=$d['aid']?>&user=<?=$d['nickname']?>">回复</a>
+<? } ?>
+</div>
+</div>
 </td>
 </tr>
 <?

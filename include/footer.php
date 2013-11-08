@@ -9,6 +9,7 @@
 <a class='btn btn-small' onclick="document.getElementById('trad').innerHTML='中文繁體';document.getElementById('alltext').innerHTML = TradSimp.getSimp(document.getElementById('alltext').innerHTML);" id="simp">中文简体</a>
 </div>
 <p>
+<span class='tou'><?=date('Y-m-d H:i:s',time())?></span>
 以 <a href="http://getbootstrap.com/" target="_blank">Twitter Bootstrap</a> 作为界面框架，应用 <a href="/Bootstrap/css/<?=$_SESSION['user_style']?>.min.css" target="_blank"><?=$_SESSION['user_style']?></a> 主题。
 <?php echo 输出文本("进程运行 %processtime% s ，处理完成数据库 %querytimes% 次。") ?>
 </p>

@@ -99,20 +99,20 @@ function okdel(name) {
 <table id="userlist" class='table table-striped table-condensed table-bordered fiexd'>
 <thead>
   <tr>
-    <th style="width: 3ex;"></th>
-    <th style="width: 3ex;">UID</th>
+    <th style="min-width: 3ex;"></th>
+    <th style="min-width: 3ex;">UID</th>
     <th>昵称</th>
     <? if(有此权限('查看用户')) { ?>
-    <th class='admin' style="width: 4em;">姓名</th>
-    <th style="width: 6ex;">阅读</th>
+    <th class='admin' style="min-width: 4em;">姓名</th>
+    <th style="min-width: 6ex;">阅读</th>
     <? } ?>
     <th>权限</th>
     <th>分组</th>
-    <th style="width: 4ex;">通过</th>
-    <th style="width: 6ex;">通过率</th>
-    <th style="width: 6ex;">等级</th>
-    <? if(有此权限('查看用户')) { ?><th class='admin' style="width: 8em;">IP</th><? } ?>
-    <? if(有此权限('修改用户')) { ?><th class='admin' style="width: 4em;">操作</th><? } ?>
+    <th style="min-width: 4ex;">通过</th>
+    <th style="min-width: 6ex;">通过率</th>
+    <th style="min-width: 6ex;">等级</th>
+    <? if(有此权限('查看用户')) { ?><th class='admin' style="min-width: 8em;">IP</th><? } ?>
+    <? if(有此权限('修改用户')) { ?><th class='admin' style="min-width: 4em;">操作</th><? } ?>
   </tr>
 </thead>
 <?php

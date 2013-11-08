@@ -4,6 +4,7 @@ gethead(8,"sess","");
 过滤("cate");
 $uid = (int) $_SESSION['ID'];
 $pid = (int)$_GET['pid'];
+$filename = $_POST['filename'];
 if($pid) {
     $p=new DataAccess();
     $sql="select * from problem where pid={$pid}";
@@ -24,16 +25,16 @@ if($_GET[action]=="change") {
 if($_FILES['datafile']['size'] && !$_FILES['datafile']['error']) {
     //chdir($cfg['testdata']);
     chdir("/tmp");
-    //$dir="{$cfg['testdata']}/{$_POST['filename']}/";
-    $dir="/tmp/{$_POST['filename']}/";
+    //$dir="{$cfg['testdata']}/{$filename}/";
+    $dir="/tmp/{$filename}/";
     mkdir($dir);
     //$cmd = "unzip -uo {$_FILES['datafile']['tmp_name']} -d\"{$cfg['testdata']}\"";
     $cmd = "unzip -uo {$_FILES['datafile']['tmp_name']} -d\"/tmp\"";
     exec($cmd);
-    exec("chmod 777 *");
-    $ff="<p>正在上传测试数据：<ul>";
+    exec("chmod 755 *");
+    $ff="<p>正在重命名测试数据：</p>";
     chdir($dir);
-    $pname=$_POST['filename'];
+    $pname=$filename;
     $count=(int)$_POST['datacnt'];
     if($data = (file_exists("data.txt"))) {
         $fp=fopen("data.txt","r");
@@ -45,19 +46,23 @@ if($_FILES['datafile']['size'] && !$_FILES['datafile']['error']) {
     }
     for($i=$count; $i>=1; $i--) {
         $now = (int) ($start + $i);
-        rename(str_replace("#", "{$now}", $input), "{$_POST['filename']}{$i}.in");
-        rename(str_replace("#", "{$now}", $answer), "{$_POST['filename']}{$i}.ans");
-        if(!file_exists("{$_POST['filename']}{$i}.ans") && file_exists("{$_POST['filename']}{$i}.out"))
-            rename("{$_POST['filename']}{$i}.out", "{$_POST['filename']}{$i}.ans");
+        rename(str_replace("#", "{$now}", $input), "{$filename}{$i}.in");
+        rename(str_replace("#", "{$now}", $answer), "{$filename}{$i}.ans");
+        if(!file_exists("{$filename}{$i}.ans") && file_exists("{$filename}{$i}.out"))
+            rename("{$filename}{$i}.out", "{$filename}{$i}.ans");
     }
-    $ff.="<p>正在检查测试数据：<ul>";
+    $ff="<p>正在上传测试数据：</p>";
     $pdir=$dir;
     $dir="{$cfg['testdata']}/{$pname}/";
     mkdir($dir);
     chdir($dir);
-    $cmd = "cp $pdir* -R .";
+    $cmd = "cp $pdir* -rfpv . > /tmp/{$filename}.log";
     exec($cmd);
+    $ff.="<pre>".file_get_contents("/tmp/{$filename}.log")."</pre>";
+    $ff.="<p>正在检查测试数据：<ul>";
     for($i=$count; $i>=1; $i--) {
+        if(!file_exists("{$pdir}{$filename}{$i}.in") && !file_exists("{$pdir}{$filename}{$i}.in"))
+            continue;
         if(file_exists("{$pname}{$i}.in") && file_exists("{$pname}{$i}.ans"))
             $ff.="<li><span class='label label-success'>第 $i 个</span>测试点上传成功！</li>";
         else
@@ -75,7 +80,7 @@ if ($_REQUEST[action]=='add') {
     echo($sql);
 	$p->dosql($sql);
 	
-	$sql="select pid from problem where filename='{$_POST['filename']}'";
+	$sql="select pid from problem where filename='{$filename}'";
 	$p->dosql($sql);
 	$d=$p->rtnrlt(0);
 	$pid=$d['pid'];
@@ -85,7 +90,7 @@ if ($_REQUEST[action]=='add') {
 			$p->dosql($sql);
 		}
 	}
-    提示("$ff 添加题目 $pid 成功！", 取路径("problem/problem.php?pid=$pid"));
+    提示("$ff 添加题目 $pid 成功！", 取路径("problem/problem.php?pid=$pid"), 60);
 } else if ($_REQUEST[action]=='edit') {
     if(!有此权限("查看题目"))
         $sub = $rf = 0;
@@ -94,7 +99,7 @@ if ($_REQUEST[action]=='add') {
     $cnt=$p->dosql($sql);
     if($cnt) {
         $d=$p->rtnrlt(0);
-        if($d['filename'] != $_POST['filename']) {
+        if($d['filename'] != $filename) {
             $sql="update problem set addtime=".time().", addid=".(int)$_SESSION['ID']." where pid={$_REQUEST['pid']}";
             $p->dosql($sql);
         }
@@ -114,7 +119,7 @@ if ($_REQUEST[action]=='add') {
 		$p->dosql($sql);
 	}
 	$pid=$_REQUEST[pid];
-    提示("$ff 修改题目 $pid 成功！", 取路径("problem/problem.php?pid=$pid"));
+    提示("$ff 修改题目 $pid 成功！", 取路径("problem/problem.php?pid=$pid"), 60);
 }/* else if ($_REQUEST[action]=='del') {
     if(!有此权限("修改题目"))
         异常("没有修改权限！", 取路径("problem/index.php"));

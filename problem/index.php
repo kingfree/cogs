@@ -104,7 +104,7 @@ function okic(name) {
 </script>
 <table id="problist" class='table table-striped table-condensed table-bordered fiexd'>
 <thead><tr>
-<th style="width: 4ex;">PID</th>
+<th style="min-width: 4ex;">PID</th>
 <th onclick="sortTable('problist', 0, 'int')">题目名称</th>
 <th>文件名称</th>
 <th>时间</th>
@@ -115,7 +115,7 @@ function okic(name) {
 <th onclick="sortTable('problist', 7, 'int')">提交</th>
 <th onclick="sortTable('problist', 8, 'int')">通过率</th>
 <?php if(有此权限('查看题目')) { ?>
-<th class=admin style="width: 4ex;"><i class='icon icon-question-sign'></i></th>
+<th class=admin style="min-width: 4ex;"><i class='icon icon-question-sign'></i></th>
 <?php } ?>
 </tr></thead>
 <?php

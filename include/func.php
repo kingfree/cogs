@@ -351,13 +351,16 @@ function 分页($total,$page,$url='',$page_size='',$max_length='') {
     echo $page_table;
 }
 
-function i异常($msg = "错误", $id = "") {
+function i异常($msg = "错误", $id = "", $jp = 0) {
     gethead(8,"","");
-    异常($msg, $id);
+    global $SET;
+    if(!$jp) $jp = $SET['style_jumptime'];
+    异常($msg, $id, $jp);
 }
 
-function 异常($msg = "错误", $id = "") {
+function 异常($msg = "错误", $id = "", $jp = 0) {
     global $SET;
+    if(!$jp) $jp = $SET['style_jumptime'];
     if($id == "") $id = base64_encode("/".$SET['global_root']);
     $id = base64_decode($id);
     HTML("<div id='dialog' class='modal fade in'>");
@@ -366,15 +369,17 @@ function 异常($msg = "错误", $id = "") {
     HTML("</div>");
     HTML("<div id='dialog_text' class='modal-body alert alert-error'>");
     HTML($msg);
+    HTML("</div>{$jp} 秒后跳转到<a href='{$id}'>{$id}</a>……");
     HTML("</div>");
-    HTML("</div>");
-    HTML("<meta http-equiv='refresh' content='{$SET['style_jumptime']}; URL={$id}'>");
+    HTML("<meta http-equiv='refresh' content='{$jp}; URL={$id}'>");
     exit;
 }
 
-function i提示($msg = "提示", $id = "") {
+function i提示($msg = "提示", $id = "", $jp = 0) {
     gethead(8,"","");
-    提示($msg, $id);
+    global $SET;
+    if(!$jp) $jp = $SET['style_jumptime'];
+    提示($msg, $id, $jp);
 }
 
 function 取路径($path) {
@@ -382,8 +387,9 @@ function 取路径($path) {
     return base64_encode("/{$SET['global_root']}$path");
 }
 
-function 提示($msg = "提示", $id = "") {
+function 提示($msg = "提示", $id = "", $jp = 0) {
     global $SET;
+    if(!$jp) $jp = $SET['style_jumptime'];
     if($id == "") $id = base64_encode("/".$SET['global_root']);
     $id = base64_decode($id);
     HTML("<div id='dialog' class='modal fade in'>");
@@ -392,9 +398,9 @@ function 提示($msg = "提示", $id = "") {
     HTML("</div>");
     HTML("<div id='dialog_text' class='modal-body alert alert-success'>");
     HTML($msg);
+    HTML("</div>{$jp} 秒后跳转到<a href='{$id}'>{$id}</a>……");
     HTML("</div>");
-    HTML("</div>");
-    HTML("<meta http-equiv='refresh' content='{$SET['style_jumptime']}; URL={$id}'>");
+    HTML("<meta http-equiv='refresh' content='{$jp}; URL={$id}'>");
 }
 
 function 背景图片($uid=0) {

@@ -19,7 +19,7 @@ if($cnt) {
 ?>
 <table class='table table-striped table-condensed table-bordered fiexd'>
 <tr>
-<th style="width: 3em;">比赛</th>
+<th style="min-width: 3em;">比赛</th>
 <td><b><?php echo $d[cname] ?></b></td>
 </tr>
 <tr>
@@ -78,7 +78,7 @@ $d=$p->rtnrlt($i);
 <table class='table table-striped table-condensed table-bordered fiexd'>
 <thead>
 <tr>
-<th style="width: 4ex;">PID</th>
+<th style="min-width: 4ex;">PID</th>
 <th>最新题目
 <a href="problem/random.php" title="随机选择一道你没有通过的题目" class='btn btn-danger btn-mini pull-right' ><i class='icon icon-random icon-white'></i></a>
 </th>
@@ -105,7 +105,7 @@ if(有此权限("修改题目") && 有此权限("查看题目")) {
     $cnt=$p->dosql("select * from problem where submitable!=1 order by addtime desc limit 5");
     if($cnt) {
 $hasaa=$SET['index_submit_size'] - $cnt;
-        echo "<div class='alert'><h4>用户提交待审核的题目：</h4><ul>";
+        echo "<div class='alert'><span class='pull-right'>（其实只是设置为不可提交的题目）</span><h4>用户提交待审核题目：</h4><ul>";
         for($i=0;$i<$cnt;$i++) {
             $d=$p->rtnrlt($i);
             echo "<li><a href='problem/problem.php?pid={$d['pid']}'>{$d['pid']}. {$d['probname']}</a> <a href='problem/editprob.php?action=edit&pid={$d['pid']}'>[编辑]</a></li>";
@@ -129,9 +129,9 @@ $hasaa=$SET['index_submit_size'] - $cnt;
 <thead><tr>
 <th>题目</th>
 <th>用户</th>
-<th style="width: 12ex;">评测结果</th>
-<th style="width: 5ex;">得分</th>
-<th style="width: 10ex;">提交时间</th>
+<th style="min-width: 12ex;">评测结果</th>
+<th style="min-width: 5ex;">得分</th>
+<th style="min-width: 10ex;">提交时间</th>
 </tr></thead>
 <?php 
 $cnt=$p->dosql("select submit.sid,submit.pid,submit.uid,submit.result,submit.score,submit.accepted,submit.subtime,problem.probname,userinfo.nickname,userinfo.realname,userinfo.email,userinfo.memo from submit,problem,userinfo where submit.score>={$SET['index_submit_score']} and submit.uid=userinfo.uid and submit.pid=problem.pid order by submit.sid desc limit {$hasaa}");
@@ -166,7 +166,7 @@ echo "</a>"; ?></td>
 <th style="width: 2ex;"></th>
 <th>用户排名</th>
 <th style="width: 5ex;">积分</th>
-<th style="width: 4ex;">题目</th>
+<th style="width: 5ex;">题目</th>
 </tr>
 </thead>
 <?php 

@@ -6,10 +6,10 @@ gethead(1,"","在线竞赛");
 <table class='table table-striped table-condensed table-bordered fiexd'>
 <thead>
 <tr>
-<th width='160px'>评测系统</th>
+<th min-width='160px'>评测系统</th>
 <th>竞赛名称</th>
-<th width='200px'>开始时间</th>
-<th width='100px'>可访问性</th>
+<th min-width='200px'>开始时间</th>
+<th min-width='100px'>可访问性</th>
 </tr>
 </thead>
 <tbody>

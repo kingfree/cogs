@@ -48,15 +48,15 @@ if(!$_GET['page']) {
 ?>
 <table id="submitlist" class='table table-striped table-condensed table-bordered fiexd'>
 <thead><tr>
-<th style="width: 6ex;">SID</th>
+<th style="min-width: 6ex;">SID</th>
 <th>题目</th>
 <th>用户</th>
-<th style="width: 20ex;">结果</th>
-<th style="width: 5ex;">得分</th>
-<th style="width: 6ex;">语言</th>
-<th style="width: 10ex;">用时</th>
-<th style="width: 10ex;">内存</th>
-<th style="width: 20ex;">时间</th>
+<th style="min-width: 20ex;">结果</th>
+<th style="min-width: 5ex;">得分</th>
+<th style="min-width: 6ex;">语言</th>
+<th style="min-width: 10ex;">用时</th>
+<th style="min-width: 10ex;">内存</th>
+<th style="min-width: 20ex;">时间</th>
 </tr></thead>
 <?php if (!$err)
 for ($i=$st;$i<$cnt && $i<$st+$SET['style_pagesize'] ;$i++) {

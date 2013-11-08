@@ -31,7 +31,7 @@ $st=检测页面($cnt, $_GET['page']);
 <table id="pagelist" class='table table-striped table-condensed table-bordered fiexd'>
 <thead><tr>
 <th>AID</th>
-<th width=50%>页面标题</th>
+<th min-width=50%>页面标题</th>
 <th>创建时间</th>
 <th>修改时间</th>
 <th>开放分组</th>

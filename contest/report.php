@@ -21,7 +21,7 @@ $pbs=explode(":",$d['contains']);
 <table id="contest_report" class='table table-striped table-condensed table-bordered fiexd'>
 <thead>
   <tr>
-    <th style="width: 5ex;">名次</th>
+    <th style="min-width: 5ex;">名次</th>
     <th>用户</th>
 <?php
     $cnt_prob=0;
@@ -37,11 +37,11 @@ $pbs=explode(":",$d['contains']);
     <th><a href="problem.php?pid=<?=$v?>&ctid=<?=$_GET[ctid]?>" target="_blank"><?=shortname($d['probname'])?></a>
     <? if($end || 有此权限('查看比赛')) { ?><a href="../problem/problem.php?pid=<?=$v?>" target="_blank" title="跳转到题目 <?=$d['probname']?>"><i class='icon-share'></i></a><? } ?>
     </th>
-    <th onclick="sortTable('contest_report', <?=$cnt_prob*2+1?>, 'int')" style="width: 5ex; cursor: pointer; color:navy;">得分</th>
+    <th onclick="sortTable('contest_report', <?=$cnt_prob*2+1?>, 'int')" style="min-width: 5ex; cursor: pointer; color:navy;">得分</th>
 <?php
     }
 ?>
-    <th onclick="sortTable('contest_report', <?=$cnt_prob*2+2?>, 'int')" style="width: 6ex; cursor: pointer; color:navy;">总分</th>
+    <th onclick="sortTable('contest_report', <?=$cnt_prob*2+2?>, 'int')" style="min-width: 6ex; cursor: pointer; color:navy;">总分</th>
   </tr>
 </thead>
 <?php 
