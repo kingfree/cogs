@@ -24,6 +24,7 @@ function sdir($dir,$dname)
     $dh=opendir($dir);
     while ($file=readdir($dh)) 
     {
+flush();
         if($file!="." && $file!="..") 
         {
             $fullpath=$dir."/".$file;
