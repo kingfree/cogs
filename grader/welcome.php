@@ -18,8 +18,8 @@
 <pre>gcc {$query['src']} -lm -w -O2 -static -o {$query['pname']}</pre>
 <pre>g++ {$query['src']} -lm -w -O2 -static -o {$query['pname']}</pre>
 <h3>编译器版本</h3>
-<pre><?passthru("fpc -v")?></pre>
 <pre><?passthru("gcc --version")?></pre>
 <pre><?passthru("g++ --version")?></pre>
+<pre><?passthru("fpc -i")?></pre>
 </body>
 </html>

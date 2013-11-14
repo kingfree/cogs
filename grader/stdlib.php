@@ -19,7 +19,6 @@ function wfile($str,$fname)
 function write_cnt()
 {
     $t=read_cnt()+1;
-    exec("ls > /home/tjf/1.txt");
     $fp=fopen("cnt.php","w");
     fprintf($fp,"%ld",$t);
     fclose($fp);
@@ -157,7 +156,7 @@ function getsettings()
     $fp=fopen("settings.php","r");
     fscanf($fp,"%s",$cfg['Name']);
     //fscanf($fp,"%s",$cfg['Ver']);
-    $cfg['Ver']='1.43';
+    $cfg['Ver']='1.5';
     fscanf($fp,"%s",$cfg['cpldir']);
     fscanf($fp,"%s",$cfg['datdir']);
     //fscanf($fp,"%s",$cfg['basedir']);
