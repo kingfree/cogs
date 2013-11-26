@@ -1,9 +1,10 @@
 <?php
 date_default_timezone_set('PRC');
+error_reporting(E_ERROR);
 require_once("lib.php");
 $LIB->cls_getsettings();
    global $SET,$cfg,$LIB;
-if(!($_SESSION['ID'])) {
+if(!isset($_SESSION['ID'])) {
     if($_COOKIE['cogs_usr'] && $_COOKIE['cogs_pwd_hash']) {
         $p=new DataAccess();
         $usr = $_COOKIE['cogs_usr'];

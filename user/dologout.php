@@ -6,7 +6,7 @@ setcookie("cogs_pwd_hash","",-100,"/");
 $_SESSION=array();
 session_destroy();
 
-if(!$_SESSION['ID'])
+if(!isset($_SESSION['ID']))
 i提示("退出（注销用户会话）成功！");
 else
 i异常("退出（注销用户会话）失败！");

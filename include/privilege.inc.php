@@ -32,10 +32,10 @@ function 有此权限($qx, $uid=0) {
     if($qx == '普通用户' && $_SESSION['ID']) return true;
     if($qx == '可以管理')
         for($i=1;$i<100;$i++)
-            if($_SESSION['pri'.$i]) return true;
-    if($_SESSION['pri'.$pri[$qx]]) return true;
-    if($_SESSION['pri'.$pri['超级用户']]) return true;
-    if($pri[$qx]<60 && $_SESSION['pri'.$pri['管理用户']]) return true;
+            if(isset($_SESSION['pri'.$i])) return true;
+    if(isset($_SESSION['pri'.$pri[$qx]])) return true;
+    if(isset($_SESSION['pri'.$pri['超级用户']])) return true;
+    if($pri[$qx]<60 && isset($_SESSION['pri'.$pri['管理用户']])) return true;
     return false;
 }
 

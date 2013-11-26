@@ -72,7 +72,7 @@ for ($i=$st;$i<$cnt && $i<$st+$SET['style_pagesize'] ;$i++) {
     echo "<a href='../problem/problem.php?pid={$d['pid']}' target='_blank'>".shortname($d['probname'])."</a>";
 ?></td>
 <td><a href='../user/detail.php?uid=<?=$d['uid']?>' target='_blank'><?=gravatar::showImage($d['email']);?></a>
-<?php echo "<a href='?uid={$d[uid]}&pid={$_GET['pid']}'>";
+<?php echo "<a href='?uid={$d['uid']}&pid={$_GET['pid']}'>";
 if(有此权限("查看用户")) echo $d['realname']; else echo $d['nickname'];
 echo "</a>"; ?></td>
 <td class='wrap'><a href='code.php?id=<?=$d['sid']?>'><?=评测结果($d['result'], 20)?></a></td>
