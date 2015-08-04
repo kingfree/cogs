@@ -14,7 +14,7 @@
 <?php echo 输出文本("进程运行 %processtime% s ，处理完成数据库 %querytimes% 次。") ?>
 </p>
 <?php echo 输出文本($SET['global_tail']) ?>
-由 <a href="https://github.com/KingFree/COGS-by-Kingfree" target="_blank">CmYkRgB123 在线评测系统</a> 强力驱动，版本 <?php echo $cfg['Version']; ?> ，由 <a href="http://weibo.com/kingfree" target="_blank">王者自由</a> 二次开发。原作者 &copy; <a href="http://www.byvoid.com" target="_blank">BYVoid</a>，保留部分权利。
+由 <a href="https://github.com/kingfree/cogs" target="_blank">CmYkRgB123 在线评测系统</a> 强力驱动，版本 <?php echo $cfg['Version']; ?> ，由 <a href="http://weibo.com/kingfree" target="_blank">王者自由</a> 二次开发。原作者 &copy; <a href="http://www.byvoid.com" target="_blank">BYVoid</a>，保留部分权利。
 </p>
 </div>
 </div>
