@@ -507,4 +507,76 @@ function BBCode($string) {
             return $string;
         return substr($string, 0, $long) . "...";
     }
+
+function get_problem_diffarr() {
+  $p = new DataAccess();
+  $sql = "select pid, difficulty from problem";
+  $cnt = $p->dosql($sql);
+  $probs = array();
+  for ($i = 0; $i < $cnt; $i++) {
+    $d = $p->rtnrlt($i);
+    $pid = (int)$d['pid'];
+    if (!$probs[$pid] || $probs[$pid] < $d['difficulty']) {
+      $probs[$pid] = $d['difficulty'];
+    }
+  }
+  return $probs;
+}
+
+function calc_grade($uid, $diffarr) {
+  global $SET;
+  $ww = 0.01;
+  $pw = 2; //$SET['problem_weigth'];
+  $cw = 1; //$SET['contest_weigth'];
+  $pw *= $ww;
+  $cw *= $ww;
+
+  $uid = (int)($uid);
+  if (!$uid) return;
+  $p = new DataAccess();
+  $sql = "select uid, pid, score, accepted from submit where uid = $uid";
+  $cnt = $p->dosql($sql);
+  $probs = array();
+  for ($i = 0; $i < $cnt; $i++) {
+    $d = $p->rtnrlt($i);
+    $pid = (int)($d['pid']);
+    if (!$probs[$pid] || $probs[$pid] < $d['score']) {
+      $probs[$pid] = $d['score'];
+    }
+  }
+
+  $submt = (int)($cnt);
+  $accpd = 0;
+  $grade = 0;
+
+  foreach ($probs as $key => $value) {
+    $pid = (int)($key);
+    $score = (int)($value);
+    if (!$pid) continue;
+    if ($value == 100) $accpd++;
+    //echo "$pid.$score!!";
+    $diff = (int)($diffarr[$pid]) + 1;
+    //echo "$grade->";
+    $grade += $diff * $score * $pw;
+    //echo "$grade. ";
+  }
+
+  $sql = "select score, pid from compscore where uid = $uid";
+  $cnt = $p->dosql($sql);
+  for ($i = 0; $i < $cnt; $i++) {
+    $d = $p->rtnrlt($i);
+    $pid = (int)($d['pid']);
+    $score = (int)($d['score']);
+    $diff = (int)($diffarr[$pid]) + 1;
+    $grade += $diff * $score * $cw;
+  }
+  $grade = (int)$grade;
+  //$grade = (int)($accpd * 2.3);
+
+  $sql="update userinfo set submited = $submt, accepted = $accpd, grade = $grade where uid = $uid";
+  $p->dosql($sql);
+
+  return array($submt, $accpd, $grade);
+}
+
 ?>

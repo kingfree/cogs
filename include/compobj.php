@@ -210,24 +210,21 @@ class Compiler
             $sql="update submit set result='{$this->s_detail}' ,score='{$this->s_score}' ,memory='{$this->avgmemory}' ,accepted='{$ac}' ,runtime='{$this->totaltime}' where sid='{$this->info['sid']}'";
             $p->dosql($sql);
         } else {
-            $sql1="update userinfo set submited=submited+1";
             $sql="update problem set submitcnt=submitcnt+1";
             if ($ac) {
                 $sql.=",lastacid={$this->info['uid']}";
                 $sql2="select accepted from submit where pid='{$this->info['pid']}' and uid='{$this->info['uid']}' and accepted=1";
                 $first=$p->dosql($sql2)==0;
                 if ($first) { //第一次AC
-                    $sql1.=" ,grade=grade+5";
                     $sql.=" ,acceptcnt=acceptcnt+1";
                 }
             }
             $sql.=" where pid={$this->info['pid']}";
             $p->dosql($sql);
-            $sql1.=" where uid='{$this->info['uid']}'";
-            $p->dosql($sql1);
             $sql="insert into submit(pid,uid,lang,result,score,memory,accepted,subtime,IP,runtime,srcname) values({$this->info['pid']},{$this->info['uid']},{$this->info['language']},'{$this->s_detail}',{$this->s_score},{$this->avgmemory},{$ac},".time().",'{$_SERVER['REMOTE_ADDR']}',{$this->totaltime},'{$this->srcname}')";
             $p->dosql($sql);
         }
+        calc_grade($this->info['uid'], get_problem_diffarr());
     }
 
     public function writedb_comp($csid)

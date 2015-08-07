@@ -2,14 +2,15 @@
 require_once("../include/header.php");
 gethead(1,"","生成等级");
 
-$rand_gen_data_access=new DataAccess();
 ?>
 <div class='page'>
+开始计算……<br />
 <?
-$subcnt=array();
+/*$subcnt=array();
 $supcnt=array();
 $accnt=array();
 
+$rand_gen_data_access=new DataAccess();
 $sql="select * from problem";
 $probcnt=$rand_gen_data_access->dosql($sql);
 
@@ -48,7 +49,7 @@ for ($i=0;$i<$cnt;$i++) {
 $users=$lastuser;
 echo "更新数据库积分……<br />";
 for ($i=1;$i<=$users;$i++) {
-    $grade[$i]=(int) ($grade[$i] /* * ($accnt[$i] / $supcnt[$i])*/);
+    $grade[$i]=(int) ($grade[$i] /* * ($accnt[$i] / $supcnt[$i]));
     $sql="update userinfo set accepted='{$accnt[$i]}',submited='{$subcnt[$i]}',grade='{$grade[$i]}' where uid='{$i}'";
     $rand_gen_data_access->dosql($sql);
 }
@@ -75,7 +76,30 @@ for ($i=1;$i<=$probs;$i++) {
     $rand_gen_data_access->dosql($sql);
 }
     flush();
+*/
+$diffarr = get_problem_diffarr();
+
+$p = new DataAccess();
+$sql = "select uid, usr, realname from userinfo";
+$cnt = $p->dosql($sql);
+for ($i = 0; $i < $cnt; $i++) {
+  $d = $p->rtnrlt($i);
+  $uid = (int)($d['uid']);
+  $username = ($d['realname']);
+  $arr = calc_grade($uid, $diffarr);
+  $submt = $arr[0];
+  $accpd = $arr[1];
+  $grade = $arr[2];
+  if ($grade > 0) {
+    echo "$username = <span class=ok>$grade</span> "; //<br />";
+    echo "(<span class=no>$accpd</span>/";
+    echo "<span class=did>$submt</span>). ";
+  }
+  flush();
+}
+
 ?>
+
 <span class=ok>计算完成！</span>
 </div>
 <?
