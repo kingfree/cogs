@@ -77,7 +77,7 @@ for ($i=0;$i<$cnt;$i++) {
 <? if($_SESSION['ID']) { ?>
 <a href="<?=路径("mail/index.php")?>?toid=<?=$d['uid']?>" title="给<?=$d['nickname']?>发送信件" class="pull-right"><span class="icon-envelope"></span></a>
 <? } ?>
-<a href="?uid=<?=$d['uid']?>"
+<a href="<?php echo 路径("user/detail.php?uid={$d['uid']}");?>"
 <?if(有此权限("查看用户")) echo "title='".$d['realname']."'";?>>
 <b><?php echo $d['nickname'];?></b>
 </a>

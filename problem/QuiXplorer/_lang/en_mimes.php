@@ -7,6 +7,7 @@ $GLOBALS["mimes"]=array(
 	"dir"	=> "Directory",
 	"exe"	=> "Executable File",
 	"file"	=> "File",
+	"link"	=> "Link",
 
 	// text
 	"text"	=> "Text File",
@@ -56,5 +57,9 @@ $GLOBALS["mimes"]=array(
 	// Micosoft / Adobe
 	"word"	=> "Word Document",
 	"excel"	=> "Excel Document",
-	"pdf"	=> "PDF File"
+	"pdf"	=> "PDF File",
+	"xml"	=> "XML File",
+	"c"		=> "C File",
+	"psd"	=> "Photoshop File",
+	"point"	=> "PowerPoint Presentation"
 ); ?>
