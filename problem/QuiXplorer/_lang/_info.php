@@ -1,2 +1,13 @@
-<OPTION value="cn">简体中文</OPTION>
-<OPTION value="en">English</OPTION>
+<OPTION selected value="en">English</OPTION>
+<OPTION value="de">Deutsch</OPTION>
+<OPTION value="es">Espa&ntilde;ol</OPTION>
+<OPTION value="fr">Fran&ccedil;ais</OPTION>
+<OPTION value="it">Italian</OPTION>
+<OPTION value="nl">Nederlands</OPTION>
+<OPTION value="pl">Polski</OPTION>
+<OPTION value="ptbr">Portugu%ecirc;s - Brasil</OPTION>
+<OPTION value="ro">Romn</OPTION>
+<OPTION value="ru">Russian</OPTION>
+<OPTION value="bg">Bulgarian</OPTION>
+<OPTION value="cs">Czech</OPTION>
+<OPTION value="da">Dansk</OPTION>
