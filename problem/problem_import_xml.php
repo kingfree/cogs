@@ -1,17 +1,15 @@
 <?php
 require_once("../include/header.php");
 gethead(1,"修改题目","导入题目");
-$db = @mysql_connect($cfg['data_server'],$cfg['data_uid'],$cfg['data_pwd']);
-@mysql_select_db($cfg['data_database'],$db);
-@mysql_query("set names utf8");
+
 
 function image_save_file($filepath ,$base64_encoded_img){
     $fp=fopen($filepath ,"wb");
     fwrite($fp,base64_decode($base64_encoded_img));
     fclose($fp);
 }
-function addproblem($title, $file_name, $time_limit, $memory_limit, $description, $input, $output, $sample_input, $sample_output, $hint, $source, $spj,$OJ_DATA) {
-    $title=mysql_real_escape_string($title);
+function addproblem($title, $time_limit, $memory_limit, $description, $input, $output, $sample_input, $sample_output, $hint, $source, $spj,$OJ_DATA) {
+    $title=DataAccess::escape($title);
     $time_limit=(int)($time_limit);
     $memory_limit=(int)($memory_limit);
     $plugin=!$spj;
@@ -23,13 +21,13 @@ function addproblem($title, $file_name, $time_limit, $memory_limit, $description
     $detail.="<h3>【样例输出】</h3><pre>".$sample_output."</pre>";
     $detail.="<h3>【提示】</h3>".$hint;
     $detail.="<h3>【来源(FPS)】</h3>".$source;
-    $detail = mysql_real_escape_string($detail);
-    $detail = str_replace("'", "\'", $detail);
+    $detail = DataAccess::escape($detail);
 
-    $sql="insert into problem(probname,readforce,submitable,datacnt,timelimit,memorylimit,detail,addtime,addid,plugin,`group`) values('{$title}',0,0,0,{$time_limit},{$memory_limit},'".$detail."',".time().",{$_SESSION[ID]},'{$plugin}','0')";
-    echo $sql;
-    @mysql_query ( $sql ) or die ( mysql_error () );
-    $pid = mysql_insert_id ();
+
+    $sql="insert into problem(probname,readforce,submitable,datacnt,timelimit,memorylimit,detail,addtime,addid,plugin,`group`) values('{$title}',0,0,0,{$time_limit},{$memory_limit},'".$detail."',".time().",{$_SESSION['ID']},'{$plugin}','0')";
+
+    DataAccess::connection()->query($sql);
+    $pid = DataAccess::connection()->lastInsertId();
     echo "<br>Add $pid  ";
     $basedir = "$OJ_DATA/$pid";
     echo "[$title]data in $basedir";
@@ -59,11 +57,11 @@ function getAttribute($Node, $TagName,$attribute) {
 function hasProblem($title){
     $md5=md5($title);
     $sql="select 1 from problem where md5(probname)='$md5'";  
-    $result=mysql_query ( $sql );
-    $rows_cnt=mysql_num_rows($result);		
-    mysql_free_result($result);
+    $result=DataAccess::connection()->query($sql);
+    $found = $result->fetchColumn();		
+    
     //echo "row->$rows_cnt";			
-    return  ($rows_cnt>0);
+    return (bool)$found;
 }
 
 if ($_FILES ["fps"] ["error"] > 0) {
@@ -78,7 +76,7 @@ if ($_FILES ["fps"] ["error"] > 0) {
     //$xmlDoc = new DOMDocument ();
     //$xmlDoc->load ( $tempfile );
     //$xmlcontent=file_get_contents($tempfile );
-    $xmlDoc=simplexml_load_file($tempfile);
+    $xmlDoc=simplexml_load_file($tempfile, "SimpleXMLElement", LIBXML_NONET);
     $searchNodes = $xmlDoc->xpath ( "/fps/item" );
     $spid=0;
     foreach($searchNodes as $searchNode) {
@@ -130,7 +128,7 @@ if ($_FILES ["fps"] ["error"] > 0) {
                 mkdata($pid,$pid.$testno++.".out",$testNode,$OJ_DATA);
             }
             $sql="update problem set datacnt=$testno,filename=$pid where pid=$pid";  
-            mysql_query ( $sql );
+            DataAccess::connection()->query($sql);
             $images=($searchNode->children()->img);
             $did=array();
             $testno=1;
@@ -150,10 +148,10 @@ if ($_FILES ["fps"] ["error"] > 0) {
                     image_save_file($newpath,$base64);
                     $newpath=dirname($_SERVER['REQUEST_URI'] )."/../images/pimg".$pid."_".$testno.".".$ext;
 
-                    $src=mysql_real_escape_string($src);
-                    $newpath=mysql_real_escape_string($newpath);
+                    $src=DataAccess::escape($src);
+                    $newpath=DataAccess::escape($newpath);
                     $sql="update problem set detail=replace(detail,'$src','$newpath') where pid=$pid";  
-                    mysql_query ( $sql );
+                    DataAccess::connection()->query($sql);
                     array_push($did,$src);
                 }
 

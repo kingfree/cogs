@@ -1,118 +1,46 @@
 <?php
-
-class SQL_Expression
-{
-    public $key,$value,$predication;
-    public function __construct($t_key,$t_value,$t_predication)
-    {
-        $this->key=$t_key;
-        $this->value=$t_value;
-        $this->predication=$t_predication;
-    }
-};
-
-class SQL_Where
-{
-    public $logic,$sub;
-    public function __construct($t_logic,$t_sub)
-    {
-        $this->logic=$t_logic;
-        $this->sub=$t_sub;
-    }
-    public function GetSQL()
-    {
-        $first=true;
-        $SQL=" ( ";
-        foreach ($this->sub as $E)
-        {
-            if (!$first)
-                $SQL.= ' '.$this->logic.' ';
-            $first=false;
-            if ($E->predication)
-                $SQL.=$E->key . $E->predication . $E->value;
-            else
-                $SQL.=$E->GetSQL();
-        }
-        $SQL.=" ) ";
-        return $SQL;
-    }
-};
-
+// 各页面共享数据库连接，每个查询对象保留自己的结果集。
 class DataAccess
 {
-    private $conn,$result,$rows;
+    private static $connection;
+    private $rows = array();
 
-    private function fail()
-    {
-        echo "数据库连接失败";
-        exit;
-    }
-
-    public function __construct()
+    public static function connection()
     {
         global $cfg;
-        @$this->conn=mysql_connect($cfg['data_server'],$cfg['data_uid'],$cfg['data_pwd'])
-            or $this->fail();
-        mysql_select_db($cfg['data_database'],$this->conn);
-        mysql_query("set names utf8");
+        if (!self::$connection) {
+            $dsn = 'mysql:host='.$cfg['data_server'].';dbname='.$cfg['data_database'].';charset=utf8';
+            self::$connection = new PDO($dsn, $cfg['data_uid'], $cfg['data_pwd'], array(
+                PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+                PDO::ATTR_EMULATE_PREPARES => false
+            ));
+        }
+        return self::$connection;
     }
 
-    public function __destruct() 
+    // 旧页面自行添加引号；新查询通过 dosql 的第二个参数绑定。
+    public static function escape($value)
     {
-        //@mysql_close($this->conn);
+        return substr(self::connection()->quote($value), 1, -1);
     }
 
-    public function dosql($SQL)
+    public function dosql($sql, $params = array())
     {
         global $Query_Times;
         $Query_Times++;
-        if (!empty($this->result))
-            @mysql_free_result($this->result);
-
-        $this->result=mysql_query($SQL) or die(mysql_error());
-        $this->rows=@mysql_num_rows($this->result);
-        return $this->rows;
+        $statement = self::connection()->prepare($sql);
+        $statement->execute($params);
+        $this->rows = $statement->columnCount() ? $statement->fetchAll(PDO::FETCH_BOTH) : array();
+        return count($this->rows);
     }
 
-    public function rtnrlt($rownum)
+    public function rtnrlt($rownum = 0)
     {
-        mysql_data_seek($this->result,$rownum);
-        $data=@mysql_fetch_array($this->result);
-        return $data;
+        return isset($this->rows[$rownum]) ? $this->rows[$rownum] : false;
     }
 
-    public function Query($SQL)
+    public function Query($sql)
     {
-        global $Query_Times;
-        $Query_Times++;
-        if (!empty($this->result))
-            @mysql_free_result($this->result);
-
-        $this->result=mysql_query($SQL) or die(mysql_error());
-        $this->rows=@mysql_num_rows($this->result);
-        return $this->rows;
+        return $this->dosql($sql);
     }
-
-    public function Update($table,$keys,$condition)
-    {
-        $first=true;
-        $SQL="UPDATE `";
-        $SQL.=$table;
-        $SQL.="` SET ";
-        foreach ($keys as $E)
-        {
-            if (!$first)
-                $SQL.=" , ";
-            $first=false;
-            $SQL.=$E->key . $E->predication . $E->value;
-        }
-        if ($condition!=array())
-        {
-            $SQL.=" WHERE ";
-            $SQL.=$condition->GetSQL();
-        }
-
-        //$this->Query($SQL);
-    }
-};
-?>
+}

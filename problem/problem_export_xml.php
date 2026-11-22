@@ -1,13 +1,6 @@
 <?php
-@session_start ();
-$DB_HOST = $cfg['data_server'];
-$DB_USER = $cfg['data_uid'];
-$DB_PASS = $cfg['data_pwd'];
-	$con = mysql_pconnect($DB_HOST,$DB_USER,$DB_PASS);
-	mysql_query("set names utf8",$con);
-	mysql_set_charset("utf8",$con);
-	mysql_select_db($DB_NAME,$con);
-
+require_once("../include/header.php");
+if (!有此权限("修改题目")) exit;
 function getTestFileIn($pid, $testfile,$OJ_DATA) {
 	if ($testfile != "")
 		return file_get_contents ( "$OJ_DATA/$pid/" . $testfile . ".in" );
@@ -49,27 +42,24 @@ class Solution{
 }
 function getSolution($pid,$lang){
 	$ret=new Solution();
-	$con = mysql_pconnect($DB_HOST,$DB_USER,$DB_PASS);
-	mysql_query("set names utf8",$con);
-	mysql_set_charset("utf8",$con);
-	mysql_select_db($DB_NAME,$con);
+	$con = DataAccess::connection();
 	$sql = "select `solution_id`,`language` from solution where problem_id=$pid and result=4 and language=$lang limit 1";
 //	echo $sql;
-	$result = mysql_query($sql,$con ) ;
-	if($result&&$row = mysql_fetch_row ( $result) ){
+	$result = $con->query($sql) ;
+	if($result&&$row = $result->fetch(PDO::FETCH_NUM) ){
 		$solution_id=$row[0];
 		$ret->language=$language_name[$row[1]];
 		
-		mysql_free_result($result);
+		$result->closeCursor();
 		$sql = "select source from source_code where solution_id=$solution_id";
-		$result = mysql_query ( $sql ) or die ( mysql_error () );
-		if($row = mysql_fetch_object ( $result) ){
+		$result = DataAccess::connection()->query($sql);
+		if($row = $result->fetchObject() ){
 			$ret->source_code=$row->source;
 			
 		}
-		mysql_free_result($result);
+		$result->closeCursor();
 	}
-    mysql_close($con);
+    
 	return $ret;
 }
 function fixurl($img_url){
@@ -127,8 +117,9 @@ function fixImageURL(&$html,&$did){
 
 if (isset($_POST ['do'])||isset($_GET['cid'])) {
    if(isset($_POST ['in'])&&strlen($_POST ['in'])>0){
-   	$in=mysql_real_escape_string ( $_POST ['in'] );
-   	$sql = "select * from problem where problem_id in($in)";
+   	if (!preg_match('/^[0-9]+(?:,[0-9]+)*$/D', $_POST['in'])) exit;
+        $in = $_POST['in'];
+   	$sql = "select * from problem where pid in($in)";
    	  $filename="-$in";
    }else{
 	   $start = intval ( $_POST ['start'] );
@@ -138,7 +129,7 @@ if (isset($_POST ['do'])||isset($_GET['cid'])) {
    }
 	
 	//echo $sql;
-	$result = mysql_query ( $sql ) or die ( mysql_error () );
+	$result = DataAccess::connection()->query($sql);
 	
 	if (isset($_POST ['submit'])&&$_POST ['submit'] == "Export")
 		header ( 'Content-Type:   text/xml' );
@@ -153,7 +144,7 @@ if (isset($_POST ['do'])||isset($_GET['cid'])) {
 <fps version="1.1" url="http://code.google.com/p/freeproblemset/">
 	<generator name="COGS" url=""/>
 	<?php
-	while ( $row = mysql_fetch_object ( $result ) ) {
+	while ( $row = $result->fetchObject() ) {
 		
 		?>
 <item>
@@ -207,7 +198,7 @@ for ($lang=0;$lang<count($language_name);$lang++){
 ?>
 </item>
 <?php }
-	mysql_free_result ( $result );
+	$result->closeCursor();
 	
 	echo "</fps>";
 

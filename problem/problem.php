@@ -3,7 +3,7 @@ require_once("../include/header.php");
 $uid = (int) $_SESSION['ID'];
 $pid = (int) $_GET['pid'];
 $p=new DataAccess();
-$sql="select problem.*,groups.* from problem,groups where pid=".(int)$_GET[pid]." and groups.gid=problem.group limit 1";
+$sql="select problem.*,groups.* from problem,groups where pid=".(int)$_GET['pid']." and groups.gid=problem.group limit 1";
 $cnt=$p->dosql($sql);
 $d=$p->rtnrlt(0);
 $title = $d['probname'];
@@ -13,9 +13,9 @@ $LIB->mathjax();
 $q=new DataAccess();
 $r=new DataAccess();
 if($cnt) {
-    if ($d[readforce]>$_SESSION[readforce]) 
+    if ($d['readforce']>$_SESSION['readforce']) 
         异常("没有阅读权限！", 取路径("problem/index.php"));
-    if (!$d[submitable] && !有此权限('查看题目') && $d['addid'] != $uid) 
+    if (!$d['submitable'] && !有此权限('查看题目') && $d['addid'] != $uid) 
         异常("该题目不可提交！", 取路径("problem/index.php"));
     $subgroup=$LIB->getsubgroup($q,$d['gid']);
     $subgroup[0]=$d['gid'];
@@ -29,7 +29,7 @@ if($cnt) {
     }
     if (!$promise && !有此权限('查看题目'))
         异常("没有阅读权限！", 取路径("problem/index.php"));
-    $pid=$d[pid];
+    $pid=$d['pid'];
 } else {
     异常("无此题目！！", 取路径("problem/index.php"));
 }
@@ -46,7 +46,7 @@ if($cnt) {
 <td><?=难度($d['difficulty']); ?>
 <!--<?php if(有此权限('查看题目')) { ?>
 <a href="../problem/problem_export.php?pid=<?=$d['pid']?>" target='_blank' class='btn btn-mini pull-right'>导出题目</a>
-<? } ?>-->
+<?php  } ?>-->
 </td></tr>
 <tr><th>时间限制</th>
 <td><?=$d['timelimit']; ?> ms (<?=$d['timelimit']/1000?> s)</td></tr>
@@ -54,7 +54,7 @@ if($cnt) {
 <td><?=$d['memorylimit']; ?> MB </td></tr>
 <tr><th><?php if(有此权限('查看数据')) { ?>
 <a href='testdata.php?problem=<?=$d['filename']?>'>测试数据</a>
-<? } else { ?>测试数据<? } ?></th>
+<?php  } else { ?>测试数据<?php  } ?></th>
 <td>
 <span class='badge badge-<?=$d['submitable']?"success":"important"?>'><?=$d['datacnt']?></span>
 <span class='pull-right'><?=$STR['plugin'][$d['plugin']]?></span>
@@ -67,11 +67,11 @@ if($cnt) {
     $ac=$q->dosql($sql);
     $e=$q->rtnrlt(0); ?>
 <a href="../user/detail.php?uid=<?=$d['addid']; ?>"><?=$e['realname']?></a>
-<? } ?>
+<?php  } ?>
 <?=date('Y-m-d', $d['addtime']) ?>
 <?php if(有此权限('修改题目') || $d['addid'] == $uid) { ?>
 <a href="editprob.php?action=edit&pid=<?=$d['pid']?>" class='btn btn-info btn-mini pull-right' title="修改题目 <?=$d['probname']?>" >修改该题</a>
-<? } ?>
+<?php  } ?>
 </td></tr>
 <tr><th>开放分组</th>
 <td><a href="../user/index.php?gid=<?=$d['gid'] ?>" target="_blank" class='btn btn-mini btn-warning'><?=$d['gname']?></a></td></tr>
@@ -99,17 +99,17 @@ if($uid) {
 </td></tr>
 <tr><th id="fenleito" title="单击以显示或隐藏分类标签" style="cursor:pointer">分类标签</th>
 <td><div id="fenlei"><?php
-$sql="select category.cname,category.memo,category.caid from category,tag where tag.pid={$_GET[pid]} and category.caid=tag.caid";
+$sql="select category.cname,category.memo,category.caid from category,tag where tag.pid={$_GET['pid']} and category.caid=tag.caid";
 $cnt2=$r->dosql($sql);
 for ($i=0;$i<=$cnt2-1;$i++) {
     $e=$r->rtnrlt($i);
     HTML(" <a href='index.php?caid={$e['caid']}' target='_blank' title='{$e['memo']}' class='btn btn-mini'>{$e['cname']}</a> ");
 } ?>
-<? if(!$acpid) { ?>
+<?php  if(!$acpid) { ?>
 <script>
   $('#fenlei').hide();
 </script>
-<? } else { ?>
+<?php  } else { ?>
 <a id="addfenlei" class='btn btn-success btn-mini pull-right' href="#addcate" data-toggle='modal' title="添加分类标签"><i class='icon-plus icon-white'></i></a>
 <div id='addcate' class='modal hide fade in'>
 <form method="post" action="addcate.php" class='form-horizontal'>
@@ -140,22 +140,22 @@ for ($i=0;$i<=$cnt2-1;$i++) {
 </fieldset>
 </form>
 </div>
-<? } ?></div>
+<?php  } ?></div>
 </td></tr>
-<? if($uid) { ?>
+<?php  if($uid) { ?>
 <tr><form action="../submit/run.php" method="post" enctype="multipart/form-data" class='form-inline'>
 <td colspan=2>
 <input name="pid" type="hidden" id="pid" value="<?=$d['pid']?>" />
 <input type="file" name="file" title='选择程序源文件' /><br />
 <?php if(有此权限('测试题目') || $d['addid'] == $uid) { ?>
 <label class='checkbox inline pull-right'>
-<? if($d['addid'] == $uid && $d['submitable'] != 1) $tmm=1; else $tmm=0; ?>
-<input name="testmode" type="checkbox" <?if($tmm) echo "checked"?> value="<?=$tmm?>" />不写入数据库
+<?php  if($d['addid'] == $uid && $d['submitable'] != 1) $tmm=1; else $tmm=0; ?>
+<input name="testmode" type="checkbox" <?php if($tmm) echo "checked"?> value="<?=$tmm?>" />不写入数据库
 </label>
 <?php } ?>
 <select name='judger' class='input-medium'>
 <option value=0 selected=selected>自动选择评测机</option>
-<?
+<?php
 $sql="select grid,address,memo from grader where enabled=1 order by priority desc";
 $cnt=$q->dosql($sql);
 for ($i=0;$i<$cnt;$i++) {
@@ -165,7 +165,7 @@ for ($i=0;$i<$cnt;$i++) {
 ?>       
 </select>
 <br />
-<? if($d['plugin'] == 3 || $d['plugin'] == 4) { ?>
+<?php  if($d['plugin'] == 3 || $d['plugin'] == 4) { ?>
 <input type='hidden' name='lang' value='zip' />
 请提交一个 zip 压缩包，里面直接有 <?=$d['datacnt']?> 个 <?=$d['filename']?>#.out 文件<br />
 <a href="downinput.php?file=<?=$d['filename']?>&data=<?=$d['datacnt']?>" class="btn btn-success btn-mini pull-left">下载测试数据</a>
@@ -173,12 +173,12 @@ for ($i=0;$i<$cnt;$i++) {
 <label class='radio inline'><input type='radio' name='lang' value='pas' />Pascal</label>
 <label class='radio inline'><input type='radio' name='lang' value='c' />C</label>
 <label class='radio inline'><input type='radio' name='lang' value='cpp' checked='checked'/>C++</label>
-<? } ?>
+<?php  } ?>
 <button type='submit' class='btn btn-primary pull-right' >提交代码</button>
 </td>
 </form>
 </tr>
-<? } ?>
+<?php  } ?>
 </table>
 <table id="singlerank" class='table table-striped table-condensed table-bordered fiexd'>
 <tr><td colspan=4>
@@ -201,17 +201,17 @@ for ($i=0;$i<$cnt;$i++) {
 <td><?php printf("%.3f s",$f['runtime']/1000.0) ?></td>
 <td><a href="../submit/code.php?id=<?=$f['sid'] ?>" target="_blank"><?=$STR['lang'][$f['lang']]?></a></td>
 </tr>
-<?php 
+<?php
 }
 ?></table>
 <table class='table table-condensed table-bordered fiexd'>
 <tr><th colspan=5>
 <a href="comments.php?pid=<?=$pid?>">关于 <b><?=shortname($d['probname']); ?></b> 的讨论</a>
-<? if($uid) { ?>
+<?php  if($uid) { ?>
 <a href="comment.php?pid=<?=$pid?>" class="pull-right btn btn-mini btn-danger">发表评论</a>
-<? } ?>
+<?php  } ?>
 </th></tr>
-<?
+<?php
 $sql="select comments.*,userinfo.nickname,userinfo.uid,userinfo.email from comments,userinfo where userinfo.uid=comments.uid and comments.pid='{$d['pid']}' order by comments.cid asc";
 $cnt=$q->dosql($sql);
 for ($i=0;$i<$cnt;$i++) {
@@ -233,15 +233,15 @@ for ($i=0;$i<$cnt;$i++) {
 <?php } ?>
 <span class="muted"><?=date('Y-m-d H:i',$e['stime'])?></span>
 <span><?=($i+1)?>楼</span>
-<? if($_SESSION['ID'] && $_SESSION['ID'] == $e['uid']) { ?>
+<?php  if($_SESSION['ID'] && $_SESSION['ID'] == $e['uid']) { ?>
 <a href='comment.php?cid=<?=$e['cid']?>' class='btn btn-mini btn-warning'>修改</a>
-<? } else if($_SESSION['ID']) { ?>
+<?php  } else if($_SESSION['ID']) { ?>
 <a class='btn btn-mini btn-danger' href="comment.php?ccid=<?=$e['cid']?>&pid=<?=$d['pid']?>&user=<?=$e['nickname']?>">回复</a>
-<? } ?>
+<?php  } ?>
 </div>
 </div>
 </td></tr>
-<?
+<?php
 }
 ?>
 </table>
@@ -272,13 +272,13 @@ $Jia['summary']=trim(strip_tags($d['detail']));
 <dl class='problem'>
 <?=$d['detail']?>
 </dl>
-<? if($uid) { ?>
+<?php  if($uid) { ?>
 <form action="../submit/run.php" method="post" enctype="multipart/form-data" class='form-inline' id="tijiao">
 <input name="pid" type="hidden" id="pid" value="<?=$d['pid']?>" />
 <input id="source" type="file" name="file" title='选择程序源文件' />
 <select name='judger' class='input-medium'>
 <option value=0 selected=selected>自动选择评测机</option>
-<?
+<?php
 $sql="select grid,address,memo from grader where enabled=1 order by priority desc";
 $cnt=$q->dosql($sql);
 for ($i=0;$i<$cnt;$i++) {
@@ -289,13 +289,13 @@ for ($i=0;$i<$cnt;$i++) {
 </select>
 <?php if(有此权限('测试题目') || $d['addid'] == $uid) { ?>
 <label class='checkbox inline'>
-<? if($d['addid'] == $uid && $d['submitable'] != 1) $tmm=1; else $tmm=0; ?>
-<input id="testmode" name="testmode" type="checkbox" <?if($tmm) echo "checked"?> value="<?=$tmm?>" />不写入数据库
+<?php  if($d['addid'] == $uid && $d['submitable'] != 1) $tmm=1; else $tmm=0; ?>
+<input id="testmode" name="testmode" type="checkbox" <?php if($tmm) echo "checked"?> value="<?=$tmm?>" />不写入数据库
 </label>
 <?php } ?>
 <br />
 <button type='submit' class='btn btn-primary' >提交代码</button>
-<? if($d['plugin'] == 3 || $d['plugin'] == 4) { ?>
+<?php  if($d['plugin'] == 3 || $d['plugin'] == 4) { ?>
 <input type='hidden' name='lang' value='zip' />
 请提交一个 zip 压缩包，里面直接有 <?=$d['datacnt']?> 个 <?=$d['filename']?>#.out 文件
 <a href="downinput.php?file=<?=$d['filename']?>&data=<?=$d['datacnt']?>" class="btn btn-success btn-mini">下载测试数据</a>
@@ -303,9 +303,9 @@ for ($i=0;$i<$cnt;$i++) {
 <label class='radio inline'><input type='radio' name='lang' value='pas' id='pas'/>Pascal</label>
 <label class='radio inline'><input type='radio' name='lang' value='c' id='c'/>C</label>
 <label class='radio inline'><input type='radio' name='lang' value='cpp' id='cpp' checked='checked'/>C++</label>
-<? } ?>
+<?php  } ?>
 </form>
-<? } ?>
+<?php  } ?>
 
 </div>
 </div>

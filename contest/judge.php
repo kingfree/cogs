@@ -17,7 +17,7 @@ sort($list);
 
 <script language="javascript">
 var HTTP;
-var list = new Array(<?php 
+var list = new Array(<?php
     $cnt=0;
     foreach($list as $k=>$v) {
         echo "$v,";
@@ -99,7 +99,7 @@ function Finish() {
     <th>测试点</th>
     <th>得分</th>
   </tr>
-<?php 
+<?php
     $p=new DataAccess();
     $sql="select compscore.csid,compscore.ctid,userinfo.nickname,userinfo.realname,problem.probname,problem.filename,compscore.lang,compscore.score,compscore.result,compscore.pid,compscore.uid,compscore.ctid from compscore,problem,userinfo where compscore.uid=userinfo.uid and compscore.pid=problem.pid and(";
     foreach($list as $k=>$v)
@@ -110,15 +110,15 @@ function Finish() {
         $d=$p->rtnrlt($i);
 ?>
   <tr>
-    <td><?=$d[csid] ?></td>
-    <td><a href="../user/detail.php?uid=<?=$d[uid] ?>" target="_blank"><?=$d[realname] ?></a></td>
-    <td><a href="problem.php?pid=<?=$d[pid] ?>&ctid=<?=$d[ctid] ?>" target="_blank"><?=shortname($d[probname]) ?></a></td>
-    <td><code><?=$d[filename] ?></code></td>
-    <td><a href="code.php?csid=<?=$d[csid] ?>" target="_blank"><?=$STR[lang][$d[lang]] ?></a></td>
-    <td id="result<?=$d[csid] ?>"><?=评测结果($d[result], 50) ?></td>
-    <td id="score<?=$d[csid] ?>"><?=$d[score] ?></td>
+    <td><?=$d['csid'] ?></td>
+    <td><a href="../user/detail.php?uid=<?=$d['uid'] ?>" target="_blank"><?=$d['realname'] ?></a></td>
+    <td><a href="problem.php?pid=<?=$d['pid'] ?>&ctid=<?=$d['ctid'] ?>" target="_blank"><?=shortname($d['probname']) ?></a></td>
+    <td><code><?=$d['filename'] ?></code></td>
+    <td><a href="code.php?csid=<?=$d['csid'] ?>" target="_blank"><?=$STR['lang'][$d['lang']] ?></a></td>
+    <td id="result<?=$d['csid'] ?>"><?=评测结果($d['result'], 50) ?></td>
+    <td id="score<?=$d['csid'] ?>"><?=$d['score'] ?></td>
   </tr>
-<?php 
+<?php
     }
 ?>
 </table>

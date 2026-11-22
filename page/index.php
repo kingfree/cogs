@@ -15,7 +15,7 @@ $sql="select page.*,groups.*,userinfo.nickname,userinfo.email,userinfo.realname 
 $sql.=" userinfo.uid=page.uid and groups.gid=page.group";
 
 if ($_GET['key']!="")
-$sql.=" and (page.text like '%{$_GET[key]}%' or page.title like '%{$_GET[key]}%')";
+$sql.=" and (page.text like '%{$_GET['key']}%' or page.title like '%{$_GET['key']}%')";
 
 $sql .= " order by aid desc";
 
@@ -57,12 +57,12 @@ for ($i=$st;$i<$cnt && $i<$st+$SET['style_pagesize'] ;$i++) {
 <td><a href="../user/index.php?gid=<?=$d['gid'] ?>" target="_blank"><?=$d['gname'] ?></a></td>
 <td><a href='../user/detail.php?uid=<?=$d['uid']?>' target='_blank'>
 <?=gravatar::showImage($d['email']);?>
-<?if(有此权限("查看用户")) echo $d['realname']; else echo $d['nickname'];?>
+<?php if(有此权限("查看用户")) echo $d['realname']; else echo $d['nickname'];?>
 </a></td>
 </tr>
 <?php } ?>
 </table>
-<? 分页($cnt, $_GET['page'], '?key='.$_GET['key'].'&'); ?>
+<?php  分页($cnt, $_GET['page'], '?key='.$_GET['key'].'&'); ?>
 </div>
 
 <?php

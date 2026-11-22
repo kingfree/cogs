@@ -11,7 +11,7 @@ chdir($SET['dir_databackup']);
 
 <div class="page">
 <a href="backup.php">返回备份与恢复页面</a>
-<?
+<?php
 if($_POST['backtype'] == "database") {
     mkdir("database");
     chdir("database");
@@ -91,7 +91,7 @@ if($_POST['backtype'] == "database") {
 <a href="backup.php">返回备份与恢复页面</a>
 </div>
 
-<?
+<?php
 chdir($ima);
 
 include_once("../include/footer.php");

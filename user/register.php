@@ -6,7 +6,7 @@ if($_SESSION['ID']) 异常("已经登录！");
 ?>
 <div class='container'>
 <?php
-if ($_GET[accept]==1) {
+if ($_GET['accept']==1) {
 ?>
 <form id='zhuce' method="post" action="doreg.php" class='form-inline'>
 <table class='table-form'>
@@ -127,7 +127,7 @@ $("#zhuce").submit(function() {
 ?>
 <div align="center">
 <div class='page'>
-<?php echo $SET[reg_eula]; ?>
+<?php echo $SET['reg_eula']; ?>
 <a href="register.php?accept=1" class='btn btn-primary'>同意</a>
 <a href="../" class='btn'>拒绝</a>
 </div>

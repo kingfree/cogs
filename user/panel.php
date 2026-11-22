@@ -2,7 +2,7 @@
 require_once("../include/header.php");
 gethead(1,"sess","控制面板");
 $p=new DataAccess();
-$sql="select * from userinfo where uid={$_SESSION[ID]}";
+$sql="select * from userinfo where uid={$_SESSION['ID']}";
 $cnt=$p->dosql($sql);
 $d=$p->rtnrlt(0);
 ?>
@@ -68,7 +68,7 @@ $d=$p->rtnrlt(0);
 </form>
 
 <div class='row-fluid'>
-<form id='xiugai' method="post" action="doedit.php?uid=<?=$_SESSION[ID] ?>" enctype="multipart/form-data" class='form-inline page' >
+<form id='xiugai' method="post" action="doedit.php?uid=<?=$_SESSION['ID'] ?>" enctype="multipart/form-data" class='form-inline page' >
 <input name="action" type="hidden" value="edit" />
 <input name="uid" type="hidden" value="<?=$d['uid']?>" />
 <table id="userpanel" class='table-form'>
@@ -112,7 +112,7 @@ $d=$p->rtnrlt(0);
   <tr>
     <th>系统主题</th>
     <td colspan=2>
-    <select name="user_style"><? $dir="../../Bootstrap/css/";
+    <select name="user_style"><?php  $dir="../../Bootstrap/css/";
 $ssss= glob("$dir*.min.css");
 foreach($ssss as $sms) {
     $zhuti = str_replace(".min.css", "", str_replace($dir, "", $sms));
@@ -120,8 +120,8 @@ foreach($ssss as $sms) {
     if($d['user_style'] == $zhuti) echo "selected='selected'";
     echo ">$zhuti</option>";
 }?><select>
-    <label class='radio inline'><input type='radio' name='style' value='0' <?if(!$d['style']) echo "checked='checked'";?>/>浅色标题栏</label>
-    <label class='radio inline'><input type='radio' name='style' value='1' <?if($d['style']) echo "checked='checked'";?>/>深色标题栏</label>
+    <label class='radio inline'><input type='radio' name='style' value='0' <?php if(!$d['style']) echo "checked='checked'";?>/>浅色标题栏</label>
+    <label class='radio inline'><input type='radio' name='style' value='1' <?php if($d['style']) echo "checked='checked'";?>/>深色标题栏</label>
     </td>
   </tr>
   <tr>

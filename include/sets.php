@@ -1,4 +1,4 @@
-<?
+<?php
 $p=new DataAccess();
 $sql="select name,value from settings";
 $cnt=$p->dosql($sql);

@@ -2,7 +2,7 @@
 require_once("../include/header.php");
 $p=new DataAccess();
 $aid = (int)$_GET['aid'];
-$sql="select page.*,groups.*,userinfo.nickname from page,groups,userinfo where aid=".(int)$_GET[aid]." and userinfo.uid=page.uid and groups.gid=page.group limit 1";
+$sql="select page.*,groups.*,userinfo.nickname from page,groups,userinfo where aid=".(int)$_GET['aid']." and userinfo.uid=page.uid and groups.gid=page.group limit 1";
 $cnt=$p->dosql($sql);
 $d=$p->rtnrlt(0);
 $title = $d['title'];
@@ -15,7 +15,7 @@ $q=new DataAccess();
 $r=new DataAccess();
 
 if($cnt) {
-    if ($d[force]>$_SESSION[readforce]) {
+    if ($d['force']>$_SESSION['readforce']) {
         异常("你没有该页面阅读权限！",取路径("page/index.php"));
         exit;
     }
@@ -30,7 +30,7 @@ if($cnt) {
     }
     if (!$promise && !有此权限('查看页面'))
         exit;
-    $aid=$d[aid];
+    $aid=$d['aid'];
 } else {
     异常("页面不存在！",取路径("page/index.php"));
 }
@@ -56,11 +56,11 @@ if($cnt) {
 <table class='table table-condensed table-bordered fiexd'>
 <tr><th colspan=5>
 <a href="../problem/comments.php?aid=<?=$aid?>">关于 <b><?=shortname($d['title']); ?></b> 的讨论</a>
-<? if($_SESSION['ID']) { ?>
+<?php  if($_SESSION['ID']) { ?>
 <a href="../problem/comment.php?aid=<?=$aid?>" class="pull-right btn btn-mini btn-danger">发表评论</a>
-<? } ?>
+<?php  } ?>
 </th></tr>
-<?
+<?php
 $sql="SELECT comments.*, userinfo.uid, userinfo.nickname, userinfo.realname, userinfo.email, userinfo.accepted, userinfo.submited, userinfo.grade, userinfo.memo FROM comments, userinfo WHERE userinfo.uid = comments.uid ";
 $sql.="AND $aid = comments.aid ";
 $sql.="ORDER BY comments.cid asc";
@@ -74,11 +74,11 @@ for ($i=0;$i<$cnt;$i++) {
 <?=gravatar::showImage($d['email'], 64);?>
 </a>
 <div style="margin-left:72px;">
-<? if($_SESSION['ID']) { ?>
+<?php  if($_SESSION['ID']) { ?>
 <a href="<?=路径("mail/index.php")?>?toid=<?=$d['uid']?>" title="给<?=$d['nickname']?>发送信件" class="pull-right"><span class="icon-envelope"></span></a>
-<? } ?>
+<?php  } ?>
 <a href="<?php echo 路径("user/detail.php?uid={$d['uid']}");?>"
-<?if(有此权限("查看用户")) echo "title='".$d['realname']."'";?>>
+<?php if(有此权限("查看用户")) echo "title='".$d['realname']."'";?>>
 <b><?php echo $d['nickname'];?></b>
 </a>
 <br />
@@ -97,19 +97,19 @@ for ($i=0;$i<$cnt;$i++) {
 <div style="vertical-align:text-bottom;">
 <div class="pull-right">
 <span class="muted"><?php echo date('Y-m-d H:i:s',$d['stime']);?></span>
-<? if($_GET['show'] || $pid || $aid || $uid) { ?>
+<?php  if($_GET['show'] || $pid || $aid || $uid) { ?>
 <span><?=($i+1)?>楼</span>
-<? } ?>
-<? if($_SESSION['ID'] && $_SESSION['ID'] == $d['uid']) { ?>
+<?php  } ?>
+<?php  if($_SESSION['ID'] && $_SESSION['ID'] == $d['uid']) { ?>
 <a href='../problem/comment.php?cid=<?=$d['cid']?>' class='btn btn-mini btn-warning'>修改</a>
-<? } else if($_SESSION['ID']) { ?>
+<?php  } else if($_SESSION['ID']) { ?>
 <a class='btn btn-mini btn-danger' href="../problem/comment.php?ccid=<?=$d['cid']?>&aid=<?=$d['aid']?>&user=<?=$d['nickname']?>">回复</a>
-<? } ?>
+<?php  } ?>
 </div>
 </div>
 </td>
 </tr>
-<?
+<?php
 }
 ?>
 </table>

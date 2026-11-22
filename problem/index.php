@@ -31,7 +31,7 @@ if (restore) selObj.selectedIndex=0;
 <?php } ?>
 <a href="catelist.php" class='btn btn-success pull-left'><i class="icon-tags icon-white"></i>题目分类列表</a>
 
-<? if ($_GET['caid']) { ?>
+<?php  if ($_GET['caid']) { ?>
 <span id="cate_detail"> 当前分类：
 <?php if(有此权限('修改分类')) { ?>
 <a href="editcate.php?action=edit&caid=<?php echo $d['caid'] ?>">
@@ -52,7 +52,7 @@ else
 $sql .= " where problem.readforce<={$_SESSION['readforce']}";
 
 if ($_GET['key']!="")
-$sql.=" and (problem.probname like '%{$_GET[key]}%' or problem.pid ='{$_GET[key]}' or problem.filename like '%{$_GET[key]}%')";
+$sql.=" and (problem.probname like '%{$_GET['key']}%' or problem.pid ='{$_GET['key']}' or problem.filename like '%{$_GET['key']}%')";
 
 if ($_GET['diff']!="")
 $sql.=" and problem.difficulty='{$_GET['diff']}'";
@@ -92,7 +92,7 @@ $st=检测页面($cnt, $_GET['page']);
 <button name="rank" class='btn' value='submitcnt'>提交次数</button>
 <?php if(有此权限('查看题目')) { ?>
 <button name="rank" class='btn' value='submitable'>标识</button>
-<? } ?>
+<?php  } ?>
 </div>
 </form>
 <script language=javascript>
@@ -132,7 +132,7 @@ if (!$err) for ($i=$st;$i<$cnt && $i<$st+$SET['style_pagesize'] ;$i++) {
 <?php if(有此权限('修改题目')) { ?>
 <a href="editprob.php?action=edit&pid=<?=$d['pid']?>" title="修改题目 <?=$d['probname']?>" class="pull-right"><i class="icon icon-edit"></i></a>
 <?php } ?>
-<? 是否通过($d['pid'], $q);?>
+<?php  是否通过($d['pid'], $q);?>
 <b><a href="problem.php?pid=<?=$d['pid'] ?>"><?=$d['probname']?></a></b>
 </td>
 <td><code><?php echo $d['filename']; ?></code></td>
@@ -153,7 +153,7 @@ if (!$err) for ($i=$st;$i<$cnt && $i<$st+$SET['style_pagesize'] ;$i++) {
 </tr>
 <?php } ?>
 </table>
-<? 分页($cnt, $_GET['page'], '?caid='.$_GET['caid'].'&order='.$_GET['order'].'&diff='.$_GET['diff'].'&key='.$_GET['key'].'&rank='.$_GET['rank'].'&'); ?>
+<?php  分页($cnt, $_GET['page'], '?caid='.$_GET['caid'].'&order='.$_GET['order'].'&diff='.$_GET['diff'].'&key='.$_GET['key'].'&rank='.$_GET['rank'].'&'); ?>
 </div>
 
 <?php

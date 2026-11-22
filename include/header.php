@@ -4,25 +4,9 @@ error_reporting(E_ERROR);
 require_once("lib.php");
 $LIB->cls_getsettings();
    global $SET,$cfg,$LIB;
+require_once dirname(__FILE__)."/login-session.php";
 if(!isset($_SESSION['ID'])) {
-    if($_COOKIE['cogs_usr'] && $_COOKIE['cogs_pwd_hash']) {
-        $p=new DataAccess();
-        $usr = $_COOKIE['cogs_usr'];
-        $pwd = $_COOKIE['cogs_pwd_hash'];
-        $sql="select * from userinfo where usr='$usr' AND pwdhash='$pwd' limit 1";
-        $cnt=$p->dosql($sql);
-        if($cnt) {
-            $d=$p->rtnrlt(0);
-            if($pwd==$d['pwdhash']) {
-                $LIB->get_userinfo($d['uid']);
-                $q=new DataAccess();
-                $sql="UPDATE `userinfo` SET `lastip` = '{$_SERVER['REMOTE_ADDR']}' WHERE `uid` ={$d['uid']}";
-                $q->dosql($sql);
-                $sql="insert into login(uid,ua,ip,ltime,version) values({$d['uid']},'".mysql_real_escape_string($_SERVER['HTTP_USER_AGENT'])."','{$_SERVER['REMOTE_ADDR']}',NOW(),'".mysql_real_escape_string($cfg['dir_root'])."(C)')";
-                if($SET['login_log']) $q->dosql($sql);
-            }
-        }
-    }
+    restoreLogin();
     if(!($_SESSION['ID'])) {
         $_SESSION['readforce']=0;
         $_SESSION['ID']=0;
@@ -49,7 +33,7 @@ function gethead($head,$check,$title,$userid=0) {
 <link rel="Shortcut Icon" href="<?=路径("style/cogs.png")?>" />
 <link rel=stylesheet type="text/css" href="/Bootstrap/css/<?=$user_style?>.min.css" />
 <link rel=stylesheet href="<?=路径("style/{$SET['style_profile']}")?>" />
-<?背景图片($userid ? $userid : $_SESSION['ID']);?>
+<?php 背景图片($userid ? $userid : $_SESSION['ID']);?>
 <?php $LIB->tradsimp(); ?>
 <script type="text/javascript" src="/jQuery/jquery-1.8.0.min.js"></script>
 <script type="text/javascript" src="<?=路径("include/sortTable.js")?>"></script>
@@ -61,7 +45,7 @@ function gethead($head,$check,$title,$userid=0) {
 </head>
 <body>
 <div id="alltext">
-<?
+<?php
 if($check=="sess") $check="普通用户";
 else if($check=="admin") $check="管理用户";
 else if($check=="advadmin") $check="超级用户";

@@ -95,7 +95,7 @@ if ($csucc) {
 	<td><?=$Cp->memory ?> KB</td>
 	<td><?=$Cp->exitcode?></td>
 </tr>
-<?
+<?php
     }
 ?>
 </table>
@@ -161,7 +161,7 @@ if($nodata || $_POST['testmode'] && (有此权限('测试题目') || $d['addid']
 <p>编译失败：</p>
 <pre class="prettyprint"><?=htmlspecialchars($Cp->compilemessage)?></pre>
 </div>
-<?php 
+<?php
 }
 $Cp->unlock();
 ?>

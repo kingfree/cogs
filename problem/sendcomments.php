@@ -7,7 +7,7 @@ $uid=(int)$_SESSION['ID'];
 $pid=(int)$_POST['pid'];
 $aid=(int)$_POST['aid'];
 $cid=(int)$_POST['cid'];
-$detail=mysql_real_escape_string($_POST['detail']);
+$detail=DataAccess::escape($_POST['detail']);
 $showcode=(int)$_POST['showcode'];
 $tm=time();
 

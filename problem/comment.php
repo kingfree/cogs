@@ -51,42 +51,42 @@ if($pid) {
 <form method="post" action="sendcomments.php" class='form-horizontal' id="tijiao">
 <div class='modal-header'>
 <h3><?=($cid)?"修改":"发表"?> 
-<? if($pid) { ?>
+<?php  if($pid) { ?>
 <a href="problem.php?pid=<?=$pid?>" target="_blank"><?=$e['probname']?></a>
-<? } else if($aid) { ?>
+<?php  } else if($aid) { ?>
 <a href="../page/page.php?aid=<?=$aid?>" target="_blank"><?=$e['title']?></a>
-<? } ?>
+<?php  } ?>
 的评论</h3>
 </div>
 <div class='modal-body'>
 <textarea name="detail" class='textarea' style='height:10em'>
-<?php 
+<?php
 if($_GET['user']) echo "回复 @".$_GET['user']." : \n";
 echo $d['detail'];
 ?></textarea>
 <br />
-<? if($pid) { ?>
+<?php  if($pid) { ?>
     <label><input id="showcode" name="showcode" type="checkbox" value="1" <?php if($d['showcode']){ ?> checked="checked" <?php } ?> />允许查看你提交的代码</label>
-<? } else { ?>
+<?php  } else { ?>
     <input name="showcode" type="hidden" value="0" />
-<? } ?>
+<?php  } ?>
 </div>
 <div class='modal-footer'>
 <input name="pid" type="hidden" value="<?=$pid?>" />
 <input name="aid" type="hidden" value="<?=$aid?>" />
 <input name="cid" type="hidden" value="<?=$cid?>" />
-<? if($pid) { ?>
+<?php  if($pid) { ?>
 <a class='btn' href='comments.php?pid=<?=$pid?>'>返回评论列表</a>
-<? } else if($aid) { ?>
+<?php  } else if($aid) { ?>
 <a class='btn' href='comments.php?aid=<?=$aid?>'>返回评论列表</a>
-<? } ?>
+<?php  } ?>
 <button type="submit" class='btn btn-primary'>发表评论</button>
 </div>
 </form>
 </div>
 <div class='clear page'>
 <h4>BBCode 指南</h4>
-<?
+<?php
 function showBBCode($txt, $str) {
     echo "<div class='bs-docs-example'><span class='after'>".$txt."</span>\n";
     echo BBCode($str)."</div>\n";

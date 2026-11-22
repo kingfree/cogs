@@ -1,25 +1,19 @@
 <?php
 require_once("../include/header.php");
-gethead(1,"","邮件");
-
-$uid = $_SESSION[ID];
-
+require_once(dirname(__FILE__)."/message.php");
+gethead(1,"sess","邮件");
+$uid = (int)$_SESSION['ID'];
 $p = new DataAccess();
-
-
-$sql = "select * from mail where mid = {$_GET['mid']}";
-$p->dosql($sql);
-$d=$p->rtnrlt();
-
-$sql = "update mail set readed = 1 where mid = {$_GET['mid']} and toid = $uid";
-$p->dosql($sql);
+$d = mailReadMessage($p, $_GET['mid'], $uid);
+if (!$d) 异常("邮件不存在或无权查看！");
+mailMarkRead($p, $d['mid'], $uid);
 ?>
 
 <div class='container-fluid'>
 <table border=2>
 <tr>
 <th>邮件主题</th>
-<td width="80%"><?=$d['title']?></td>
+<td width="80%"><?=mailHtml($d['title'])?></td>
 </tr>
 <tr>
 <th>发件人ID</th>
@@ -40,15 +34,14 @@ $p->dosql($sql);
 </table>
 
 <form id="form" name="form" method="post" action="index.php">
-<input name="fromid" type="hidden" value=<?=$uid?> />
 <input name="toid" type="hidden" value=<?=$d['fromid']?> />
-<input name="title" type="hidden" value="回(<?=$d['mid']?>)：<?=$d['title']?>" />
+<input name="title" type="hidden" value="回(<?=$d['mid']?>)：<?=mailHtml($d['title'])?>" />
 <input type="submit" name="Submit" value="回复该邮件" class="btn"/>
 </form>
 
 </div>
 
-<?
+<?php
 include_once("../include/footer.php");
 ?>
 

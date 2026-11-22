@@ -11,11 +11,11 @@ gethead(1,"","帮助");
 <a href="map.php" class="btn btn-block btn-primary"><span class='icon-map-marker icon-white'></span>站点地图</a>
 </div>
 <table class='table table-striped table-condensed'>
-<? $s="APWTMECRD";
+<?php  $s="APWTMECRD";
 for($i=0; $i<strlen($s); $i++) {?>
 <tr><td><?=评测结果($s[$i])?></td>
 <td><?=评测信息($s[$i])?></td></tr>
-<? } ?>
+<?php  } ?>
 </table>
 </div>
 <div class='span9'>

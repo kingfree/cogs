@@ -12,7 +12,7 @@ if ($cnt) {
 } else {
 	exit;
 }
-$cdir="{$SET['dir_competition']}/{$d[ctid]}";
+$cdir="{$SET['dir_competition']}/{$d['ctid']}";
 
 $info=array();
 $info['pid']=$d['pid'];
@@ -45,7 +45,7 @@ if (!$csucc) {
 	echo "0!C";
 	$Cp->s_detail="C";
 } else {
-	for ($P=1;$P<=$d[datacnt];$P++)
+	for ($P=1;$P<=$d['datacnt'];$P++)
 	{
 		$Cp->run($P);
 		$Cp->getresult();

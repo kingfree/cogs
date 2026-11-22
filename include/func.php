@@ -94,34 +94,7 @@ function gettime() {
     return $sec.substr($usec,1);
 }
 
-function array_encode($arr) {
-    $sa=array();
-    $i=0;
-    foreach($arr as $k=>$v) {
-        $sa[$i]=base64_encode($k);
-        $sa[$i+1]=base64_encode($v);
-        $i+=2;
-    }
-    $s=implode("?",$sa);
-    return base64_encode($s);
-}
-
-function array_decode($s) {
-    $arr=array();
-    $s=base64_decode($s);
-    $sa=explode("?",$s);
-    $i=0;
-    $t="";
-    foreach($sa as $k=>$v) {
-        if ($i==0) {
-            $t=base64_decode($v);
-        } else {
-            $arr[$t]=base64_decode($v);
-        }
-        $i=!$i;
-    }
-    return $arr;
-}
+require_once dirname(__FILE__)."/../include/grader-protocol.php";
 
 function pathconvert($cur,$absp) { //当前文件，目标路径
     $cur = str_replace("\\","/",$cur);
@@ -414,28 +387,10 @@ function 背景图片($uid=0) {
 }
 
 /* 过滤函数 */ 
-//整型过滤函数 
-function get_int($number) 
-{ 
-    return intval($number); 
-} 
-//字符串型过滤函数 
-function get_str($string) 
-{ 
-    if (!get_magic_quotes_gpc()) { 
-        return addslashes($string); 
-    } 
-    return $string; 
-}
-function 过滤($strin="") {
-    foreach ($_POST as $post_key=>$post_var) {
-        if (is_numeric($post_var)) { 
-            $post[strtolower($post_key)] = get_int($post_var); 
-        } else if($post_key!=$strin) { 
-            $post[strtolower($post_key)] = get_str($post_var); 
-        } //$strin 不过滤
-        if($post_key!=$strin) $_POST[$post_key] = mysql_real_escape_string($post_var);
-    } 
+function 过滤($skip = "") {
+    foreach ($_POST as $key => $value) {
+        if ($key !== $skip && is_string($value)) $_POST[$key] = DataAccess::escape($value);
+    }
 }
 
 function shortname($longname) {

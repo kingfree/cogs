@@ -1,4 +1,4 @@
-<?
+<?php
 $p=new DataAccess();
 $sql="select * from userinfo where uid={$uid}";
 $p->dosql($sql);

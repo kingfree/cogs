@@ -27,7 +27,7 @@ $st=检测页面($cnt, $_GET['page']);
     <th width="80px">组织者</th>
     <th width="60px">操作</th>
   </tr>
-<?
+<?php
 for ($i=$st;$i<$cnt && $i<$st+$SET['style_pagesize'] ;$i++) {
 		$d=$p->rtnrlt($i);
 ?>
@@ -48,7 +48,7 @@ for ($i=$st;$i<$cnt && $i<$st+$SET['style_pagesize'] ;$i++) {
 				$q->dosql($sql);
 				$e=$q->rtnrlt(0);
 		?>
-			<option value="../problem/problem.php?pid=<?php echo $v ?>">[<?php echo $e[probname] ?>]</option>
+			<option value="../problem/problem.php?pid=<?php echo $v ?>">[<?php echo $e['probname'] ?>]</option>
 <?php		}
 	   }?>
 <option selected="selected">[<?php echo $c ?>个题目]</option>	
@@ -56,13 +56,13 @@ for ($i=$st;$i<$cnt && $i<$st+$SET['style_pagesize'] ;$i++) {
     <td>
         <select name="menu2" onchange="MM_jumpMenu('parent',this,0)" class="InputBox">
 		<?php
-		$sql="select starttime,ctid from comptime where cbid={$d[cbid]} order by starttime asc";
+		$sql="select starttime,ctid from comptime where cbid={$d['cbid']} order by starttime asc";
 		$c=$q->dosql($sql);
 		for ($j=0;$j<$c;$j++)
 		{
 			$e=$q->rtnrlt($j);
 		?>
-			<option value="comptime.php?ctid=<?php echo $e[ctid] ?>"><?php echo date("在 Y-m-d H:i:s 的开始比赛",$e[starttime]) ?></option>
+			<option value="comptime.php?ctid=<?php echo $e['ctid'] ?>"><?php echo date("在 Y-m-d H:i:s 的开始比赛",$e['starttime']) ?></option>
 <?php }?>
 <option selected="selected">[<?php echo $c ?>个场次]</option>
 <option value="editcomptime.php?action=add&cbid=<?php echo $d['cbid'] ?>">[添加新场次]</option>
@@ -70,7 +70,7 @@ for ($i=$st;$i<$cnt && $i<$st+$SET['style_pagesize'] ;$i++) {
 	</td>
 <td><a href='../user/detail.php?uid=<?=$d['ouid']?>' target='_blank'>
 <?=gravatar::showImage($d['email']);?>
-<?if(有此权限("查看用户")) echo $d['realname']; else echo $d['nickname'];?>
+<?php if(有此权限("查看用户")) echo $d['realname']; else echo $d['nickname'];?>
 </a></td>
     <td><a href="editcompbase.php?action=edit&cbid=<?php echo $d['cbid'] ?>">修改比赛</a></td>
   </tr>
@@ -78,7 +78,7 @@ for ($i=$st;$i<$cnt && $i<$st+$SET['style_pagesize'] ;$i++) {
 	}
 ?>
 </table>
-<? 分页($cnt, $_GET['page'], '?settings=comp&'); ?>
+<?php  分页($cnt, $_GET['page'], '?settings=comp&'); ?>
 </div>
 <?php
 	include_once("../include/footer.php");

@@ -11,7 +11,7 @@ $_POST['memo']=htmlspecialchars($_POST['memo']);
 
 $regpage=取路径("user/panel.php");
 
-if ($_POST[action]=="edit") {
+if ($_POST['action']=="edit") {
 if(!preg_match('/([_a-z0-9]{1,24})/', $_POST['usr']))
 异常("用户名长度必须在[1,24]中且只能使用英文字母、数字以及_。", $regpage);
     if($_FILES['file']['tmp_name']) {
@@ -45,16 +45,16 @@ if(!preg_match('/(\S{0,8})/', $_POST['realname']))
         提示("用户设置信息修改成功！", 取路径("user/panel.php"));
     } else
         异常("用户 {$_POST['usr']} 已存在！",取路径("user/panel.php"));
-} else if ($_POST[action]=="editpwd") {
+} else if ($_POST['action']=="editpwd") {
 if(!preg_match('/(.{0,24})/', $_POST['npwd1']))
 异常("密码长度必须在[0,24]中。", $regpage);
-    if ($_POST[npwd1]==$_POST[npwd2]) {
+    if ($_POST['npwd1']==$_POST['npwd2']) {
         $p=new DataAccess();
-        $sql="select pwdhash,nickname from userinfo where uid={$_GET[uid]}";
+        $sql="select pwdhash,nickname from userinfo where uid={$_GET['uid']}";
         $p->dosql($sql);
         $d=$p->rtnrlt(0);
-        if ($d[pwdhash]==encode($_POST[opwd])) {
-            $sql="update userinfo set pwdhash='". encode($_POST[npwd1]) ."' where uid={$_GET[uid]}";
+        if ($d['pwdhash']==encode($_POST['opwd'])) {
+            $sql="update userinfo set pwdhash='". encode($_POST['npwd1']) ."' where uid={$_GET['uid']}";
             $p->dosql($sql);
             提示("用户 $nickname 的密码修改成功！", 取路径("user/panel.php"));
         } else
@@ -62,9 +62,9 @@ if(!preg_match('/(.{0,24})/', $_POST['npwd1']))
     } else {
         异常("两次输入的密码不匹配！", 取路径("user/panel.php"));
     }
-} else if ($_POST[action]=="editpwdans") {
+} else if ($_POST['action']=="editpwdans") {
     $p=new DataAccess();
-    $sql="select pwdhash,nickname from userinfo where uid={$_GET[uid]}";
+    $sql="select pwdhash,nickname from userinfo where uid={$_GET['uid']}";
     $p->dosql($sql);
     $d=$p->rtnrlt(0);
     $uid=(int)$_GET['uid'];

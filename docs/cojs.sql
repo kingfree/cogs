@@ -405,3 +405,10 @@ INSERT INTO `userinfo` (`uid`, `usr`, `pwdhash`, `pwdtipques`, `pwdtipanshash`, 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+CREATE TABLE IF NOT EXISTS login_token (
+    digest CHAR(64) CHARACTER SET ascii PRIMARY KEY,
+    uid INT NOT NULL,
+    expires_at BIGINT NOT NULL,
+    password_version CHAR(64) CHARACTER SET ascii NOT NULL,
+    INDEX (uid), INDEX (expires_at)
+) ENGINE=InnoDB;

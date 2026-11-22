@@ -28,7 +28,7 @@ $st=检测页面($cnt, $_GET['page']);
 <th width=80px>版本</th>
 <th width=180px>时间</th>
 </tr></thead>
-<?
+<?php
 for ($i=$st;$i<$cnt && $i<$st+$SET['style_pagesize'] ;$i++) {
 	$d=$p->rtnrlt($i);
 ?>
@@ -40,7 +40,7 @@ for ($i=$st;$i<$cnt && $i<$st+$SET['style_pagesize'] ;$i++) {
 <td><?=$d['version']?></td>
 <td><?=$d['ltime']?></td>
 </tr>
-<? } ?>
+<?php  } ?>
 </table>
 </div>
 <?php

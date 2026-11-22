@@ -40,10 +40,10 @@ if(!$_GET['page']) {
     $_GET['page']=1;
     $st=0;
 } else {
-    if ($_GET[page]<1 || $_GET[page]>$totalpage)
+    if ($_GET['page']<1 || $_GET['page']>$totalpage)
         异常("页面错误！");
     else
-        $st=(($_GET[page]-1)*$SET['style_pagesize']);
+        $st=(($_GET['page']-1)*$SET['style_pagesize']);
 }
 ?>
 <table id="submitlist" class='table table-striped table-condensed table-bordered fiexd'>
@@ -86,7 +86,7 @@ echo "</a>"; ?></td>
 }
 ?>
 </table>
-<?
+<?php
 if($_GET['show'] || $_GET['pid'])
     分页($cnt, $_GET['page'], '?pid='.$_GET['pid'].'&uid='.$_GET['uid'].'&display='.$_GET['display'].'&show='.$_GET['show'].'&');
 ?>

@@ -19,8 +19,8 @@ $sname=$d['name'];
 <div class='control-group'>
 <div class='controls'>
 <ul class='nav nav-tabs' id='view'>
-<li class='<?if($_GET['method']=='html') echo "active";?>'><a href="editkey.php?sname=<?php echo $sname ?>&method=html">HTML视图</a></li>
-<li class='<?if($_GET['method']=='text') echo "active";?>'><a href="editkey.php?sname=<?php echo $sname ?>&method=text">文本视图</a></li>
+<li class='<?php if($_GET['method']=='html') echo "active";?>'><a href="editkey.php?sname=<?php echo $sname ?>&method=html">HTML视图</a></li>
+<li class='<?php if($_GET['method']=='text') echo "active";?>'><a href="editkey.php?sname=<?php echo $sname ?>&method=text">文本视图</a></li>
 </ul>
 </div>
 </div>

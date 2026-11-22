@@ -7,19 +7,19 @@
 <body>
 <h3>评测机状态</h3>
 <ul>
-<li>评测机：<?echo $cfg['Name'] ?></li>
-<li>版本：<?echo $cfg['Ver'] ?></li>
-<li>当前状态：<?echo read();?></li>
-<li>评测次数：<?echo read_cnt();?></li>
-<li>正在运行：<?echo getrunning();?></li>
+<li>评测机：<?php echo $cfg['Name'] ?></li>
+<li>版本：<?php echo $cfg['Ver'] ?></li>
+<li>当前状态：<?php echo read();?></li>
+<li>评测次数：<?php echo read_cnt();?></li>
+<li>正在运行：<?php echo getrunning();?></li>
 </ul>
 <h3>编译选项</h3>
 <pre>fpc {$query['src']} -So -XS -v0 -O1 -o\"{$query['pname']}\"</pre>
 <pre>gcc {$query['src']} -lm -w -O2 -static -o {$query['pname']}</pre>
 <pre>g++ {$query['src']} -lm -w -O2 -static -o {$query['pname']}</pre>
 <h3>编译器版本</h3>
-<pre><?passthru("gcc --version")?></pre>
-<pre><?passthru("g++ --version")?></pre>
-<pre><?passthru("fpc -i")?></pre>
+<pre><?php passthru("gcc --version")?></pre>
+<pre><?php passthru("g++ --version")?></pre>
+<pre><?php passthru("fpc -i")?></pre>
 </body>
 </html>

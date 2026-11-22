@@ -16,28 +16,28 @@ $q=new DataAccess();
 ?>
 <div class='row-fluid'>
 <form method="get" action="" class='form-search'>
-<? if($_SESSION['ID']) { ?>
-<? if($pid) { ?>
+<?php  if($_SESSION['ID']) { ?>
+<?php  if($pid) { ?>
 <a class='btn btn-danger' href="comment.php?pid=<?=$pid?>">发表评论</a>
-<? } else if($aid) { ?>
+<?php  } else if($aid) { ?>
 <a class='btn btn-danger' href="comment.php?aid=<?=$aid?>">发表评论</a>
-<? } else if($ctid) { ?>
+<?php  } else if($ctid) { ?>
 <a class='btn btn-danger' href="comment.php?ctid=<?=$ctid?>">发表评论</a>
-<? } ?>
-<? } ?>
-<? if($pid) { ?>
+<?php  } ?>
+<?php  } ?>
+<?php  if($pid) { ?>
 <a class='btn' href="problem.php?pid=<?=$pid?>">返回原题</a>
-<? } else if($aid) { ?>
+<?php  } else if($aid) { ?>
 <a class='btn' href="../page/page.php?aid=<?=$aid?>">返回原页</a>
-<? } else if($ctid) { ?>
+<?php  } else if($ctid) { ?>
 <a class='btn' href="../contest/problem.php?ctid=<?=$ctid?>">返回比赛</a>
-<? } ?>
+<?php  } ?>
 <div class='input-append pull-right'>
 <input name="key" type="text" class='search-query input-medium' value='<?=$_GET['key']?>' placeholder='搜索评论'/>
 <button type='submit' class='btn'><i class='icon icon-search'></i></button>
-<? if(!($_GET['show'] || $pid || $aid || $uid)) { ?>
+<?php  if(!($_GET['show'] || $pid || $aid || $uid)) { ?>
 <a href="comments.php?show=yes" class='btn btn-inverse'>全部评论</a>
-<? } ?>
+<?php  } ?>
 </div>
 <span>
 题目PID
@@ -53,7 +53,7 @@ if($pid) $sql.=" and problem.pid=$pid";
 if ($_GET['key']!="")
 $sql.=" and (problem.probname like '%{$_GET[key]}%' or problem.pid ='{$_GET[key]}' or problem.filename like '%{$_GET[key]}%' or comments.detail like '%{$_GET[key]}%' or userinfo.nickname like '%{$_GET[key]}%' or userinfo.usr like '%{$_GET[key]}%' or userinfo.realname like '%{$_GET[key]}%')";
 if($pid) $sql.=" order by comments.cid asc"; else $sql.=" order by comments.stime desc";*/
-$key=mysql_real_escape_string($_GET['key']);
+$key=DataAccess::escape($_GET['key']);
 $sql="SELECT comments.*, userinfo.uid, userinfo.nickname, userinfo.realname, userinfo.email, userinfo.accepted, userinfo.submited, userinfo.grade, userinfo.memo FROM comments, userinfo WHERE userinfo.uid = comments.uid ";
 if($key) $sql.="AND (comments.detail LIKE '%$key%' OR userinfo.nickname LIKE '%$key%' OR userinfo.usr LIKE '%$key%' OR userinfo.realname LIKE '%$key%') ";
 if($pid) {
@@ -76,7 +76,7 @@ $cnt=$p->dosql($sql);
 $st=检测页面($cnt, $_GET['page']);
 ?>
 <table class='table table-striped table-condensed table-bordered fiexd'>
-<?
+<?php
 if($cnt) {
 	for ($i=$st;$i<$cnt && $i<$st+$SET['style_pagesize'];$i++) {
 		$d=$p->rtnrlt($i);
@@ -92,11 +92,11 @@ if($cnt) {
 <?=gravatar::showImage($d['email'], 64);?>
 </a>
 <div style="margin-left:72px;">
-<? if($_SESSION['ID']) { ?>
+<?php  if($_SESSION['ID']) { ?>
 <a href="<?=路径("mail/index.php")?>?toid=<?=$d['uid']?>" title="给<?=$d['nickname']?>发送信件" class="pull-right"><span class="icon-envelope"></span></a>
-<? } ?>
+<?php  } ?>
 <a href="?uid=<?=$d['uid']?>"
-<?if(有此权限("查看用户")) echo "title='".$d['realname']."'";?>>
+<?php if(有此权限("查看用户")) echo "title='".$d['realname']."'";?>>
 <b><?php echo $d['nickname'];?></b>
 </a>
 <br />
@@ -114,13 +114,13 @@ if($cnt) {
 <br />
 <div style="vertical-align:text-bottom;">
 <span class="pull-left">
-<? if($d['pid']) { ?>
+<?php  if($d['pid']) { ?>
 <a href='problem.php?pid=<?=$d['pid']?>' target='_blank'><span class='icon-share'></span></a>
 <a href="?pid=<?=$d['pid']?>">题目 <?=$d['pid']?></a>
-<? } else if($d['aid']) { ?>
+<?php  } else if($d['aid']) { ?>
 <a href='../page/page.php?aid=<?=$d['aid']?>' target='_blank'><span class='icon-share'></span></a>
 <a href="?aid=<?=$d['aid']?>">页面 <?=$d['aid']?></a>
-<? } ?>
+<?php  } ?>
 </span><?php if ($d['showcode']) {
 	$sql="select sid,result from submit where uid='{$d['uid']}' and pid='{$d['pid']}' order by subtime desc";
 	$q->dosql($sql);
@@ -130,14 +130,14 @@ if($cnt) {
 <?php } ?>
 <div class="pull-right">
 <span class="muted"><?php echo date('Y-m-d H:i:s',$d['stime']);?></span>
-<? if($_GET['show'] || $pid || $aid || $uid) { ?>
+<?php  if($_GET['show'] || $pid || $aid || $uid) { ?>
 <span><?=($i+1)?>楼</span>
-<? } ?>
-<? if($_SESSION['ID'] && $_SESSION['ID'] == $d['uid']) { ?>
+<?php  } ?>
+<?php  if($_SESSION['ID'] && $_SESSION['ID'] == $d['uid']) { ?>
 <a href='comment.php?cid=<?=$d['cid']?>' class='btn btn-mini btn-warning'>修改</a>
-<? } else if($_SESSION['ID']) { ?>
+<?php  } else if($_SESSION['ID']) { ?>
 <a class='btn btn-mini btn-danger' href="comment.php?ccid=<?=$d['cid']?>&pid=<?=$d['pid']?>&aid=<?=$d['aid']?>&user=<?=$d['nickname']?>">回复</a>
-<? } ?>
+<?php  } ?>
 </div>
 </div>
 </td>
@@ -149,14 +149,14 @@ if($cnt) {
 	echo "<div class='alert'>还没有人发表评论！</div>";
 }
 ?>
-<? if(!($_GET['show'] || $pid || $aid || $uid)) { ?>
+<?php  if(!($_GET['show'] || $pid || $aid || $uid)) { ?>
 <tr class="warning">
 <td colspan=6><center>
 <a href="comments.php?show=yes">全部评论</a>
 </center></td></tr>
-<? } ?>
+<?php  } ?>
 </table>
-<?
+<?php
 if($cnt > $limitt && ($_GET['show'] || $pid || $aid || $uid))
     分页($cnt, $_GET['page'], '?show='.$_GET['show'].'?key='.$_GET['key'].'&');
 ?>

@@ -21,21 +21,21 @@ else {$("#msg2").html("<b><span style='color:red;'>NO</span></b>");}
 }
 </script>
 <?php
-if ($_GET[action]=='del') {
-    echo "确认要删除该题目及与该题目相关所有内容吗(无法恢复)？<p><a href='doeditpage.php?action=del&aid={$_GET[aid]}'>确认删除</a>";
+if ($_GET['action']=='del') {
+    echo "确认要删除该题目及与该题目相关所有内容吗(无法恢复)？<p><a href='doeditpage.php?action=del&aid={$_GET['aid']}'>确认删除</a>";
     exit;
 }
 $p=new DataAccess();
 $q=new DataAccess();
-if ($_GET[action]=='edit') {
-    $sql="select * from page where aid={$_GET[aid]}";
+if ($_GET['action']=='edit') {
+    $sql="select * from page where aid={$_GET['aid']}";
     $cnt=$p->dosql($sql);
 }
 if ($cnt) {
     $d=$p->rtnrlt(0);
     $dtext=$d['text'];
 } else {
-    if ($_GET[action]=='add') {
+    if ($_GET['action']=='add') {
         $d=array();
         $d['force']=0;
         $d['group']=0;

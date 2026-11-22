@@ -18,7 +18,7 @@
 </p>
 </div>
 </div>
-<? /*
+<?php  /*
 <!--[if IE 6]>
 <script type="text/javascript" src="/Bootstrap-IE6/ie6.min.js"></script>
 <![endif]-->

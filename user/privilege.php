@@ -15,7 +15,7 @@ $way=$_POST['way'] ? $_POST['way'] : $_GET['way'];
     <input type=hidden name=way value="ins" />
 	用户权限：<select name="pri">
 <?php
-while(list($key, $val)=each($pri)) {
+foreach ($pri as $key => $val) {
 	if (isset($priv) && ($priv == $val)) {
 		echo '<option value="'.$val.'" selected>'.$key.'</option>';
 	} else {
@@ -26,7 +26,7 @@ while(list($key, $val)=each($pri)) {
 <input type='hidden' name='do' value='do' />
 <button type=submit class='btn btn-primary' >添加权限</button>
 </form>
-<?
+<?php
 if($way=='ins' && $uid) {
     $sql="select def from `privilege` where uid=$uid and pri=$priv limit 1";
     $cnt=$p->dosql($sql);
@@ -48,18 +48,18 @@ if($way=='del' && $uid) {
 	
 	$cnt=$p->dosql($sql);
 	$totalpage=(int)(($cnt-1)/$SET['style_pagesize'])+1;
-	if (!isset($_GET[page])) 
+	if (!isset($_GET['page'])) 
 	{
-		$_GET[page]=1;
+		$_GET['page']=1;
 		$st=0;
 	} else {
-		if ($_GET[page]<1 || $_GET[page]>$totalpage)
+		if ($_GET['page']<1 || $_GET['page']>$totalpage)
 		{
 			echo "页错误！";
 			$err=1;
 		}
 		else
-		$st=(($_GET[page]-1)*$SET['style_pagesize']);
+		$st=(($_GET['page']-1)*$SET['style_pagesize']);
 	}
 ?>
 <table class='table table-striped table-condensed table-bordered fiexd'>
@@ -69,7 +69,7 @@ if($way=='del' && $uid) {
     <th>可用</th>
     <th>操作</th>
   </tr>
-<?	if (!$err)
+<?php 	if (!$err)
 	for ($i=$st;$i<$cnt && $i<$st+$SET['style_pagesize'] ;$i++)
 	{
 		$d=$p->rtnrlt($i);
@@ -86,7 +86,7 @@ if($way=='del' && $uid) {
 	}
 ?>
 </table>
-<?
+<?php
 分页($cnt, $_GET['page']);
 ?>
 </div>

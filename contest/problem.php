@@ -47,11 +47,11 @@ if ($cnt) {
             $pb=1;
     }
     if (!有此权限('查看比赛')) {
-        if (time()<$e[starttime])
+        if (time()<$e['starttime'])
             i异常("比赛尚未开始！",取路径("contest/index.php"));
-        if ($d[readforce]>$_SESSION[readforce])
+        if ($d['readforce']>$_SESSION['readforce'])
             i异常("你没有该场比赛的参与权限！",取路径("contest/index.php"));
-        if($_SESSION['ID'] != $_GET['uid'] && time()<$e[endtime])
+        if($_SESSION['ID'] != $_GET['uid'] && time()<$e['endtime'])
             $uid = $_SESSION['ID'];
     }
 } else i异常("未查询到记录！",取路径("contest/index.php"));
@@ -65,24 +65,24 @@ $r=new DataAccess();
 <table class='table table-striped table-condensed table-bordered fiexd'>
 <tr>
 <th style="width: 5em;">比赛名称</th>
-<td><b><?php echo $e[cname] ?></b></td>
+<td><b><?php echo $e['cname'] ?></b></td>
 </tr>
 <tr>
 <th>比赛状态</th>
 <td><?php
-if (time()>$e[endtime]) echo "<span class='did'>已结束</span>"; else
-if (time()<$e[endtime] && time()>$e[starttime]) echo "<a href='contest/problem.php?ctid={$e[ctid]}'><span class='doing'>正在进行...</span></a>"; else
+if (time()>$e['endtime']) echo "<span class='did'>已结束</span>"; else
+if (time()<$e['endtime'] && time()>$e['starttime']) echo "<a href='contest/problem.php?ctid={$e['ctid']}'><span class='doing'>正在进行...</span></a>"; else
 echo "<span class='todo'>还未开始</span>"; 
 if(有此权限('查看比赛') || time()>$e['endtime']) echo "<a href='report.php?ctid={$ctid}' target='_blank' class='pull-right'>比赛成绩</a>";
 ?></td>
 </tr>
 <tr>
 <th>开始时间</th>
-<td><?php echo date('Y-m-d H:i:s', $e[starttime]) ?></td>
+<td><?php echo date('Y-m-d H:i:s', $e['starttime']) ?></td>
 </tr>
 <tr>
 <th>结束时间</th>
-<td><?php echo date('Y-m-d H:i:s', $e[endtime]) ?></td>
+<td><?php echo date('Y-m-d H:i:s', $e['endtime']) ?></td>
 </tr>
 <tr>
 <th>开放分组</th>
@@ -90,13 +90,13 @@ if(有此权限('查看比赛') || time()>$e['endtime']) echo "<a href='report.p
 </tr>
 <tr>
 <th>注释介绍</th>
-<td class="wrap"><?php echo BBCode($e[intro]) ?></td>
+<td class="wrap"><?php echo BBCode($e['intro']) ?></td>
 </tr>
 </table>
 <table id="probinfo" class='table table-striped table-condensed table-bordered fiexd'>
 <tr><th style="width: 5em;">题目名称</th>
 <td><b><?php echo shortname($d['probname']); ?></b>
-<? if(time() > $e['endtime'] || 有此权限('查看比赛')) { ?><a href="../problem/problem.php?pid=<?=$pid?>" target="_blank" title="跳转到题目 <?=$d['probname']?>"><i class='icon-share'></i></a><? } ?>
+<?php  if(time() > $e['endtime'] || 有此权限('查看比赛')) { ?><a href="../problem/problem.php?pid=<?=$pid?>" target="_blank" title="跳转到题目 <?=$d['probname']?>"><i class='icon-share'></i></a><?php  } ?>
 </td></tr>
 <tr><th>输入输出</th>
 <td><code><?php echo $d['filename']; ?>.in/out</code></td></tr>
@@ -108,11 +108,11 @@ if(有此权限('查看比赛') || time()>$e['endtime']) echo "<a href='report.p
 <td><span class='badge badge-success'><?=$d['datacnt']?></span>
 <span class='pull-right'><?=$STR['plugin'][$d['plugin']]?></span>
 </td></tr>
-<? if(有此权限('查看比赛') || ($_SESSION['ID'] && time() < $e['endtime'] && time() > $e['starttime'])) { ?>
+<?php  if(有此权限('查看比赛') || ($_SESSION['ID'] && time() < $e['endtime'] && time() > $e['starttime'])) { ?>
 <tr><form action="submit.php" method="post" enctype="multipart/form-data" class='form-inline'>
 <td colspan=2>
 <input type="file" name="file" title='选择程序源文件' /><br />
-<? if($d['plugin'] == 3 || $d['plugin'] == 4) { ?>
+<?php  if($d['plugin'] == 3 || $d['plugin'] == 4) { ?>
 <input type='hidden' name='lang' value='zip' />
 请提交一个 zip 压缩包，里面<b>直接</b>有 <?=$d['datacnt']?> 个 <?=$d['filename']?>#.out 文件<br />
 <a href="../problem/downinput.php?file=<?=$d['filename']?>&data=<?=$d['datacnt']?>" class="btn btn-success btn-mini pull-left">下载测试数据</a>
@@ -120,16 +120,16 @@ if(有此权限('查看比赛') || time()>$e['endtime']) echo "<a href='report.p
 <label class='radio inline'><input type='radio' name='lang' value='pas' />Pascal</label>
 <label class='radio inline'><input type='radio' name='lang' value='c' />C</label>
 <label class='radio inline'><input type='radio' name='lang' value='cpp' checked='checked'/>C++</label>
-<? } ?>
+<?php  } ?>
 <button type='submit' class='btn btn-primary pull-right' >提交代码</button>
 <input name="pid" type="hidden" value="<?=$d['pid']?>" />
 <input name="filename" type="hidden" value="<?=$d['filename']?>" />
 <input name="ctid" type="hidden" value="<?=$_GET['ctid']?>" />
 <input name="endtime" type="hidden" value="<?=$e['endtime']?>" />
 </td></form></tr>
-<? } ?>
+<?php  } ?>
 </table>
-<? if (time()>$e['endtime']) { ?>
+<?php  if (time()>$e['endtime']) { ?>
 <table class='table table-striped table-condensed table-bordered fiexd'>
 <tr>
 <th>用户</th>
@@ -138,7 +138,7 @@ if(有此权限('查看比赛') || time()>$e['endtime']) echo "<a href='report.p
 <th>内存</th>
 <th>得分</th>
 </tr>
-<?
+<?php
 $sql="select * from compscore,userinfo where userinfo.uid=compscore.uid and compscore.pid={$pid} and compscore.ctid={$ctid} order by compscore.score desc, compscore.runtime asc, compscore.memory asc";
 $cnt=$r->dosql($sql);
 for ($i=0;$i<$cnt;$i++) {
@@ -154,12 +154,12 @@ for ($i=0;$i<$cnt;$i++) {
 <td><?php printf("%.2f",$f['memory']/1024)?></td>
 <td><span class="<?=$f['score']>=100?'ok':'no'?>"><?=$f['score'] ?></span></td>
 </tr>
-    <?
+    <?php
 }
 ?>
 </table>
-<? } else { ?>
-<?
+<?php  } else { ?>
+<?php
 $sql="select * from compscore,userinfo where compscore.uid='{$uid}' and userinfo.uid='{$uid}' and compscore.pid={$pid} and compscore.ctid={$ctid}";
 $cnt=$r->dosql($sql);
 if($cnt) {
@@ -175,16 +175,16 @@ if($cnt) {
 <tr><th>评测结果</th>
 <td class="wrap"><?=评测结果($f['result'], 60); ?></td></tr>
 <tr><th>提交代码</th>
-<td><a href="code.php?csid=<?=$f[csid] ?>" target="_blank"><?=$STR[lang][$f[lang]] ?></a></td></tr>
+<td><a href="code.php?csid=<?=$f['csid'] ?>" target="_blank"><?=$STR['lang'][$f['lang']] ?></a></td></tr>
 </table>
-<? } ?>
-<? } ?>
+<?php  } ?>
+<?php  } ?>
 </div>
 <div id='rightbar' class='span8'>
 <div class='page'>
 <div class='tabbable'>
 <ul class='nav nav-tabs'>
-<?
+<?php
     $contains=$e['contains'];
     $pbs=explode(":",$contains);
     $ppid = 1;
@@ -199,9 +199,9 @@ if($cnt) {
 ?>
 <li class="<?=($v == $pid)?"active":""?>">
 <a href="problem.php?pid=<?=$v?>&ctid=<?=$ctid?>&uid=<?=$uid?>">
-<? echo $ppid . ". "; $ppid++; echo shortname($pname); ?></a>
+<?php  echo $ppid . ". "; $ppid++; echo shortname($pname); ?></a>
 </li>
-<?  } ?>
+<?php   } ?>
 </ul>
 </div>
 <div class="problem tou">
@@ -223,11 +223,11 @@ if($cnt) {
 <?=$d['detail']?>
 </dl>
 
-<? if(有此权限('查看比赛') || ($_SESSION['ID'] && time() < $e['endtime'] && time() > $e['starttime'])) { ?>
+<?php  if(有此权限('查看比赛') || ($_SESSION['ID'] && time() < $e['endtime'] && time() > $e['starttime'])) { ?>
 <form action="submit.php" method="post" enctype="multipart/form-data" class='form-inline' id="tijiao">
 <td colspan=2>
 <input id="source" type="file" name="file" title='选择程序源文件' />
-<? if($d['plugin'] == 3 || $d['plugin'] == 4) { ?>
+<?php  if($d['plugin'] == 3 || $d['plugin'] == 4) { ?>
 <input type='hidden' name='lang' value='zip' />
 请提交一个 zip 压缩包，里面<b>直接</b>有 <?=$d['datacnt']?> 个 <?=$d['filename']?>#.out 文件
 <a href="../problem/downinput.php?file=<?=$d['filename']?>&data=<?=$d['datacnt']?>" class="btn btn-success btn-mini">下载测试数据</a>
@@ -235,14 +235,14 @@ if($cnt) {
 <label class='radio inline'><input type='radio' name='lang' value='pas' id='pas'/>Pascal</label>
 <label class='radio inline'><input type='radio' name='lang' value='c' id='c'/>C</label>
 <label class='radio inline'><input type='radio' name='lang' value='cpp' id='cpp' checked='checked'/>C++</label>
-<? } ?>
+<?php  } ?>
 <button type='submit' class='btn btn-primary' >提交代码</button>
 <input name="pid" type="hidden" value="<?=$d['pid']?>" />
 <input name="filename" type="hidden" value="<?=$d['filename']?>" />
 <input name="ctid" type="hidden" value="<?=$_GET['ctid']?>" />
 <input name="endtime" type="hidden" value="<?=$e['endtime']?>" />
 </form>
-<? } ?>
+<?php  } ?>
 
 </div>
 </div>

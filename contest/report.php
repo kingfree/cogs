@@ -4,7 +4,7 @@ gethead(1,"","比赛成绩");
 
 $p=new DataAccess();
 $r=new DataAccess();
-$sql="select comptime.starttime,comptime.endtime,compbase.contains,comptime.showscore from compbase,comptime where comptime.cbid=compbase.cbid and comptime.ctid={$_GET[ctid]}";
+$sql="select comptime.starttime,comptime.endtime,compbase.contains,comptime.showscore from compbase,comptime where comptime.cbid=compbase.cbid and comptime.ctid={$_GET['ctid']}";
 $cnt=$p->dosql($sql);
 if (!$cnt)
     异常("未查询到记录！");
@@ -34,8 +34,8 @@ $pbs=explode(":",$d['contains']);
         $d=$p->rtnrlt(0);
         $cnt_prob++;
 ?>
-    <th><a href="problem.php?pid=<?=$v?>&ctid=<?=$_GET[ctid]?>" target="_blank"><?=shortname($d['probname'])?></a>
-    <? if($end || 有此权限('查看比赛')) { ?><a href="../problem/problem.php?pid=<?=$v?>" target="_blank" title="跳转到题目 <?=$d['probname']?>"><i class='icon-share'></i></a><? } ?>
+    <th><a href="problem.php?pid=<?=$v?>&ctid=<?=$_GET['ctid']?>" target="_blank"><?=shortname($d['probname'])?></a>
+    <?php  if($end || 有此权限('查看比赛')) { ?><a href="../problem/problem.php?pid=<?=$v?>" target="_blank" title="跳转到题目 <?=$d['probname']?>"><i class='icon-share'></i></a><?php  } ?>
     </th>
     <th onclick="sortTable('contest_report', <?=$cnt_prob*2+1?>, 'int')" style="min-width: 5ex; cursor: pointer; color:navy;">得分</th>
 <?php
@@ -44,16 +44,16 @@ $pbs=explode(":",$d['contains']);
     <th onclick="sortTable('contest_report', <?=$cnt_prob*2+2?>, 'int')" style="min-width: 6ex; cursor: pointer; color:navy;">总分</th>
   </tr>
 </thead>
-<?php 
+<?php
     $sql="select userinfo.uid,userinfo.nickname,userinfo.realname,userinfo.email from userinfo,compscore where compscore.uid=userinfo.uid and compscore.ctid=$_GET[ctid] order by uid";
     $cnt=$p->dosql($sql);
     $luid=0;
     $rowcnt=0;
     for ($i=0;$i<$cnt;$i++) {
         $d=$p->rtnrlt($i);
-        if ($d[uid]==$luid) continue;
+        if ($d['uid']==$luid) continue;
         $rowcnt++;
-        $luid=$d[uid];
+        $luid=$d['uid'];
 ?>
   <tr>
     <td id="rank<?=$rowcnt?>"></td>
@@ -62,16 +62,16 @@ $pbs=explode(":",$d['contains']);
 <?=有此权限('查看用户') ? $d['realname'] : $d['nickname'] ?>
 </a></td>
 <?php
-        $sql="select pid,result,score,csid,lang from compscore where uid='{$d['uid']}' and ctid={$_GET[ctid]} order by pid asc";
+        $sql="select pid,result,score,csid,lang from compscore where uid='{$d['uid']}' and ctid={$_GET['ctid']} order by pid asc";
         $cnt_sub=$q->dosql($sql);
         $sum=0;
         $rank=$mbarray;
         for ($j=0;$j<$cnt_sub;$j++) {
             $e=$q->rtnrlt($j);
-            $sum+=$e[score];
-            $rank[ $e[pid] ][csid]=$e[csid];
-            $rank[ $e[pid] ][score]=$e[score];
-            $rank[ $e[pid] ][result]=$e[result];
+            $sum+=$e['score'];
+            $rank[ $e['pid'] ][csid]=$e['csid'];
+            $rank[ $e['pid'] ][score]=$e['score'];
+            $rank[ $e['pid'] ][result]=$e['result'];
         }
         foreach($pbs as $k=>$v) {
 ?>
@@ -88,13 +88,13 @@ $pbs=explode(":",$d['contains']);
         if((有此权限('查看比赛') || $end))
             echo "</a>";
     } ?></td>
-    <td id="score<?=$v ?>_<?=$rowcnt ?>" ><?if($end || (有此权限('查看比赛'))) echo $rank[$v][score]; ?></td>
+    <td id="score<?=$v ?>_<?=$rowcnt ?>" ><?php if($end || (有此权限('查看比赛'))) echo $rank[$v][score]; ?></td>
 <?php
         }
 ?>
-    <td id="sum<?=$rowcnt ?>" ><?if($end || (有此权限('查看比赛'))) echo $sum; ?></td>
+    <td id="sum<?=$rowcnt ?>" ><?php if($end || (有此权限('查看比赛'))) echo $sum; ?></td>
   </tr>
-<?php 
+<?php
     }
 ?>
 </table>

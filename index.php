@@ -9,7 +9,7 @@ $sizee=$SET['style_ranksize'] - 7;
 <div class='span9'>
 <div class='row-fluid'>
 <div class='span4' id="index_page">
-<?php 
+<?php
 $now = time();
 $noww = time() + 60*60*2;
 $cnt = $p->dosql("select comptime.*,compbase.*,userinfo.nickname,groups.* from comptime,compbase,userinfo,groups where comptime.cbid=compbase.cbid and userinfo.uid=compbase.ouid and comptime.group=groups.gid and endtime > $now and starttime < $noww order by starttime asc");
@@ -20,23 +20,23 @@ if($cnt) {
 <table class='table table-striped table-condensed table-bordered fiexd'>
 <tr>
 <th style="min-width: 3em;">比赛</th>
-<td><b><?php echo $d[cname] ?></b></td>
+<td><b><?php echo $d['cname'] ?></b></td>
 </tr>
 <tr>
 <th>状态</th>
 <td><?php
-if (time()>$d[endtime]) echo "<span class='did'>已结束</span>"; else
-if (time()<$d[endtime] && time()>$d[starttime]) echo "<a href='contest/problem.php?ctid={$d[ctid]}'><span class='doing'>正在进行...</span></a>"; else
+if (time()>$d['endtime']) echo "<span class='did'>已结束</span>"; else
+if (time()<$d['endtime'] && time()>$d['starttime']) echo "<a href='contest/problem.php?ctid={$d['ctid']}'><span class='doing'>正在进行...</span></a>"; else
 echo "<span class='todo'>还未开始</span>"; 
 ?></td>
 </tr>
 <tr>
 <th>开始</th>
-<td><?php echo date('Y-m-d H:i:s', $d[starttime]) ?></td>
+<td><?php echo date('Y-m-d H:i:s', $d['starttime']) ?></td>
 </tr>
 <tr>
 <th>结束</th>
-<td><?php echo date('Y-m-d H:i:s', $d[endtime]) ?></td>
+<td><?php echo date('Y-m-d H:i:s', $d['endtime']) ?></td>
 </tr>
 <tr>
 <th>分组</th>
@@ -44,14 +44,14 @@ echo "<span class='todo'>还未开始</span>";
 </tr>
 <tr>
 <th>介绍</th>
-<td><?php echo BBCode($d[intro]) ?></td>
+<td><?php echo BBCode($d['intro']) ?></td>
 </tr>
 </table>
 <?php } ?>
 <br />
-<? } else { ?>
+<?php  } else { ?>
 <table class='table table-striped table-condensed table-bordered fiexd'>
-<?php 
+<?php
 $cnt=$p->dosql("select * from page order by etime desc limit 6");
 for($i=0;$i<$cnt;$i++) {
 $d=$p->rtnrlt($i);
@@ -59,7 +59,7 @@ $d=$p->rtnrlt($i);
 <tr><td><a href="page/page.php?aid=<?=$d['aid']?>" title="<?=$d['title']?>"><?=shortname($d['title'])?></a></td></tr>
 <?php } ?>
 </table>
-<? } ?>
+<?php  } ?>
 </div>
 <div class='span8' id="index_title">
 <div>
@@ -84,21 +84,21 @@ $d=$p->rtnrlt($i);
 </th>
 </thead>
 </tr>
-<?php 
+<?php
 $cnt=$p->dosql("select * from problem where submitable=1 order by addtime desc limit {$SET['index_problem_size']}");
 for($i=0;$i<$cnt;$i++) {
 $d=$p->rtnrlt($i);
 ?>
 <tr>
 <td><?php echo $d['pid']; ?></td>
-<td><? 是否通过($d['pid'], $q); ?>
+<td><?php  是否通过($d['pid'], $q); ?>
 <a href="problem/problem.php?pid=<?php echo $d['pid']; ?>" title="<?=$d['probname']?>"><?php echo shortname($d['probname']); ?></a></td>
 </tr>
 <?php } ?>
 </table>
 </div>
 <div class='span8' id="index_submit">
-<?
+<?php
 $uid=(int)$_SESSION['ID'];
 $hasaa=$SET['index_submit_size'];
 if(有此权限("修改题目") && 有此权限("查看题目")) {
@@ -133,7 +133,7 @@ $hasaa=$SET['index_submit_size'] - $cnt;
 <th style="min-width: 5ex;">得分</th>
 <th style="min-width: 10ex;">提交时间</th>
 </tr></thead>
-<?php 
+<?php
 $cnt=$p->dosql("select submit.sid,submit.pid,submit.uid,submit.result,submit.score,submit.accepted,submit.subtime,problem.probname,userinfo.nickname,userinfo.realname,userinfo.email,userinfo.memo from submit,problem,userinfo where submit.score>={$SET['index_submit_score']} and submit.uid=userinfo.uid and submit.pid=problem.pid order by submit.sid desc limit {$hasaa}");
 for($i=0;$i<$cnt;$i++) {
     $d=$p->rtnrlt($i);
@@ -147,7 +147,7 @@ for($i=0;$i<$cnt;$i++) {
     echo "<a href='problem/problem.php?pid={$d['pid']}' title='{$d['probname']}' target='_blank'>".shortname($d['probname'])."</a>";
 ?></td>
 <td class="wrap"><a href='user/detail.php?uid=<?=$d['uid']?>' title="<?=(sp2n(htmlspecialchars($d['memo'])))?>" target='_blank'><?=gravatar::showImage($d['email']);?></a>
-<?php echo "<a href='submit/?uid={$d[uid]}'>";
+<?php echo "<a href='submit/?uid={$d['uid']}'>";
 if(有此权限("查看用户")) echo $d['realname']; else echo $d['nickname'];
 echo "</a>"; ?></td>
 <td><a href='submit/code.php?id=<?=$d['sid']?>' title="<?=$d['result']?>"><?=评测结果($d['result'], 10, true)?></a></td>
@@ -169,7 +169,7 @@ echo "</a>"; ?></td>
 <th style="width: 5ex;">题目</th>
 </tr>
 </thead>
-<?php 
+<?php
 $cnt=$p->dosql("select * from userinfo order by grade desc limit 0, {$SET['style_ranksize']}");
 for($i=0;$i<$cnt;$i++) {
 $d=$p->rtnrlt($i);

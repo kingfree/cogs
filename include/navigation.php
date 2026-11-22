@@ -1,4 +1,4 @@
-<?
+<?php
 function 链接($path, $text, $icon = "") {
     if($icon) $ttt = "<span class='icon-{$icon}'></span>";
     HTML("<a href=\"".路径($path)."\">{$ttt}{$text}</a>");
@@ -89,7 +89,7 @@ function Navigation($p) {
 <button class='btn btn-primary'>登录</button>
 </form></li>
 <li class='divider'></li>
-<?
+<?php
 列表("user/register.php", "user", "注册");
 列表("user/lost.php", "eye-open", "忘记密码");
 }

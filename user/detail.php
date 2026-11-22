@@ -32,7 +32,7 @@ $q=new DataAccess();
 <a href="../mail" class="btn btn-success" title="信件"><span class='icon-envelope icon-white'></span></a>
 <p style="line-height: 2px;">&nbsp;</p>
 <a href="panel.php" class="btn btn-primary" title="设置"><span class='icon-cog icon-white'></span></a>
-<? } ?></th>
+<?php  } ?></th>
 <td><?=gravatar::showImage($d['email'], 200);?></td>
 </tr>
 <tr>
@@ -71,7 +71,7 @@ $q=new DataAccess();
   <tr>
     <th>用户权限</th>
     <td>
-  <?
+  <?php
     $sql="select privilege.* from privilege where uid={$d['uid']} order by pri asc";
 	$cnt=$q->dosql($sql);
     if(!$cnt) echo array_search(0,$pri) . " ";
@@ -108,7 +108,7 @@ if ($cnt) {
 ?>
     <tr>
     <td><b><?=$d['cname']?></b></td>
-    <td><a href="../contest/problem.php?ctid=<?=$d['ctid']?>" target="_blank"><?echo date("Y-m-d",$d['subtime'])?></a></td>
+    <td><a href="../contest/problem.php?ctid=<?=$d['ctid']?>" target="_blank"><?php echo date("Y-m-d",$d['subtime'])?></a></td>
     </tr>
 <?php
 	}
@@ -122,7 +122,7 @@ if ($cnt) {
 <a href="../submit/index.php?uid=<?=$uid?>" target="_blank">查看全部提交记录</a>
 <?php if(有此权限('查看用户') || $_SESSION['ID']==$uid) { ?>
 <a href="export.php?uid=<?=$uid?>" target="_blank" class='btn pull-right'>导出全部提交记录</a>
-<? } ?>
+<?php  } ?>
 <?php
 $accnt=0;
 $sql="select problem.pid,problem.probname,submit.accepted,submit.lang,submit.sid from submit,problem where submit.uid={$uid} and submit.pid=problem.pid order by problem.pid asc, submit.score desc ";
@@ -142,7 +142,7 @@ for ($i=0;$i<$cnt;$i++) {
 ?>
 <td>
 <a href='../submit/code.php?id=<?=$d['sid']?>' target='_blank'>
-<?=$STR[lng][$d['lang']]?>
+<?=$STR['lng'][$d['lang']]?>
 <i class='icon-<?=($d['accepted']?"ok":"remove")?>'></i>
 </a>
 <a href="../problem/problem.php?pid=<?=$d['pid'] ?>" target="_blank">

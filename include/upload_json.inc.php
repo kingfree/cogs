@@ -1,7 +1,11 @@
 <?php
-require_once 'JSON.php';
+require_once dirname(__FILE__).'/header.php';
+if (!有此权限('上传数据')) {
+    http_response_code(403);
+    exit;
+}
 
-$php_path = '/home/syzx/www/';
+$php_path = dirname(dirname(__FILE__)).'/';
 $php_url = dirname($_SERVER['PHP_SELF']) . '../../../../../';
 
 //文件保存目录路径
@@ -11,14 +15,16 @@ $save_url = $php_url . 'upload/';
 //定义允许上传的文件扩展名
 $ext_arr = array(
 	'image' => array('gif', 'jpg', 'jpeg', 'png', 'bmp'),
-	'flash' => array('swf', 'flv'),
-	'media' => array('swf', 'flv', 'mp3', 'mp4', 'wav', 'wma', 'wmv', 'mid', 'avi', 'mpg', 'asf', 'rm', 'rmvb'),
-	'file' => array('doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx', 'pdf', 'htm', 'html', 'txt', 'zip', '7z', 'rar', 'gz', 'bz2'),
+	'flash' => array(),
+	'media' => array('flv', 'mp3', 'mp4', 'wav', 'wma', 'wmv', 'mid', 'avi', 'mpg', 'asf', 'rm', 'rmvb'),
+	'file' => array('doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx', 'pdf', 'txt', 'zip', '7z', 'rar', 'gz', 'bz2'),
 );
 //最大文件大小
 $max_size = 1000000;
 
-$save_path = realpath($save_path) . '/';
+$save_path = realpath($save_path);
+if ($save_path === false) alert('上传目录不存在。');
+$save_path .= '/';
 
 //PHP上传失败
 if (!empty($_FILES['imgFile']['error'])) {
@@ -118,15 +124,15 @@ if (empty($_FILES) === false) {
 	$file_url = $save_url . $new_file_name;
 	
 	header('Content-type: text/html; charset=UTF-8');
-	$json = new Services_JSON();
-	echo $json->encode(array('error' => 0, 'url' => $file_url));
+	
+	echo json_encode(array('error' => 0, 'url' => $file_url));
 	exit;
 }
 
 function alert($msg) {
 	header('Content-type: text/html; charset=UTF-8');
-	$json = new Services_JSON();
-	echo $json->encode(array('error' => 1, 'message' => $msg));
+	
+	echo json_encode(array('error' => 1, 'message' => $msg));
 	exit;
 }
 ?>

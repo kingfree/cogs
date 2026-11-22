@@ -8,8 +8,8 @@ if(!有此权限("查看比赛") && time() > $_POST['endtime'])
 if($_FILES['file']['size']>1024*100 || $_FILES['file']['size']<=0)
 异常("源代码上传失败。请检查文件大小。",取路径("contest/problem.php?pid={$_POST['pid']}&ctid={$_POST['ctid']}"));
 
-$fname=$_POST[filename];
-switch ($_POST[lang]) {
+$fname=$_POST['filename'];
+switch ($_POST['lang']) {
     case 'pas':
         $fname.=".pas";
         $nlang=0;
@@ -30,17 +30,17 @@ switch ($_POST[lang]) {
 
 chdir($SET['dir_competition']);
 
-if (!file_exists($_POST[ctid])) {
-    mkdir($_POST[ctid]);
-    chmod($_POST[ctid],0775);
+if (!file_exists($_POST['ctid'])) {
+    mkdir($_POST['ctid']);
+    chmod($_POST['ctid'],0775);
 }
-chdir($_POST[ctid]);
+chdir($_POST['ctid']);
 
-if (!file_exists($_SESSION[ID])) {
-    mkdir($_SESSION[ID]);
-    chmod($_SESSION[ID],0775);
+if (!file_exists($_SESSION['ID'])) {
+    mkdir($_SESSION['ID']);
+    chmod($_SESSION['ID'],0775);
 }
-chdir($_SESSION[ID]);
+chdir($_SESSION['ID']);
 
 if(file_exists($fname)) unlink($fname);
 move_uploaded_file($_FILES['file']['tmp_name'],$fname);
@@ -49,17 +49,17 @@ if(!file_exists($fname))
     异常("比赛提交代码文件 $fname 失败！",取路径("contest/problem.php?pid={$_POST['pid']}&ctid={$_POST['ctid']}"));
 
     $p=new DataAccess();
-    $sql="select csid from compscore where uid={$_SESSION[ID]} and pid={$_POST[pid]} and ctid={$_POST[ctid]}";
+    $sql="select csid from compscore where uid={$_SESSION['ID']} and pid={$_POST['pid']} and ctid={$_POST['ctid']}";
     $cnt=$p->dosql($sql);
     if ($cnt) {
-        $sql="update compscore set subtime=".time().",lang={$nlang} where ctid={$_POST[ctid]} and uid={$_SESSION[ID]} and pid={$_POST[pid]}";
+        $sql="update compscore set subtime=".time().",lang={$nlang} where ctid={$_POST['ctid']} and uid={$_SESSION['ID']} and pid={$_POST['pid']}";
         $p->dosql($sql);
     } else {
-        $sql="insert into compscore(ctid,uid,pid,subtime,lang) values({$_POST[ctid]},{$_SESSION[ID]},{$_POST[pid]},".time().",{$nlang})";
+        $sql="insert into compscore(ctid,uid,pid,subtime,lang) values({$_POST['ctid']},{$_SESSION['ID']},{$_POST['pid']},".time().",{$nlang})";
         $p->dosql($sql);
     }
 
-$sql="select csid from compscore where uid={$_SESSION[ID]} and pid={$_POST[pid]} and ctid={$_POST[ctid]}";
+$sql="select csid from compscore where uid={$_SESSION['ID']} and pid={$_POST['pid']} and ctid={$_POST['ctid']}";
 $cnt=$p->dosql($sql);
 if ($cnt) {
     $d=$p->rtnrlt(0);

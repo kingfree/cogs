@@ -8,7 +8,7 @@ $q=new DataAccess();
 <?php if(有此权限('修改分类')) { ?>
 <a href="editcate.php?action=add" class="btn btn-info">添加新分类</a>
 <?php } ?>
-<?
+<?php
     $sql="select * from category order by cname";
     $cnt=$p->dosql($sql);
 ?>
@@ -23,7 +23,7 @@ $q=new DataAccess();
     <th>备注</th>
   </tr>
 </thead>
-<?php 
+<?php
 for ($i=$st;$i<$cnt;$i++) {
     $d=$p->rtnrlt($i);
 ?>

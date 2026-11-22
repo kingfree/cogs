@@ -39,8 +39,8 @@ else {$("#msg2").html("<b><span style='color:red;'>NO</span></b>");}
 </script>
 
 <?php
-if ($_GET[action]=='del') {
-    echo "确认要删除该题目及与该题目相关所有内容吗(无法恢复)？<p><a href='doeditprob.php?action=del&pid={$_GET[pid]}'>确认删除</a>";
+if ($_GET['action']=='del') {
+    echo "确认要删除该题目及与该题目相关所有内容吗(无法恢复)？<p><a href='doeditprob.php?action=del&pid={$_GET['pid']}'>确认删除</a>";
     exit;
 }
 if (!$cnt) {
@@ -74,9 +74,6 @@ if (!$cnt) {
 if($_GET['oj']=='poj' && $_GET['id']>=1000) {
     $d=array();
     $url="http://www.poj.org/problem?id=".$_GET['id']."&lang=zh-CN&change=true";
-    if(get_magic_quotes_gpc()) {
-        $url=stripslashes($url);
-    }
     $baseurl=substr($url,0,strrpos($url,"/")+1);
     $html=file_get_html($url);
     foreach($html->find('img') as $element)
@@ -122,9 +119,6 @@ if($_GET['oj']=='poj' && $_GET['id']>=1000) {
 } else if($_GET['oj']=='soj' && $_GET['id']>=1000) {
     $d=array();
     $url="http://www.soj.me/show_problem.php?pid=".$_GET['id'];
-    if(get_magic_quotes_gpc()) {
-        $url=stripslashes($url);
-    }
     $baseurl=substr($url,0,strrpos($url,"/")+1);
     $html=file_get_html($url);
     foreach($html->find('img') as $element)
@@ -168,9 +162,6 @@ if($_GET['oj']=='poj' && $_GET['id']>=1000) {
 } else if($_GET['oj']=='pojgrids' && $_GET['id']>=1000) {
     $d=array();
     $url="http://poj.grids.cn/practice/".$_GET['id'];
-    if(get_magic_quotes_gpc()) {
-        $url=stripslashes($url);
-    }
     $baseurl=substr($url,0,strrpos($url,"/")+1);
     $html=file_get_html($url);
 
@@ -213,9 +204,6 @@ if($_GET['oj']=='poj' && $_GET['id']>=1000) {
 } else if($_GET['oj']=='lydsy' && $_GET['id']>=1000) {
     $d=array();
     $url="http://www.lydsy.com/JudgeOnline/problem.php?id=".$_GET['id'];
-    if(get_magic_quotes_gpc()) {
-        $url=stripslashes($url);
-    }
     $baseurl=substr($url,0,strrpos($url,"/")+1);
     $html=file_get_html($url);
     foreach($html->find('img') as $element)
@@ -264,9 +252,6 @@ if($_GET['oj']=='poj' && $_GET['id']>=1000) {
     $d=array();
     $url="http://uva.onlinejudge.org/external/".(int)($_GET['id']/100)."/".$_GET['id'].".html";
     echo $url;
-    if(get_magic_quotes_gpc()) {
-        $url=stripslashes($url);
-    }
     $baseurl=substr($url,0,strrpos($url,"/")+1);
     $html=file_get_html($url);
     foreach($html->find('img') as $element)
@@ -317,12 +302,12 @@ if($_GET['oj']=='poj' && $_GET['id']>=1000) {
 <label class='control-label' for='oj'>在线系统</label>
 <div class='controls'>
 <select id='oj' name='oj' class='input-medium'>
-<option value='poj' <?if($_GET['oj']=='poj') echo "selected=selected";?> >POJ</option>
-<option value='soj' <?if($_GET['oj']=='soj') echo "selected=selected";?> >SOJ</option>
-<!--<option value='rqnoj' <?if($_GET['oj']=='rqnoj') echo "selected=selected";?> >RQNOJ</option>-->
-<option value='pojgrids' <?if($_GET['oj']=='pojgrids') echo "selected=selected";?> >POJ 百练</option>
-<option value='lydsy' <?if($_GET['oj']=='lydsy') echo "selected=selected";?> >耒阳大视野</option>
-<!--<option value='uva' <?if($_GET['oj']=='uva') echo "selected=selected";?> >UVa</option>-->
+<option value='poj' <?php if($_GET['oj']=='poj') echo "selected=selected";?> >POJ</option>
+<option value='soj' <?php if($_GET['oj']=='soj') echo "selected=selected";?> >SOJ</option>
+<!--<option value='rqnoj' <?php if($_GET['oj']=='rqnoj') echo "selected=selected";?> >RQNOJ</option>-->
+<option value='pojgrids' <?php if($_GET['oj']=='pojgrids') echo "selected=selected";?> >POJ 百练</option>
+<option value='lydsy' <?php if($_GET['oj']=='lydsy') echo "selected=selected";?> >耒阳大视野</option>
+<!--<option value='uva' <?php if($_GET['oj']=='uva') echo "selected=selected";?> >UVa</option>-->
 </select>
 </div>
 </div>
@@ -369,14 +354,14 @@ $f=$p->rtnrlt($i);
 <li style='width: 120px'>
 <input name="cate[<?=$f['caid']?>]" type="hidden" value="0" />
 <label class='checkbox inline'>
-<input name="cate[<?=$f['caid']?>]" type="checkbox" id="cate[<?=$f[caid]?>]" value="1" <?php if ($hash[$f['caid']]) echo 'checked="checked"';?>/>
+<input name="cate[<?=$f['caid']?>]" type="checkbox" id="cate[<?=$f['caid']?>]" value="1" <?php if ($hash[$f['caid']]) echo 'checked="checked"';?>/>
 <label <?php if ($hash[$f['caid']]) echo 'class="label"';?>><?=$f['cname']?></label>
 </label>
 </li>
-<? } ?>
+<?php  } ?>
 </ul>
 </div>
-<? } ?>
+<?php  } ?>
 <div class='modal-footer'>
 <button data-dismiss='modal' class='btn'>关闭</button>
 </div>
@@ -437,7 +422,7 @@ $f=$p->rtnrlt($i);
 </div>
 </div>
 <div class='control-group'>
-<? if(有此权限("查看题目")) { ?>
+<?php  if(有此权限("查看题目")) { ?>
 <label class='control-label' for='readforce'>阅读权限</label>
 <div class='controls'>
 <input name="readforce" type="number" id="readforce" value="<?=$d['readforce'] ?>" class='span4' />
@@ -445,13 +430,13 @@ $f=$p->rtnrlt($i);
 <input name="submitable" type="checkbox" id="submitable" value="1" <?php if ($d['submitable']) echo 'checked="checked"'; ?> />
 可否提交</label></span>
 </div>
-<? } ?>
+<?php  } ?>
 </div>
 <div class='control-group'>
 <label class='control-label' for='plugin'>评测方式</label>
 <div class='controls'>
 <select name="plugin" id="plugin">
-<? for($i=-1; $i<5; $i++) {
+<?php  for($i=-1; $i<5; $i++) {
     echo "<option value='$i' ";
     if($d['plugin']==$i) echo "selected='selected'";
     echo " >{$STR['plugin'][$i]}</option>";

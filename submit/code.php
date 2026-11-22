@@ -17,8 +17,6 @@ if($cnt) {
     if (is_resource($fp))
         $code=rfile($fp);
     fclose($fp);
-    if(get_magic_quotes_gpc())
-        $code=stripslashes($code);
     $code=mb_convert_encoding($code, "utf-8", "gbk");
 } else 异常("提交记录不存在");
 gethead(1,"","{$d['probname']} - {$d['nickname']} - {$sid}", $d['uid']);
@@ -40,7 +38,7 @@ $q=new DataAccess();
     <td><?php echo $d['score'] ?></td>
     <th rowspan='3' width="60px">重新评测</th>
     <td rowspan='3'>
-<? if($uid == $d['uid'] || 有此权限('测试题目')) { ?>
+<?php  if($uid == $d['uid'] || 有此权限('测试题目')) { ?>
     <form method="post" action="../submit/run.php" class='form-inline'>
         <input name="pid" type="hidden" id="pid" value="<?=$d['pid']; ?>" />
         <input name="sid" type="hidden" id="sid" value="<?=$d['sid']; ?>" />
@@ -48,7 +46,7 @@ $q=new DataAccess();
         <input type="hidden" name="lang" value="<?php echo langnumtostr($d['lang']) ?>">
     <select name='judger' id='judger' >
     <option value=0 selected=selected>自动选择</option>
-<?
+<?php
     $sql="select grid,address,memo from grader where enabled=1 order by priority desc";
     $cnt=$q->dosql($sql);
     for ($i=0;$i<$cnt;$i++) {
@@ -59,7 +57,7 @@ $q=new DataAccess();
     </select>
     <button type="submit" class='btn'>重新评测</button>
     </form>
-<? } ?>
+<?php  } ?>
     </td>
 </tr>
 <tr>
@@ -76,7 +74,7 @@ $q=new DataAccess();
 </tr>
 <tr>
     <th>提交时间</th>
-    <td><?php echo date('Y-m-d H:i:s',$d[subtime]); ?></td>
+    <td><?php echo date('Y-m-d H:i:s',$d['subtime']); ?></td>
     <th>内存使用</th>
     <td><?php printf("%.2f",$d['memory']/1024) ?> MiB </td>
     <th>IP</th>

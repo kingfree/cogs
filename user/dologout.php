@@ -1,7 +1,8 @@
 <?php
 require_once("../include/header.php");
 
-setcookie("cogs_user","",-100,"/");
+forgetLogin();
+setcookie("cogs_usr","",-100,"/");
 setcookie("cogs_pwd_hash","",-100,"/");
 $_SESSION=array();
 session_destroy();

@@ -3,7 +3,7 @@ require_once("../include/header.php");
 gethead(1,"查看比赛","比赛场次评测");
 $p=new DataAccess();
 $q=new DataAccess();
-$sql="select comptime.*,compbase.cname,groups.* from comptime,compbase,groups where comptime.cbid=compbase.cbid and comptime.ctid={$_GET[ctid]} and groups.gid=comptime.group";
+$sql="select comptime.*,compbase.cname,groups.* from comptime,compbase,groups where comptime.cbid=compbase.cbid and comptime.ctid={$_GET['ctid']} and groups.gid=comptime.group";
 $cnt=$p->dosql($sql);
 if(!$cnt) 异常("未查询到记录！");
 $d=$p->rtnrlt(0);
@@ -12,31 +12,31 @@ $d=$p->rtnrlt(0);
 <table class='table table-striped table-condensed table-bordered fiexd'>
   <tr>
     <td width="90px">CTID</td>
-    <td><?php echo $d[ctid] ?></td>
+    <td><?php echo $d['ctid'] ?></td>
     <td width="90px">关联比赛</td>
-    <td><?php echo $d[cname] ?></td>
+    <td><?php echo $d['cname'] ?></td>
   </tr>
   <tr>
     <td>开始时间</td>
-    <td><?php echo date('Y-m-d H:i:s', $d[starttime]) ?></td>
+    <td><?php echo date('Y-m-d H:i:s', $d['starttime']) ?></td>
     <td>结束时间</td>
-    <td><?php echo date('Y-m-d H:i:s', $d[endtime]) ?></td>
+    <td><?php echo date('Y-m-d H:i:s', $d['endtime']) ?></td>
   </tr>
   <tr>
     <td>开放分组</td>
     <td><a href="../user/index.php?gid=<?php echo $d['gid'] ?>" target="_blank"><?php echo $d['gname'] ?></a></td>
     <td>公布成绩</td>
-    <td><?php echo $d[showscore]?"是":"否" ?></td>
+    <td><?php echo $d['showscore']?"是":"否" ?></td>
   </tr>
   <tr>
     <td>比赛状态</td>
     <td><?php
-	 if (time()>$d[endtime]) echo "已结束"; else
-	 if (time()<$d[endtime] && time()>$d[starttime]) echo "正在进行"; else
+	 if (time()>$d['endtime']) echo "已结束"; else
+	 if (time()<$d['endtime'] && time()>$d['starttime']) echo "正在进行"; else
 	 echo "还未开始"; 
 	 ?></td>
     <td>阅读权限</td>
-    <td><?php echo $d[readforce] ?></td>
+    <td><?php echo $d['readforce'] ?></td>
   </tr>
   <tr>
     <td>查看成绩</td>
@@ -48,20 +48,20 @@ $d=$p->rtnrlt(0);
   </tr>
   <tr>
     <td>场次介绍</td>
-    <td><?php echo BBCode($d[intro]) ?></td>
+    <td><?php echo BBCode($d['intro']) ?></td>
     <td>修改场次</td>
-    <td><a href="editcomptime.php?action=edit&ctid=<?php echo $d[ctid] ?>">修改</a></td>
+    <td><a href="editcomptime.php?action=edit&ctid=<?php echo $d['ctid'] ?>">修改</a></td>
   </tr>
 </table>
 <?php
-$sql="select compscore.uid,userinfo.realname,userinfo.email,userinfo.nickname from compscore,userinfo where userinfo.uid=compscore.uid and compscore.ctid={$_GET[ctid]} order by uid asc";
+$sql="select compscore.uid,userinfo.realname,userinfo.email,userinfo.nickname from compscore,userinfo where userinfo.uid=compscore.uid and compscore.ctid={$_GET['ctid']} order by uid asc";
 $cnt=$p->dosql($sql);
 if ($cnt) {
 ?>
 <form method="post" action="judge.php">
     选择评测机：<select name='judger' id='judger'>
     <option value=0 selected=selected>自动选择</option>
-<?
+<?php
     $sql="select grid,address,memo from grader where enabled=1 order by priority desc";
     $cnt1=$q->dosql($sql);
     for ($i=0;$i<$cnt1;$i++) {
@@ -84,11 +84,11 @@ if ($cnt) {
 	for ($i=0;$i<$cnt;$i++)
 	{
 		$d=$p->rtnrlt($i);
-		if ($d[uid]==$tu) continue;
-		$tu=$d[uid];
+		if ($d['uid']==$tu) continue;
+		$tu=$d['uid'];
 ?>
   <tr>
-    <td><a target="_blank" href="../user/detail.php?uid=<?php echo $d[uid] ?>"><? echo gravatar::showImage($d['email'], 64); echo "<br />"; if(有此权限("查看用户")) echo $d['realname']; else echo $d['nickname'];?></a></td>
+    <td><a target="_blank" href="../user/detail.php?uid=<?php echo $d['uid'] ?>"><?php  echo gravatar::showImage($d['email'], 64); echo "<br />"; if(有此权限("查看用户")) echo $d['realname']; else echo $d['nickname'];?></a></td>
     <td>
 	
 <table class='table table-striped table-condensed table-bordered fiexd'>
@@ -101,7 +101,7 @@ if ($cnt) {
 		<th style="width: 4em;">得分</th>
 	  </tr>
 	<?php
-	$sql="select compscore.csid,compscore.pid,compscore.lang,compscore.subtime,compscore.score,compscore.result,problem.probname from compscore,problem where problem.pid=compscore.pid and compscore.uid={$d[uid]} and compscore.ctid={$_GET[ctid]}";
+	$sql="select compscore.csid,compscore.pid,compscore.lang,compscore.subtime,compscore.score,compscore.result,problem.probname from compscore,problem where problem.pid=compscore.pid and compscore.uid={$d['uid']} and compscore.ctid={$_GET['ctid']}";
 	$c=$q->dosql($sql);
 	if ($c) {
 		for ($j=0;$j<$c;$j++) {
@@ -109,14 +109,14 @@ if ($cnt) {
 	?>
         <tr>
         <td>
-        <input name="doit[]" type="checkbox" id="doit[]" value="<?php echo $e[csid] ?>" />
-        <input name="doall[]" type="hidden" id="doall[]" value="<?php echo $e[csid] ?>" />
-        <?php echo $e[csid] ?></td>
-        <td><a target="_blank" href="problem.php?ctid=<?=$_GET[ctid]?>&pid=<?php echo $e[pid] ?>&uid=<?=$d[uid]?>"><?php echo shortname($e[probname]) ?></a></td>
-        <td><a href="code.php?csid=<?php echo $e[csid] ?>" target="_blank"><?php echo $STR[lang][$e[lang]] ?></a></td>
-        <td><?php echo date("m/d H:i:s",$e[subtime]) ?></td>
-        <td><?php echo 评测结果($e[result], 50) ?></td>
-        <td><?php echo $e[score] ?></td>
+        <input name="doit[]" type="checkbox" id="doit[]" value="<?php echo $e['csid'] ?>" />
+        <input name="doall[]" type="hidden" id="doall[]" value="<?php echo $e['csid'] ?>" />
+        <?php echo $e['csid'] ?></td>
+        <td><a target="_blank" href="problem.php?ctid=<?=$_GET['ctid']?>&pid=<?php echo $e['pid'] ?>&uid=<?=$d['uid']?>"><?php echo shortname($e['probname']) ?></a></td>
+        <td><a href="code.php?csid=<?php echo $e['csid'] ?>" target="_blank"><?php echo $STR['lang'][$e['lang']] ?></a></td>
+        <td><?php echo date("m/d H:i:s",$e['subtime']) ?></td>
+        <td><?php echo 评测结果($e['result'], 50) ?></td>
+        <td><?php echo $e['score'] ?></td>
         </tr>
         <?php
         }

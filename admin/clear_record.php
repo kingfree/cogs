@@ -4,7 +4,7 @@ gethead(1,"管理用户","清除记录");
 ?>
 
 <pre>
-<?
+<?php
 global $p;
 $p=new DataAccess();
 

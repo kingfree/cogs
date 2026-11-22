@@ -30,7 +30,7 @@ class lib {
         require_once("socket.php");
     }
     public function get_userinfo($uid) {
-        require_once("getuserinfo.php");
+        require("getuserinfo.php");
     }
     public function getsubgroup($p,$gid) {
         global $SET;

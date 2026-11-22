@@ -1,27 +1,25 @@
 <?php
 require_once("../include/header.php");
-gethead(8,"修改页面","");
-过滤();
-//date_default_timezone_set("Asia/Shanghai");
-if ($_REQUEST[action]=='add') {
-	$p=new DataAccess();
-	$sql="insert into page(title,`force`,`text`,`time`,etime,uid,`group`) values('{$_POST[title]}','{$_POST[force]}','".($_POST[text])."','".time()."','".time()."','{$_SESSION[ID]}','{$_POST['group']}')";
-	$p->dosql($sql);
-	$d=$p->rtnrlt(0);
-	$aid=$d['aid'];
-    提示("新建页面 {$_POST[title]} 成功",取路径("page/page.php?aid=$aid"));
-} else if ($_REQUEST[action]=='edit') {
-	$p=new DataAccess();
-	$sql="update page set title='{$_POST[title]}',`force`={$_POST[force]}, etime=".time().",`text`='".($_POST[text])."',`group`='{$_POST['group']}' where aid={$_REQUEST[aid]}";
-	$p->dosql($sql);
-	$aid=$_REQUEST[aid];
-    提示("修改页面 {$_POST[title]} 成功",取路径("page/page.php?aid=$aid"));
-} else if ($_REQUEST[action]=='del') {
-	$p=new DataAccess();
-	$sql="delete from page where aid={$_REQUEST[aid]}";
-	$p->dosql($sql);
-	$aid=0;
-    异常("删除页面 {$_REQUEST[aid]} 成功",取路径("page/index.php"));
+gethead(8, "修改页面", "");
+$db = new DataAccess();
+$action = $_REQUEST['action'];
+$aid = isset($_REQUEST['aid']) ? (int)$_REQUEST['aid'] : 0;
+if ($action === 'del') {
+    $db->dosql("delete from page where aid = ?", array($aid));
+    提示("删除页面成功", 取路径("page/index.php"));
+    return;
 }
-?>
-
+if ($action !== 'edit' && $action !== 'add') 异常("未知页面操作");
+if (!isset($_POST['title'], $_POST['text'], $_POST['force'], $_POST['group']) ||
+    !is_string($_POST['title']) || !is_string($_POST['text'])) 异常("页面内容无效");
+$fields = array($_POST['title'], (int)$_POST['force'], $_POST['text'], (int)$_POST['group'], time());
+if ($action === 'edit') {
+    $fields[] = $aid;
+    $db->dosql("update page set title=?, `force`=?, `text`=?, `group`=?, etime=? where aid=?", $fields);
+} else {
+    $fields[] = time();
+    $fields[] = (int)$_SESSION['ID'];
+    $db->dosql("insert into page(title, `force`, `text`, `group`, etime, `time`, uid) values(?,?,?,?,?,?,?)", $fields);
+    $aid = (int)DataAccess::connection()->lastInsertId();
+}
+提示("页面已保存", 取路径("page/page.php?aid=$aid"));

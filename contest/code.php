@@ -1,16 +1,16 @@
 <?php
 require_once("../include/header.php");
 $p=new DataAccess();
-$sql="select compbase.cname,problem.pid,problem.filename,problem.probname,userinfo.uid,userinfo.nickname,userinfo.realname,comptime.endtime,compscore.* from problem,compscore,comptime,compbase,userinfo where compscore.pid=problem.pid and comptime.ctid=compscore.ctid and userinfo.uid=compscore.uid and compscore.csid={$_GET[csid]} and compbase.cbid=comptime.cbid";
-$cnt=$p->dosql($sql);
+$sql="select compbase.cname,problem.pid,problem.filename,problem.probname,userinfo.uid,userinfo.nickname,userinfo.realname,comptime.endtime,compscore.* from problem,compscore,comptime,compbase,userinfo where compscore.pid=problem.pid and comptime.ctid=compscore.ctid and userinfo.uid=compscore.uid and compscore.csid=? and compbase.cbid=comptime.cbid";
+$cnt=$p->dosql($sql, array((int)$_GET['csid']));
 if ($cnt) {
 	$d=$p->rtnrlt(0);
     if(!有此权限("查看比赛") && (time() < $d['endtime'] && $_SESSION['ID'] != $d['uid']))
         异常("比赛未结束！", 取路径("contest/index.php"));
-	if ($d[lang]==0) $ext="pas"; else
-	if ($d[lang]==1) $ext="c"; else
-	if ($d[lang]==2) $ext="cpp"; 
-	$fp=fopen("{$SET['dir_competition']}{$d[ctid]}/{$d[uid]}/{$d[filename]}.{$ext}","r");
+	if ($d['lang']==0) $ext="pas"; else
+	if ($d['lang']==1) $ext="c"; else
+	if ($d['lang']==2) $ext="cpp"; 
+	$fp=fopen("{$SET['dir_competition']}{$d['ctid']}/{$d['uid']}/{$d['filename']}.{$ext}","r");
 	if (is_resource($fp)) {
 		$code=rfile($fp);
 	}
@@ -49,12 +49,12 @@ $LIB->hlighter();
 </tr>
 <tr>
     <th>提交时间</th>
-    <td colspan='3'><?php echo date('Y-m-d H:i:s',$d[subtime]); ?></td>
+    <td colspan='3'><?php echo date('Y-m-d H:i:s',$d['subtime']); ?></td>
 </tr>
 <tr>
 </tr>
 </table>
-<?    if($d['lang']==0) $langstr="pascal";
+<?php     if($d['lang']==0) $langstr="pascal";
     else if($d['lang']==1) $langstr="c";
     else if($d['lang']==2) $langstr="cpp";
 ?>

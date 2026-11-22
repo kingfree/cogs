@@ -44,7 +44,7 @@ for($i=0;$i<$cnt;$i++) {
     $d=$p->rtnrlt($i);
     echo "<span id='{$d['ctid']}'>";
     echo "<a href=\"../contest/problem.php?ctid={$d['ctid']}\">{$d['cname']}</a>\n";
-    echo nl2br(sp2n(htmlspecialchars($d[intro])));
+    echo nl2br(sp2n(htmlspecialchars($d['intro'])));
     echo "</span>";
 }
 ?>

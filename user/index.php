@@ -39,7 +39,7 @@ $e=$q->rtnrlt(0);
 <li>上级分组</li>
 <li><a href="index.php?gid=<?=$e['gid'] ?>"><?=$e['gname'] ?></a></li>
 <?php } ?>
-<?php 
+<?php
 if ($subgroup!=array()) {
 ?>
 <li class='divider'></li>
@@ -51,7 +51,7 @@ $q->dosql($sql2);
 $e=$q->rtnrlt(0);
 ?>
 <a href="index.php?gid=<?=$e['gid'] ?>"><?=$e['gname'] ?></a>
-<?php 
+<?php
 }
 ?></li>
 <?php } ?>
@@ -59,7 +59,7 @@ $e=$q->rtnrlt(0);
 </div>
 <?php
     if ($_GET['key']!="")
-        $sql.=" and (nickname like '%{$_GET[key]}%' or uid ='{$_GET[key]}' or usr like '%{$_GET[key]}%' or realname like '%{$_GET[key]}%')";
+        $sql.=" and (nickname like '%{$_GET['key']}%' or uid ='{$_GET['key']}' or usr like '%{$_GET['key']}%' or realname like '%{$_GET['key']}%')";
 if($_GET['rank'])
 $sql.=" order by {$_GET['rank']} {$_GET['order']}";
 else
@@ -80,7 +80,7 @@ $st=检测页面($cnt, $_GET['page']);
   <button name="rank" type="submit" value='nickname' class='btn'>昵称</button>
   <?php if(有此权限('查看用户')) { ?>
   <button name="rank" type="submit" value='realname' class='btn'>姓名</button>
-  <? } ?>
+  <?php  } ?>
   <button name="rank" type="submit" value='readforce' class='btn'>阅读</button>
   <button name="rank" type="submit" value='gbelong' class='btn'>分组</button>
   <button name="rank" type="submit" value='accepted' class='btn'>通过</button>
@@ -102,17 +102,17 @@ function okdel(name) {
     <th style="min-width: 3ex;"></th>
     <th style="min-width: 3ex;">UID</th>
     <th>昵称</th>
-    <? if(有此权限('查看用户')) { ?>
+    <?php  if(有此权限('查看用户')) { ?>
     <th class='admin' style="min-width: 4em;">姓名</th>
     <th style="min-width: 6ex;">阅读</th>
-    <? } ?>
+    <?php  } ?>
     <th>权限</th>
     <th>分组</th>
     <th style="min-width: 4ex;">通过</th>
     <th style="min-width: 6ex;">通过率</th>
     <th style="min-width: 6ex;">等级</th>
-    <? if(有此权限('查看用户')) { ?><th class='admin' style="min-width: 8em;">IP</th><? } ?>
-    <? if(有此权限('修改用户')) { ?><th class='admin' style="min-width: 4em;">操作</th><? } ?>
+    <?php  if(有此权限('查看用户')) { ?><th class='admin' style="min-width: 8em;">IP</th><?php  } ?>
+    <?php  if(有此权限('修改用户')) { ?><th class='admin' style="min-width: 4em;">操作</th><?php  } ?>
   </tr>
 </thead>
 <?php
@@ -123,15 +123,15 @@ function okdel(name) {
     <td><i><?=$i+1?></i></td>
     <td><?=$d['uid'] ?></td>
     <td><a href="detail.php?uid=<?=$d['uid'] ?>" title="<?=(sp2n(htmlspecialchars($d['memo'])))?>"><?=gravatar::showImage($d['email']);?><?=$d['nickname'] ?></a></td>
-    <? if(有此权限('查看用户')) { ?>
+    <?php  if(有此权限('查看用户')) { ?>
     <td>
         <?=$d['realname'] ?></td>
     <td>
         <a href="dodelimg.php?email=<?=md5($d['email'])?>" title="重建头像缓存"><i class="icon icon-picture"></i></a>
     <?=$d['readforce'] ?>
     </td>
-    <? } ?>
-    <td><?
+    <?php  } ?>
+    <td><?php
     $sql="select privilege.* from privilege where uid={$d['uid']} order by pri asc";
 	$cnt1=$r->dosql($sql);
 	for($i1=0;$i1<$cnt1;$i1++) {
@@ -142,23 +142,23 @@ function okdel(name) {
     <td ><?=$d['accepted'] ?></td>
     <td ><?=@round($d['accepted']/$d['submited']*100,1); ?>%</td>
     <td ><?=$d['grade'] ?></td>
-    <? if(有此权限('查看用户')) { ?>
+    <?php  if(有此权限('查看用户')) { ?>
     <td>
     <a href="loginlog.php?uid=<?=$d['uid'] ?>"><?=$d['lastip'] ?></a>
-    </td><? } ?>
-    <? if(有此权限('修改用户')) { ?><td>
+    </td><?php  } ?>
+    <?php  if(有此权限('修改用户')) { ?><td>
     <a href="edituser.php?uid=<?=$d['uid'] ?>" title="修改用户信息"><i class="icon icon-wrench"></i></a>
-    <? if(有此权限('修改权限')) { ?>
+    <?php  if(有此权限('修改权限')) { ?>
     <a href='privilege.php?way=edit&uid=<?=$d['uid']?>' title="赋予权限"><i class="icon icon-book"></i></a>
-    <? } ?>
+    <?php  } ?>
     <a href="doedituser.php?uid=<?=$d['uid'] ?>&action=del" onclick="return okdel('<?=$d['nickname']?>')" title="删除用户账号"><i class="icon icon-remove"></i></a>
-    </td><? } ?>
+    </td><?php  } ?>
   </tr>
 <?php
     }
 ?>
 </table>
-<? 分页($cnt, $_GET['page'], '?key='.$_GET['key'].'&sc'.$_GET['sc'].'&rank='.$_GET['rank'].'&order='.$_GET['order'].'&caid='.$_GET['caid'].'&'); ?>
+<?php  分页($cnt, $_GET['page'], '?key='.$_GET['key'].'&sc'.$_GET['sc'].'&rank='.$_GET['rank'].'&order='.$_GET['order'].'&caid='.$_GET['caid'].'&'); ?>
 </div>
 <?php
 include_once("../include/footer.php");

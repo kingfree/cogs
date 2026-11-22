@@ -4,14 +4,14 @@ gethead(1,"分类管理","修改分类");
 ?>
 <div class='row-fluid'>
 <?php
-if ($_GET[action]=='edit') {
+if ($_GET['action']=='edit') {
 	$p=new DataAccess();
 	$sql="select * from category where caid={$_GET['caid']}";
 	$cnt=$p->dosql($sql);
 	$d=$p->rtnrlt(0);
 }
 ?>
-<form method="post" action="doeditcate.php?action=<?php echo $_GET[action] ?>&caid=<?php echo $_GET[caid]; ?>" class='form-horizontal'>
+<form method="post" action="doeditcate.php?action=<?php echo $_GET['action'] ?>&caid=<?php echo $_GET['caid']; ?>" class='form-horizontal'>
 <div class='control-group'>
 <label class='control-label' for='caid'>CAID</label>
 <div class='controls'>

@@ -1,4 +1,4 @@
-<?
+<?php
 class RegisterCheck
 {
     private function IsDigit($cCheck) 
@@ -16,7 +16,7 @@ class RegisterCheck
         $strUserID = $p;
         for ($nIndex=0; $nIndex<strlen($strUserID); $nIndex++)
         {
-            $cCheck = $strUserID[nIndex];
+            $cCheck = $strUserID['nIndex'];
             if ( $nIndex==0 && ( $cCheck =='-' || $cCheck =='_') )
             {
                 return false;
@@ -41,27 +41,27 @@ class RegisterCheck
     {
         if ($s['VerifyCode']!=$c)
             return false;
-        if (!($this->Verifylen($s[usr],4,24) && $this->Verify($s[usr])))
+        if (!($this->Verifylen($s['usr'],4,24) && $this->Verify($s['usr'])))
         {
             return false;
         }
-        if (!($this->Verifylen($s[nickname],4,24)))
+        if (!($this->Verifylen($s['nickname'],4,24)))
         {
             return false;
         }
-        if (!($this->Verifylen($s[pwd],4,24) && $this->Verify($s[pwd]) && $s[pwd]==$s[repwd]))
+        if (!($this->Verifylen($s['pwd'],4,24) && $this->Verify($s['pwd']) && $s['pwd']==$s['repwd']))
         {
             return false;
         }
-        if (!($this->Verifylen($s[passwordtip],4,64)))
+        if (!($this->Verifylen($s['passwordtip'],4,64)))
         {
             return false;
         }
-        if (!($this->Verifylen($s[passwordtipans],4,64)))
+        if (!($this->Verifylen($s['passwordtipans'],4,64)))
         {
             return false;
         }
-        if (!($this->Verifylen($s[memo],4,200)))
+        if (!($this->Verifylen($s['memo'],4,200)))
         {
             return false;
         }

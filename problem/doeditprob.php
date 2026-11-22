@@ -13,7 +13,7 @@ if($pid) {
     if(!有此权限("修改题目") && $uid != $d['addid'])
         异常("没有修改权限！", 取路径("problem/index.php"));
 }
-if($_GET[action]=="change") {
+if($_GET['action']=="change") {
     if(有此权限("修改题目") && 有此权限("查看题目")) {
         $sql="update problem set submitable=1-submitable where pid={$pid}";
         $p->dosql($sql);
@@ -70,13 +70,13 @@ if($_FILES['datafile']['size'] && !$_FILES['datafile']['error']) {
     }
     $ff.="</ul></p>";
 }
-if ($_POST[submitable]==1) $sub=1; else $sub=0;
-$rf = (int) $_POST[readforce];
-if ($_REQUEST[action]=='add') {
+if ($_POST['submitable']==1) $sub=1; else $sub=0;
+$rf = (int) $_POST['readforce'];
+if ($_REQUEST['action']=='add') {
     if(!有此权限("查看题目"))
         $sub = $rf = 0;
 	$p=new DataAccess();
-	$sql="insert into problem(probname,filename,readforce,submitable,datacnt,timelimit,memorylimit,detail,addtime,addid,difficulty,plugin,`group`) values('{$_POST[probname]}','{$_POST[filename]}',{$rf},{$sub},{$_POST[datacnt]},{$_POST[timelimit]},{$_POST[memorylimit]},'".$_POST['detail']."',".time().",{$_SESSION[ID]},{$_POST[difficulty]},'{$_POST['plugin']}','{$_POST['group']}')";
+	$sql="insert into problem(probname,filename,readforce,submitable,datacnt,timelimit,memorylimit,detail,addtime,addid,difficulty,plugin,`group`) values('{$_POST['probname']}','{$_POST['filename']}',{$rf},{$sub},{$_POST['datacnt']},{$_POST['timelimit']},{$_POST['memorylimit']},'".$_POST['detail']."',".time().",{$_SESSION['ID']},{$_POST['difficulty']},'{$_POST['plugin']}','{$_POST['group']}')";
     echo($sql);
 	$p->dosql($sql);
 	
@@ -84,14 +84,14 @@ if ($_REQUEST[action]=='add') {
 	$p->dosql($sql);
 	$d=$p->rtnrlt(0);
 	$pid=$d['pid'];
-	foreach($_POST[cate] as $k=>$v) {
+	foreach($_POST['cate'] as $k=>$v) {
 		if ($v) {
 			$sql="insert into tag(pid,caid) values({$pid},{$k})";
 			$p->dosql($sql);
 		}
 	}
     提示("$ff 添加题目 $pid 成功！", 取路径("problem/problem.php?pid=$pid"), 60);
-} else if ($_REQUEST[action]=='edit') {
+} else if ($_REQUEST['action']=='edit') {
     if(!有此权限("查看题目"))
         $sub = $rf = 0;
 	$p=new DataAccess();
@@ -104,21 +104,21 @@ if ($_REQUEST[action]=='add') {
             $p->dosql($sql);
         }
     }
-	$sql="update problem set probname='{$_POST['probname']}',filename='{$_POST[filename]}',readforce={$rf},submitable={$sub},datacnt={$_POST[datacnt]},timelimit={$_POST[timelimit]},memorylimit={$_POST[memorylimit]},detail='".($_POST['detail'])."',difficulty={$_POST[difficulty]},plugin='{$_POST['plugin']}',`group`='{$_POST['group']}' where pid={$_REQUEST['pid']}";
+	$sql="update problem set probname='{$_POST['probname']}',filename='{$_POST['filename']}',readforce={$rf},submitable={$sub},datacnt={$_POST['datacnt']},timelimit={$_POST['timelimit']},memorylimit={$_POST['memorylimit']},detail='".($_POST['detail'])."',difficulty={$_POST['difficulty']},plugin='{$_POST['plugin']}',`group`='{$_POST['group']}' where pid={$_REQUEST['pid']}";
 	$p->dosql($sql);
-	foreach($_POST[cate] as $k=>$v) {
-		$sql="select tid from tag where caid={$k} and pid={$_REQUEST[pid]}";
+	foreach($_POST['cate'] as $k=>$v) {
+		$sql="select tid from tag where caid={$k} and pid={$_REQUEST['pid']}";
 		$cnt=$p->dosql($sql);
 		if (!$cnt) {
 			if ($v)
-				$sql="insert into tag(pid,caid) values({$_REQUEST[pid]},{$k})";
+				$sql="insert into tag(pid,caid) values({$_REQUEST['pid']},{$k})";
 		} else {
 			if (!$v)
-				$sql="delete from tag where pid={$_REQUEST[pid]} and caid={$k}";
+				$sql="delete from tag where pid={$_REQUEST['pid']} and caid={$k}";
 		}
 		$p->dosql($sql);
 	}
-	$pid=$_REQUEST[pid];
+	$pid=$_REQUEST['pid'];
     提示("$ff 修改题目 $pid 成功！", 取路径("problem/problem.php?pid=$pid"), 60);
 }/* else if ($_REQUEST[action]=='del') {
     if(!有此权限("修改题目"))

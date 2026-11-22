@@ -11,13 +11,13 @@ $md="mkdir {$dir}";
 exec($md);
 
 $p=new DataAccess();
-$sql="select compscore.uid,userinfo.realname,userinfo.nickname,problem.filename from compscore,userinfo,problem where userinfo.uid=compscore.uid and compscore.pid=problem.pid and compscore.ctid={$_GET[ctid]} order by uid asc";
+$sql="select compscore.uid,userinfo.realname,userinfo.nickname,problem.filename from compscore,userinfo,problem where userinfo.uid=compscore.uid and compscore.pid=problem.pid and compscore.ctid={$_GET['ctid']} order by uid asc";
 $cnt=$p->dosql($sql);
 $tu=0;
 for ($i=0;$i<$cnt;$i++) {
     $d=$p->rtnrlt($i);
     //if($d[uid]==$tu) continue;
-    $tu=$d[uid];
+    $tu=$d['uid'];
     exec("mkdir -p {$dir}/{$tu}.{$d['realname']}_/");
     $mv="cp {$ctid}/{$tu}/{$d['filename']}.* {$dir}/{$tu}.{$d['realname']}_/";
     exec($mv);

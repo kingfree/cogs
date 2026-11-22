@@ -5,14 +5,14 @@ $p=new DataAccess();
 $q=new DataAccess();
 $d['adminuid']=$_SESSION['ID'];
 $d['parent']=1;
-if ($_GET[action]=='edit') {
-    $sql="select * from groups where gid={$_GET[gid]}";
+if ($_GET['action']=='edit') {
+    $sql="select * from groups where gid={$_GET['gid']}";
     $cnt=$p->dosql($sql);
     $d=$p->rtnrlt(0);
 }
 ?>
 <div class='container'>
-<form method="post" action="doeditgroup.php?action=<?php echo $_GET[action] ?>&gid=<?php echo $_GET[gid]; ?>" class='form-horizontal'>
+<form method="post" action="doeditgroup.php?action=<?php echo $_GET['action'] ?>&gid=<?php echo $_GET['gid']; ?>" class='form-horizontal'>
 <div class='control-group'>
 <label class='control-label' for='gid'>GID</label>
 <div class='controls'>

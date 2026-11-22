@@ -5,7 +5,7 @@ gethead(1,"","生成等级");
 ?>
 <div class='page'>
 开始计算……<br />
-<?
+<?php
 /*$subcnt=array();
 $supcnt=array();
 $accnt=array();
@@ -102,6 +102,6 @@ for ($i = 0; $i < $cnt; $i++) {
 
 <span class=ok>计算完成！</span>
 </div>
-<?
+<?php
 require_once("../include/footer.php");
 ?>
