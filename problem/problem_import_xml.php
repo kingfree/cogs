@@ -3,13 +3,14 @@ require_once("../include/header.php");
 gethead(1,"修改题目","导入题目");
 
 
+$OJ_DATA = $cfg['testdata'];
 function image_save_file($filepath ,$base64_encoded_img){
     $fp=fopen($filepath ,"wb");
     fwrite($fp,base64_decode($base64_encoded_img));
     fclose($fp);
 }
 function addproblem($title, $time_limit, $memory_limit, $description, $input, $output, $sample_input, $sample_output, $hint, $source, $spj,$OJ_DATA) {
-    $title=DataAccess::escape($title);
+
     $time_limit=(int)($time_limit);
     $memory_limit=(int)($memory_limit);
     $plugin=!$spj;
@@ -21,12 +22,10 @@ function addproblem($title, $time_limit, $memory_limit, $description, $input, $o
     $detail.="<h3>【样例输出】</h3><pre>".$sample_output."</pre>";
     $detail.="<h3>【提示】</h3>".$hint;
     $detail.="<h3>【来源(FPS)】</h3>".$source;
-    $detail = DataAccess::escape($detail);
 
+    $sql = new SqlQuery("insert into problem(probname,readforce,submitable,datacnt,timelimit,memorylimit,detail,addtime,addid,plugin,`group`) values(?,0,0,0,?,?,?,?,?,?,'0')", [$title, $time_limit, $memory_limit, $detail, time(), $_SESSION['ID'], $plugin]);
 
-    $sql="insert into problem(probname,readforce,submitable,datacnt,timelimit,memorylimit,detail,addtime,addid,plugin,`group`) values('{$title}',0,0,0,{$time_limit},{$memory_limit},'".$detail."',".time().",{$_SESSION['ID']},'{$plugin}','0')";
-
-    DataAccess::connection()->query($sql);
+    DataAccess::statement($sql);
     $pid = DataAccess::connection()->lastInsertId();
     echo "<br>Add $pid  ";
     $basedir = "$OJ_DATA/$pid";
@@ -56,8 +55,8 @@ function getAttribute($Node, $TagName,$attribute) {
 }
 function hasProblem($title){
     $md5=md5($title);
-    $sql="select 1 from problem where md5(probname)='$md5'";  
-    $result=DataAccess::connection()->query($sql);
+    $sql = new SqlQuery("select 1 from problem where md5(probname)=?", [$md5]);  
+    $result=DataAccess::statement($sql);
     $found = $result->fetchColumn();		
     
     //echo "row->$rows_cnt";			
@@ -125,10 +124,10 @@ if ($_FILES ["fps"] ["error"] > 0) {
             $testno=1;
             foreach($testinputs as $testNode){
                 //if($testNode->nodeValue)
-                mkdata($pid,$pid.$testno++.".out",$testNode,$OJ_DATA);
+                mkdata($pid,$pid.$testno++.".ans",$testNode,$OJ_DATA);
             }
-            $sql="update problem set datacnt=$testno,filename=$pid where pid=$pid";  
-            DataAccess::connection()->query($sql);
+            $sql = new SqlQuery("update problem set datacnt=?,filename=? where pid=?", [$testno - 1, $pid, $pid]);  
+            DataAccess::statement($sql);
             $images=($searchNode->children()->img);
             $did=array();
             $testno=1;
@@ -139,7 +138,7 @@ if ($_FILES ["fps"] ["error"] > 0) {
                     $base64=getValue($img,"base64");
                     $ext=pathinfo($src);
                     $ext=strtolower($ext['extension']);
-                    if(!stristr(",jpeg,jpg,png,gif,bmp",$ext)){
+                    if(!in_array($ext, ["jpeg","jpg","png","gif","bmp"], true)){
                         $ext="bad";
                     }
                     $testno++;
@@ -148,10 +147,9 @@ if ($_FILES ["fps"] ["error"] > 0) {
                     image_save_file($newpath,$base64);
                     $newpath=dirname($_SERVER['REQUEST_URI'] )."/../images/pimg".$pid."_".$testno.".".$ext;
 
-                    $src=DataAccess::escape($src);
-                    $newpath=DataAccess::escape($newpath);
-                    $sql="update problem set detail=replace(detail,'$src','$newpath') where pid=$pid";  
-                    DataAccess::connection()->query($sql);
+
+                    $sql = new SqlQuery("update problem set detail=replace(detail,?,?) where pid=?", [$src, $newpath, $pid]);  
+                    DataAccess::statement($sql);
                     array_push($did,$src);
                 }
 

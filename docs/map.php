@@ -11,7 +11,7 @@ $p=new DataAccess();
 
 <h2><a href="../problem/catelist.php">分类</a></h2>
 <?php
-$sql="select caid, cname from category order by cname asc";
+$sql = new SqlQuery("select caid, cname from category order by cname asc");
 $cnt=$p->dosql($sql);
 for($i=0;$i<$cnt;$i++) {
     $d=$p->rtnrlt($i);
@@ -20,7 +20,7 @@ for($i=0;$i<$cnt;$i++) {
 ?>
 <h2><a href="../page/index.php">页面</a></h2>
 <?php
-$sql="select aid, title from page order by title asc";
+$sql = new SqlQuery("select aid, title from page order by title asc");
 $cnt=$p->dosql($sql);
 for($i=0;$i<$cnt;$i++) {
     $d=$p->rtnrlt($i);
@@ -29,7 +29,7 @@ for($i=0;$i<$cnt;$i++) {
 ?>
 <h2><a href="../problem/index.php">题目</a></h2>
 <?php
-$sql="select pid, probname, filename from problem order by acceptcnt desc";
+$sql = new SqlQuery("select pid, probname, filename from problem order by acceptcnt desc");
 $cnt=$p->dosql($sql);
 for($i=0;$i<$cnt;$i++) {
     $d=$p->rtnrlt($i);
@@ -38,7 +38,7 @@ for($i=0;$i<$cnt;$i++) {
 ?>
 <h2><a href="../contest/index.php">比赛</a></h2>
 <?php
-$sql="select comptime.cbid, comptime.ctid, compbase.cname, comptime.intro from comptime, compbase where comptime.cbid=compbase.cbid order by comptime.ctid desc";
+$sql = new SqlQuery("select comptime.cbid, comptime.ctid, compbase.cname, comptime.intro from comptime, compbase where comptime.cbid=compbase.cbid order by comptime.ctid desc");
 $cnt=$p->dosql($sql);
 for($i=0;$i<$cnt;$i++) {
     $d=$p->rtnrlt($i);
@@ -50,7 +50,7 @@ for($i=0;$i<$cnt;$i++) {
 ?>
 <h2><a href="../user/index.php">用户</a></h2>
 <?php
-$sql="select uid, usr, nickname from userinfo order by grade desc";
+$sql = new SqlQuery("select uid, usr, nickname from userinfo order by grade desc");
 $cnt=$p->dosql($sql);
 for($i=0;$i<$cnt;$i++) {
     $d=$p->rtnrlt($i);

@@ -5,7 +5,7 @@ gethead(1,"修改用户","修改用户");
 
 <?php
 $p=new DataAccess();
-$sql="select * from userinfo where uid={$_GET['uid']}";
+$sql = new SqlQuery("select * from userinfo where uid=?", [$_GET['uid']]);
 $cnt=$p->dosql($sql);
 if ($cnt)
 {
@@ -27,7 +27,7 @@ if ($cnt)
 <dd><select name="gbelong" id="gbelong">
 <?php
 $q=new DataAccess();
-$sql2="select * from groups";
+$sql2 = new SqlQuery("select * from groups");
 $cnt2=$q->dosql($sql2);
 for ($i=0;$i<=$cnt2-1;$i++) {
 	$e=$q->rtnrlt($i);

@@ -1,6 +1,6 @@
 <?php
 $p=new DataAccess();
-$sql="select name,value from settings";
+$sql = new SqlQuery("select name,value from settings");
 $cnt=$p->dosql($sql);
 for ($i=0;$i<$cnt;$i++) {
 	$d=$p->rtnrlt($i);
@@ -15,5 +15,3 @@ $SET['base']=$_SERVER['DOCUMENT_ROOT'].$hrl.$SET['global_root'];
 $SET['URI']=base64_encode($_SERVER['REQUEST_URI']);
 
 $cfg['Version']='2.8.2.1';
-?>
-

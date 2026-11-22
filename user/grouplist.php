@@ -24,7 +24,7 @@ $q=new DataAccess();
   </tr>
 </thead>
 <?php
-    $sql="select groups.*,userinfo.uid,userinfo.nickname from groups,userinfo where groups.adminuid=userinfo.uid order by gname";
+    $sql = new SqlQuery("select groups.*,userinfo.uid,userinfo.nickname from groups,userinfo where groups.adminuid=userinfo.uid order by gname");
     $cnt=$p->dosql($sql);
     for ($i=$st;$i<$cnt;$i++)
     {
@@ -37,7 +37,7 @@ $q=new DataAccess();
     <td><?php
 if ($d['parent']!=-1)
 {
-    $sql="select * from groups where gid={$d['parent']}";
+    $sql = new SqlQuery("select * from groups where gid=?", [$d['parent']]);
     $q->dosql($sql);
     $e=$q->rtnrlt(0);
 ?><a href="userlist.php?gid=<?=$e['gid']?>"><?=$e['gname']?></a><?php 

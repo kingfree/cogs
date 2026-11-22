@@ -11,7 +11,7 @@ $md="mkdir {$dir}";
 exec($md);
 
 $p=new DataAccess();
-$sql="select compscore.uid,userinfo.realname,userinfo.nickname,problem.filename from compscore,userinfo,problem where userinfo.uid=compscore.uid and compscore.pid=problem.pid and compscore.ctid={$_GET['ctid']} order by uid asc";
+$sql = new SqlQuery("select compscore.uid,userinfo.realname,userinfo.nickname,problem.filename from compscore,userinfo,problem where userinfo.uid=compscore.uid and compscore.pid=problem.pid and compscore.ctid=? order by uid asc", [$_GET['ctid']]);
 $cnt=$p->dosql($sql);
 $tu=0;
 for ($i=0;$i<$cnt;$i++) {

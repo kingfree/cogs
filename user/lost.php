@@ -21,7 +21,7 @@ if (empty($_POST['ans'])) {
 <p>第二步</p>
 <p>密码提示问题：<span class='label'>
 <?php
-$sql="select pwdtipques from userinfo where usr='".$_POST['User']."'";
+$sql = new SqlQuery("select pwdtipques from userinfo where usr=?", [$_POST['User']]);
 $cnt=$p->dosql($sql);
 if ($cnt==0)
     异常("用户不存在！",取路径("user/lost.php"));
@@ -41,11 +41,11 @@ echo "{$d['pwdtipques']}?";
 <?php
 }
 } else {
-$sql="select pwdtipanshash from userinfo where usr='".$_POST['User']."'";
+$sql = new SqlQuery("select pwdtipanshash from userinfo where usr=?", [$_POST['User']]);
 $p->dosql($sql);
 $d=$p->rtnrlt(0);
 if ($d['pwdtipanshash']==encode($_POST['ans'])) {
-$sql="update userinfo set pwdhash='".encode("") ."' where usr='".$_POST['User']."'";
+$sql = new SqlQuery("update userinfo set pwdhash=? where usr=?", [encode(""), $_POST['User']]);
 $p->dosql($sql);
 提示("密码已经被清空，请立刻登录并修改密码！");
 }

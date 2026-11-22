@@ -28,23 +28,23 @@ foreach ($pri as $key => $val) {
 </form>
 <?php
 if($way=='ins' && $uid) {
-    $sql="select def from `privilege` where uid=$uid and pri=$priv limit 1";
+    $sql = new SqlQuery("select def from `privilege` where uid=? and pri=? limit 1", [$uid, $priv]);
     $cnt=$p->dosql($sql);
     if(!$cnt) {
-        $sql="insert into `privilege`(uid, pri, def) values('$uid','$priv','1')";
+        $sql = new SqlQuery("insert into `privilege`(uid, pri, def) values(?,?,'1')", [$uid, $priv]);
         $cnt=$p->dosql($sql);
         HTML("<div class='alert alert-success'>用户 $uid 已添加权限 ".array_search($priv, $pri)." ！</div>");
     }
 }
 
 if($way=='del' && $uid) {
-    $sql="delete from `privilege` where uid=$uid and pri=$priv";
+    $sql = new SqlQuery("delete from `privilege` where uid=? and pri=?", [$uid, $priv]);
     $cnt=$p->dosql($sql);
     HTML("<div class='alert alert-success'>用户 $uid 已删除权限 ".array_search($priv, $pri)." ！</div>");
 }
 ?>
 <?php
-	$sql="select privilege.*,userinfo.email,userinfo.nickname from privilege,userinfo where userinfo.uid=privilege.uid order by uid,pri asc";
+	$sql = new SqlQuery("select privilege.*,userinfo.email,userinfo.nickname from privilege,userinfo where userinfo.uid=privilege.uid order by uid,pri asc");
 	
 	$cnt=$p->dosql($sql);
 	$totalpage=(int)(($cnt-1)/$SET['style_pagesize'])+1;

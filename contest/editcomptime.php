@@ -8,7 +8,7 @@ gethead(1,"修改比赛","修改比赛场次");
 if ($_GET['action']=='edit')
 {
 	$p=new DataAccess();
-	$sql="select comptime.*,compbase.cname from comptime,compbase where comptime.cbid=compbase.cbid and comptime.ctid={$_GET['ctid']}";
+	$sql = new SqlQuery("select comptime.*,compbase.cname from comptime,compbase where comptime.cbid=compbase.cbid and comptime.ctid=?", [$_GET['ctid']]);
 	$cnt=$p->dosql($sql);
 	$d=$p->rtnrlt(0);
 }
@@ -32,7 +32,7 @@ else
     <td>关联比赛</td>
     <td><select name="cbid" id="cbid">
         <?php
-		$sql="select cname,cbid from compbase";
+		$sql = new SqlQuery("select cname,cbid from compbase");
 		$c=$q->dosql($sql);
 		for ($j=0;$j<$c;$j++)
 		{
@@ -47,7 +47,7 @@ else
     <td>开放分组</td>
     <td><select name="group" id="group" >
         <?php
-		$sql="select * from groups order by gname";
+		$sql = new SqlQuery("select * from groups order by gname");
 		$c=$q->dosql($sql);
 		for ($j=0;$j<$c;$j++)
 		{

@@ -12,7 +12,7 @@ if(!$uid)
     异常("非注册用户！", 取路径("problem/comments.php?pid={$pid}"));
 
 if($cid) {
-    $sql="select comments.* from comments where comments.cid=$cid limit 1";
+    $sql = new SqlQuery("select comments.* from comments where comments.cid=? limit 1", [$cid]);
     $cnt=$p->dosql($sql);
     if($cnt) {
         $d=$p->rtnrlt(0);
@@ -30,14 +30,14 @@ if($cid) {
 }
 
 if($pid) {
-    $sql="select probname from problem where pid={$pid} limit 1";
+    $sql = new SqlQuery("select probname from problem where pid=? limit 1", [$pid]);
     $cnt=$p->dosql($sql);
     if($cnt) {
         $e=$p->rtnrlt(0);
     } else
         异常("无此题目！", 取路径("problem/commentlist.php"));
 } else if($aid) {
-    $sql="select title from page where aid={$aid} limit 1";
+    $sql = new SqlQuery("select title from page where aid=? limit 1", [$aid]);
     $cnt=$p->dosql($sql);
     if($cnt) {
         $e=$p->rtnrlt(0);

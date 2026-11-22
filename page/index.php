@@ -10,14 +10,13 @@ $q=new DataAccess();
 <?php } ?>
 
 <?php
-$sql="select page.*,groups.*,userinfo.nickname,userinfo.email,userinfo.realname from page,groups,userinfo where page.force<={$_SESSION['readforce']} and ";
+$sql = new SqlQuery("select page.*,groups.*,userinfo.nickname,userinfo.email,userinfo.realname from page,groups,userinfo where page.force<=? and userinfo.uid=page.uid and groups.gid=page.group", [$_SESSION['readforce']]);
 
-$sql.=" userinfo.uid=page.uid and groups.gid=page.group";
 
 if ($_GET['key']!="")
-$sql.=" and (page.text like '%{$_GET['key']}%' or page.title like '%{$_GET['key']}%')";
+$sql->append(" and (page.text like ? or page.title like ?)", ['%'. $_GET['key'] .'%', '%'. $_GET['key'] .'%']);
 
-$sql .= " order by aid desc";
+$sql->append(" order by aid desc");
 
 $cnt=$p->dosql($sql);
 $st=检测页面($cnt, $_GET['page']);

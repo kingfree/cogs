@@ -48,29 +48,25 @@ $q=new DataAccess();
 </span>
 </form>
 <?php
-/*$sql="select comments.*,userinfo.*,problem.pid,problem.probname from comments,userinfo,problem where userinfo.uid=comments.uid and problem.pid=comments.pid ";
-if($pid) $sql.=" and problem.pid=$pid";
-if ($_GET['key']!="")
-$sql.=" and (problem.probname like '%{$_GET[key]}%' or problem.pid ='{$_GET[key]}' or problem.filename like '%{$_GET[key]}%' or comments.detail like '%{$_GET[key]}%' or userinfo.nickname like '%{$_GET[key]}%' or userinfo.usr like '%{$_GET[key]}%' or userinfo.realname like '%{$_GET[key]}%')";
-if($pid) $sql.=" order by comments.cid asc"; else $sql.=" order by comments.stime desc";*/
-$key=DataAccess::escape($_GET['key']);
-$sql="SELECT comments.*, userinfo.uid, userinfo.nickname, userinfo.realname, userinfo.email, userinfo.accepted, userinfo.submited, userinfo.grade, userinfo.memo FROM comments, userinfo WHERE userinfo.uid = comments.uid ";
-if($key) $sql.="AND (comments.detail LIKE '%$key%' OR userinfo.nickname LIKE '%$key%' OR userinfo.usr LIKE '%$key%' OR userinfo.realname LIKE '%$key%') ";
+
+$key=$_GET['key'];
+$sql = new SqlQuery("SELECT comments.*, userinfo.uid, userinfo.nickname, userinfo.realname, userinfo.email, userinfo.accepted, userinfo.submited, userinfo.grade, userinfo.memo FROM comments, userinfo WHERE userinfo.uid = comments.uid ");
+if($key) $sql->append("AND (comments.detail LIKE ? OR userinfo.nickname LIKE ? OR userinfo.usr LIKE ? OR userinfo.realname LIKE ?) ", ['%'. $key .'%', '%'. $key .'%', '%'. $key .'%', '%'. $key .'%']);
 if($pid) {
-    $sql.="AND $pid = comments.pid ";
-    $sql.="ORDER BY comments.cid asc";
+    $sql->append("AND ? = comments.pid ", [$pid]);
+    $sql->append("ORDER BY comments.cid asc");
 } else if($aid) {
-    $sql.="AND $aid = comments.aid ";
-    $sql.="ORDER BY comments.cid asc";
+    $sql->append("AND ? = comments.aid ", [$aid]);
+    $sql->append("ORDER BY comments.cid asc");
 } else if($uid) {
-    $sql.="AND $uid = comments.uid ";
-    $sql.="ORDER BY comments.stime desc";
+    $sql->append("AND ? = comments.uid ", [$uid]);
+    $sql->append("ORDER BY comments.stime desc");
 } else {
-    $sql.="ORDER BY comments.stime desc";
+    $sql->append("ORDER BY comments.stime desc");
 }
 $limitt=(int) ((int)$SET['style_pagesize'] / 6);
 if(!($_GET['show'] || $pid || $aid || $uid))
-    $sql .= " limit {$limitt}";
+    $sql->append(" limit ?", [$limitt]);
 //echo "<pre>".$sql."</pre>";
 $cnt=$p->dosql($sql);
 $st=检测页面($cnt, $_GET['page']);
@@ -122,7 +118,7 @@ if($cnt) {
 <a href="?aid=<?=$d['aid']?>">页面 <?=$d['aid']?></a>
 <?php  } ?>
 </span><?php if ($d['showcode']) {
-	$sql="select sid,result from submit where uid='{$d['uid']}' and pid='{$d['pid']}' order by subtime desc";
+	$sql = new SqlQuery("select sid,result from submit where uid=? and pid=? order by subtime desc", [$d['uid'], $d['pid']]);
 	$q->dosql($sql);
 	$e=$q->rtnrlt(0);
 ?>

@@ -25,7 +25,7 @@ gethead(1,"","评测机列表");
     $LIB->func_socket();
 
     $p=new DataAccess();
-    $sql="select * from grader";
+    $sql = new SqlQuery("select * from grader");
     $cnt=$p->dosql($sql);
     for ($i=$st;$i<$cnt ;$i++) {
         $d=$p->rtnrlt($i);

@@ -8,7 +8,7 @@ else
 $p=new DataAccess();
 $q=new DataAccess();
 if($pid) {
-    $sql="select * from problem where pid={$pid}";
+    $sql = new SqlQuery("select * from problem where pid=?", [$pid]);
     $cnt=$p->dosql($sql);
     if($cnt) {
         $d=$p->rtnrlt(0);
@@ -330,14 +330,14 @@ if($_GET['oj']=='poj' && $_GET['id']>=1000) {
 <div id='cates' class='modal hide fade in' style='width:940px; margin-left:-470px;'>
 <?php
 if ($pid) {
-    $sql="select caid from tag where pid={$pid}";
+    $sql = new SqlQuery("select caid from tag where pid=?", [$pid]);
     $cnt=$p->dosql($sql);
     for ($i=0;$i<=$cnt-1;$i++) {
         $f=$p->rtnrlt($i);
         $hash[$f['caid']]=true;
     }
 }
-$sql="select * from category order by cname";
+$sql = new SqlQuery("select * from category order by cname");
 $cnt=$p->dosql($sql);
 if($cnt) {
 ?>
@@ -449,7 +449,7 @@ $f=$p->rtnrlt($i);
 <div class='controls'>
 <select name="group" id="group">
 <?php
-$sql="select * from groups order by gname";
+$sql = new SqlQuery("select * from groups order by gname");
 $c=$q->dosql($sql);
 for ($j=0;$j<$c;$j++) {
     $e=$q->rtnrlt($j);

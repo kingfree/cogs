@@ -9,7 +9,7 @@ $q=new DataAccess();
 <a href="editcate.php?action=add" class="btn btn-info">添加新分类</a>
 <?php } ?>
 <?php
-    $sql="select * from category order by cname";
+    $sql = new SqlQuery("select * from category order by cname");
     $cnt=$p->dosql($sql);
 ?>
 <table id="catelist" class='table table-striped table-condensed table-bordered fiexd'>

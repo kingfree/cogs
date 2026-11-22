@@ -25,9 +25,9 @@ class Compiler
     {
         $p=new DataAccess();
         if($judger)
-            $sql="select grid,address,memo from grader where enabled=1 and grid=$judger";
+            $sql = new SqlQuery("select grid,address,memo from grader where enabled=1 and grid=?", [$judger]);
         else
-            $sql="select grid,address,memo from grader where enabled=1 order by priority desc";
+            $sql = new SqlQuery("select grid,address,memo from grader where enabled=1 order by priority desc");
         $cnt=$p->dosql($sql);
         for ($i=0;$i<$cnt;$i++)
         {
@@ -207,21 +207,21 @@ class Compiler
         $ac=$this->ac==$this->info['datacnt']?1:0;
 
         if ($this->info['rejudge']==1) {
-            $sql="update submit set result='{$this->s_detail}' ,score='{$this->s_score}' ,memory='{$this->avgmemory}' ,accepted='{$ac}' ,runtime='{$this->totaltime}' where sid='{$this->info['sid']}'";
+            $sql = new SqlQuery("update submit set result=? ,score=? ,memory=? ,accepted=? ,runtime=? where sid=?", [$this->s_detail, $this->s_score, $this->avgmemory, $ac, $this->totaltime, $this->info['sid']]);
             $p->dosql($sql);
         } else {
-            $sql="update problem set submitcnt=submitcnt+1";
+            $sql = new SqlQuery("update problem set submitcnt=submitcnt+1");
             if ($ac) {
-                $sql.=",lastacid={$this->info['uid']}";
-                $sql2="select accepted from submit where pid='{$this->info['pid']}' and uid='{$this->info['uid']}' and accepted=1";
+                $sql->append(",lastacid=?", [$this->info['uid']]);
+                $sql2 = new SqlQuery("select accepted from submit where pid=? and uid=? and accepted=1", [$this->info['pid'], $this->info['uid']]);
                 $first=$p->dosql($sql2)==0;
                 if ($first) { //第一次AC
-                    $sql.=" ,acceptcnt=acceptcnt+1";
+                    $sql->append(" ,acceptcnt=acceptcnt+1");
                 }
             }
-            $sql.=" where pid={$this->info['pid']}";
+            $sql->append(" where pid=?", [$this->info['pid']]);
             $p->dosql($sql);
-            $sql="insert into submit(pid,uid,lang,result,score,memory,accepted,subtime,IP,runtime,srcname) values({$this->info['pid']},{$this->info['uid']},{$this->info['language']},'{$this->s_detail}',{$this->s_score},{$this->avgmemory},{$ac},".time().",'{$_SERVER['REMOTE_ADDR']}',{$this->totaltime},'{$this->srcname}')";
+            $sql = new SqlQuery("insert into submit(pid,uid,lang,result,score,memory,accepted,subtime,IP,runtime,srcname) values(?,?,?,?,?,?,?,?,?,?,?)", [$this->info['pid'], $this->info['uid'], $this->info['language'], $this->s_detail, $this->s_score, $this->avgmemory, $ac, time(), $_SERVER['REMOTE_ADDR'], $this->totaltime, $this->srcname]);
             $p->dosql($sql);
         }
         calc_grade($this->info['uid'], get_problem_diffarr());
@@ -230,7 +230,7 @@ class Compiler
     public function writedb_comp($csid)
     {
         $p=new DataAccess();
-        $sql="update compscore set score={$this->s_score}, result='{$this->s_detail}', memory='{$this->avgmemory}', runtime='{$this->totaltime}' where csid={$csid}";
+        $sql = new SqlQuery("update compscore set score=?, result=?, memory=?, runtime=? where csid=?", [$this->s_score, $this->s_detail, $this->avgmemory, $this->totaltime, $csid]);
         $p->dosql($sql);
     }
 

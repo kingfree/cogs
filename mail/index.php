@@ -65,7 +65,7 @@ function reply(uid, tit) {
 <td>发件箱</td>
 </tr>
 <?php
-$sql = "select mail.*,userinfo.* from mail,userinfo where mail.fromid = $uid and mail.toid = userinfo.uid order by mid desc";
+$sql = new SqlQuery("select mail.*,userinfo.* from mail,userinfo where mail.fromid = ? and mail.toid = userinfo.uid order by mid desc", [$uid]);
 $cnt = $p->dosql($sql);
 for($i=0; $i<$cnt; $i++) {
 	$d=$p->rtnrlt($i);
@@ -109,7 +109,7 @@ for($i=0; $i<$cnt; $i++) {
 <td width=80px>收到时间</td>
 </tr>
 <?php
-$sql = "select mail.*,userinfo.* from mail,userinfo where mail.toid = $uid and mail.fromid = userinfo.uid order by mid desc";
+$sql = new SqlQuery("select mail.*,userinfo.* from mail,userinfo where mail.toid = ? and mail.fromid = userinfo.uid order by mid desc", [$uid]);
 $cnt = $p->dosql($sql);
 for($i=0; $i<$cnt; $i++) {
 	$d=$p->rtnrlt($i);

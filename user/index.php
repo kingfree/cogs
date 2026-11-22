@@ -6,22 +6,22 @@ gethead(1,"","用户列表");
     $p=new DataAccess();
     $q=new DataAccess();
     $r=new DataAccess();
-    $sql="select userinfo.*,groups.gname from userinfo,groups where groups.gid=userinfo.gbelong ";
+    $sql = new SqlQuery("select userinfo.*,groups.gname from userinfo,groups where groups.gid=userinfo.gbelong ");
 
     if ($_GET['gid']=="")
         $_GET['gid']=0;
-    $sql1="select * from groups where gid={$_GET['gid']}";
+    $sql1 = new SqlQuery("select * from groups where gid=?", [$_GET['gid']]);
     $cnt=$p->dosql($sql1);
     $d=$p->rtnrlt(0);
     
     $subgroup=$LIB->getsubgroup($p,$_GET['gid']);
     
-    $sql.=" and ( userinfo.gbelong={$_GET['gid']} ";
+    $sql->append(" and ( userinfo.gbelong=? ", [$_GET['gid']]);
     
     foreach($subgroup as $value) {
-        $sql.=" or userinfo.gbelong={$value}";
+        $sql->append(" or userinfo.gbelong=?", [$value]);
     }
-    $sql.=") ";
+    $sql->append(") ");
 
 ?>
 <div class='btn-group pull-left'>
@@ -31,7 +31,7 @@ gethead(1,"","用户列表");
 <li>当前分组</li>
 <li><a href=""><span class='label'><?=$d['gname'] ?></span><?=nl2br(sp2n(htmlspecialchars($d['memo']))) ?></a></li>
 <?php if ($d['parent']) {
-$sql2="select * from groups where gid={$d['parent']}";
+$sql2 = new SqlQuery("select * from groups where gid=?", [$d['parent']]);
 $q->dosql($sql2);
 $e=$q->rtnrlt(0);
 ?>
@@ -46,7 +46,7 @@ if ($subgroup!=array()) {
 <li>下级分组</li>
 <li><?php
 foreach($subgroup as $value) {
-$sql2="select * from groups where gid={$value}";
+$sql2 = new SqlQuery("select * from groups where gid=?", [$value]);
 $q->dosql($sql2);
 $e=$q->rtnrlt(0);
 ?>
@@ -59,11 +59,12 @@ $e=$q->rtnrlt(0);
 </div>
 <?php
     if ($_GET['key']!="")
-        $sql.=" and (nickname like '%{$_GET['key']}%' or uid ='{$_GET['key']}' or usr like '%{$_GET['key']}%' or realname like '%{$_GET['key']}%')";
-if($_GET['rank'])
-$sql.=" order by {$_GET['rank']} {$_GET['order']}";
-else
-$sql.=" order by grade desc";
+        $sql->append(" and (nickname like ? or uid =? or usr like ? or realname like ?)", ['%'. $_GET['key'] .'%', $_GET['key'], '%'. $_GET['key'] .'%', '%'. $_GET['key'] .'%']);
+$columns = ['uid', 'nickname', 'realname', 'readforce', 'gbelong', 'accepted', 'accepted/submited', 'grade'];
+$column = $_GET['rank'] ?? '';
+if (!in_array($column, $columns, true)) $column = 'grade';
+$direction = strtolower($_GET['order'] ?? 'desc') === 'desc' ? 'DESC' : 'ASC';
+$sql->append(' ORDER BY '.$column.' '.$direction);
 
 $cnt=$p->dosql($sql);
 $st=检测页面($cnt, $_GET['page']);
@@ -132,7 +133,7 @@ function okdel(name) {
     </td>
     <?php  } ?>
     <td><?php
-    $sql="select privilege.* from privilege where uid={$d['uid']} order by pri asc";
+    $sql = new SqlQuery("select privilege.* from privilege where uid=? order by pri asc", [$d['uid']]);
 	$cnt1=$r->dosql($sql);
 	for($i1=0;$i1<$cnt1;$i1++) {
 		$e=$r->rtnrlt($i1);
@@ -140,7 +141,7 @@ function okdel(name) {
     } ?></td>
     <td ><?="<a href='?gid={$d['gbelong']}'>{$d['gname']}</a>"; ?></td>
     <td ><?=$d['accepted'] ?></td>
-    <td ><?=@round($d['accepted']/$d['submited']*100,1); ?>%</td>
+    <td ><?=($d['submited'] ? round($d['accepted']/$d['submited']*100,1) : 0); ?>%</td>
     <td ><?=$d['grade'] ?></td>
     <?php  if(有此权限('查看用户')) { ?>
     <td>

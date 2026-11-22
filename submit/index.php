@@ -24,16 +24,16 @@ $q=new DataAccess();
 <button name='show' value='yes' class='btn btn-inverse'>显示分页记录</button>
 </form>
 <?php
-$sql="select submit.*,userinfo.nickname,userinfo.email,userinfo.realname,problem.probname from submit,userinfo,problem where problem.readforce<={$_SESSION['readforce']} and submit.pid=problem.pid and submit.uid=userinfo.uid ";
+$sql = new SqlQuery("select submit.*,userinfo.nickname,userinfo.email,userinfo.realname,problem.probname from submit,userinfo,problem where problem.readforce<=? and submit.pid=problem.pid and submit.uid=userinfo.uid ", [$_SESSION['readforce']]);
 if ($_GET['display']=='ac')
-    $sql.=" and submit.accepted=1 ";
+    $sql->append(" and submit.accepted=1 ");
 if ($_GET['uid'])
-    $sql.=" and submit.uid={$_GET['uid']} ";
+    $sql->append(" and submit.uid=? ", [$_GET['uid']]);
 if ($_GET['pid'])
-    $sql.=" and submit.pid={$_GET['pid']} ";
-$sql.=" order by submit.sid desc";
+    $sql->append(" and submit.pid=? ", [$_GET['pid']]);
+$sql->append(" order by submit.sid desc");
 $limitt=(int)$SET['style_pagesize']/2;
-if(!$_GET['show'] && !$_GET['pid']) $sql .= " limit {$limitt}";
+if(!$_GET['show'] && !$_GET['pid']) $sql->append(" limit ?", [$limitt]);
 $cnt=$p->dosql($sql);
 $totalpage=(int)(($cnt-1)/$SET['style_pagesize'])+1;
 if(!$_GET['page']) {

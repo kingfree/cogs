@@ -5,9 +5,9 @@ if($_GET['method']=='html') $LIB->editor("value");
 $p=new DataAccess();
 
 if ((int)$_GET['ssid'])
-	$sql="select * from settings where ssid={$_GET['ssid']}";
+	$sql = new SqlQuery("select * from settings where ssid=?", [$_GET['ssid']]);
 else
-	$sql="select * from settings where name='{$_GET['sname']}'";
+	$sql = new SqlQuery("select * from settings where name=?", [$_GET['sname']]);
 $cnt=$p->dosql($sql);
 $d=$p->rtnrlt(0);
 $ssid=$d['ssid'];

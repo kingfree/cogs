@@ -28,7 +28,7 @@ if ($_GET['action']=='del') {
 $p=new DataAccess();
 $q=new DataAccess();
 if ($_GET['action']=='edit') {
-    $sql="select * from page where aid={$_GET['aid']}";
+    $sql = new SqlQuery("select * from page where aid=?", [$_GET['aid']]);
     $cnt=$p->dosql($sql);
 }
 if ($cnt) {
@@ -57,7 +57,7 @@ if ($cnt) {
 <dt>开放分组</dt>
 <dd><select name="group" id="group">
 <?php
-$sql="select * from groups order by gname";
+$sql = new SqlQuery("select * from groups order by gname");
 $c=$q->dosql($sql);
 for ($j=0;$j<$c;$j++) {
 $e=$q->rtnrlt($j);

@@ -2,7 +2,7 @@
 require_once("../include/header.php");
 $p = new DataAccess();
 if($name = $_GET['name']) {
-    $sql = "SELECT uid FROM userinfo WHERE usr='$name'";
+    $sql = new SqlQuery("SELECT uid FROM userinfo WHERE usr=?", [$name]);
     $rows = $p->dosql($sql);
     $uid = 0;
     if($rows) {

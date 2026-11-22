@@ -22,7 +22,7 @@ function Navigation($p) {
     HTML("<li class='dropdown'>");
     HTML("<a id='fenleibar' href='#' class='dropdown-toggle' data-toggle='dropdown'><b class='caret'></b></a>");
     HTML("<ul class='dropdown-menu span11' id='catebar'>");
-    $sql="select * from category order by cname";
+    $sql = new SqlQuery("select * from category order by cname");
     $cnt=$p->dosql($sql);
     for ($i=0;$i<$cnt;$i++) {
         $d=$p->rtnrlt($i);
@@ -42,9 +42,9 @@ function Navigation($p) {
     HTML("<li class='{$active['submit']}'><a href='".路径("submit/index.php")."'>记录</a></li>");
     $context = "比赛";
     $now = time();
-    $cnt2 = $p->dosql("select ctid from comptime where starttime < $now and endtime > $now");
+    $cnt2 = $p->dosql("select ctid from comptime where starttime < ? and endtime > ?", [$now, $now]);
     if($cnt2) $context .= "<span class='doing'>($cnt2)</span>";
-    $cnt1 = $p->dosql("select ctid from comptime where starttime > $now and endtime > $now");
+    $cnt1 = $p->dosql("select ctid from comptime where starttime > ? and endtime > ?", [$now, $now]);
     if($cnt1) $context .= "<span class='todo'>($cnt1)</span>";
     HTML("<li class='{$active['contest']}'><a href='".路径("contest/index.php")."'>$context</a></li>");
     HTML("<li class='{$active['page']}'><a href='".路径("page/index.php")."'>页面</a></li>");
@@ -61,13 +61,13 @@ function Navigation($p) {
     HTML("<li class='divider-vertical'></li>");
     HTML("<li class='dropdown'>");
     if($uid = (int) $_SESSION['ID']) {
-        $sql="select * from userinfo where uid='{$uid}'";
+        $sql = new SqlQuery("select * from userinfo where uid=?", [$uid]);
         $p->dosql($sql);
         $d=$p->rtnrlt(0);
         $nickname = $d['nickname'];
-        $cnt1 = $p->dosql("select mid from mail where readed = 0 and toid = {$uid}");
+        $cnt1 = $p->dosql("select mid from mail where readed = 0 and toid = ?", [$uid]);
         if($cnt1 > 0) $mails .= "<span class='doing'>($cnt1)</span>";
-        $cnt1 = $p->dosql("select mid from mail where readed = 0 and fromid = {$uid}");
+        $cnt1 = $p->dosql("select mid from mail where readed = 0 and fromid = ?", [$uid]);
         if($cnt1 > 0) $mails .= "<span class='todo'>($cnt1)</span>";
     } else $nickname = "登录";
     HTML("<a href='#' class='dropdown-toggle' data-toggle='dropdown'>{$nickname}{$mails}<b class='caret'></b></a>");
@@ -125,9 +125,9 @@ function Navigation_IE($p) {
     HTML("<li class='{$active['submit']}'><a href='".路径("submit/index.php")."'>记录</a></li>");
     $context = "比赛";
     $now = time();
-    $cnt2 = $p->dosql("select ctid from comptime where starttime < $now and endtime > $now");
+    $cnt2 = $p->dosql("select ctid from comptime where starttime < ? and endtime > ?", [$now, $now]);
     if($cnt2) $context .= "<span class='doing'>($cnt2)</span>";
-    $cnt1 = $p->dosql("select ctid from comptime where starttime > $now and endtime > $now");
+    $cnt1 = $p->dosql("select ctid from comptime where starttime > ? and endtime > ?", [$now, $now]);
     if($cnt1) $context .= "<span class='todo'>($cnt1)</span>";
     HTML("<li class='{$active['contest']}'><a href='".路径("contest/index.php")."'>$context</a></li>");
     HTML("<li class='{$active['page']}'><a href='".路径("page/index.php")."'>页面</a></li>");
@@ -141,13 +141,13 @@ function Navigation_IE($p) {
     HTML("<li class='divider-vertical'></li>");
     HTML("<li class='dropdown'>");
     if($uid = (int) $_SESSION['ID']) {
-        $sql="select * from userinfo where uid='{$uid}'";
+        $sql = new SqlQuery("select * from userinfo where uid=?", [$uid]);
         $p->dosql($sql);
         $d=$p->rtnrlt(0);
         $nickname = $d['nickname'];
-        $cnt1 = $p->dosql("select mid from mail where readed = 0 and toid = {$uid}");
+        $cnt1 = $p->dosql("select mid from mail where readed = 0 and toid = ?", [$uid]);
         if($cnt1 > 0) $mails .= "<span class='doing'>($cnt1)</span>";
-        $cnt1 = $p->dosql("select mid from mail where readed = 0 and fromid = {$uid}");
+        $cnt1 = $p->dosql("select mid from mail where readed = 0 and fromid = ?", [$uid]);
         if($cnt1 > 0) $mails .= "<span class='todo'>($cnt1)</span>";
     } else $nickname = "登录";
     if($uid = (int) $_SESSION['ID']) {

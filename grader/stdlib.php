@@ -19,8 +19,8 @@ function wfile($str,$fname)
 function write_cnt()
 {
     $t=read_cnt()+1;
-    $fp=fopen("cnt.php","w");
-    fprintf($fp,"%ld",$t);
+    $fp=fopen(__DIR__."/cnt.php","w");
+    fprintf($fp,"%d",$t);
     fclose($fp);
 }
 
@@ -77,7 +77,7 @@ require_once dirname(__FILE__)."/../include/grader-protocol.php";
 
 function read()
 {
-    $fp=fopen("mode.php","r");
+    $fp=fopen(__DIR__."/mode.php","r");
     fscanf($fp,"%s",$out);
     fclose($fp);
     return $out;
@@ -85,14 +85,14 @@ function read()
 
 function write($str)
 {
-    $fp=fopen("mode.php","w");
+    $fp=fopen(__DIR__."/mode.php","w");
     fprintf($fp,"%s",$str);
     fclose($fp);
 }
 
 function read_cnt()
 {
-    $fp=fopen("cnt.php","r");
+    $fp=fopen(__DIR__."/cnt.php","r");
     fscanf($fp,"%d",$out);
     fclose($fp);
     return $out;
@@ -101,8 +101,8 @@ function read_cnt()
 function getrunning()
 {
     global $cfg;
-    $fp=fopen("running.php","r");
-    fscanf($fp,"%ld",$out);
+    $fp=fopen(__DIR__."/running.php","r");
+    fscanf($fp,"%d",$out);
     fclose($fp);
     return $out;
 }
@@ -113,17 +113,17 @@ function setrunning($k,$a="")
     $t=getrunning();
     $t+=$k;
     if ($t<0) $t=0;
-    $fp=fopen("running.php","w");
+    $fp=fopen(__DIR__."/running.php","w");
     if ($a=='abs')
         $t=$k;
-    fprintf($fp,"%ld",$t);
+    fprintf($fp,"%d",$t);
     fclose($fp);
 }
 
 function getsettings()
 {
     global $cfg;
-    $fp=fopen("settings.php","r");
+    $fp=fopen(__DIR__."/settings.php","r");
     fscanf($fp,"%s",$cfg['Name']);
     //fscanf($fp,"%s",$cfg['Ver']);
     $cfg['Ver']='1.5';

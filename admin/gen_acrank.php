@@ -11,11 +11,11 @@ $supcnt=array();
 $accnt=array();
 
 $rand_gen_data_access=new DataAccess();
-$sql="select * from problem";
+$sql = new SqlQuery("select * from problem");
 $probcnt=$rand_gen_data_access->dosql($sql);
 
     flush();
-$sql="select submit.pid,uid,accepted,difficulty,score from submit,problem where problem.pid=submit.pid order by uid,pid,-score";
+$sql = new SqlQuery("select submit.pid,uid,accepted,difficulty,score from submit,problem where problem.pid=submit.pid order by uid,pid,-score");
 $cnt=$rand_gen_data_access->dosql($sql);
     flush();
 echo "计算题目等级积分……<br />";
@@ -37,7 +37,7 @@ for ($i=0;$i<$cnt;$i++) {
     }
 }
     flush();
-$sql="select compscore.score,compscore.uid,problem.difficulty,problem.pid from compscore,problem where problem.pid=compscore.pid order by uid,pid";
+$sql = new SqlQuery("select compscore.score,compscore.uid,problem.difficulty,problem.pid from compscore,problem where problem.pid=compscore.pid order by uid,pid");
 $cnt=$rand_gen_data_access->dosql($sql);
 echo "计算比赛等级积分……<br />";
 for ($i=0;$i<$cnt;$i++) {
@@ -50,7 +50,7 @@ $users=$lastuser;
 echo "更新数据库积分……<br />";
 for ($i=1;$i<=$users;$i++) {
     $grade[$i]=(int) ($grade[$i] /* * ($accnt[$i] / $supcnt[$i]));
-    $sql="update userinfo set accepted='{$accnt[$i]}',submited='{$subcnt[$i]}',grade='{$grade[$i]}' where uid='{$i}'";
+    $sql = new SqlQuery("update userinfo set accepted=?,submited=?,grade=? where uid=?", [$accnt[$i], $subcnt[$i], $grade[$i], $i]);
     $rand_gen_data_access->dosql($sql);
 }
     flush();
@@ -58,7 +58,7 @@ echo "更新题目提交数据库……<br />";
 
 $subcnt=array();
 $accnt=array();
-$sql="select pid,accepted from submit order by pid";
+$sql = new SqlQuery("select pid,accepted from submit order by pid");
 $cnt=$rand_gen_data_access->dosql($sql);
 $lastprob=0;
 for ($i=0;$i<$cnt;$i++) {
@@ -72,7 +72,7 @@ for ($i=0;$i<$cnt;$i++) {
     flush();
 $probs=$lastprob;
 for ($i=1;$i<=$probs;$i++) {
-    $sql="update problem set acceptcnt='{$accnt[$i]}',submitcnt='{$subcnt[$i]}' where pid='{$i}'";
+    $sql = new SqlQuery("update problem set acceptcnt=?,submitcnt=? where pid=?", [$accnt[$i], $subcnt[$i], $i]);
     $rand_gen_data_access->dosql($sql);
 }
     flush();
@@ -80,7 +80,7 @@ for ($i=1;$i<=$probs;$i++) {
 $diffarr = get_problem_diffarr();
 
 $p = new DataAccess();
-$sql = "select uid, usr, realname from userinfo";
+$sql = new SqlQuery("select uid, usr, realname from userinfo");
 $cnt = $p->dosql($sql);
 for ($i = 0; $i < $cnt; $i++) {
   $d = $p->rtnrlt($i);

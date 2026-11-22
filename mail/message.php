@@ -4,14 +4,14 @@ function mailReadMessage($db, $mid, $uid) {
     $mid = filter_var($mid, FILTER_VALIDATE_INT, array('options' => array('min_range' => 1)));
     $uid = (int)$uid;
     if (!$mid || $uid < 1) return false;
-    if (!$db->dosql("select * from mail where mid = $mid and (fromid = $uid or toid = $uid)")) return false;
+    if (!$db->dosql("select * from mail where mid = ? and (fromid = ? or toid = ?)", [$mid, $uid, $uid])) return false;
     return $db->rtnrlt();
 }
 
 function mailMarkRead($db, $mid, $uid) {
     $mid = filter_var($mid, FILTER_VALIDATE_INT, array('options' => array('min_range' => 1)));
     $uid = (int)$uid;
-    if ($mid && $uid > 0) $db->dosql("update mail set readed = 1 where mid = $mid and toid = $uid");
+    if ($mid && $uid > 0) $db->dosql("update mail set readed = 1 where mid = ? and toid = ?", [$mid, $uid]);
 }
 
 function mailHtml($value) {

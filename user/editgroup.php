@@ -6,7 +6,7 @@ $q=new DataAccess();
 $d['adminuid']=$_SESSION['ID'];
 $d['parent']=1;
 if ($_GET['action']=='edit') {
-    $sql="select * from groups where gid={$_GET['gid']}";
+    $sql = new SqlQuery("select * from groups where gid=?", [$_GET['gid']]);
     $cnt=$p->dosql($sql);
     $d=$p->rtnrlt(0);
 }
@@ -36,7 +36,7 @@ if ($_GET['action']=='edit') {
 <div class='controls'>
 <select name="parent" id="parent">
 <?php
-$sql="select * from groups order by gname";
+$sql = new SqlQuery("select * from groups order by gname");
 $c=$q->dosql($sql);
 for ($j=0;$j<$c;$j++) {
     $e=$q->rtnrlt($j);

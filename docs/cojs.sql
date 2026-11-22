@@ -42,6 +42,7 @@ CREATE TABLE IF NOT EXISTS `category` (
 
 CREATE TABLE IF NOT EXISTS `comments` (
   `cid` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `aid` int(10) unsigned NOT NULL DEFAULT 0,
   `pid` int(10) unsigned NOT NULL DEFAULT '0',
   `uid` int(10) unsigned NOT NULL DEFAULT '0',
   `detail` text,

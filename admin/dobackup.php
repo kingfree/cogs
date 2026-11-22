@@ -2,7 +2,10 @@
 require_once("../include/header.php");
 gethead(1,"超级用户","执行备份与恢复");
 $LIB->func_socket();
-过滤();
+if (!isset($_POST['filename']) || !is_string($_POST['filename']) ||
+    !preg_match('/^[a-zA-Z0-9_][a-zA-Z0-9_.-]{0,100}$/D', $_POST['filename'])) {
+    if ($_POST['backtype'] !== 'showback') 异常("备份文件名无效");
+}
 
 $filename=$_POST['filename']."_".date('His', time());
 $ima=getcwd();

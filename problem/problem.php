@@ -3,7 +3,7 @@ require_once("../include/header.php");
 $uid = (int) $_SESSION['ID'];
 $pid = (int) $_GET['pid'];
 $p=new DataAccess();
-$sql="select problem.*,groups.* from problem,groups where pid=".(int)$_GET['pid']." and groups.gid=problem.group limit 1";
+$sql = new SqlQuery("select problem.*,groups.* from problem,groups where pid=? and groups.gid=problem.group limit 1", [(int)$_GET['pid']]);
 $cnt=$p->dosql($sql);
 $d=$p->rtnrlt(0);
 $title = $d['probname'];
@@ -63,7 +63,7 @@ if($cnt) {
 <th>题目来源</th>
 <td>
 <?php if(有此权限('查看题目') || $uid == $d['addid']) { 
-    $sql="SELECT realname FROM userinfo WHERE uid ={$d['addid']} limit 1";
+    $sql = new SqlQuery("SELECT realname FROM userinfo WHERE uid =? limit 1", [$d['addid']]);
     $ac=$q->dosql($sql);
     $e=$q->rtnrlt(0); ?>
 <a href="../user/detail.php?uid=<?=$d['addid']; ?>"><?=$e['realname']?></a>
@@ -79,12 +79,12 @@ if($cnt) {
 <td><?php
 $acpid=0;
 if($uid) {
-    $sql="(SELECT max(score) AS score FROM submit WHERE pid ={$pid} AND uid ={$uid})";
+    $sql = new SqlQuery("(SELECT max(score) AS score FROM submit WHERE pid =? AND uid =?)", [$pid, $uid]);
     $ac=$q->dosql($sql);
     if ($ac) {
         $e=$q->rtnrlt(0);
         $score=(int)$e['score'];
-        $sql="SELECT sid,lang,result,accepted FROM submit WHERE pid={$pid} AND uid={$uid} AND score={$score} order by sid desc";
+        $sql = new SqlQuery("SELECT sid,lang,result,accepted FROM submit WHERE pid=? AND uid=? AND score=? order by sid desc", [$pid, $uid, $score]);
         $ac=$q->dosql($sql);
         if ($ac) {
             $e=$q->rtnrlt(0);
@@ -99,7 +99,7 @@ if($uid) {
 </td></tr>
 <tr><th id="fenleito" title="单击以显示或隐藏分类标签" style="cursor:pointer">分类标签</th>
 <td><div id="fenlei"><?php
-$sql="select category.cname,category.memo,category.caid from category,tag where tag.pid={$_GET['pid']} and category.caid=tag.caid";
+$sql = new SqlQuery("select category.cname,category.memo,category.caid from category,tag where tag.pid=? and category.caid=tag.caid", [$_GET['pid']]);
 $cnt2=$r->dosql($sql);
 for ($i=0;$i<=$cnt2-1;$i++) {
     $e=$r->rtnrlt($i);
@@ -156,7 +156,7 @@ for ($i=0;$i<=$cnt2-1;$i++) {
 <select name='judger' class='input-medium'>
 <option value=0 selected=selected>自动选择评测机</option>
 <?php
-$sql="select grid,address,memo from grader where enabled=1 order by priority desc";
+$sql = new SqlQuery("select grid,address,memo from grader where enabled=1 order by priority desc");
 $cnt=$q->dosql($sql);
 for ($i=0;$i<$cnt;$i++) {
     $e=$q->rtnrlt($i);
@@ -184,10 +184,10 @@ for ($i=0;$i<$cnt;$i++) {
 <tr><td colspan=4>
 通过：<?php echo $d['acceptcnt']; ?>，
 提交：<?php echo $d['submitcnt']; ?>，
-通过率：<?php echo @round($d['acceptcnt']/$d['submitcnt']*100,2); ?>%
+通过率：<?php echo ($d['submitcnt'] ? round($d['acceptcnt']/$d['submitcnt']*100,2) : 0); ?>%
 </td><tr>
 <?php
-$sql2="select submit.*,userinfo.nickname,userinfo.realname,userinfo.uid,userinfo.email from submit,userinfo where submit.pid={$pid} and submit.uid=userinfo.uid order by score desc, runtime asc, memory asc limit {$SET['style_single_ranksize']}";
+$sql2 = new SqlQuery("select submit.*,userinfo.nickname,userinfo.realname,userinfo.uid,userinfo.email from submit,userinfo where submit.pid=? and submit.uid=userinfo.uid order by score desc, runtime asc, memory asc limit ?", [$pid, $SET['style_single_ranksize']]);
 $cnt=$q->dosql($sql2);
 for ($i=0;$i<$cnt;$i++) {
     $f=$q->rtnrlt($i);
@@ -212,7 +212,7 @@ for ($i=0;$i<$cnt;$i++) {
 <?php  } ?>
 </th></tr>
 <?php
-$sql="select comments.*,userinfo.nickname,userinfo.uid,userinfo.email from comments,userinfo where userinfo.uid=comments.uid and comments.pid='{$d['pid']}' order by comments.cid asc";
+$sql = new SqlQuery("select comments.*,userinfo.nickname,userinfo.uid,userinfo.email from comments,userinfo where userinfo.uid=comments.uid and comments.pid=? order by comments.cid asc", [$d['pid']]);
 $cnt=$q->dosql($sql);
 for ($i=0;$i<$cnt;$i++) {
     $e=$q->rtnrlt($i);
@@ -225,7 +225,7 @@ for ($i=0;$i<$cnt;$i++) {
 <a href="../user/detail.php?uid=<?=$e['uid'] ?>"><?=gravatar::showImage($e['email']);?><?=$e['nickname'] ?></a>
 <div class="pull-right">
 <?php if($e['showcode']) {
-    $sql="select sid from submit where uid='{$e['uid']}' and pid='{$d['pid']}' order by subtime desc";
+    $sql = new SqlQuery("select sid from submit where uid=? and pid=? order by subtime desc", [$e['uid'], $d['pid']]);
     $r->dosql($sql);
     $f=$r->rtnrlt(0);
 ?>
@@ -279,7 +279,7 @@ $Jia['summary']=trim(strip_tags($d['detail']));
 <select name='judger' class='input-medium'>
 <option value=0 selected=selected>自动选择评测机</option>
 <?php
-$sql="select grid,address,memo from grader where enabled=1 order by priority desc";
+$sql = new SqlQuery("select grid,address,memo from grader where enabled=1 order by priority desc");
 $cnt=$q->dosql($sql);
 for ($i=0;$i<$cnt;$i++) {
     $e=$q->rtnrlt($i);

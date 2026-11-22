@@ -49,17 +49,17 @@ if(!file_exists($fname))
     异常("比赛提交代码文件 $fname 失败！",取路径("contest/problem.php?pid={$_POST['pid']}&ctid={$_POST['ctid']}"));
 
     $p=new DataAccess();
-    $sql="select csid from compscore where uid={$_SESSION['ID']} and pid={$_POST['pid']} and ctid={$_POST['ctid']}";
+    $sql = new SqlQuery("select csid from compscore where uid=? and pid=? and ctid=?", [$_SESSION['ID'], $_POST['pid'], $_POST['ctid']]);
     $cnt=$p->dosql($sql);
     if ($cnt) {
-        $sql="update compscore set subtime=".time().",lang={$nlang} where ctid={$_POST['ctid']} and uid={$_SESSION['ID']} and pid={$_POST['pid']}";
+        $sql = new SqlQuery("update compscore set subtime=?,lang=? where ctid=? and uid=? and pid=?", [time(), $nlang, $_POST['ctid'], $_SESSION['ID'], $_POST['pid']]);
         $p->dosql($sql);
     } else {
-        $sql="insert into compscore(ctid,uid,pid,subtime,lang) values({$_POST['ctid']},{$_SESSION['ID']},{$_POST['pid']},".time().",{$nlang})";
+        $sql = new SqlQuery("insert into compscore(ctid,uid,pid,subtime,lang) values(?,?,?,?,?)", [$_POST['ctid'], $_SESSION['ID'], $_POST['pid'], time(), $nlang]);
         $p->dosql($sql);
     }
 
-$sql="select csid from compscore where uid={$_SESSION['ID']} and pid={$_POST['pid']} and ctid={$_POST['ctid']}";
+$sql = new SqlQuery("select csid from compscore where uid=? and pid=? and ctid=?", [$_SESSION['ID'], $_POST['pid'], $_POST['ctid']]);
 $cnt=$p->dosql($sql);
 if ($cnt) {
     $d=$p->rtnrlt(0);

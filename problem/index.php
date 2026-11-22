@@ -2,7 +2,7 @@
 require_once("../include/header.php");
 $p=new DataAccess();
 if ($_GET['caid']) {
-    $sql="select * from category where caid={$_GET['caid']}";
+    $sql = new SqlQuery("select * from category where caid=?", [$_GET['caid']]);
     $cnt=$p->dosql($sql);
     $d=$p->rtnrlt(0);
     gethead(1,"","{$d['cname']} - 题目列表");
@@ -45,22 +45,23 @@ if (restore) selObj.selectedIndex=0;
 <?php } ?>
 
 <?php
-$sql="select problem.* from problem";
+$sql = new SqlQuery("select problem.* from problem");
 if($_GET['caid'])
-$sql.=",tag where tag.pid=problem.pid and tag.caid={$_GET['caid']}";
+$sql->append(",tag where tag.pid=problem.pid and tag.caid=? and problem.readforce<=?", [$_GET['caid'], $_SESSION['readforce']]);
 else
-$sql .= " where problem.readforce<={$_SESSION['readforce']}";
+$sql->append(" where problem.readforce<=?", [$_SESSION['readforce']]);
 
 if ($_GET['key']!="")
-$sql.=" and (problem.probname like '%{$_GET['key']}%' or problem.pid ='{$_GET['key']}' or problem.filename like '%{$_GET['key']}%')";
+$sql->append(" and (problem.probname like ? or problem.pid =? or problem.filename like ?)", ['%'. $_GET['key'] .'%', $_GET['key'], '%'. $_GET['key'] .'%']);
 
 if ($_GET['diff']!="")
-$sql.=" and problem.difficulty='{$_GET['diff']}'";
+$sql->append(" and problem.difficulty=?", [$_GET['diff']]);
 
-if($_GET['rank'])
-$sql.=" order by {$_GET['rank']} {$_GET['order']}";
-else
-$sql.=" order by problem.pid asc";
+$columns = ['pid', 'probname', 'filename', 'timelimit', 'memorylimit', 'difficulty', 'plugin', 'acceptcnt', 'submitcnt', 'submitable'];
+$column = $_GET['rank'] ?? '';
+if (!in_array($column, $columns, true)) $column = 'pid';
+$direction = strtolower($_GET['order'] ?? 'asc') === 'desc' ? 'DESC' : 'ASC';
+$sql->append(' ORDER BY '.$column.' '.$direction);
 
 $cnt=$p->dosql($sql);
 $st=检测页面($cnt, $_GET['page']);
@@ -142,7 +143,7 @@ if (!$err) for ($i=$st;$i<$cnt && $i<$st+$SET['style_pagesize'] ;$i++) {
 <td><?=$STR['plugin'][$d['plugin']]?></td>
 <td><?php echo $d['acceptcnt']; ?></td>
 <td><?php echo $d['submitcnt']; ?></td>
-<td><?php echo @round($d['acceptcnt']/$d['submitcnt']*100,2); ?>%</td>
+<td><?php echo ($d['submitcnt'] ? round($d['acceptcnt']/$d['submitcnt']*100,2) : 0); ?>%</td>
 <?php if(有此权限('查看题目')) { ?>
 <td class="center">
 <a href="doeditprob.php?action=change&pid=<?=$d['pid']?>" title="更改题目 <?=shortname($d['probname'])?> 的可用性" onclick="return okic('<?=$d['probname']?>')">

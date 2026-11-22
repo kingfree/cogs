@@ -6,7 +6,7 @@ gethead(1,"分类管理","修改分类");
 <?php
 if ($_GET['action']=='edit') {
 	$p=new DataAccess();
-	$sql="select * from category where caid={$_GET['caid']}";
+	$sql = new SqlQuery("select * from category where caid=?", [$_GET['caid']]);
 	$cnt=$p->dosql($sql);
 	$d=$p->rtnrlt(0);
 }

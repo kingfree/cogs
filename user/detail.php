@@ -4,9 +4,9 @@ $p=new DataAccess();
 $uid = (int) $_GET['uid'];
 $user = $_GET['user'];
 if($uid)
-$sql="select userinfo.*,groups.gname,groups.gid from userinfo,groups where userinfo.uid={$uid} and userinfo.gbelong=groups.gid";
+$sql = new SqlQuery("select userinfo.*,groups.gname,groups.gid from userinfo,groups where userinfo.uid=? and userinfo.gbelong=groups.gid", [$uid]);
 else
-$sql="select userinfo.*,groups.gname,groups.gid from userinfo,groups where (userinfo.uid='$user' OR userinfo.nickname='$user' OR userinfo.realname='$user' OR userinfo.usr='$user') and userinfo.gbelong=groups.gid";
+$sql = new SqlQuery("select userinfo.*,groups.gname,groups.gid from userinfo,groups where (userinfo.uid=? OR userinfo.nickname=? OR userinfo.realname=? OR userinfo.usr=?) and userinfo.gbelong=groups.gid", [$user, $user, $user, $user]);
 $cnt=$p->dosql($sql);
 if(!$cnt) 异常("无此用户！", 取路径("user/index.php"));
 $d=$p->rtnrlt(0);
@@ -72,7 +72,7 @@ $q=new DataAccess();
     <th>用户权限</th>
     <td>
   <?php
-    $sql="select privilege.* from privilege where uid={$d['uid']} order by pri asc";
+    $sql = new SqlQuery("select privilege.* from privilege where uid=? order by pri asc", [$d['uid']]);
 	$cnt=$q->dosql($sql);
     if(!$cnt) echo array_search(0,$pri) . " ";
 	for ($i=0;$i<$cnt;$i++) {
@@ -89,7 +89,7 @@ $q=new DataAccess();
   <?php } ?>
 </table>
 <?php
-$sql="select compbase.cbid,compbase.cname,compscore.subtime,comptime.ctid from compscore,comptime,compbase where compscore.uid={$uid} and comptime.ctid=compscore.ctid and comptime.cbid=compbase.cbid order by comptime.endtime desc";
+$sql = new SqlQuery("select compbase.cbid,compbase.cname,compscore.subtime,comptime.ctid from compscore,comptime,compbase where compscore.uid=? and comptime.ctid=compscore.ctid and comptime.cbid=compbase.cbid order by comptime.endtime desc", [$uid]);
 $cnt=$p->dosql($sql);
 if ($cnt) {
 ?>
@@ -125,7 +125,7 @@ if ($cnt) {
 <?php  } ?>
 <?php
 $accnt=0;
-$sql="select problem.pid,problem.probname,submit.accepted,submit.lang,submit.sid from submit,problem where submit.uid={$uid} and submit.pid=problem.pid order by problem.pid asc, submit.score desc ";
+$sql = new SqlQuery("select problem.pid,problem.probname,submit.accepted,submit.lang,submit.sid from submit,problem where submit.uid=? and submit.pid=problem.pid order by problem.pid asc, submit.score desc ", [$uid]);
 $cnt=$p->dosql($sql);
 if ($cnt) {
 ?>

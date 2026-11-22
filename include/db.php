@@ -1,4 +1,5 @@
 <?php
+require_once __DIR__."/sql-query.php";
 // 各页面共享数据库连接，每个查询对象保留自己的结果集。
 class DataAccess
 {
@@ -18,18 +19,27 @@ class DataAccess
         return self::$connection;
     }
 
-    // 旧页面自行添加引号；新查询通过 dosql 的第二个参数绑定。
-    public static function escape($value)
-    {
-        return substr(self::connection()->quote($value), 1, -1);
-    }
-
-    public function dosql($sql, $params = array())
+    public static function statement($sql, array $params = [])
     {
         global $Query_Times;
         $Query_Times++;
+        if ($sql instanceof SqlQuery) {
+            $params = $sql->values;
+            $sql = $sql->text;
+        }
         $statement = self::connection()->prepare($sql);
-        $statement->execute($params);
+        foreach (array_values($params) as $offset => $value) {
+            $type = is_int($value) ? PDO::PARAM_INT : PDO::PARAM_STR;
+            if ($value === null) $type = PDO::PARAM_NULL;
+            $statement->bindValue($offset + 1, $value, $type);
+        }
+        $statement->execute();
+        return $statement;
+    }
+
+    public function dosql($sql, $params = [])
+    {
+        $statement = self::statement($sql, $params);
         $this->rows = $statement->columnCount() ? $statement->fetchAll(PDO::FETCH_BOTH) : array();
         return count($this->rows);
     }

@@ -12,9 +12,9 @@ if($_GET['uid'] != $_SESSION['ID'] && !有此权限("查看用户"))
 <button type="submit" class='btn btn-primary'>检索</button>
 </form>
 <?php
-$sql="select login.*,userinfo.email,userinfo.realname from login,userinfo where login.uid=userinfo.uid";
-if($_GET['uid']) $sql .= " and login.uid={$_GET['uid']}";
-$sql .= " order by ltime desc";
+$sql = new SqlQuery("select login.*,userinfo.email,userinfo.realname from login,userinfo where login.uid=userinfo.uid");
+if($_GET['uid']) $sql->append(" and login.uid=?", [$_GET['uid']]);
+$sql->append(" order by ltime desc");
 $cnt=$p->dosql($sql);
 $st=检测页面($cnt, $_GET['page']);
 ?>

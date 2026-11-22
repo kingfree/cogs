@@ -6,7 +6,7 @@ gethead(1,"修改比赛","修改比赛");
 <?php
 $p=new DataAccess();
 if ($_GET['action']=='edit') {
-	$sql="select * from compbase where cbid={$_GET['cbid']} ";
+	$sql = new SqlQuery("select * from compbase where cbid=? ", [$_GET['cbid']]);
 	$cnt=$p->dosql($sql);
 	$d=$p->rtnrlt(0);
 	$pbs=explode(":",$d['contains']);
@@ -29,7 +29,7 @@ if ($_GET['action']=='edit') {
     <td>
 	<ul class='nav nav-pills'>
 	<?php
-	$sql="select pid,probname,submitable from problem order by pid";
+	$sql = new SqlQuery("select pid,probname,submitable from problem order by pid");
 	$cnt=$p->dosql($sql);
 	for ($i=0;$i<$cnt;$i++) {
 		$d=$p->rtnrlt($i);

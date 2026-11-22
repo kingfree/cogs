@@ -4,12 +4,12 @@ $uid = (int) $_SESSION['ID'];
 $sid = (int) $_GET['id'];
 $p=new DataAccess();
 if(!$sid) {
-    $sql = "select max(sid) as sid from submit";
+    $sql = new SqlQuery("select max(sid) as sid from submit");
     $p->dosql($sql);
     $d=$p->rtnrlt(0);
     $sid = $d['sid'];
 }
-$sql="select submit.*,userinfo.nickname,userinfo.realname,submit.subtime,problem.probname,problem.filename from submit,userinfo,problem where submit.pid=problem.pid and submit.uid=userinfo.uid and submit.sid={$sid}";
+$sql = new SqlQuery("select submit.*,userinfo.nickname,userinfo.realname,submit.subtime,problem.probname,problem.filename from submit,userinfo,problem where submit.pid=problem.pid and submit.uid=userinfo.uid and submit.sid=?", [$sid]);
 $cnt=$p->dosql($sql);
 if($cnt) {
     $d=$p->rtnrlt(0);
@@ -47,7 +47,7 @@ $q=new DataAccess();
     <select name='judger' id='judger' >
     <option value=0 selected=selected>自动选择</option>
 <?php
-    $sql="select grid,address,memo from grader where enabled=1 order by priority desc";
+    $sql = new SqlQuery("select grid,address,memo from grader where enabled=1 order by priority desc");
     $cnt=$q->dosql($sql);
     for ($i=0;$i<$cnt;$i++) {
         $e=$q->rtnrlt($i);
@@ -87,7 +87,7 @@ $q=new DataAccess();
 if(有此权限('查看代码') || $d['uid']==$uid)
     $forcetocode=1;
 else {
-    $sql="select showcode from comments where uid={$d['uid']} and pid={$d['pid']} order by showcode desc limit 1";
+    $sql = new SqlQuery("select showcode from comments where uid=? and pid=? order by showcode desc limit 1", [$d['uid'], $d['pid']]);
     $cnt=$p->dosql($sql);
     if ($cnt) {
         $f=$p->rtnrlt(0);
@@ -95,7 +95,7 @@ else {
     }
 
     if(!$forcetocode) {
-        $sql = "select accepted from submit where uid={$uid} and pid={$d['pid']} order by score desc limit 1";
+        $sql = new SqlQuery("select accepted from submit where uid=? and pid=? order by score desc limit 1", [$uid, $d['pid']]);
         $cnt=$p->dosql($sql);
         if ($cnt) {
             $f=$p->rtnrlt(0);

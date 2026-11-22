@@ -2,22 +2,21 @@
 require_once("../include/header.php");
 gethead(8,"修改用户","");
 $p=new DataAccess();
-过滤();
 
 if ($_GET['action']=="del") {
-    $sql="select admin,uid from userinfo where uid={$_GET['uid']}";
+    $sql = new SqlQuery("select admin,uid from userinfo where uid=?", [$_GET['uid']]);
     $cnt=$p->dosql($sql);
     if(!$cnt) 异常("无此用户！",取路径("user/index.php"));
     $d=$p->rtnrlt(0);
-    $sql="delete from userinfo where uid={$_GET['uid']}";
+    $sql = new SqlQuery("delete from userinfo where uid=?", [$_GET['uid']]);
     $p->dosql($sql);
     提示("删除用户成功！",取路径("user/index.php"));
 } else if ($_GET['action']=="edit") {
     $tt="";
-    $sql="update userinfo set nickname='{$_POST['nickname']}' ,readforce={$_POST['readforce']} ,email='{$_POST['email']}',memo='{$_POST['memo']}',realname='{$_POST['realname']}',gbelong={$_POST['gbelong']} where uid={$_GET['uid']}";
+    $sql = new SqlQuery("update userinfo set nickname=? ,readforce=? ,email=?,memo=?,realname=?,gbelong=? where uid=?", [$_POST['nickname'], $_POST['readforce'], $_POST['email'], $_POST['memo'], $_POST['realname'], $_POST['gbelong'], $_GET['uid']]);
     $p->dosql($sql);
     if ($_POST['reset'] == "reset") {
-        $sql="update userinfo set pwdhash='".encode("")."' where uid={$_GET['uid']}";
+        $sql = new SqlQuery("update userinfo set pwdhash=? where uid=?", [encode(""), $_GET['uid']]);
         $p->dosql($sql);
         $ttt="并且重置密码为空。";
     }

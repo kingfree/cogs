@@ -1,5 +1,5 @@
 <?php
-$sql="select * from groups order by gname";
+$sql = new SqlQuery("select * from groups order by gname");
 $cnt=$p->dosql($sql);
 for ($i=0;$i<$cnt;$i++)
 {

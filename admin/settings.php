@@ -11,7 +11,7 @@ $p=new DataAccess();
     <th>值</th>
   </tr>
 <?php
-	$sql="select * from settings";
+	$sql = new SqlQuery("select * from settings");
 	$cnt=$p->dosql($sql);
 	for ($i=0;$i<$cnt;$i++)
 	{

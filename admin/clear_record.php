@@ -11,7 +11,7 @@ $p=new DataAccess();
 function check($f,$uid)
 {
     global $p;
-    $sql="select * from submit where uid={$uid} and srcname='{$f}'";
+    $sql = new SqlQuery("select * from submit where uid=? and srcname=?", [$uid, $f]);
     $cnt=$p->dosql($sql);
     if ($cnt==0)
         return 1;

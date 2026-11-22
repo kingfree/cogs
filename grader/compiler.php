@@ -23,11 +23,11 @@ function compile($query)
     wfile($query['code'],$query['src']);
     if (file_exists($query['pname']))
         unlink($query['pname']);
-    $compilecommand="timelimit 20 ".$compilecommand;
+    $compilecommand= "timeout -k 1 20 ".$compilecommand;
     $handle = popen($compilecommand, 'r');
     $tmp['msg']=rfile($handle);
-    pclose($handle);
-    if (file_exists($query['pname']) || $query['language'] == 3)
+    $status = pclose($handle);
+    if ($status === 0 && (file_exists($query['pname']) || $query['language'] == 3))
         $tmp['compilesucc']=1;
     else
         $tmp['compilesucc']=0;

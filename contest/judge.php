@@ -12,7 +12,10 @@ if ($_POST['do']=="评测选定") {
     $list=$_POST['doall'];
 }
 if (!is_array($list))$list=array();
-sort($list);
+$list = array_values(array_filter($list, static function ($id) {
+    return is_scalar($id) && preg_match('/^[1-9][0-9]*$/D', (string)$id);
+}));
+sort($list, SORT_NUMERIC);
 ?>
 
 <script language="javascript">
@@ -101,10 +104,14 @@ function Finish() {
   </tr>
 <?php
     $p=new DataAccess();
-    $sql="select compscore.csid,compscore.ctid,userinfo.nickname,userinfo.realname,problem.probname,problem.filename,compscore.lang,compscore.score,compscore.result,compscore.pid,compscore.uid,compscore.ctid from compscore,problem,userinfo where compscore.uid=userinfo.uid and compscore.pid=problem.pid and(";
-    foreach($list as $k=>$v)
-        $sql.="compscore.csid={$v} or ";
-    $sql.="compscore.csid=0) order by compscore.csid asc";
+    $sql = new SqlQuery("select compscore.csid,compscore.ctid,userinfo.nickname,userinfo.realname,problem.probname,problem.filename,compscore.lang,compscore.score,compscore.result,compscore.pid,compscore.uid,compscore.ctid from compscore,problem,userinfo where compscore.uid=userinfo.uid and compscore.pid=problem.pid");
+    if ($list) {
+        $marks = implode(',', array_fill(0, count($list), '?'));
+        $sql->append(" and compscore.csid in ($marks)", $list);
+    } else {
+        $sql->append(" and 1=0");
+    }
+    $sql->append(" order by compscore.csid asc");
     $cnt=$p->dosql($sql);
     for ($i=0;$i<$cnt;$i++) {
         $d=$p->rtnrlt($i);

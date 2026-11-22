@@ -2,7 +2,7 @@
 require_once("../include/header.php");
 $p=new DataAccess();
 $aid = (int)$_GET['aid'];
-$sql="select page.*,groups.*,userinfo.nickname from page,groups,userinfo where aid=".(int)$_GET['aid']." and userinfo.uid=page.uid and groups.gid=page.group limit 1";
+$sql = new SqlQuery("select page.*,groups.*,userinfo.nickname from page,groups,userinfo where aid=? and userinfo.uid=page.uid and groups.gid=page.group limit 1", [(int)$_GET['aid']]);
 $cnt=$p->dosql($sql);
 $d=$p->rtnrlt(0);
 $title = $d['title'];
@@ -61,9 +61,9 @@ if($cnt) {
 <?php  } ?>
 </th></tr>
 <?php
-$sql="SELECT comments.*, userinfo.uid, userinfo.nickname, userinfo.realname, userinfo.email, userinfo.accepted, userinfo.submited, userinfo.grade, userinfo.memo FROM comments, userinfo WHERE userinfo.uid = comments.uid ";
-$sql.="AND $aid = comments.aid ";
-$sql.="ORDER BY comments.cid asc";
+$sql = new SqlQuery("SELECT comments.*, userinfo.uid, userinfo.nickname, userinfo.realname, userinfo.email, userinfo.accepted, userinfo.submited, userinfo.grade, userinfo.memo FROM comments, userinfo WHERE userinfo.uid = comments.uid ");
+$sql->append("AND ? = comments.aid ", [$aid]);
+$sql->append("ORDER BY comments.cid asc");
 $cnt=$q->dosql($sql);
 for ($i=0;$i<$cnt;$i++) {
     $d=$q->rtnrlt($i);

@@ -7,7 +7,7 @@ gethead(1,"管理评测","修改评测机");
 if ($_GET['action']=='edit')
 {
 	$p=new DataAccess();
-	$sql="select * from grader where grid={$_GET['grid']}";
+	$sql = new SqlQuery("select * from grader where grid=?", [$_GET['grid']]);
 	$cnt=$p->dosql($sql);
 	$d=$p->rtnrlt(0);
 }

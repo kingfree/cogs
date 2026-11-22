@@ -5,7 +5,7 @@ $pid = (int) $_GET['pid'];
 $ctid = (int) $_GET['ctid'];
 $p=new DataAccess();
 if(!$pid && $ctid) {
-    $sql="select compbase.cname,compbase.contains,comptime.starttime,comptime.endtime,comptime.showscore,comptime.intro,groups.* from comptime,compbase,groups where comptime.cbid=compbase.cbid and comptime.ctid={$ctid} and comptime.group=groups.gid";
+    $sql = new SqlQuery("select compbase.cname,compbase.contains,comptime.starttime,comptime.endtime,comptime.showscore,comptime.intro,groups.* from comptime,compbase,groups where comptime.cbid=compbase.cbid and comptime.ctid=? and comptime.group=groups.gid", [$ctid]);
     $cnt=$p->dosql($sql);
     if ($cnt) {
         $d=$p->rtnrlt(0);
@@ -18,12 +18,12 @@ if(!$pid && $ctid) {
         $pid=(int) $pbs[0];
     }
 }
-$sql="select * from problem where pid={$pid}";
+$sql = new SqlQuery("select * from problem where pid=?", [$pid]);
 $cnt=$p->dosql($sql);
 if ($cnt) {
     $d=$p->rtnrlt(0);
     $q=new DataAccess();
-    $sql="select cname,starttime,endtime,contains,intro,groups.* from compbase,comptime,groups where comptime.cbid=compbase.cbid and comptime.ctid={$ctid} and comptime.group=groups.gid";
+    $sql = new SqlQuery("select cname,starttime,endtime,contains,intro,groups.* from compbase,comptime,groups where comptime.cbid=compbase.cbid and comptime.ctid=? and comptime.group=groups.gid", [$ctid]);
     $c=$q->dosql($sql);
     $e=$q->rtnrlt(0);
     
@@ -139,7 +139,7 @@ if(有此权限('查看比赛') || time()>$e['endtime']) echo "<a href='report.p
 <th>得分</th>
 </tr>
 <?php
-$sql="select * from compscore,userinfo where userinfo.uid=compscore.uid and compscore.pid={$pid} and compscore.ctid={$ctid} order by compscore.score desc, compscore.runtime asc, compscore.memory asc";
+$sql = new SqlQuery("select * from compscore,userinfo where userinfo.uid=compscore.uid and compscore.pid=? and compscore.ctid=? order by compscore.score desc, compscore.runtime asc, compscore.memory asc", [$pid, $ctid]);
 $cnt=$r->dosql($sql);
 for ($i=0;$i<$cnt;$i++) {
     $f=$r->rtnrlt($i);
@@ -160,7 +160,7 @@ for ($i=0;$i<$cnt;$i++) {
 </table>
 <?php  } else { ?>
 <?php
-$sql="select * from compscore,userinfo where compscore.uid='{$uid}' and userinfo.uid='{$uid}' and compscore.pid={$pid} and compscore.ctid={$ctid}";
+$sql = new SqlQuery("select * from compscore,userinfo where compscore.uid=? and userinfo.uid=? and compscore.pid=? and compscore.ctid=?", [$uid, $uid, $pid, $ctid]);
 $cnt=$r->dosql($sql);
 if($cnt) {
     $f=$r->rtnrlt(0);
@@ -189,11 +189,11 @@ if($cnt) {
     $pbs=explode(":",$contains);
     $ppid = 1;
     foreach($pbs as $k=>$v) {
-        $sql="select probname from problem where pid={$v}";
+        $sql = new SqlQuery("select probname from problem where pid=?", [$v]);
         $r->dosql($sql);
         $f=$r->rtnrlt(0);
         $pname=$f['probname'];
-        $sql="select * from compscore where uid='{$uid}' and compscore.pid={$v} and compscore.ctid={$ctid}";
+        $sql = new SqlQuery("select * from compscore where uid=? and compscore.pid=? and compscore.ctid=?", [$uid, $v, $ctid]);
         $cnt=$r->dosql($sql);
         if($cnt) $f=$r->rtnrlt(0);
 ?>

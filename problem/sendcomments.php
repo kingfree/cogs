@@ -7,16 +7,16 @@ $uid=(int)$_SESSION['ID'];
 $pid=(int)$_POST['pid'];
 $aid=(int)$_POST['aid'];
 $cid=(int)$_POST['cid'];
-$detail=DataAccess::escape($_POST['detail']);
+$detail=$_POST['detail'];
 $showcode=(int)$_POST['showcode'];
 $tm=time();
 
 if($cid) {
-    $sql="update comments set detail='{$detail}', stime={$tm} ,showcode={$showcode} where cid={$cid}";
+    $sql = new SqlQuery("update comments set detail=?, stime=? ,showcode=? where cid=? and uid=?", [$detail, $tm, $showcode, $cid, $uid]);
 } else if($pid) {
-    $sql="insert into comments(pid,uid,detail,stime,showcode) values({$pid},{$uid},'{$detail}',{$tm} ,{$showcode})";
+    $sql = new SqlQuery("insert into comments(pid,uid,detail,stime,showcode) values(?,?,?,? ,?)", [$pid, $uid, $detail, $tm, $showcode]);
 } else if($aid) {
-    $sql="insert into comments(aid,uid,detail,stime,showcode) values({$aid},{$uid},'{$detail}',{$tm} ,{$showcode})";
+    $sql = new SqlQuery("insert into comments(aid,uid,detail,stime,showcode) values(?,?,?,? ,?)", [$aid, $uid, $detail, $tm, $showcode]);
 } else {
     异常("发表评论失败！",取路径("problem/comments.php"));
 }

@@ -68,4 +68,3 @@ $time_Ls=gettime();
 
 require_once("string.inc.php");
 
-?>

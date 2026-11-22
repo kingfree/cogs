@@ -12,7 +12,7 @@ $sizee=$SET['style_ranksize'] - 7;
 <?php
 $now = time();
 $noww = time() + 60*60*2;
-$cnt = $p->dosql("select comptime.*,compbase.*,userinfo.nickname,groups.* from comptime,compbase,userinfo,groups where comptime.cbid=compbase.cbid and userinfo.uid=compbase.ouid and comptime.group=groups.gid and endtime > $now and starttime < $noww order by starttime asc");
+$cnt = $p->dosql("select comptime.*,compbase.*,userinfo.nickname,groups.* from comptime,compbase,userinfo,groups where comptime.cbid=compbase.cbid and userinfo.uid=compbase.ouid and comptime.group=groups.gid and endtime > ? and starttime < ? order by starttime asc", [$now, $noww]);
 if($cnt) {
     for($i=0; $i<$cnt; $i++) {
         $d=$p->rtnrlt($i);
@@ -85,7 +85,7 @@ $d=$p->rtnrlt($i);
 </thead>
 </tr>
 <?php
-$cnt=$p->dosql("select * from problem where submitable=1 order by addtime desc limit {$SET['index_problem_size']}");
+$cnt=$p->dosql("select * from problem where submitable=1 order by addtime desc limit ?", [$SET['index_problem_size']]);
 for($i=0;$i<$cnt;$i++) {
 $d=$p->rtnrlt($i);
 ?>
@@ -113,7 +113,7 @@ $hasaa=$SET['index_submit_size'] - $cnt;
         echo "</ul></div>";
     }
 } else {
-    $cnt=$p->dosql("select * from problem where addid=$uid and submitable!=1 order by addtime desc");
+    $cnt=$p->dosql("select * from problem where addid=? and submitable!=1 order by addtime desc", [$uid]);
     if($cnt) {
 $hasaa=$SET['index_submit_size'] - $cnt;
         echo "<div class='alert'><h4>已提交正在审核的题目：</h4><ul>";
@@ -134,7 +134,7 @@ $hasaa=$SET['index_submit_size'] - $cnt;
 <th style="min-width: 10ex;">提交时间</th>
 </tr></thead>
 <?php
-$cnt=$p->dosql("select submit.sid,submit.pid,submit.uid,submit.result,submit.score,submit.accepted,submit.subtime,problem.probname,userinfo.nickname,userinfo.realname,userinfo.email,userinfo.memo from submit,problem,userinfo where submit.score>={$SET['index_submit_score']} and submit.uid=userinfo.uid and submit.pid=problem.pid order by submit.sid desc limit {$hasaa}");
+$cnt=$p->dosql("select submit.sid,submit.pid,submit.uid,submit.result,submit.score,submit.accepted,submit.subtime,problem.probname,userinfo.nickname,userinfo.realname,userinfo.email,userinfo.memo from submit,problem,userinfo where submit.score>=? and submit.uid=userinfo.uid and submit.pid=problem.pid order by submit.sid desc limit ?", [$SET['index_submit_score'], $hasaa]);
 for($i=0;$i<$cnt;$i++) {
     $d=$p->rtnrlt($i);
 ?>
@@ -170,7 +170,7 @@ echo "</a>"; ?></td>
 </tr>
 </thead>
 <?php
-$cnt=$p->dosql("select * from userinfo order by grade desc limit 0, {$SET['style_ranksize']}");
+$cnt=$p->dosql("select * from userinfo order by grade desc limit 0, ?", [$SET['style_ranksize']]);
 for($i=0;$i<$cnt;$i++) {
 $d=$p->rtnrlt($i);
 ?>

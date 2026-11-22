@@ -13,7 +13,7 @@ function MM_jumpMenu(targ,selObj,restore){ //v3.0
 <?php
 	$p=new DataAccess();
 	$q=new DataAccess();
-	$sql="select compbase.*,userinfo.nickname,userinfo.realname,userinfo.email from compbase,userinfo where userinfo.uid=compbase.ouid order by compbase.cbid desc";
+	$sql = new SqlQuery("select compbase.*,userinfo.nickname,userinfo.realname,userinfo.email from compbase,userinfo where userinfo.uid=compbase.ouid order by compbase.cbid desc");
 	
 $cnt=$p->dosql($sql);
 $st=检测页面($cnt, $_GET['page']);
@@ -44,7 +44,7 @@ for ($i=$st;$i<$cnt && $i<$st+$SET['style_pagesize'] ;$i++) {
 			foreach($pbs as $k=>$v)
 			{
 				$c++;
-				$sql="select probname from problem where pid={$v}";
+				$sql = new SqlQuery("select probname from problem where pid=?", [$v]);
 				$q->dosql($sql);
 				$e=$q->rtnrlt(0);
 		?>
@@ -56,7 +56,7 @@ for ($i=$st;$i<$cnt && $i<$st+$SET['style_pagesize'] ;$i++) {
     <td>
         <select name="menu2" onchange="MM_jumpMenu('parent',this,0)" class="InputBox">
 		<?php
-		$sql="select starttime,ctid from comptime where cbid={$d['cbid']} order by starttime asc";
+		$sql = new SqlQuery("select starttime,ctid from comptime where cbid=? order by starttime asc", [$d['cbid']]);
 		$c=$q->dosql($sql);
 		for ($j=0;$j<$c;$j++)
 		{

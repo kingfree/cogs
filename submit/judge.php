@@ -5,7 +5,7 @@ if (!$_POST['pid']) 异常("你来错地方了！");
 $LIB->hlighter();
 $LIB->func_socket();
 $p=new DataAccess();
-$sql="select * from problem where pid={$_POST['pid']}";
+$sql = new SqlQuery("select * from problem where pid=?", [$_POST['pid']]);
 $p->dosql($sql);
 $d=$p->rtnrlt(0);
 if(!$d['submitable'] && !有此权限('查看题目'))
@@ -28,7 +28,7 @@ if ($_POST['testmode']=='1' && 有此权限('测试题目'))
 	$info['mode']="test";
 if ($_POST['rejudge']==1) {
 	$info['rejudge']=1;
-	$sql="select * from submit where sid='{$info['sid']}'";
+	$sql = new SqlQuery("select * from submit where sid=?", [$info['sid']]);
 	$p->dosql($sql);
 	$e=$p->rtnrlt(0);
 	$info['uid']=$e['uid'];

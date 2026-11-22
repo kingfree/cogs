@@ -58,4 +58,3 @@ class gravatar
 		return $url;
 	}
 }
-?>

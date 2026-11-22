@@ -1,8 +1,8 @@
 <?php
 require_once("../include/header.php");
 $p=new DataAccess();
-$sql="select compbase.cname,problem.pid,problem.filename,problem.probname,userinfo.uid,userinfo.nickname,userinfo.realname,comptime.endtime,compscore.* from problem,compscore,comptime,compbase,userinfo where compscore.pid=problem.pid and comptime.ctid=compscore.ctid and userinfo.uid=compscore.uid and compscore.csid=? and compbase.cbid=comptime.cbid";
-$cnt=$p->dosql($sql, array((int)$_GET['csid']));
+$sql = new SqlQuery("select compbase.cname,problem.pid,problem.filename,problem.probname,userinfo.uid,userinfo.nickname,userinfo.realname,comptime.endtime,compscore.* from problem,compscore,comptime,compbase,userinfo where compscore.pid=problem.pid and comptime.ctid=compscore.ctid and userinfo.uid=compscore.uid and compscore.csid=? and compbase.cbid=comptime.cbid", [(int)$_GET['csid']]);
+$cnt=$p->dosql($sql);
 if ($cnt) {
 	$d=$p->rtnrlt(0);
     if(!有此权限("查看比赛") && (time() < $d['endtime'] && $_SESSION['ID'] != $d['uid']))

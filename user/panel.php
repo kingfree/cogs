@@ -2,7 +2,7 @@
 require_once("../include/header.php");
 gethead(1,"sess","控制面板");
 $p=new DataAccess();
-$sql="select * from userinfo where uid={$_SESSION['ID']}";
+$sql = new SqlQuery("select * from userinfo where uid=?", [$_SESSION['ID']]);
 $cnt=$p->dosql($sql);
 $d=$p->rtnrlt(0);
 ?>

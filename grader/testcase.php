@@ -49,38 +49,36 @@ function grade($query)
         exec($cpcmd);
         exec("ls output/{$query['pname']}*.out > tmpp");
     } else {
-        $execute="(ulimit -v {$memorylimit}; ./{$query['pname']})";
-        $descriptorspec = array(0 => array("pipe", "r"),1 => array("pipe", "w"),2 => array("pipe", "w"));
-        $process = proc_open($execute, $descriptorspec, $pipes);
-        $status=proc_get_status($process);
-
-        $pid=$status['pid']+2;
-        exec("ps v -C {$query['pname']}",$mem);
-        sscanf($mem[1],"%ld%s%s%s%s%ld%ld",$ar[1],$ar[2],$ar[3],$ar[4],$ar[5],$ar[6],$ar[7]);
-        fwrite($pipes[0],"1");
+        $program = './'.$query['pname'];
+        $execute = ['sh', '-c', 'ulimit -v "$1" && exec "$2"', 'cogs', (string)$memorylimit, $program];
+        $streams = [0 => ['pipe','r'], 1 => ['file','/dev/null','w'], 2 => ['file','/dev/null','w']];
+        $process = proc_open($execute, $streams, $pipes);
+        if (!is_resource($process)) throw new RuntimeException('无法启动评测程序');
+        fwrite($pipes[0], "1");
         fclose($pipes[0]);
-
-        $tmp['memory']=$memory=$ar[7];  
-        $time_start = getmicrotime();
+        $start = hrtime(true);
+        $tmp['memory'] = 0;
         setrunning(1);
-        for (;;)
-        {
-            $status=proc_get_status($process);
-            if (!$status['running']) break;
-            $time_now = getmicrotime();
-            $tmp['rtime']=($time_now-$time_start)*950;
-            if ($tmp['rtime']>$query['timelimit'])
-            {
-                proc_terminate($process);
-                //posix_kill($pid,1);
-                exec("killall {$query['pname']}");
-                $tmp['timeout']=true;
-                break;
-            }
+        try {
+            do {
+                $status = proc_get_status($process);
+                $tmp['rtime'] = (hrtime(true) - $start) / 1000000;
+                if (!$status['running']) break;
+                $usage = @file_get_contents('/proc/'.$status['pid'].'/status');
+                if ($usage && preg_match('/^VmHWM:\s*(\d+)/m', $usage, $match)) {
+                    $tmp['memory'] = max($tmp['memory'], (int)$match[1]);
+                }
+                if ($tmp['rtime'] > $query['timelimit']) {
+                    proc_terminate($process, 9);
+                    $tmp['timeout'] = true;
+                    break;
+                }
+                usleep(1000);
+            } while (true);
+        } finally {
+            setrunning(-1);
         }
-        setrunning(-1);
-
-        $tmp['exitcode']=$status['exitcode'];
+        $tmp['exitcode'] = $status['exitcode'];
         if ($tmp['exitcode']==137) 
             $tmp['memoryout']=true;
         if ($tmp['exitcode']!=0) 
@@ -114,7 +112,7 @@ function grade($query)
         exec($fistr . " > tmp", $diff);
         $tmp['diff'] = file_get_contents("tmp");
     }
-    proc_close($process);
+    if (isset($process) && is_resource($process)) proc_close($process);
 
     destroylink($i,$query);
 

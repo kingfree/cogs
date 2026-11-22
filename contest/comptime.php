@@ -3,7 +3,7 @@ require_once("../include/header.php");
 gethead(1,"查看比赛","比赛场次评测");
 $p=new DataAccess();
 $q=new DataAccess();
-$sql="select comptime.*,compbase.cname,groups.* from comptime,compbase,groups where comptime.cbid=compbase.cbid and comptime.ctid={$_GET['ctid']} and groups.gid=comptime.group";
+$sql = new SqlQuery("select comptime.*,compbase.cname,groups.* from comptime,compbase,groups where comptime.cbid=compbase.cbid and comptime.ctid=? and groups.gid=comptime.group", [$_GET['ctid']]);
 $cnt=$p->dosql($sql);
 if(!$cnt) 异常("未查询到记录！");
 $d=$p->rtnrlt(0);
@@ -54,7 +54,7 @@ $d=$p->rtnrlt(0);
   </tr>
 </table>
 <?php
-$sql="select compscore.uid,userinfo.realname,userinfo.email,userinfo.nickname from compscore,userinfo where userinfo.uid=compscore.uid and compscore.ctid={$_GET['ctid']} order by uid asc";
+$sql = new SqlQuery("select compscore.uid,userinfo.realname,userinfo.email,userinfo.nickname from compscore,userinfo where userinfo.uid=compscore.uid and compscore.ctid=? order by uid asc", [$_GET['ctid']]);
 $cnt=$p->dosql($sql);
 if ($cnt) {
 ?>
@@ -62,7 +62,7 @@ if ($cnt) {
     选择评测机：<select name='judger' id='judger'>
     <option value=0 selected=selected>自动选择</option>
 <?php
-    $sql="select grid,address,memo from grader where enabled=1 order by priority desc";
+    $sql = new SqlQuery("select grid,address,memo from grader where enabled=1 order by priority desc");
     $cnt1=$q->dosql($sql);
     for ($i=0;$i<$cnt1;$i++) {
         $e=$q->rtnrlt($i);
@@ -101,7 +101,7 @@ if ($cnt) {
 		<th style="width: 4em;">得分</th>
 	  </tr>
 	<?php
-	$sql="select compscore.csid,compscore.pid,compscore.lang,compscore.subtime,compscore.score,compscore.result,problem.probname from compscore,problem where problem.pid=compscore.pid and compscore.uid={$d['uid']} and compscore.ctid={$_GET['ctid']}";
+	$sql = new SqlQuery("select compscore.csid,compscore.pid,compscore.lang,compscore.subtime,compscore.score,compscore.result,problem.probname from compscore,problem where problem.pid=compscore.pid and compscore.uid=? and compscore.ctid=?", [$d['uid'], $_GET['ctid']]);
 	$c=$q->dosql($sql);
 	if ($c) {
 		for ($j=0;$j<$c;$j++) {

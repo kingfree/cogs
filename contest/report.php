@@ -4,7 +4,7 @@ gethead(1,"","比赛成绩");
 
 $p=new DataAccess();
 $r=new DataAccess();
-$sql="select comptime.starttime,comptime.endtime,compbase.contains,comptime.showscore from compbase,comptime where comptime.cbid=compbase.cbid and comptime.ctid={$_GET['ctid']}";
+$sql = new SqlQuery("select comptime.starttime,comptime.endtime,compbase.contains,comptime.showscore from compbase,comptime where comptime.cbid=compbase.cbid and comptime.ctid=?", [$_GET['ctid']]);
 $cnt=$p->dosql($sql);
 if (!$cnt)
     异常("未查询到记录！");
@@ -29,7 +29,7 @@ $pbs=explode(":",$d['contains']);
         $v=(int)$v;
         $mbarray[$v][score]=0;
         $mbarray[$v][result]="N";
-        $sql="select probname from problem where pid={$v}";
+        $sql = new SqlQuery("select probname from problem where pid=?", [$v]);
         $p->dosql($sql);
         $d=$p->rtnrlt(0);
         $cnt_prob++;
@@ -45,7 +45,7 @@ $pbs=explode(":",$d['contains']);
   </tr>
 </thead>
 <?php
-    $sql="select userinfo.uid,userinfo.nickname,userinfo.realname,userinfo.email from userinfo,compscore where compscore.uid=userinfo.uid and compscore.ctid=$_GET[ctid] order by uid";
+    $sql = new SqlQuery("select userinfo.uid,userinfo.nickname,userinfo.realname,userinfo.email from userinfo,compscore where compscore.uid=userinfo.uid and compscore.ctid=? order by uid", [$_GET['ctid']]);
     $cnt=$p->dosql($sql);
     $luid=0;
     $rowcnt=0;
@@ -62,7 +62,7 @@ $pbs=explode(":",$d['contains']);
 <?=有此权限('查看用户') ? $d['realname'] : $d['nickname'] ?>
 </a></td>
 <?php
-        $sql="select pid,result,score,csid,lang from compscore where uid='{$d['uid']}' and ctid={$_GET['ctid']} order by pid asc";
+        $sql = new SqlQuery("select pid,result,score,csid,lang from compscore where uid=? and ctid=? order by pid asc", [$d['uid'], $_GET['ctid']]);
         $cnt_sub=$q->dosql($sql);
         $sum=0;
         $rank=$mbarray;

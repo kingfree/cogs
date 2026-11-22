@@ -17,4 +17,3 @@ $STR['plugin'][1]="<span class='label label-default'>简单对比</span>";
 $STR['plugin'][2]="<span class='label label-info'>逐字节对比</span>";
 $STR['plugin'][3]="<span class='label label-success'>提交答案 + 评测插件</span>";
 $STR['plugin'][4]="<span class='label label-default'>提交答案 + 简单对比</span>";
-?>
