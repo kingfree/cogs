@@ -48,7 +48,7 @@ if($way=='del' && $uid) {
 	
 	$cnt = count($privileges);
 	$totalpage=(int)(($cnt-1)/$SET['style_pagesize'])+1;
-	if (!isset($_GET['page'])) 
+	if (!isset($_GET['page']))
 	{
 		$_GET['page']=1;
 		$st=0;

@@ -2,6 +2,7 @@
 from pathlib import Path
 import http.cookiejar
 import io
+import json
 import gzip
 import base64
 import os
@@ -162,6 +163,14 @@ for route in ['/problem/index.php','/docs/map.php','/']:
     assert '组内练习题'.encode() not in user.visit(route), route
 # A synthetic image and Pascal checker must survive export and re-import with their original mode.
 sample_png = 'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAusB9WD1+sAAAAAASUVORK5CYII='
+upload = '/include/upload_json.inc.php?dir=image'
+user.visit(upload, {}, {'imgFile':('fixture.png',base64.b64decode(sample_png))}, status=403)
+admin.visit(upload, status=405)
+invalid = admin.visit(upload, {}, {'imgFile':('fixture.png',b'plain text')})
+assert json.loads(invalid)['error'] == 1
+attachment = json.loads(admin.visit(upload, {}, {'imgFile':('fixture.png',base64.b64decode(sample_png))}))
+assert attachment['error'] == 0 and attachment['url'].startswith('/upload/image/')
+assert guest.visit(attachment['url']) == base64.b64decode(sample_png)
 item = doc.find('item')
 item.find('title').text = '带特判题包'
 item.find('description').text = '<p><img src="fps-pixel.png"></p>'

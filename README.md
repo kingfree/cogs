@@ -5,6 +5,7 @@ COGS 提供题库、文件输入输出评测、比赛和成绩单、用户分组
 | 要改的功能 | 从这里开始 |
 | --- | --- |
 | 题目、分类和测试数据 | `features/Problem.php`、`Category.php`、`TestData.php` |
+| 编辑器上传的图片、媒体和文档 | `features/Attachment.php` |
 | FPS 题包和外站题面 | `features/Fps.php`、`ProblemSource.php`。外站解析规则在 `problem-sources/`，每站一个文件 |
 | 比赛题单、场次和交卷 | `features/Contest.php`、`ContestRound.php`、`ContestEntry.php` |
 | 普通提交、选机和计分 | `features/Submission.php`、`Judging.php`、`Ranking.php` |
