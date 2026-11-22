@@ -1,18 +1,8 @@
 <?php
-require_once("../include/header.php");
-gethead(8,"普通用户","");
-
-$txt="";
-$path = 路径("images/gravatar").'/';
-$email = $_GET['email'];
-for($i=0; $i<=200; $i++) {
-	$file = $path.$email."s{$i}";
-	if(file_exists($file)) {
-		unlink($file);
-        $txt .= "<p>清除 ".$file." 中... </p>";
-    }
+require_once __DIR__.'/../include/header.php';
+gethead(8, '普通用户', '');
+requirePost();
+foreach (glob(dirname(__DIR__).'/images/gravatar/'.md5($_SESSION['email']).'s[0-9]*') ?: [] as $file) {
+    if (is_file($file)) unlink($file);
 }
-
-提示($txt."重建头像缓存完成！", 取路径("user/panel.php"));
-
-?>
+提示('头像缓存已清除。', 取路径('user/panel.php'));

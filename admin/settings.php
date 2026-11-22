@@ -1,7 +1,6 @@
 <?php
 require_once("../include/header.php");
 gethead(1,"参数设置","参数设置");
-$p=new DataAccess();
 ?>
 <div class='row-fluid'>
 <table class='table table-striped table-condensed table-bordered fiexd'>
@@ -11,19 +10,17 @@ $p=new DataAccess();
     <th>值</th>
   </tr>
 <?php
-	$sql = new SqlQuery("select * from settings");
-	$cnt=$p->dosql($sql);
-	for ($i=0;$i<$cnt;$i++)
-	{
-		$d=$p->rtnrlt($i);
+	$settings = Setting::all();
+
+	foreach ($settings as $i => $d) {
 ?>
   <tr>
     <td>
-    <a href="editkey.php?sname=<?php echo $d['name'] ?>&method=html">富文</a>
-    <a href="editkey.php?sname=<?php echo $d['name'] ?>&method=text">纯文</a>
+    <a href="editkey.php?sname=<?=h($d['name'])?>&method=html">富文</a>
+    <a href="editkey.php?sname=<?=h($d['name'])?>&method=text">纯文</a>
     </td>
-    <td><code><?php echo $d['name'] ?></code></td>
-    <td><?php echo $d['value'] ?></td>
+    <td><code><?=h($d['name'])?></code></td>
+    <td><?=h($d['value'])?></td>
   </tr>
 <?php
 	}

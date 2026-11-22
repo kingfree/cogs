@@ -51,7 +51,7 @@ function 背景图片($uid=0) {
     global $SET;
     $portrait=$SET['base']."images/background";
     $path = pathconvert($SET['cur'],$portrait).'/';
-    $backfile = $path . $uid . ".png";
+    $backfile = $path . (int)$uid . ".png";
     if(!file_exists($backfile) || filesize($backfile) < 1)
         $backfile = $path . "0.png";
     echo "<style type='text/css'>body {background-image: url($backfile);}</style>";
@@ -60,7 +60,7 @@ function 背景图片($uid=0) {
 function shortname($longname) {
     $res = preg_replace("/\[.*\]/", "", $longname);
     $res = trim($res);
-    return $res;
+    return h($res);
 }
 
 function BBCode($string) {
@@ -109,7 +109,7 @@ function BBCode($string) {
     );
     $string = htmlspecialchars($string);
     $string = preg_replace($search, $replace, $string);
-    return nl2br($string);
+    return richText(nl2br($string));
 }
 
     function gettexts($string, $long) {

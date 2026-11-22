@@ -1,13 +1,12 @@
 <?php
 require_once("../include/header.php");
 gethead(1,"sess","控制面板");
-$p=new DataAccess();
-$sql = new SqlQuery("select * from userinfo where uid=?", [$_SESSION['ID']]);
-$cnt=$p->dosql($sql);
-$d=$p->rtnrlt(0);
+$accounts = Account::byId($_SESSION['ID']);
+$cnt = count($accounts);
+$d=($accounts[0] ?? false);
 ?>
 
-<form method="post" action="doedit.php?uid=<?php echo $_SESSION['ID'] ?>" class='form-inline'>
+<form method="post" action="doedit.php?uid=<?php echo $_SESSION['ID'] ?>" class='form-inline'><?=formTokenField()?>
 <div id='editpwd' class='modal hide fade in'>
 <div class='modal-header'>
 <button class='close' data-dismiss='modal'>×</button>
@@ -37,7 +36,7 @@ $d=$p->rtnrlt(0);
 </div>
 </form>
 
-<form method="post" action="doedit.php?uid=<?php echo $_SESSION['ID'] ?>" class='form-inline'>
+<form method="post" action="doedit.php?uid=<?php echo $_SESSION['ID'] ?>" class='form-inline'><?=formTokenField()?>
 <div id='editpwdans' class='modal hide fade in'>
 <div class='modal-header'>
 <button class='close' data-dismiss='modal'>×</button>
@@ -52,7 +51,7 @@ $d=$p->rtnrlt(0);
 </tr>
 <tr>
 <td>新密码提示问题</td>
-<td><input name="qus" type="text" value="<?=$d['pwdtipques']?>"></td>
+<td><input name="qus" type="text" value="<?=h($d['pwdtipques'])?>"></td>
 </tr>
 <tr>
 <td>提示问题的答案</td>
@@ -68,7 +67,7 @@ $d=$p->rtnrlt(0);
 </form>
 
 <div class='row-fluid'>
-<form id='xiugai' method="post" action="doedit.php?uid=<?=$_SESSION['ID'] ?>" enctype="multipart/form-data" class='form-inline page' >
+<form id='xiugai' method="post" action="doedit.php?uid=<?=$_SESSION['ID'] ?>" enctype="multipart/form-data" class='form-inline page' ><?=formTokenField()?>
 <input name="action" type="hidden" value="edit" />
 <input name="uid" type="hidden" value="<?=$d['uid']?>" />
 <table id="userpanel" class='table-form'>
@@ -83,7 +82,7 @@ $d=$p->rtnrlt(0);
   </tr>
   <tr>
     <th>用户名称</th>
-    <td><input name="usr" value="<?=$d['usr']?>" id='usr' type='text'/></td>
+    <td><input name="usr" value="<?=h($d['usr'])?>" id='usr' type='text'/></td>
     <td rowspan=4>
 <?=gravatar::showImage($d['email'], 64);?>
     </td>
@@ -99,15 +98,15 @@ $d=$p->rtnrlt(0);
   </tr>
   <tr>
     <th>用户昵称</th>
-    <td><input name="nickname" value="<?=$d['nickname']?>" type='text' id='nickname'/></td>
+    <td><input name="nickname" value="<?=h($d['nickname'])?>" type='text' id='nickname'/></td>
   </tr>
   <tr>
     <th>真实姓名</th>
-    <td><input name="realname" type='text' value="<?=$d['realname']?>" id='realname' /></td>
+    <td><input name="realname" type='text' value="<?=h($d['realname'])?>" id='realname' /></td>
   </tr>
   <tr>
     <th>电子邮件</th>
-    <td><input name="email" type="email" value="<?=$d['email']?>" id='email' /></td>
+    <td><input name="email" type="email" value="<?=h($d['email'])?>" id='email' /></td>
   </tr>
   <tr>
     <th>系统主题</th>
@@ -130,7 +129,7 @@ foreach($ssss as $sms) {
   </tr>
   <tr>
     <th>个人介绍</th>
-    <td colspan=2><textarea name="memo" class='span12' ><?=$d['memo']?></textarea></td>
+    <td colspan=2><textarea name="memo" class='span12' ><?=h($d['memo'])?></textarea></td>
   </tr>
   <tr>
     <th></th>

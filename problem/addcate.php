@@ -1,37 +1,34 @@
 <?php
 require_once("../include/header.php");
 gethead(8,"sess","");
+requirePost();
 
-$p=new DataAccess();
-if(!$_POST['pid'])
-异常("没有选择题目！", 取路径("problem/index.php"));
+if (!Problem::forReader((int)($_POST['pid'] ?? 0))) { http_response_code(404); exit('题目不存在或未开放。'); }
 if(!$_POST['cname'])
 异常("没有填写分类名！", 取路径("problem/problem.php?pid={$_POST['pid']}"));
 
-$sql = new SqlQuery("select * from category where cname like ? or memo like ? limit 1", ['%'. $_POST['cname'] .'%', '%'. $_POST['cname'] .'%']);
-$cnt=$p->dosql($sql);
+$categories = Category::matching('%'. $_POST['cname'] .'%', '%'. $_POST['cname'] .'%');
+$cnt = count($categories);
 if(!$cnt) {
-	$sql1 = new SqlQuery("insert into category(cname,memo) values(?,?)", [$_POST['cname'], $_POST['memo']]);
-	$p->dosql($sql1);
+	Category::create($_POST['cname'], $_POST['memo']);
 } else {
-    $e=$p->rtnrlt(0);
+    $e=($categories[0] ?? false);
     $st=trim("{$e['memo']} {$_POST['memo']}");
-	$sql1 = new SqlQuery("update category set memo=? where caid=?", [$st, $e['caid']]);
-	$p->dosql($sql1);
-    $sql2 = new SqlQuery("select * from tag where pid=? and caid=?", [$_POST['pid'], $e['caid']]);
-	$al=$p->dosql($sql2);
+	Category::updateMemo($st, $e['caid']);
+    $categories = Category::hasProblem($_POST['pid'], $e['caid']);
+	$al = count($categories);
     if($al) {
         提示("添加题目 {$_POST['pid']} 分类 “{$e['caid']}. {$_POST['cname']}” 成功，虽然它之前就已经存在了！", 取路径("problem/problem.php?pid={$_POST['pid']}"));
         exit(0);
     }
 }
 
-$cnt=$p->dosql($sql);
+$categories = Category::matching('%'.$_POST['cname'].'%', '%'.$_POST['cname'].'%');
+$cnt = count($categories);
 if(!$cnt)
 异常("添加分类失败！", 取路径("problem/problem.php?pid={$_POST['pid']}"));
 
-$e=$p->rtnrlt(0);
-$sql2 = new SqlQuery("insert into tag(pid,caid) values(?,?)", [$_POST['pid'], $e['caid']]);
-$p->dosql($sql2);
+$e=($categories[0] ?? false);
+Category::attach($_POST['pid'], $e['caid']);
 提示("添加题目 {$_POST['pid']} 分类 “{$e['caid']}. {$_POST['cname']}” 成功！", 取路径("problem/problem.php?pid={$_POST['pid']}"));
 ?>

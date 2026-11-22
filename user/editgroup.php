@@ -1,18 +1,16 @@
 <?php
 require_once("../include/header.php");
 gethead(1,"分组管理","修改分组");
-$p=new DataAccess();
-$q=new DataAccess();
 $d['adminuid']=$_SESSION['ID'];
 $d['parent']=1;
 if ($_GET['action']=='edit') {
-    $sql = new SqlQuery("select * from groups where gid=?", [$_GET['gid']]);
-    $cnt=$p->dosql($sql);
-    $d=$p->rtnrlt(0);
+    $groups = UserGroup::byId($_GET['gid']);
+    $cnt = count($groups);
+    $d=($groups[0] ?? false);
 }
 ?>
 <div class='container'>
-<form method="post" action="doeditgroup.php?action=<?php echo $_GET['action'] ?>&gid=<?php echo $_GET['gid']; ?>" class='form-horizontal'>
+<form method="post" action="doeditgroup.php?action=<?=h($_GET['action'] ?? '')?>&gid=<?=h($_GET['gid'] ?? '')?>" class='form-horizontal'><?=formTokenField()?>
 <div class='control-group'>
 <label class='control-label' for='gid'>GID</label>
 <div class='controls'>
@@ -28,7 +26,7 @@ if ($_GET['action']=='edit') {
 <div class='control-group'>
 <label class='control-label' for='gname'>分组名称</label>
 <div class='controls'>
-<input name="gname" type="text" id="gname" value="<?=$d['gname'] ?>" />
+<input name="gname" type="text" id="gname" value="<?=h($d['gname'])?>" />
 </div>
 </div>
 <div class='control-group'>
@@ -36,13 +34,12 @@ if ($_GET['action']=='edit') {
 <div class='controls'>
 <select name="parent" id="parent">
 <?php
-$sql = new SqlQuery("select * from groups order by gname");
-$c=$q->dosql($sql);
-for ($j=0;$j<$c;$j++) {
-    $e=$q->rtnrlt($j);
+$qRows = UserGroup::all();
+$c = count($qRows);
+foreach ($qRows as $j => $e) {
     echo "<option value='{$e['gid']}' ";
     if($d['parent']==$e['gid']) echo "selected='selected'";
-    echo " >{$e['gname']}</option>";
+    echo " >".h($e['gname'])."</option>";
 }
 ?>
 </select>
@@ -51,7 +48,7 @@ for ($j=0;$j<$c;$j++) {
 <div class='control-group'>
 <label class='control-label' for='memo'>分组说明</label>
 <div class='controls'>
-<textarea id='memo' name="memo" class="textarea"><?=$d['memo']?></textarea>
+<textarea id='memo' name="memo" class="textarea"><?=h($d['memo'])?></textarea>
 </div>
 </div>
 <div class='form-actions'>

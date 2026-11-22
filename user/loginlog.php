@@ -1,22 +1,19 @@
 <?php
 require_once("../include/header.php");
 gethead(1,"sess","登录日志",$_GET['uid']);
-$p=new DataAccess();
-if($_GET['uid'] != $_SESSION['ID'] && !有此权限("查看用户"))
+if($_GET['uid'] != $_SESSION['ID'] && !Privilege::allows("查看用户"))
 异常("不是本人并且没有权限查看！", 取路径("user/detail.php?uid={$_GET['uid']}"));
 ?>
 
 <form action="" method="get" class='form-inline center'>
 检索： 用户UID
-<input name="uid" type="number" value="<?=$_GET['uid']?>" class='span1' />
+<input name="uid" type="number" value="<?=h($_GET['uid'] ?? '')?>" class='span1' />
 <button type="submit" class='btn btn-primary'>检索</button>
 </form>
 <?php
-$sql = new SqlQuery("select login.*,userinfo.email,userinfo.realname from login,userinfo where login.uid=userinfo.uid");
-if($_GET['uid']) $sql->append(" and login.uid=?", [$_GET['uid']]);
-$sql->append(" order by ltime desc");
-$cnt=$p->dosql($sql);
-$st=检测页面($cnt, $_GET['page']);
+$logins = Login::history((int)($_GET['uid'] ?? 0));
+$cnt = count($logins);
+$st=检测页面($cnt, ($_GET['page'] ?? 1));
 ?>
 <div class='row-fluid'>
 <table class='table table-striped table-condensed table-bordered fiexd'>
@@ -30,14 +27,14 @@ $st=检测页面($cnt, $_GET['page']);
 </tr></thead>
 <?php
 for ($i=$st;$i<$cnt && $i<$st+$SET['style_pagesize'] ;$i++) {
-	$d=$p->rtnrlt($i);
+	$d=($logins[$i] ?? false);
 ?>
 <tr>
 <td><?=$d['lid']?></td>
-<td><a href="?uid=<?=$d['uid']?>"><?=gravatar::showImage($d['email']);?><?=$d['realname']?></a></td>
-<td><?=$d['ip']?></td>
-<td class="wrap"><?=$d['ua']?></td>
-<td><?=$d['version']?></td>
+<td><a href="?uid=<?=$d['uid']?>"><?=gravatar::showImage($d['email']);?><?=h($d['realname'])?></a></td>
+<td><?=h($d['ip'])?></td>
+<td class="wrap"><?=h($d['ua'])?></td>
+<td><?=h($d['version'])?></td>
 <td><?=$d['ltime']?></td>
 </tr>
 <?php  } ?>
@@ -45,6 +42,6 @@ for ($i=$st;$i<$cnt && $i<$st+$SET['style_pagesize'] ;$i++) {
 </div>
 <?php
 //if($_GET['show'])
-分页($cnt, $_GET['page'], '?uid='.$_GET['uid']."&");
+分页($cnt, ($_GET['page'] ?? 1), '?uid='.$_GET['uid']."&");
 include_once("../include/footer.php");
 ?>

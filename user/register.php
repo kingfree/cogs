@@ -6,41 +6,41 @@ if($_SESSION['ID']) 异常("已经登录！");
 ?>
 <div class='container'>
 <?php
-if ($_GET['accept']==1) {
+if (($_GET['accept'] ?? '') == 1) {
 ?>
-<form id='zhuce' method="post" action="doreg.php" class='form-inline'>
+<form id='zhuce' method="post" action="doreg.php" class='form-inline'><?=formTokenField()?>
 <table class='table-form'>
 <tr>
 <th width='100px'>用户名称</th>
-<td><input name="usr" type="text" id="usr" /> 1～24位，遵循变量名命名规范</td>
+<td><input name="usr" type="text" required pattern="[A-Za-z0-9_]{1,24}" maxlength="24" id="usr" /> 1～24位，遵循变量名命名规范</td>
 </tr>
 <tr>
 <th>密码</th>
-<td><input name="pwd" type="password" id="pwd"> 0～24位，加密存储</td>
+<td><input name="pwd" type="password" required autocomplete="new-password" id="pwd"> 1 至 72 字节</td>
 </tr>
 <tr>
 <th>重复密码</th>
-<td><input name="repwd" type="password" id="repwd" /> 验证你没有输错</td>
+<td><input name="repwd" type="password" required autocomplete="new-password" id="repwd" /> 验证你没有输错</td>
 </tr>
 <tr>
 <th>用户昵称</th>
-<td><input name="nickname" type="text" id="nickname" /> 1～8位，汉字、字母、假名、谚文等可显示字符</td>
+<td><input name="nickname" type="text" id="nickname" required maxlength="16" /> 1～16位，汉字、字母、假名、谚文等可显示字符</td>
 </tr>
 <tr>
 <th>电子邮件</th>
-<td><input name="email" type="text" id="email" /> 用于显示 Gravatar 头像</td>
+<td><input name="email" type="email" required id="email" /> 用于显示 Gravatar 头像</td>
 </tr>
 <tr>
 <th>提示问题</th>
-<td><input name="passwordtip" type="text" id="passwordtip" /> 0～64位可显示字符，用于忘记密码时找回密码</td>
+<td><input name="passwordtip" type="text" id="passwordtip" maxlength="64" /> 0～64位可显示字符，用于忘记密码时找回密码</td>
 </tr>
 <tr>
 <th>问题答案</th>
-<td><input name="passwordtipans" type="text" id="passwordtipans" /> 0～64位，上述问题的答案，加密存储</td>
+<td><input name="passwordtipans" type="text" id="passwordtipans" /> 最多 72 字节，上述问题的答案，保存为密码哈希</td>
 </tr>
 <tr>
 <th>真实姓名</th>
-<td><input name="realname" type="text" id="realname"/> 0～8位汉字字符，不会公开，<b>如果你实在不想写的话写可以代表你的昵称也可以</b></td>
+<td><input name="realname" type="text" id="realname" maxlength="16" /> 0～16位汉字字符，不会公开，<b>如果你实在不想写的话写可以代表你的昵称也可以</b></td>
 </tr>
 <tr>
 <th>个人介绍</th>
@@ -59,69 +59,7 @@ if ($_GET['accept']==1) {
 </td></tr>
 </table>
 </form>
-<script language="javascript">
-$("#zhuce").submit(function() {
-  var t = $("#usr").val();
-  var e = /([_a-z0-9]{1,24})/;
-  if(!e.test(t)) {
-    alert("用户名长度必须在[1,24]中且只能使用英文字母、数字以及_。");
-    return false;
-  }
-  $.get("checkname.php",{name: t},function(txt){
-    if(txt != 0) {
-      alert("用户名已被注册！");
-      return false;
-    }
-  });
-  $.get("checkname.php",{code: $("#VerifyCode").val()},function(txt) {
-    if(txt != 'right') {
-      alert("验证码 " + txt + " 错误，请一律小写。");
-      return false;
-    }
-  });
-  t = $("#pwd").val();
-  e = /(.{0,24})/;
-  if(!e.test(t)) {
-    alert("密码长度必须在[0,24]中。");
-    return false;
-  }
-  if($("#pwd").val() != $("#repwd").val()) {
-    alert("重复输入密码必须和密码相同。");
-    return false;
-  }
-  t = $("#nickname").val();
-  e = /(\S{1,20})/;
-  if(!e.test(t)) {
-    alert("昵称长度必须在[1,20]中。");
-    return false;
-  }
-  t = $("#email").val();
-  e = /(\S*@\S*\.\S*)/;
-  if(!e.test(t)) {
-    alert("电子邮箱格式不正确。");
-    return false;
-  }
-  t = $("#realname").val();
-  e = /(\S{0,8})/;
-  if(!e.test(t)) {
-    alert("真实姓名长度必须在[0,8]中，应该是汉字。");
-    return false;
-  }
-  t = $("#passwordtip").val();
-  e = /(.{0,64})/;
-  if(!e.test(t)) {
-    alert("提示问题长度必须在[0,64]中。");
-    return false;
-  }
-  t = $("#passwordtipans").val();
-  e = /(.{0,64})/;
-  if(!e.test(t)) {
-    alert("提示问题答案长度必须在[0,64]中。");
-    return false;
-  }
-  return true;
-});
-</script>
+
 <?php
 } else {
 ?>

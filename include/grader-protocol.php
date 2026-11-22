@@ -1,4 +1,5 @@
 <?php
+require_once dirname(__DIR__).'/grader/Language.php';
 // Web 端和评测机共用的键值编码，保持已有评测结果的格式。
 function array_encode($fields) {
     $parts = array();
@@ -28,22 +29,27 @@ function array_decode($packet) {
 function graderRequestAllowed($fields) {
     if (!isset($fields['action'])) return false;
     $action = $fields['action'];
-    if (in_array($action, array('state', 'start', 'shutdown', 'lock'), true)) return true;
+    if (in_array($action, array('state', 'start', 'shutdown'), true)) return true;
+    if (!preg_match('/^[a-f0-9]{32}$/D', $fields['job'] ?? '')) return false;
+    if ($action === 'lock') return true;
     if (!isset($fields['uid']) || !preg_match('/^[1-9][0-9]*$/D', $fields['uid'])) return false;
     if ($action === 'unlock') return true;
     if (!isset($fields['pname'], $fields['language']) ||
         !preg_match('/^[A-Za-z0-9_][A-Za-z0-9_-]*$/D', $fields['pname']) ||
         !preg_match('/^[0-3]$/D', $fields['language'])) return false;
     if ($action === 'compile') {
-        $extensions = array('pas', 'c', 'cpp', 'zip');
-        return isset($fields['src'], $fields['code']) &&
+        $extensions = array_column(Language::TYPES, 0);
+        return isset($fields['src'], $fields['code']) && strlen($fields['code']) <= 102400 &&
             $fields['src'] === $fields['pname'].'.'.$extensions[$fields['language']];
     }
     if ($action !== 'grade') return false;
-    foreach (array('grade', 'memorylimit', 'timelimit', 'plugin') as $key) {
+    foreach (array('grade', 'memorylimit', 'timelimit') as $key) {
         if (!isset($fields[$key]) || !preg_match('/^[0-9]+$/D', $fields[$key])) return false;
     }
-    return true;
+    return $fields['grade'] >= 1 && $fields['grade'] <= 4096 &&
+        $fields['timelimit'] >= 1 && $fields['timelimit'] <= 30000 &&
+        $fields['memorylimit'] >= 1 && $fields['memorylimit'] <= 2048 &&
+        in_array($fields['plugin'] ?? null, ['-1','0','1','2','3','4'], true);
 }
 
 function graderSignatureValid($form, $key, $now) {

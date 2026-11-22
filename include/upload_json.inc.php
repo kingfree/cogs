@@ -1,6 +1,6 @@
 <?php
 require_once dirname(__FILE__).'/header.php';
-if (!有此权限('上传数据')) {
+if (!Privilege::allows('上传数据')) {
     http_response_code(403);
     exit;
 }

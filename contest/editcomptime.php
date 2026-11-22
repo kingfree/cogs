@@ -1,16 +1,16 @@
 <?php
 require_once("../include/header.php");
 gethead(1,"修改比赛","修改比赛场次");
+$contests = Contest::choices();
+$groups = UserGroup::all();
 ?>
 <div class='container'>
 <?php
-	$q=new DataAccess();
 if ($_GET['action']=='edit')
 {
-	$p=new DataAccess();
-	$sql = new SqlQuery("select comptime.*,compbase.cname from comptime,compbase where comptime.cbid=compbase.cbid and comptime.ctid=?", [$_GET['ctid']]);
-	$cnt=$p->dosql($sql);
-	$d=$p->rtnrlt(0);
+	$rounds = ContestRound::withTitle($_GET['ctid']);
+	$cnt = count($rounds);
+	$d=($rounds[0] ?? false);
 }
 else
 {
@@ -22,7 +22,7 @@ else
     $d['showscore']=1;
 }
 ?>
-<form method="post" action="doeditcomptime.php?action=<?php echo $_GET['action'] ?>&ctid=<?php echo $_GET['ctid']; ?>">
+<form method="post" action="doeditcomptime.php?action=<?=h($_GET['action'] ?? '')?>&ctid=<?=h($_GET['ctid'] ?? '')?>"><?=formTokenField()?>
 <table class='table table-striped table-condensed table-bordered fiexd'>
   <tr>
     <td width='80px'>CTID</td>
@@ -32,13 +32,11 @@ else
     <td>关联比赛</td>
     <td><select name="cbid" id="cbid">
         <?php
-		$sql = new SqlQuery("select cname,cbid from compbase");
-		$c=$q->dosql($sql);
-		for ($j=0;$j<$c;$j++)
-		{
-			$e=$q->rtnrlt($j);
+		$qRows = $contests;
+		$c = count($qRows);
+		foreach ($qRows as $j => $e) {
 ?>
-        <option value="<?php echo $e['cbid'] ?>" <?php if($e['cbid']==$d['cbid']) echo 'selected="selected"' ?>>[<?php echo $e['cname'] ?>]</option>
+        <option value="<?php echo $e['cbid'] ?>" <?php if($e['cbid']==$d['cbid']) echo 'selected="selected"' ?>>[<?=h($e['cname'])?>]</option>
         <?php }?>
       </select>
       (比赛开始后请勿再改) </td>
@@ -47,13 +45,11 @@ else
     <td>开放分组</td>
     <td><select name="group" id="group" >
         <?php
-		$sql = new SqlQuery("select * from groups order by gname");
-		$c=$q->dosql($sql);
-		for ($j=0;$j<$c;$j++)
-		{
-			$e=$q->rtnrlt($j);
+		$qRows = $groups;
+		$c = count($qRows);
+		foreach ($qRows as $j => $e) {
 ?>
-        <option value="<?php echo $e['gid'] ?>" <?php if($e['gid']==$d['group']) echo 'selected="selected"' ?>>[<?php echo $e['gname'] ?>]</option>
+        <option value="<?php echo $e['gid'] ?>" <?php if($e['gid']==$d['group']) echo 'selected="selected"' ?>>[<?=h($e['gname'])?>]</option>
         <?php }?>
       </select>
       (比赛开始后请勿再改) </td>
@@ -97,7 +93,7 @@ else
   </tr>
   <tr>
     <td>介绍</td>
-    <td><textarea name="intro" class='textarea'><?php echo $d['intro'] ?></textarea></td>
+    <td><textarea name="intro" class='textarea'><?=h($d['intro'])?></textarea></td>
   </tr>
   <tr>
     <td></td>

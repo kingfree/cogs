@@ -1,21 +1,20 @@
 <?php
 require_once("../include/header.php");
 gethead(1,"参数设置","修改参数");
-if($_GET['method']=='html') $LIB->editor("value");
-$p=new DataAccess();
+if($_GET['method']=='html') renderEditor("value");
 
 if ((int)$_GET['ssid'])
-	$sql = new SqlQuery("select * from settings where ssid=?", [$_GET['ssid']]);
+	$settings = Setting::byId($_GET['ssid']);
 else
-	$sql = new SqlQuery("select * from settings where name=?", [$_GET['sname']]);
-$cnt=$p->dosql($sql);
-$d=$p->rtnrlt(0);
+	$settings = Setting::byName($_GET['sname']);
+$cnt = count($settings);
+$d=($settings[0] ?? false);
 $ssid=$d['ssid'];
 $sname=$d['name'];
 
 ?>
 <div class='row-fluid'>
-<form method="post" action="doeditkey.php?ssid=<?=$ssid?>" class='form-horizontal'>
+<form method="post" action="doeditkey.php?ssid=<?=$ssid?>" class='form-horizontal'><?=formTokenField()?>
 <div class='control-group'>
 <div class='controls'>
 <ul class='nav nav-tabs' id='view'>
@@ -33,7 +32,7 @@ $sname=$d['name'];
 <div class='control-group'>
 <label class='control-label' for='value'>值</label>
 <div class='controls'>
-<textarea id="value" name="value" class='textarea'><?=$d['value']?></textarea>
+<textarea id="value" name="value" class='textarea'><?=h($d['value'])?></textarea>
 </div>
 </div>
 <div class='form-actions'>

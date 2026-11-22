@@ -1,20 +1,30 @@
 <?php
-require_once dirname(__FILE__)."/stdlib.php";
+require_once dirname(__DIR__).'/include/grader-protocol.php';
+require_once dirname(__DIR__).'/features/Archive.php';
+require_once __DIR__.'/Worker.php';
+require_once __DIR__.'/Sandbox.php';
+require_once __DIR__.'/compiler.php';
+require_once __DIR__.'/checker.php';
+require_once __DIR__.'/testcase.php';
 
-if (!isset($_POST['query'])) {
-    require dirname(__FILE__)."/welcome.php";
-    return;
-}
-if (!graderSignatureValid($_POST, getenv('COGS_GRADER_KEY'), time())) {
-    http_response_code(403);
+if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+    try {
+        $status = Worker::configured()->handle(['action'=>'state']);
+        header('Content-Type: text/plain; charset=UTF-8');
+        echo '评测机 '.$status['name'].' · '.$status['state'].' · 已评测 '.$status['cnt'].' 次';
+    } catch (Throwable $error) { http_response_code(503); echo '评测机未就绪。'; }
     exit;
 }
-// 编译器和选手程序无需继承调度密钥。
-putenv('COGS_GRADER_KEY');
-unset($_ENV['COGS_GRADER_KEY'], $_SERVER['COGS_GRADER_KEY']);
+if (!graderSignatureValid($_POST, getenv('COGS_GRADER_KEY'), time())) { http_response_code(403); exit; }
 $query = array_decode($_POST['query']);
-if (!graderRequestAllowed($query)) {
-    http_response_code(400);
-    exit;
+if (!graderRequestAllowed($query)) { http_response_code(400); exit; }
+try {
+    $result = Worker::configured()->handle($query);
+    echo '<return>'.array_encode($result);
+} catch (DomainException $error) {
+    echo '<return>'.array_encode(['state'=>'error', 'compilesucc'=>0, 'runerr'=>1, 'msg'=>$error->getMessage(), 'score'=>0]);
+} catch (Throwable $error) {
+    error_log($error->getMessage());
+    http_response_code(503);
+    echo '评测机未就绪。';
 }
-require dirname(__FILE__)."/grade.php";

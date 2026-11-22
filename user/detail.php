@@ -1,18 +1,16 @@
 <?php
 require_once("../include/header.php");
-$p=new DataAccess();
 $uid = (int) $_GET['uid'];
 $user = $_GET['user'];
 if($uid)
-$sql = new SqlQuery("select userinfo.*,groups.gname,groups.gid from userinfo,groups where userinfo.uid=? and userinfo.gbelong=groups.gid", [$uid]);
+$pRows = Account::profile($uid);
 else
-$sql = new SqlQuery("select userinfo.*,groups.gname,groups.gid from userinfo,groups where (userinfo.uid=? OR userinfo.nickname=? OR userinfo.realname=? OR userinfo.usr=?) and userinfo.gbelong=groups.gid", [$user, $user, $user, $user]);
-$cnt=$p->dosql($sql);
+$pRows = Account::findProfile($user, $user, $user, $user);
+$cnt = count($pRows);
 if(!$cnt) 异常("无此用户！", 取路径("user/index.php"));
-$d=$p->rtnrlt(0);
+$d=($pRows[0] ?? false);
 $uid=$d['uid'];
 gethead(1,"","{$d['nickname']}", $uid);
-$q=new DataAccess();
 ?>
 <div class='row-fluid'>
 <div class='span4'>
@@ -23,7 +21,7 @@ $q=new DataAccess();
 </tr>
 <tr>
 <th>用户名称</th>
-<td><?=$d['usr'] ?></td>
+<td><?=h($d['usr'])?></td>
 </tr>
 <tr>
 <th>用户头像
@@ -37,11 +35,11 @@ $q=new DataAccess();
 </tr>
 <tr>
 <th>用户昵称</th>
-<td><?=$d['nickname'] ?></td>
+<td><?=h($d['nickname'])?></td>
 </tr>
 <tr>
 <th>E-mail</th>
-<td><a href="mailto:<?=$d['email']?>" target="_blank"><?=$d['email'] ?></a></td>
+<td><a href="mailto:<?=h($d['email'])?>" target="_blank"><?=h($d['email'])?></a></td>
 </tr>
 <tr>
 <th>阅读权限</th>
@@ -49,7 +47,7 @@ $q=new DataAccess();
 </tr>
 <tr>
 <th>所属分组</th>
-<td><a href="../user/index.php?gid=<?=$d['gid'] ?>" class='btn btn-mini btn-warning'><?=$d['gname'] ?></a></td>
+<td><a href="../user/index.php?gid=<?=$d['gid'] ?>" class='btn btn-mini btn-warning'><?=h($d['gname'])?></a></td>
 </tr>
 <tr>
 <th>等级积分</th>
@@ -63,20 +61,19 @@ $q=new DataAccess();
 <th>个人介绍</th>
 <td class='wrap'><?=BBCode($d['memo']) ?></td>
 </tr>
-  <?php if(有此权限('查看用户') || $_SESSION['ID']==$d['uid']) { ?>
+  <?php if(Privilege::allows('查看用户') || $_SESSION['ID']==$d['uid']) { ?>
   <tr>
     <th>真实姓名</th>
-    <td><?=$d['realname'] ?></td>
+    <td><?=h($d['realname'])?></td>
   </tr>
   <tr>
     <th>用户权限</th>
     <td>
   <?php
-    $sql = new SqlQuery("select privilege.* from privilege where uid=? order by pri asc", [$d['uid']]);
-	$cnt=$q->dosql($sql);
+    $privileges = Privilege::ordered($d['uid']);
+	$cnt = count($privileges);
     if(!$cnt) echo array_search(0,$pri) . " ";
-	for ($i=0;$i<$cnt;$i++) {
-		$e=$q->rtnrlt($i);
+	foreach ($privileges as $i => $e) {
         echo array_search($e['pri'],$pri) . " ";
     }
   ?>
@@ -89,8 +86,8 @@ $q=new DataAccess();
   <?php } ?>
 </table>
 <?php
-$sql = new SqlQuery("select compbase.cbid,compbase.cname,compscore.subtime,comptime.ctid from compscore,comptime,compbase where compscore.uid=? and comptime.ctid=compscore.ctid and comptime.cbid=compbase.cbid order by comptime.endtime desc", [$uid]);
-$cnt=$p->dosql($sql);
+$pRows = ContestRound::forUser($uid);
+$cnt = count($pRows);
 if ($cnt) {
 ?>
 <table class='table table-striped table-condensed table-bordered fiexd'>
@@ -100,14 +97,13 @@ if ($cnt) {
   </tr>
 <?php
 	$last = $j =0;
-	for ($i=0;$i<$cnt;$i++) {
-		$d=$p->rtnrlt($i);
+	foreach ($pRows as $i => $d) {
 		if ($last==$d['cbid']) continue;
 		$last=$d['cbid'];
         $j++;
 ?>
     <tr>
-    <td><b><?=$d['cname']?></b></td>
+    <td><b><?=h($d['cname'])?></b></td>
     <td><a href="../contest/problem.php?ctid=<?=$d['ctid']?>" target="_blank"><?php echo date("Y-m-d",$d['subtime'])?></a></td>
     </tr>
 <?php
@@ -120,20 +116,19 @@ if ($cnt) {
 </div>
 <div class='span8'>
 <a href="../submit/index.php?uid=<?=$uid?>" target="_blank">查看全部提交记录</a>
-<?php if(有此权限('查看用户') || $_SESSION['ID']==$uid) { ?>
+<?php if(Privilege::allows('查看用户') || $_SESSION['ID']==$uid) { ?>
 <a href="export.php?uid=<?=$uid?>" target="_blank" class='btn pull-right'>导出全部提交记录</a>
 <?php  } ?>
 <?php
 $accnt=0;
-$sql = new SqlQuery("select problem.pid,problem.probname,submit.accepted,submit.lang,submit.sid from submit,problem where submit.uid=? and submit.pid=problem.pid order by problem.pid asc, submit.score desc ", [$uid]);
-$cnt=$p->dosql($sql);
+$pRows = Submission::history($uid);
+$cnt = count($pRows);
 if ($cnt) {
 ?>
 <table class='table table-striped table-condensed table-bordered fiexd'>
 <?php
 $ppp=array();$j=0;
-for ($i=0;$i<$cnt;$i++) {
-    $d=$p->rtnrlt($i);
+foreach ($pRows as $i => $d) {
     if($ppp[$d['pid']]) continue;
     if($d['accepted']) $accnt++;
     $ppp[$d['pid']] = true;

@@ -5,21 +5,19 @@ if($pid = (int) $_GET['pid'])
     gethead(7,"sess","修改题目");
 else
     gethead(7,"sess","新建题目");
-$p=new DataAccess();
-$q=new DataAccess();
 if($pid) {
-    $sql = new SqlQuery("select * from problem where pid=?", [$pid]);
-    $cnt=$p->dosql($sql);
+    $pRows = Problem::byId($pid);
+    $cnt = count($pRows);
     if($cnt) {
-        $d=$p->rtnrlt(0);
-        if(!有此权限("查看题目") && $uid != $d['addid'])
+        $d=($pRows[0] ?? false);
+        if(!Privilege::allows("查看题目") && $uid != $d['addid'])
             异常("没有阅读权限！", 取路径("problem/index.php"));
     } else {
         异常("无此题目！！", 取路径("problem/index.php"));
     }
 }
-$LIB->editor("detail");
-$LIB->htmldom();
+renderEditor("detail");
+
 ?>
 <script>
 function checkprobname(){
@@ -71,221 +69,10 @@ if (!$cnt) {
         $d['detail'].="<p>在此键入。</p>";
     }
 }
-if($_GET['oj']=='poj' && $_GET['id']>=1000) {
-    $d=array();
-    $url="http://www.poj.org/problem?id=".$_GET['id']."&lang=zh-CN&change=true";
-    $baseurl=substr($url,0,strrpos($url,"/")+1);
-    $html=file_get_html($url);
-    foreach($html->find('img') as $element)
-        $element->src=$baseurl.$element->src;
-
-    $element=$html->find('div[class=ptt]',0);
-    $d['probname']=$element->plaintext;
-    $d['filename']="poj_".$_GET['id'];
-    $d['submitable']=1;
-
-    $element=$html->find('div[class=plm]',0);
-    $tlimit=$element->find('td',0);
-    $tlimit=substr($tlimit->plaintext,11);
-    $tlimit=substr($tlimit,0,strlen($tlimit)-2);
-    $d['timelimit']=(int)$tlimit;
-    $mlimit=$element->find('td',2);
-    $mlimit=substr($mlimit->plaintext,13);
-    $mlimit=substr($mlimit,0,strlen($mlimit)-1);
-    $d['memorylimit']=(int)($mlimit/1024);
-
-    $d['datacnt']=10;
-    $d['difficulty']=2;
-    $d['readforce']=0;
-    $d['plugin']=1;
-    $d['group']=0;
-
-    $d['detail']="";
-    $element=$html->find('div[class=ptx]',0);
-    $d['detail'].="<h3>【题目描述】</h3>".$element->outertext;
-    $element=$html->find('div[class=ptx]',1);
-    $d['detail'].="<h3>【输入格式】</h3>".$element->outertext;
-    $element=$html->find('div[class=ptx]',2);
-    $d['detail'].="<h3>【输出格式】</h3>".$element->outertext;
-    $element=$html->find('pre[class=sio]',0);
-    $d['detail'].="<h3>【样例输入】</h3>".str_replace("  ","\n",$element->outertext)."";
-    $element=$html->find('pre[class=sio]',1);
-    $d['detail'].="<h3>【样例输出】</h3>".str_replace("  ","\n",$element->outertext)."";
-    $element=$html->find('div[class=ptx]',3);
-    $d['detail'].="<h3>【提示】</h3>".$element->outertext;
-    $element=$html->find('div[class=ptx]',4);
-    $d['detail'].="<h3>【来源】</h3>".$element->outertext;
-    $d['detail'].="<h3>【题目来源】</h3>"."<a href=\"".$url."\"> 北京大学 POJ ".$_GET['id']."</a>";
-} else if($_GET['oj']=='soj' && $_GET['id']>=1000) {
-    $d=array();
-    $url="http://www.soj.me/show_problem.php?pid=".$_GET['id'];
-    $baseurl=substr($url,0,strrpos($url,"/")+1);
-    $html=file_get_html($url);
-    foreach($html->find('img') as $element)
-        $element->src=$baseurl.$element->src;
-
-    $element=$html->find('div[class=cent]',0);
-    $pname=ltrim($element->plaintext);
-    $pname=rtrim($pname);
-    $pname=substr($pname,6);
-    $d['probname']=$pname;
-    $d['filename']="soj_".$_GET['id'];
-    $d['submitable']=1;
-
-    $element=$html->find('div[class=rtbar]',0);
-    $limit=ltrim($element->plaintext);
-    $tlimit=substr($limit,stripos($limit,"Time Limit:")+11);
-    $mlimit=substr($limit,stripos($limit,"Memory Limit:")+13);
-    $tlimit=substr($tlimit,0,stripos($tlimit,"sec"));
-    $mlimit=substr($mlimit,0,stripos($mlimit,"MB"));
-    $d['timelimit']=(int)($tlimit) * 1000;
-    $d['memorylimit']=(int)($mlimit);
-
-    $d['datacnt']=10;
-    $d['difficulty']=2;
-    $d['readforce']=0;
-    $d['plugin']=1;
-    $d['group']=0;
-
-    $d['detail']="";
-    $element=$html->find('div[class=description]',0);
-    $d['detail'].="<h3>【题目描述】</h3>".$element->outertext;
-    $element=$html->find('div[class=description]',1);
-    $d['detail'].="<h3>【输入格式】</h3>".$element->outertext;
-    $element=$html->find('div[class=description]',2);
-    $d['detail'].="<h3>【输出格式】</h3>".$element->outertext;
-    $element=$html->find('pre',0);
-    $d['detail'].="<h3>【样例输入】</h3>".str_replace("  ","\n",$element->outertext)."";
-    $element=$html->find('pre',1);
-    $d['detail'].="<h3>【样例输出】</h3>".str_replace("  ","\n",$element->outertext)."";
-    $d['detail'].="<h3>【题目来源】</h3>"."<a href=\"".$url."\">中山大学 SOJ ".$_GET['id']."</a>";
-} else if($_GET['oj']=='pojgrids' && $_GET['id']>=1000) {
-    $d=array();
-    $url="http://poj.grids.cn/practice/".$_GET['id'];
-    $baseurl=substr($url,0,strrpos($url,"/")+1);
-    $html=file_get_html($url);
-
-    foreach($html->find('img') as $element)
-        $element->src=$baseurl.$element->src;
-
-    $pname=$html->find('div[id=pageTitle]', 0)->plaintext;
-    $pname=substr($pname,stripos($pname,"题目")+5);
-    $d['probname']=$pname;
-    $d['filename']="pojg_".$_GET['id'];
-    $d['submitable']=1;
-
-    $params=$html->find('dl[class=problem-params]',0);
-    $tlimit=$params->find('dd', 0)->plaintext;
-    $mlimit=$params->find('dd', 1)->plaintext;
-    $tlimit=substr($tlimit,0,stripos($tlimit,"ms"));
-    $mlimit=substr($mlimit,0,stripos($mlimit,"kB"));
-    $d['timelimit']=(int)($tlimit);
-    $d['memorylimit']=(int)($mlimit) / 1024;
-
-    $d['datacnt']=10;
-    $d['difficulty']=2;
-    $d['readforce']=0;
-    $d['plugin']=1;
-    $d['group']=0;
-
-    $content=$html->find('dl[class=problem-content]',0);
-    $d['detail']="";
-    $element=$content->find('dd',0);
-    $d['detail'].="<h3>【题目描述】</h3>".$element->outertext;
-    $element=$content->find('dd',1);
-    $d['detail'].="<h3>【输入格式】</h3>".$element->outertext;
-    $element=$content->find('dd',2);
-    $d['detail'].="<h3>【输出格式】</h3>".$element->outertext;
-    $element=$content->find('pre',0);
-    $d['detail'].="<h3>【样例输入】</h3>".str_replace("  ","\n",$element->outertext)."";
-    $element=$content->find('pre',1);
-    $d['detail'].="<h3>【样例输出】</h3>".str_replace("  ","\n",$element->outertext)."";
-    $d['detail'].="<h3>【题目来源】</h3>"."<a href=\"".$url."\">百练 POJ ".$_GET['id']."</a>";
-} else if($_GET['oj']=='lydsy' && $_GET['id']>=1000) {
-    $d=array();
-    $url="http://www.lydsy.com/JudgeOnline/problem.php?id=".$_GET['id'];
-    $baseurl=substr($url,0,strrpos($url,"/")+1);
-    $html=file_get_html($url);
-    foreach($html->find('img') as $element)
-        $element->src=$baseurl.$element->src;
-
-    $element=$html->find('h2',0);
-    $pname=ltrim($element->plaintext);
-    $pname=rtrim($pname);
-    $pname=substr($pname,6);
-    $d['probname']=$pname;
-    $d['filename']="bzoj_".$_GET['id'];
-    $d['submitable']=1;
-
-    $element=$html->find('center',2);
-    $limit=ltrim($element->plaintext);
-    $tlimit=substr($limit,stripos($limit,"Time Limit:")+11);
-    $mlimit=substr($limit,stripos($limit,"Memory Limit:")+13);
-    $tlimit=substr($tlimit,0,stripos($tlimit,"Sec"));
-    $mlimit=substr($mlimit,0,stripos($mlimit,"MB"));
-    $d['timelimit']=(int)($tlimit) * 1000;
-    $d['memorylimit']=(int)($mlimit);
-
-    $d['datacnt']=10;
-    $d['difficulty']=2;
-    $d['readforce']=0;
-    $d['plugin']=1;
-    $d['group']=0;
-
-    $d['detail']="";
-    $element=$html->find('div[class=content]',0);
-    $d['detail'].="<h3>【题目描述】</h3>".$element->outertext;
-    $element=$html->find('div[class=content]',1);
-    $d['detail'].="<h3>【输入格式】</h3>".$element->outertext;
-    $element=$html->find('div[class=content]',2);
-    $d['detail'].="<h3>【输出格式】</h3>".$element->outertext;
-    $element=$html->find('span[class=sampledata]',0);
-    $d['detail'].="<h3>【样例输入】</h3><pre>".$element->plaintext."</pre>";
-    $element=$html->find('span[class=sampledata]',1);
-    $d['detail'].="<h3>【样例输出】</h3><pre>".$element->plaintext."</pre>";
-    $element=$html->find('div[class=content]',5);
-    $d['detail'].="<h3>【提示】</h3>".$element->outertext;
-    $element=$html->find('div[class=content]',6);
-    $d['detail'].="<h3>【来源】</h3>".$element->outertext;
-    $d['detail'].="<h3>【题目来源】</h3>"."<a href=\"".$url."\">耒阳大世界（衡阳八中） OJ ".$_GET['id']."</a>";
-} else if($_GET['oj']=='uva' && $_GET['id']) {
-    $d=array();
-    $url="http://uva.onlinejudge.org/external/".(int)($_GET['id']/100)."/".$_GET['id'].".html";
-    echo $url;
-    $baseurl=substr($url,0,strrpos($url,"/")+1);
-    $html=file_get_html($url);
-    foreach($html->find('img') as $element)
-        $element->src=$baseurl.$element->src;
-
-    $element=$html->find('H1',0);
-    $pname=ltrim($element->plaintext);
-    $pname=rtrim($pname);
-    $d['probname']=$pname;
-    $d['filename']="uva_".$_GET['id'];
-    $d['submitable']=1;
-
-    $d['timelimit']=1000;
-    $d['memorylimit']=128;
-
-    $d['datacnt']=10;
-    $d['difficulty']=2;
-    $d['readforce']=0;
-    $d['plugin']=1;
-    $d['group']=0;
-
-    $d['detail']="";
-    $element=$html->find('div[class=content]',0);
-    $d['detail'].="<h3>【题目描述】</h3>".$element->outertext;
-    $element=$html->find('div[class=content]',1);
-    $d['detail'].="<h3>【输入格式】</h3>".$element->outertext;
-    $element=$html->find('div[class=content]',2);
-    $d['detail'].="<h3>【输出格式】</h3>".$element->outertext;
-    $element=$html->find('pre',0);
-    $d['detail'].="<h3>【样例输入】</h3>".str_replace("  ","\n",$element->outertext)."";
-    $element=$html->find('pre',1);
-    $d['detail'].="<h3>【样例输出】</h3>".nl2br($element->outertext)."";
+if (!empty($_GET['oj'])) {
+    try { $d = ProblemSource::draft($_GET['oj'], (int)($_GET['id'] ?? 0)); }
+    catch (DomainException $error) { 异常(h($error->getMessage())); }
 }
-
 ?>
 
 
@@ -296,18 +83,15 @@ if($_GET['oj']=='poj' && $_GET['id']>=1000) {
 </div>
 <div class='modal-body'>
 <form action='' method='get' class='form-horizontal'>
-<input name='action' type='hidden' value='<?=$_GET['action']?>' />
-<input name='pid' type='hidden' value='<?=$_GET['pid']?>' />
+<input name='action' type='hidden' value='<?=h($_GET['action'] ?? '')?>' />
+<input name='pid' type='hidden' value='<?=h($_GET['pid'] ?? '')?>' />
 <div class='control-group'>
 <label class='control-label' for='oj'>在线系统</label>
 <div class='controls'>
 <select id='oj' name='oj' class='input-medium'>
-<option value='poj' <?php if($_GET['oj']=='poj') echo "selected=selected";?> >POJ</option>
-<option value='soj' <?php if($_GET['oj']=='soj') echo "selected=selected";?> >SOJ</option>
-<!--<option value='rqnoj' <?php if($_GET['oj']=='rqnoj') echo "selected=selected";?> >RQNOJ</option>-->
-<option value='pojgrids' <?php if($_GET['oj']=='pojgrids') echo "selected=selected";?> >POJ 百练</option>
-<option value='lydsy' <?php if($_GET['oj']=='lydsy') echo "selected=selected";?> >耒阳大视野</option>
-<!--<option value='uva' <?php if($_GET['oj']=='uva') echo "selected=selected";?> >UVa</option>-->
+<?php foreach (ProblemSource::sources() as $key=>$rule) { ?>
+<option value="<?=h($key)?>" <?=($_GET['oj'] ?? '') === $key ? 'selected' : ''?>><?=h($rule['name'])?></option>
+<?php } ?>
 </select>
 </div>
 </div>
@@ -326,19 +110,19 @@ if($_GET['oj']=='poj' && $_GET['id']>=1000) {
 </div>
 
 <div class='row-fluid'>
-<form action="doeditprob.php" method="post" enctype="multipart/form-data" class='form-horizontal' id="tijiao">
+<form action="doeditprob.php" method="post" enctype="multipart/form-data" class='form-horizontal' id="tijiao"><?=formTokenField()?>
 <div id='cates' class='modal hide fade in' style='width:940px; margin-left:-470px;'>
 <?php
 if ($pid) {
-    $sql = new SqlQuery("select caid from tag where pid=?", [$pid]);
-    $cnt=$p->dosql($sql);
+    $pRows = Category::forProblem($pid);
+    $cnt = count($pRows);
     for ($i=0;$i<=$cnt-1;$i++) {
-        $f=$p->rtnrlt($i);
+        $f=($pRows[$i] ?? false);
         $hash[$f['caid']]=true;
     }
 }
-$sql = new SqlQuery("select * from category order by cname");
-$cnt=$p->dosql($sql);
+$pRows = Category::all();
+$cnt = count($pRows);
 if($cnt) {
 ?>
 <div class='modal-header'>
@@ -348,14 +132,13 @@ if($cnt) {
 <div class='modal-body'>
 <ul class='nav nav-pills'>
 <?php
-for ($i=0;$i<$cnt;$i++) {
-$f=$p->rtnrlt($i);
+foreach ($pRows as $i => $f) {
 ?>
 <li style='width: 120px'>
 <input name="cate[<?=$f['caid']?>]" type="hidden" value="0" />
 <label class='checkbox inline'>
 <input name="cate[<?=$f['caid']?>]" type="checkbox" id="cate[<?=$f['caid']?>]" value="1" <?php if ($hash[$f['caid']]) echo 'checked="checked"';?>/>
-<label <?php if ($hash[$f['caid']]) echo 'class="label"';?>><?=$f['cname']?></label>
+<label <?php if ($hash[$f['caid']]) echo 'class="label"';?>><?=h($f['cname'])?></label>
 </label>
 </li>
 <?php  } ?>
@@ -373,21 +156,21 @@ $f=$p->rtnrlt($i);
 <div class='controls'>
 <span id='pid' class='uneditable-input span2' ><?=$_GET['pid'] ? $_GET['pid'] : "新建题目"?></span>
 <input name='pid' type='hidden' value='<?=$_GET['pid'] ? $_GET['pid'] : "0"?>' />
-<input name="action" type="hidden" id="action" value="<?=$_GET['action'] ?>" />
+<input name="action" type="hidden" id="action" value="<?=h($_GET['action'] ?? '')?>" />
 <a class='btn pull-right' href="#copy" data-toggle='modal'><i class='icon-barcode'></i>抄袭题目</a>
 </div>
 </div>
 <div class='control-group'>
 <label class='control-label' for='probname'>题目名称</label>
 <div class='controls'>
-<input name="probname" type="text" id="probname" onchange="checkprobname()" value="<?=$d['probname'] ?>" />
+<input name="probname" type="text" id="probname" onchange="checkprobname()" value="<?=h($d['probname'])?>" />
 <span class='help-inline' id="msg1"></span>
 </div>
 </div>
 <div class='control-group'>
 <label class='control-label' for='filename'>文件名称</label>
 <div class='controls'>
-<input name="filename" type="text" id="filename" onchange="checkfilename()" value="<?=$d['filename'] ?>" />
+<input name="filename" type="text" id="filename" onchange="checkfilename()" value="<?=h($d['filename'])?>" />
 <span class='help-inline' id="msg2"></span>
 </div>
 </div>
@@ -422,7 +205,7 @@ $f=$p->rtnrlt($i);
 </div>
 </div>
 <div class='control-group'>
-<?php  if(有此权限("查看题目")) { ?>
+<?php  if(Privilege::allows("查看题目")) { ?>
 <label class='control-label' for='readforce'>阅读权限</label>
 <div class='controls'>
 <input name="readforce" type="number" id="readforce" value="<?=$d['readforce'] ?>" class='span4' />
@@ -449,13 +232,12 @@ $f=$p->rtnrlt($i);
 <div class='controls'>
 <select name="group" id="group">
 <?php
-$sql = new SqlQuery("select * from groups order by gname");
-$c=$q->dosql($sql);
-for ($j=0;$j<$c;$j++) {
-    $e=$q->rtnrlt($j);
+$groups = UserGroup::all();
+$c = count($groups);
+foreach ($groups as $j => $e) {
     echo "<option value='{$e['gid']}' ";
     if($d['group']==$e['gid']) echo "selected='selected'";
-    echo " >{$e['gname']}</option>";
+    echo " >".h($e['gname'])."</option>";
 }
 ?>
 </select>
@@ -484,6 +266,6 @@ for ($j=0;$j<$c;$j++) {
 </div>
 </div>
 <?php
-//$LIB->editor("detail");
+//renderEditor("detail");
 include_once("../include/footer.php");
 ?>

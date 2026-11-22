@@ -5,18 +5,18 @@ gethead(1,"修改比赛","修改比赛");
 <div class='row-fluid'>
 <script type="text/JavaScript">
 function MM_jumpMenu(targ,selObj,restore){ //v3.0
-  eval(targ+".location='"+selObj.options[selObj.selectedIndex].value+"'");
+  window.location.assign(selObj.value);
   if (restore) selObj.selectedIndex=0;
 }
 </script>
 <a href="editcompbase.php?action=add" class="btn btn-info pull-left">添加新比赛</a>
 <?php
-	$p=new DataAccess();
-	$q=new DataAccess();
-	$sql = new SqlQuery("select compbase.*,userinfo.nickname,userinfo.realname,userinfo.email from compbase,userinfo where userinfo.uid=compbase.ouid order by compbase.cbid desc");
-	
-$cnt=$p->dosql($sql);
-$st=检测页面($cnt, $_GET['page']);
+	$contests = Contest::withOrganizers();
+$problems = array_column(Problem::choices(), null, 'pid');
+$rounds = ContestRound::byContest();
+
+$cnt = count($contests);
+$st=检测页面($cnt, ($_GET['page'] ?? 1));
 ?>
 <table class='table table-striped table-condensed table-bordered fiexd'>
   <tr>
@@ -29,11 +29,11 @@ $st=检测页面($cnt, $_GET['page']);
   </tr>
 <?php
 for ($i=$st;$i<$cnt && $i<$st+$SET['style_pagesize'] ;$i++) {
-		$d=$p->rtnrlt($i);
+		$d=($contests[$i] ?? false);
 ?>
   <tr>
     <td><?php echo $d['cbid'] ?></td>
-    <td><?php echo $d['cname'] ?></td>
+    <td><?=h($d['cname'])?></td>
     <td>
         <select name="menu1" onchange="MM_jumpMenu('parent',this,0)" class="InputBox">
 <?php
@@ -44,23 +44,19 @@ for ($i=$st;$i<$cnt && $i<$st+$SET['style_pagesize'] ;$i++) {
 			foreach($pbs as $k=>$v)
 			{
 				$c++;
-				$sql = new SqlQuery("select probname from problem where pid=?", [$v]);
-				$q->dosql($sql);
-				$e=$q->rtnrlt(0);
+				$e = $problems[$v] ?? null;
 		?>
-			<option value="../problem/problem.php?pid=<?php echo $v ?>">[<?php echo $e['probname'] ?>]</option>
+			<option value="../problem/problem.php?pid=<?php echo $v ?>">[<?=h($e['probname'])?>]</option>
 <?php		}
 	   }?>
-<option selected="selected">[<?php echo $c ?>个题目]</option>	
+<option selected="selected">[<?php echo $c ?>个题目]</option>
 </select> </td>
     <td>
         <select name="menu2" onchange="MM_jumpMenu('parent',this,0)" class="InputBox">
 		<?php
-		$sql = new SqlQuery("select starttime,ctid from comptime where cbid=? order by starttime asc", [$d['cbid']]);
-		$c=$q->dosql($sql);
-		for ($j=0;$j<$c;$j++)
-		{
-			$e=$q->rtnrlt($j);
+		$qRows = $rounds[$d['cbid']] ?? [];
+		$c = count($qRows);
+		foreach ($qRows as $j => $e) {
 		?>
 			<option value="comptime.php?ctid=<?php echo $e['ctid'] ?>"><?php echo date("在 Y-m-d H:i:s 的开始比赛",$e['starttime']) ?></option>
 <?php }?>
@@ -70,7 +66,7 @@ for ($i=$st;$i<$cnt && $i<$st+$SET['style_pagesize'] ;$i++) {
 	</td>
 <td><a href='../user/detail.php?uid=<?=$d['ouid']?>' target='_blank'>
 <?=gravatar::showImage($d['email']);?>
-<?php if(有此权限("查看用户")) echo $d['realname']; else echo $d['nickname'];?>
+<?php if(Privilege::allows("查看用户")) echo h($d['realname']); else echo h($d['nickname']);?>
 </a></td>
     <td><a href="editcompbase.php?action=edit&cbid=<?php echo $d['cbid'] ?>">修改比赛</a></td>
   </tr>
@@ -78,7 +74,7 @@ for ($i=$st;$i<$cnt && $i<$st+$SET['style_pagesize'] ;$i++) {
 	}
 ?>
 </table>
-<?php  分页($cnt, $_GET['page'], '?settings=comp&'); ?>
+<?php  分页($cnt, ($_GET['page'] ?? 1), '?settings=comp&'); ?>
 </div>
 <?php
 	include_once("../include/footer.php");

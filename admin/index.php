@@ -1,7 +1,6 @@
 <?php
 require_once("../include/header.php");
 gethead(1,"可以管理","后台管理");
-$q=new DataAccess();
 ?>
 
 <div class='page'>

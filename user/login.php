@@ -3,7 +3,7 @@ require_once("../include/header.php");
 gethead(1,"","用户登录");
 if($_SESSION['ID']) 异常("已经登录！");
 ?>
-<form id='denglu' method="post" action="dologin.php" class='form-inline center'>
+<form id='denglu' method="post" action="dologin.php" class='form-inline center'><?=formTokenField()?>
 <input name="username" type="text" class='input' placeholder='用户名' /><br />
 <input name="password" type="password" class='input' placeholder='密码' /><br />
 <label class="checkbox">

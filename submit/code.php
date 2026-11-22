@@ -2,26 +2,19 @@
 require_once("../include/header.php");
 $uid = (int) $_SESSION['ID'];
 $sid = (int) $_GET['id'];
-$p=new DataAccess();
 if(!$sid) {
-    $sql = new SqlQuery("select max(sid) as sid from submit");
-    $p->dosql($sql);
-    $d=$p->rtnrlt(0);
+    $pRows = Submission::lastId();
+    $d=($pRows[0] ?? false);
     $sid = $d['sid'];
 }
-$sql = new SqlQuery("select submit.*,userinfo.nickname,userinfo.realname,submit.subtime,problem.probname,problem.filename from submit,userinfo,problem where submit.pid=problem.pid and submit.uid=userinfo.uid and submit.sid=?", [$sid]);
-$cnt=$p->dosql($sql);
+$pRows = Submission::withAuthor($sid);
+$cnt = count($pRows);
 if($cnt) {
-    $d=$p->rtnrlt(0);
-    $fp=fopen("{$SET['dir_source']}{$d['uid']}/{$d['srcname']}","r");
-    if (is_resource($fp))
-        $code=rfile($fp);
-    fclose($fp);
-    $code=mb_convert_encoding($code, "utf-8", "gbk");
+    $d=($pRows[0] ?? false);
+
 } else 异常("提交记录不存在");
 gethead(1,"","{$d['probname']} - {$d['nickname']} - {$sid}", $d['uid']);
-$LIB->hlighter();
-$q=new DataAccess();
+require_once __DIR__.'/../include/hlighter.inc.php';
 ?>
 <div class='row-fluid'>
 <table class='table table-striped table-condensed table-bordered fiexd'>
@@ -33,13 +26,13 @@ $q=new DataAccess();
 </tr>
 <tr>
     <th>题目名称</th>
-    <td><a href="../problem/problem.php?pid=<?php echo $d['pid']; ?>" target="_blank"><?php echo $d['probname']; ?></a></td>
+    <td><a href="../problem/problem.php?pid=<?php echo $d['pid']; ?>" target="_blank"><?=h($d['probname'])?></a></td>
     <th>最终得分</th>
     <td><?php echo $d['score'] ?></td>
     <th rowspan='3' width="60px">重新评测</th>
     <td rowspan='3'>
-<?php  if($uid == $d['uid'] || 有此权限('测试题目')) { ?>
-    <form method="post" action="../submit/run.php" class='form-inline'>
+<?php  if(Privilege::allows('管理评测')) { ?>
+    <form method="post" action="../submit/run.php" class='form-inline'><?=formTokenField()?>
         <input name="pid" type="hidden" id="pid" value="<?=$d['pid']; ?>" />
         <input name="sid" type="hidden" id="sid" value="<?=$d['sid']; ?>" />
         <input type="hidden" name="rejudge" value="1">
@@ -47,11 +40,10 @@ $q=new DataAccess();
     <select name='judger' id='judger' >
     <option value=0 selected=selected>自动选择</option>
 <?php
-    $sql = new SqlQuery("select grid,address,memo from grader where enabled=1 order by priority desc");
-    $cnt=$q->dosql($sql);
-    for ($i=0;$i<$cnt;$i++) {
-        $e=$q->rtnrlt($i);
-        echo "<option value={$e['grid']} >{$e['memo']}</option>";
+    $judges = Judge::enabled();
+    $cnt = count($judges);
+    foreach ($judges as $i => $e) {
+        echo "<option value={$e['grid']} >".h($e['memo'])."</option>";
     }
 ?>       
     </select>
@@ -62,7 +54,7 @@ $q=new DataAccess();
 </tr>
 <tr>
     <th>用户昵称</th>
-    <td><a href="../user/detail.php?uid=<?php echo $d['uid']; ?>" target="_blank"><?=有此权限('查看用户') ? $d['realname'] : $d['nickname'] ?></a></td>
+    <td><a href="../user/detail.php?uid=<?php echo $d['uid']; ?>" target="_blank"><?=h(Privilege::allows('查看用户') ? $d['realname'] : $d['nickname'])?></a></td>
     <th>是否通过</th>
     <td><?php echo $d['accepted']?"<span class='ok'>通过":"<span class='no'>未通过"; ?></span></td>
 </tr>
@@ -78,32 +70,35 @@ $q=new DataAccess();
     <th>内存使用</th>
     <td><?php printf("%.2f",$d['memory']/1024) ?> MiB </td>
     <th>IP</th>
-    <td><?php if(有此权限('查看用户')) { echo $d['IP'];  } ?></td>
+    <td><?php if(Privilege::allows('查看用户')) { echo $d['IP'];  } ?></td>
 </tr>
 <tr>
 </tr>
 </table>
 <?php
-if(有此权限('查看代码') || $d['uid']==$uid)
+if(Privilege::allows('查看代码') || $d['uid']==$uid)
     $forcetocode=1;
 else {
-    $sql = new SqlQuery("select showcode from comments where uid=? and pid=? order by showcode desc limit 1", [$d['uid'], $d['pid']]);
-    $cnt=$p->dosql($sql);
+    $pRows = Comment::codeSharing($d['uid'], $d['pid']);
+    $cnt = count($pRows);
     if ($cnt) {
-        $f=$p->rtnrlt(0);
+        $f=($pRows[0] ?? false);
         $forcetocode=$f['showcode'];
     }
 
     if(!$forcetocode) {
-        $sql = new SqlQuery("select accepted from submit where uid=? and pid=? order by score desc limit 1", [$uid, $d['pid']]);
-        $cnt=$p->dosql($sql);
+        $pRows = Submission::solved($uid, $d['pid']);
+        $cnt = count($pRows);
         if ($cnt) {
-            $f=$p->rtnrlt(0);
+            $f=($pRows[0] ?? false);
             $forcetocode=$f['accepted'];
         }
     }
 }
 if ($forcetocode) {
+    $path = rtrim($SET['dir_source'], '/').'/'.(int)$d['uid'].'/'.basename($d['srcname']);
+    $code = is_file($path) && !is_link($path) && $d['lang'] != 3 ? file_get_contents($path) : '';
+    if (!mb_check_encoding($code, 'UTF-8')) $code = mb_convert_encoding($code, 'UTF-8', 'GBK');
     if($d['lang']==0) $langstr="pascal";
     else if($d['lang']==1) $langstr="c";
     else if($d['lang']==2) $langstr="cpp";

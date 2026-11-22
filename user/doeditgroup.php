@@ -1,20 +1,17 @@
 <?php
 require_once("../include/header.php");
 gethead(8,"分组管理","");
+requirePost();
 
-if ($_REQUEST['action']=='add')
+if (($_POST['action'] ?? $_GET['action'] ?? '')=='add')
 {
-	$p=new DataAccess();
-	$sql = new SqlQuery("insert into groups(gname,memo,adminuid,parent) values(?,?,?,?)", [$_POST['gname'], $_POST['memo'], $_POST['adminuid'], $_POST['parent']]);
-	$p->dosql($sql);
+	UserGroup::create($_POST['gname'], $_POST['memo'], $_POST['adminuid'], $_POST['parent']);
     提示("添加分组 {$_POST['gname']} 成功！",取路径("user/grouplist.php"));
 }
 
-if ($_REQUEST['action']=='edit')
+if (($_POST['action'] ?? $_GET['action'] ?? '')=='edit')
 {
-	$p=new DataAccess();
-	$sql = new SqlQuery("update groups set gname=?,memo=?,adminuid=?,parent=? where gid=?", [$_POST['gname'], $_POST['memo'], $_POST['adminuid'], $_POST['parent'], $_REQUEST['gid']]);
-	$p->dosql($sql);
+	UserGroup::edit($_POST['gname'], $_POST['memo'], $_POST['adminuid'], $_POST['parent'], ($_POST['gid'] ?? $_GET['gid'] ?? ''));
     提示("修改分组 {$_POST['gname']} 成功！",取路径("user/grouplist.php"));
 }
 ?>

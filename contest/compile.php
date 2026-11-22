@@ -1,14 +1,13 @@
 <?php
 require_once("../include/header.php");
 gethead(0,"查看比赛","");
-$LIB->cls_compile();
-$LIB->func_socket();
+requirePost();
+require_once __DIR__.'/../include/socket.php';
 
-$p=new DataAccess();
-$sql = new SqlQuery("select compscore.lang,compscore.uid,problem.filename,compscore.ctid,problem.pid,problem.datacnt,problem.timelimit,problem.memorylimit,problem.plugin from compscore,problem where compscore.pid=problem.pid and compscore.csid=?", [$_POST['csid']]);
-$cnt=$p->dosql($sql);
+$entries = ContestEntry::forJudging($_POST['csid']);
+$cnt = count($entries);
 if ($cnt) {
-	$d=$p->rtnrlt(0);
+	$d=($entries[0] ?? false);
 } else {
 	exit;
 }
@@ -25,9 +24,9 @@ $info['memorylimit']=$d['memorylimit'];
 $info['plugin']=$d['plugin'];
 $info['compiledir']=$cdir;
 
-$Cp=new Compiler($info);
+$Cp=new Judging($info);
 
-$free=$Cp->getgds($_POST['judger']);
+$free=$Cp->acquire($_POST['judger']);
 
 if (!$free) //非空闲
 {
@@ -35,9 +34,9 @@ if (!$free) //非空闲
 	exit;
 }
 
-$Cp->lock();
 
-$Cp->getdir();
+
+$Cp->prepareSource();
 
 $csucc=$Cp->compile();
 

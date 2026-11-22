@@ -48,13 +48,8 @@ class gravatar
 		$path = pathconvert($SET['cur'],$portrait).'/';
 		$filename = md5($email)."?s={$size}&d={$default}";
 		$filenama = md5($email)."s{$size}";
-		if (file_exists($path.$filenama) && filesize($path.$filenama) > 0)
-			$url = $path.$filenama;
-		else {
-			$web = $SET['gravatar_server'].$filename;
-			$url = $path.$filenama;
-			file_put_contents($url, file_get_contents($web));
-        }
-		return $url;
-	}
+        if (is_file($portrait.'/'.$filenama) && filesize($portrait.'/'.$filenama) > 0) return h($path.$filenama);
+        if (empty($SET['gravatar_server'])) return h(路径('style/cogs.png'));
+        return h($SET['gravatar_server'].$filename);
+    }
 }

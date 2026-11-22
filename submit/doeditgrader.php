@@ -1,33 +1,29 @@
 <?php
 require_once("../include/header.php");
 gethead(8,"管理评测","");
+requirePost();
 
-$LIB->func_socket();
+require_once __DIR__.'/../include/socket.php';
 
 if ($_POST['enabled']==1) $enabled=1; else $enabled=0;
 
-if ($_REQUEST['action']=='add')
+if (($_POST['action'] ?? $_GET['action'] ?? '')=='add')
 {
-	$p=new DataAccess();
-	$sql = new SqlQuery("insert into grader(address,priority,enabled,memo) values(?,?,?,?)", [$_POST['address'], $_POST['priority'], $enabled, $_POST['memo']]);
-	$p->dosql($sql);
+	Judge::create($_POST['address'], $_POST['priority'], $enabled, $_POST['memo']);
     提示("添加评测机 {$_POST['address']} 成功！", 取路径("submit/graderlist.php"));
 }
 
-if ($_REQUEST['action']=='edit')
+if (($_POST['action'] ?? $_GET['action'] ?? '')=='edit')
 {
-	$p=new DataAccess();
-	$sql = new SqlQuery("update grader set address=?,priority=?,enabled=?,memo=? where grid=?", [$_POST['address'], $_POST['priority'], $enabled, $_POST['memo'], $_REQUEST['grid']]);
-	$p->dosql($sql);
+	Judge::edit($_POST['address'], $_POST['priority'], $enabled, $_POST['memo'], ($_POST['grid'] ?? $_GET['grid'] ?? ''));
     提示("修改评测机 {$_POST['address']} 成功！", 取路径("submit/graderlist.php"));
 }
 
-if ($_REQUEST['action']=='start')
+if (($_POST['action'] ?? $_GET['action'] ?? '')=='start')
 {
-	$p=new DataAccess();
-	$sql = new SqlQuery("select address from grader where grid=?", [$_GET['grid']]);
-	$cnt=$p->dosql($sql);
-	$d=$p->rtnrlt(0);
+	$judges = Judge::address($_GET['grid']);
+	$cnt = count($judges);
+	$d=($judges[0] ?? false);
 	$s['action']="start";
 	httpsocket($d['address'],$s);
     if($s['state'] == "successful")
@@ -36,12 +32,11 @@ if ($_REQUEST['action']=='start')
         异常("启动评测机 {$_GET['grid']} 失败！", 取路径("submit/graderlist.php"));
 }
 
-if ($_REQUEST['action']=='stop')
+if (($_POST['action'] ?? $_GET['action'] ?? '')=='stop')
 {
-	$p=new DataAccess();
-	$sql = new SqlQuery("select address from grader where grid=?", [$_GET['grid']]);
-	$cnt=$p->dosql($sql);
-	$d=$p->rtnrlt(0);
+	$judges = Judge::address($_GET['grid']);
+	$cnt = count($judges);
+	$d=($judges[0] ?? false);
 	$s['action']="shutdown";
 	httpsocket($d['address'],$s);
     if($s['state'] == "successful")

@@ -1,9 +1,8 @@
 <?php
 require_once("../include/header.php");
 gethead(1,"","题目评论");
-$LIB->hlighter();
-$LIB->mathjax();
-$p=new DataAccess();
+require_once __DIR__.'/../include/hlighter.inc.php';
+require_once __DIR__.'/../include/mathjax.inc.php';
 $uid=(int)$_SESSION['ID'];
 $pid=(int)$_GET['pid'];
 $aid=(int)$_GET['aid'];
@@ -12,10 +11,10 @@ if(!$uid)
     异常("非注册用户！", 取路径("problem/comments.php?pid={$pid}"));
 
 if($cid) {
-    $sql = new SqlQuery("select comments.* from comments where comments.cid=? limit 1", [$cid]);
-    $cnt=$p->dosql($sql);
+    $pRows = Comment::byId($cid);
+    $cnt = count($pRows);
     if($cnt) {
-        $d=$p->rtnrlt(0);
+        $d=($pRows[0] ?? false);
         $pid=$d['pid'];
         $aid=$d['aid'];
         if($uid != $d['uid']) {
@@ -29,40 +28,25 @@ if($cid) {
         异常("无此评论！", 取路径("problem/comments.php?pid={$pid}"));
 }
 
-if($pid) {
-    $sql = new SqlQuery("select probname from problem where pid=? limit 1", [$pid]);
-    $cnt=$p->dosql($sql);
-    if($cnt) {
-        $e=$p->rtnrlt(0);
-    } else
-        异常("无此题目！", 取路径("problem/commentlist.php"));
-} else if($aid) {
-    $sql = new SqlQuery("select title from page where aid=? limit 1", [$aid]);
-    $cnt=$p->dosql($sql);
-    if($cnt) {
-        $e=$p->rtnrlt(0);
-    } else
-        异常("无此页面！", 取路径("page/index.php"));
-} else {
-    异常("什么也没找到！");
-}
+$e = $pid ? Problem::forReader($pid) : Page::forReader($aid);
+if (!$e) { http_response_code(404); exit('讨论对象不存在或未开放。'); }
 ?>
 <div class='container-fluid'>
-<form method="post" action="sendcomments.php" class='form-horizontal' id="tijiao">
+<form method="post" action="sendcomments.php" class='form-horizontal' id="tijiao"><?=formTokenField()?>
 <div class='modal-header'>
 <h3><?=($cid)?"修改":"发表"?> 
 <?php  if($pid) { ?>
-<a href="problem.php?pid=<?=$pid?>" target="_blank"><?=$e['probname']?></a>
+<a href="problem.php?pid=<?=$pid?>" target="_blank"><?=h($e['probname'])?></a>
 <?php  } else if($aid) { ?>
-<a href="../page/page.php?aid=<?=$aid?>" target="_blank"><?=$e['title']?></a>
+<a href="../page/page.php?aid=<?=$aid?>" target="_blank"><?=h($e['title'])?></a>
 <?php  } ?>
 的评论</h3>
 </div>
 <div class='modal-body'>
 <textarea name="detail" class='textarea' style='height:10em'>
 <?php
-if($_GET['user']) echo "回复 @".$_GET['user']." : \n";
-echo $d['detail'];
+if($_GET['user']) echo "回复 @".h($_GET['user'])." : \n";
+echo h($d['detail'] ?? '');
 ?></textarea>
 <br />
 <?php  if($pid) { ?>

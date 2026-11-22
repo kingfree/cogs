@@ -1,8 +1,7 @@
 <?php
 require_once("./include/header.php");
+$mySubmissions = Submission::bestByProblem($_SESSION['ID']);
 gethead(1,"","首页");
-$p=new DataAccess();
-$q=new DataAccess();
 $sizee=$SET['style_ranksize'] - 7;
 ?>
 <div class='row-fluid'>
@@ -12,15 +11,14 @@ $sizee=$SET['style_ranksize'] - 7;
 <?php
 $now = time();
 $noww = time() + 60*60*2;
-$cnt = $p->dosql("select comptime.*,compbase.*,userinfo.nickname,groups.* from comptime,compbase,userinfo,groups where comptime.cbid=compbase.cbid and userinfo.uid=compbase.ouid and comptime.group=groups.gid and endtime > ? and starttime < ? order by starttime asc", [$now, $noww]);
+$cnt = count($pRows = ContestRound::upcomingBetween($now, $noww));
 if($cnt) {
-    for($i=0; $i<$cnt; $i++) {
-        $d=$p->rtnrlt($i);
+    foreach ($pRows as $i => $d) {
 ?>
 <table class='table table-striped table-condensed table-bordered fiexd'>
 <tr>
 <th style="min-width: 3em;">比赛</th>
-<td><b><?php echo $d['cname'] ?></b></td>
+<td><b><?=h($d['cname'])?></b></td>
 </tr>
 <tr>
 <th>状态</th>
@@ -40,7 +38,7 @@ echo "<span class='todo'>还未开始</span>";
 </tr>
 <tr>
 <th>分组</th>
-<td><a href="../user/index.php?gid=<?php echo $d['gid'] ?>"><?php echo $d['gname'] ?></a></td>
+<td><a href="../user/index.php?gid=<?php echo $d['gid'] ?>"><?=h($d['gname'])?></a></td>
 </tr>
 <tr>
 <th>介绍</th>
@@ -52,11 +50,10 @@ echo "<span class='todo'>还未开始</span>";
 <?php  } else { ?>
 <table class='table table-striped table-condensed table-bordered fiexd'>
 <?php
-$cnt=$p->dosql("select * from page order by etime desc limit 6");
-for($i=0;$i<$cnt;$i++) {
-$d=$p->rtnrlt($i);
+$cnt=count($pRows = Page::recent());
+foreach ($pRows as $i => $d) {
 ?>
-<tr><td><a href="page/page.php?aid=<?=$d['aid']?>" title="<?=$d['title']?>"><?=shortname($d['title'])?></a></td></tr>
+<tr><td><a href="page/page.php?aid=<?=$d['aid']?>" title="<?=h($d['title'])?>"><?=shortname($d['title'])?></a></td></tr>
 <?php } ?>
 </table>
 <?php  } ?>
@@ -85,14 +82,13 @@ $d=$p->rtnrlt($i);
 </thead>
 </tr>
 <?php
-$cnt=$p->dosql("select * from problem where submitable=1 order by addtime desc limit ?", [$SET['index_problem_size']]);
-for($i=0;$i<$cnt;$i++) {
-$d=$p->rtnrlt($i);
+$cnt=count($pRows = Problem::recent($SET['index_problem_size']));
+foreach ($pRows as $i => $d) {
 ?>
 <tr>
 <td><?php echo $d['pid']; ?></td>
-<td><?php  是否通过($d['pid'], $q); ?>
-<a href="problem/problem.php?pid=<?php echo $d['pid']; ?>" title="<?=$d['probname']?>"><?php echo shortname($d['probname']); ?></a></td>
+<td><?php  是否通过($mySubmissions[$d['pid']] ?? null); ?>
+<a href="problem/problem.php?pid=<?php echo $d['pid']; ?>" title="<?=h($d['probname'])?>"><?php echo shortname($d['probname']); ?></a></td>
 </tr>
 <?php } ?>
 </table>
@@ -101,25 +97,23 @@ $d=$p->rtnrlt($i);
 <?php
 $uid=(int)$_SESSION['ID'];
 $hasaa=$SET['index_submit_size'];
-if(有此权限("修改题目") && 有此权限("查看题目")) {
-    $cnt=$p->dosql("select * from problem where submitable!=1 order by addtime desc limit 5");
+if(Privilege::allows("修改题目") && Privilege::allows("查看题目")) {
+    $cnt=count($pRows = Problem::awaitingReview());
     if($cnt) {
 $hasaa=$SET['index_submit_size'] - $cnt;
         echo "<div class='alert'><span class='pull-right'>（其实只是设置为不可提交的题目）</span><h4>用户提交待审核题目：</h4><ul>";
-        for($i=0;$i<$cnt;$i++) {
-            $d=$p->rtnrlt($i);
-            echo "<li><a href='problem/problem.php?pid={$d['pid']}'>{$d['pid']}. {$d['probname']}</a> <a href='problem/editprob.php?action=edit&pid={$d['pid']}'>[编辑]</a></li>";
+        foreach ($pRows as $i => $d) {
+            echo "<li><a href='problem/problem.php?pid={$d['pid']}'>{$d['pid']}. ".h($d['probname'])."</a> <a href='problem/editprob.php?action=edit&pid={$d['pid']}'>[编辑]</a></li>";
         }
         echo "</ul></div>";
     }
 } else {
-    $cnt=$p->dosql("select * from problem where addid=? and submitable!=1 order by addtime desc", [$uid]);
+    $cnt=count($pRows = Problem::drafts($uid));
     if($cnt) {
 $hasaa=$SET['index_submit_size'] - $cnt;
         echo "<div class='alert'><h4>已提交正在审核的题目：</h4><ul>";
-        for($i=0;$i<$cnt;$i++) {
-            $d=$p->rtnrlt($i);
-            echo "<li><a href='problem/problem.php?pid={$d['pid']}'>{$d['pid']}. {$d['probname']}</a> <a href='problem/editprob.php?action=edit&pid={$d['pid']}'>[编辑]</a></li>";
+        foreach ($pRows as $i => $d) {
+            echo "<li><a href='problem/problem.php?pid={$d['pid']}'>{$d['pid']}. ".h($d['probname'])."</a> <a href='problem/editprob.php?action=edit&pid={$d['pid']}'>[编辑]</a></li>";
         }
         echo "</ul></div>";
     }
@@ -134,21 +128,20 @@ $hasaa=$SET['index_submit_size'] - $cnt;
 <th style="min-width: 10ex;">提交时间</th>
 </tr></thead>
 <?php
-$cnt=$p->dosql("select submit.sid,submit.pid,submit.uid,submit.result,submit.score,submit.accepted,submit.subtime,problem.probname,userinfo.nickname,userinfo.realname,userinfo.email,userinfo.memo from submit,problem,userinfo where submit.score>=? and submit.uid=userinfo.uid and submit.pid=problem.pid order by submit.sid desc limit ?", [$SET['index_submit_score'], $hasaa]);
-for($i=0;$i<$cnt;$i++) {
-    $d=$p->rtnrlt($i);
+$cnt=count($pRows = Submission::highScores($SET['index_submit_score'], $hasaa));
+foreach ($pRows as $i => $d) {
 ?>
 <tr>
 <td class="wrap"><?php if(!$_GET['pid']) {
-    是否通过($d['pid'], $q);
+    是否通过($mySubmissions[$d['pid']] ?? null);
     echo "<a href='submit/?pid={$d['pid']}'>".shortname($d['probname'])."</a>";
-    echo "<a href='problem/problem.php?pid={$d['pid']}' title='{$d['probname']}' target='_blank'><span class='icon-share'></span></a>";
+    echo "<a href='problem/problem.php?pid={$d['pid']}' title='".h($d['probname'])."' target='_blank'><span class='icon-share'></span></a>";
 } else
-    echo "<a href='problem/problem.php?pid={$d['pid']}' title='{$d['probname']}' target='_blank'>".shortname($d['probname'])."</a>";
+    echo "<a href='problem/problem.php?pid={$d['pid']}' title='".h($d['probname'])."' target='_blank'>".shortname($d['probname'])."</a>";
 ?></td>
 <td class="wrap"><a href='user/detail.php?uid=<?=$d['uid']?>' title="<?=(sp2n(htmlspecialchars($d['memo'])))?>" target='_blank'><?=gravatar::showImage($d['email']);?></a>
 <?php echo "<a href='submit/?uid={$d['uid']}'>";
-if(有此权限("查看用户")) echo $d['realname']; else echo $d['nickname'];
+if(Privilege::allows("查看用户")) echo h($d['realname']); else echo h($d['nickname']);
 echo "</a>"; ?></td>
 <td><a href='submit/code.php?id=<?=$d['sid']?>' title="<?=$d['result']?>"><?=评测结果($d['result'], 10, true)?></a></td>
 <td><span class="<?=$d['accepted']?'ok':'no'?>"><?=$d['score'] ?></span></td>
@@ -170,13 +163,12 @@ echo "</a>"; ?></td>
 </tr>
 </thead>
 <?php
-$cnt=$p->dosql("select * from userinfo order by grade desc limit 0, ?", [$SET['style_ranksize']]);
-for($i=0;$i<$cnt;$i++) {
-$d=$p->rtnrlt($i);
+$cnt=count($pRows = Account::leaders($SET['style_ranksize']));
+foreach ($pRows as $i => $d) {
 ?>
 <tr>
 <td><i><?=$i+1 ?></i></td>
-<td><a href="user/detail.php?uid=<?php echo $d['uid']; ?>" title="<?=(sp2n(htmlspecialchars($d['memo'])))?>"><?=gravatar::showImage($d['email'], $SET['index_rank_icon']);?><?php if(有此权限("查看用户")) echo $d['realname']; else echo $d['nickname'];?></a></td>
+<td><a href="user/detail.php?uid=<?php echo $d['uid']; ?>" title="<?=(sp2n(htmlspecialchars($d['memo'])))?>"><?=gravatar::showImage($d['email'], $SET['index_rank_icon']);?><?php if(Privilege::allows("查看用户")) echo h($d['realname']); else echo h($d['nickname']);?></a></td>
 <td><?=$d['grade']?></td>
 <td><?=$d['accepted']?></td>
 </tr>

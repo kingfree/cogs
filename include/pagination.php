@@ -2,7 +2,7 @@
 function 检测页面($total,$page,$page_size='') {
     global $SET;
     $page = (int) $page;
-    $page_size = (int) ($page_size ? $page_size : $SET['style_pagesize']);
+    $page_size = max(1, (int)($page_size ?: $SET['style_pagesize']));
     $total_page = ceil($total/$page_size);
     if($page < 1) return 0;
     if($total_page < 1) return 0;
@@ -19,9 +19,9 @@ function 分页($total,$page,$url='',$page_size='',$max_length='') {
     //$page_size :每页显示的数据的数目
     //$url   :传递的地址,默认为当前页面
     //$max_length:分页代码时候,中间的分页数的一半
-    $page = ($page < 1) ? 1 : $page ;
-    $page_size = $page_size ? $page_size : $SET['style_pagesize'];
-    $url = $url ? $url : $_SERVER['PHP_SELF'] . '?';
+    $page = max(1, (int)$page);
+    $page_size = max(1, (int)($page_size ?: $SET['style_pagesize']));
+    $url = h($url ?: $_SERVER['PHP_SELF'].'?');
     $max_length = $max_length ? $max_length : 5 ;
     $start = $page ? ($page - 1) * $page_size : 0;
     $total_page = ceil($total/$page_size);

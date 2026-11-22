@@ -2,20 +2,19 @@
 require_once("../include/header.php");
 gethead(1,"","比赛成绩");
 
-$p=new DataAccess();
-$r=new DataAccess();
-$sql = new SqlQuery("select comptime.starttime,comptime.endtime,compbase.contains,comptime.showscore from compbase,comptime where comptime.cbid=compbase.cbid and comptime.ctid=?", [$_GET['ctid']]);
-$cnt=$p->dosql($sql);
+$rounds = ContestRound::scoreboardRules($_GET['ctid']);
+$cnt = count($rounds);
 if (!$cnt)
     异常("未查询到记录！");
-$d=$p->rtnrlt(0);
-if (!$d['showscore'] && !有此权限('查看比赛'))
+$d=($rounds[0] ?? false);
+if (!$d['showscore'] && !Privilege::allows('查看比赛'))
     异常("成绩还未公布！");
-if(time() < $d['starttime'] && !有此权限('查看比赛'))
+if(time() < $d['starttime'] && !Privilege::allows('查看比赛'))
     异常("比赛尚未开始，不能查看关于题目的任何信息！");
 $end = time() > $d['endtime'];
-$q=new DataAccess();
-$pbs=explode(":",$d['contains']);
+$pbs = array_filter(explode(':', $d['contains']));
+$problems = array_column(Problem::selected($pbs), null, 'pid');
+$entrants = ContestEntry::roundResults($_GET['ctid']);
 ?>
 <div class='row-fluid'>
 <table id="contest_report" class='table table-striped table-condensed table-bordered fiexd'>
@@ -27,15 +26,13 @@ $pbs=explode(":",$d['contains']);
     $cnt_prob=0;
     foreach($pbs as $k=>$v) {
         $v=(int)$v;
-        $mbarray[$v][score]=0;
-        $mbarray[$v][result]="N";
-        $sql = new SqlQuery("select probname from problem where pid=?", [$v]);
-        $p->dosql($sql);
-        $d=$p->rtnrlt(0);
+        $mbarray[$v]['score']=0;
+        $mbarray[$v]['result']="N";
+        $d = $problems[$v] ?? [];
         $cnt_prob++;
 ?>
-    <th><a href="problem.php?pid=<?=$v?>&ctid=<?=$_GET['ctid']?>" target="_blank"><?=shortname($d['probname'])?></a>
-    <?php  if($end || 有此权限('查看比赛')) { ?><a href="../problem/problem.php?pid=<?=$v?>" target="_blank" title="跳转到题目 <?=$d['probname']?>"><i class='icon-share'></i></a><?php  } ?>
+    <th><a href="problem.php?pid=<?=$v?>&ctid=<?=h($_GET['ctid'] ?? '')?>" target="_blank"><?=shortname($d['probname'])?></a>
+    <?php  if($end || Privilege::allows('查看比赛')) { ?><a href="../problem/problem.php?pid=<?=$v?>" target="_blank" title="跳转到题目 <?=h($d['probname'])?>"><i class='icon-share'></i></a><?php  } ?>
     </th>
     <th onclick="sortTable('contest_report', <?=$cnt_prob*2+1?>, 'int')" style="min-width: 5ex; cursor: pointer; color:navy;">得分</th>
 <?php
@@ -45,54 +42,40 @@ $pbs=explode(":",$d['contains']);
   </tr>
 </thead>
 <?php
-    $sql = new SqlQuery("select userinfo.uid,userinfo.nickname,userinfo.realname,userinfo.email from userinfo,compscore where compscore.uid=userinfo.uid and compscore.ctid=? order by uid", [$_GET['ctid']]);
-    $cnt=$p->dosql($sql);
-    $luid=0;
-    $rowcnt=0;
-    for ($i=0;$i<$cnt;$i++) {
-        $d=$p->rtnrlt($i);
-        if ($d['uid']==$luid) continue;
+    $rowcnt = 0;
+    foreach ($entrants as $entrant) {
+        $d = $entrant['user'];
         $rowcnt++;
-        $luid=$d['uid'];
 ?>
   <tr>
     <td id="rank<?=$rowcnt?>"></td>
     <td id="nickname<?=$rowcnt ?>"><a href="../user/detail.php?uid=<?=$d['uid'] ?>" target="_blank">
 <?=gravatar::showImage($d['email'], 14);?>
-<?=有此权限('查看用户') ? $d['realname'] : $d['nickname'] ?>
+<?=h(Privilege::allows('查看用户') ? $d['realname'] : $d['nickname'])?>
 </a></td>
 <?php
-        $sql = new SqlQuery("select pid,result,score,csid,lang from compscore where uid=? and ctid=? order by pid asc", [$d['uid'], $_GET['ctid']]);
-        $cnt_sub=$q->dosql($sql);
-        $sum=0;
-        $rank=$mbarray;
-        for ($j=0;$j<$cnt_sub;$j++) {
-            $e=$q->rtnrlt($j);
-            $sum+=$e['score'];
-            $rank[ $e['pid'] ][csid]=$e['csid'];
-            $rank[ $e['pid'] ][score]=$e['score'];
-            $rank[ $e['pid'] ][result]=$e['result'];
-        }
+        $sum = $entrant['total'];
+        $rank = $entrant['marks'] + $mbarray;
         foreach($pbs as $k=>$v) {
 ?>
     <td id="result<?=$v?>_<?=$rowcnt?>" class='wrap'>
     <?php
-    if($rank[$v][result] =="N")
-        评测信息($rank[$v][result]);
+    if($rank[$v]['result'] =="N")
+        评测信息($rank[$v]['result']);
     else {
-        if((有此权限('查看比赛') || $end))
+        if((Privilege::allows('查看比赛') || $end))
             echo "<a href='code.php?csid={$rank[$v]['csid']}'>";
-        if($rank[$v][result] == "") echo "未评测";
-        else if((有此权限('查看比赛') || $end)) 评测结果($rank[$v][result], 30);
+        if($rank[$v]['result'] == "") echo "未评测";
+        else if((Privilege::allows('查看比赛') || $end)) 评测结果($rank[$v]['result'], 30);
         else echo "不显示";
-        if((有此权限('查看比赛') || $end))
+        if((Privilege::allows('查看比赛') || $end))
             echo "</a>";
     } ?></td>
-    <td id="score<?=$v ?>_<?=$rowcnt ?>" ><?php if($end || (有此权限('查看比赛'))) echo $rank[$v][score]; ?></td>
+    <td id="score<?=$v ?>_<?=$rowcnt ?>" ><?php if($end || (Privilege::allows('查看比赛'))) echo $rank[$v]['score']; ?></td>
 <?php
         }
 ?>
-    <td id="sum<?=$rowcnt ?>" ><?php if($end || (有此权限('查看比赛'))) echo $sum; ?></td>
+    <td id="sum<?=$rowcnt ?>" ><?php if($end || (Privilege::allows('查看比赛'))) echo $sum; ?></td>
   </tr>
 <?php
     }
@@ -155,7 +138,7 @@ foreach($pbs as $k=>$v) {
     t=document.getElementById("result<?=$v ?>_"+a).innerHTML;
     document.getElementById("result<?=$v ?>_"+a).innerHTML=document.getElementById("result<?=$v ?>_"+b).innerHTML;
     document.getElementById("result<?=$v ?>_"+b).innerHTML=t;
-    
+
     t=document.getElementById("score<?=$v ?>_"+a).innerHTML;
     document.getElementById("score<?=$v ?>_"+a).innerHTML=document.getElementById("score<?=$v ?>_"+b).innerHTML;
     document.getElementById("score<?=$v ?>_"+b).innerHTML=t;
@@ -176,7 +159,7 @@ for (i=1;i<=rowcnt;i++) {
         last=document.getElementById("sum"+i).innerHTML;
     }
 }
-    
+
 </script>
 
 <?php

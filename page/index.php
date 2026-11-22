@@ -1,29 +1,20 @@
 <?php
 require_once("../include/header.php");
 gethead(1,"","页面列表");
-$p=new DataAccess();
-$q=new DataAccess();
 ?>
 <div class='row-fluid'>
-<?php if(有此权限('修改页面')) { ?>
+<?php if(Privilege::allows('修改页面')) { ?>
 <a href="editpage.php?action=add" class="btn btn-info pull-left">添加新页面</a>
 <?php } ?>
 
 <?php
-$sql = new SqlQuery("select page.*,groups.*,userinfo.nickname,userinfo.email,userinfo.realname from page,groups,userinfo where page.force<=? and userinfo.uid=page.uid and groups.gid=page.group", [$_SESSION['readforce']]);
-
-
-if ($_GET['key']!="")
-$sql->append(" and (page.text like ? or page.title like ?)", ['%'. $_GET['key'] .'%', '%'. $_GET['key'] .'%']);
-
-$sql->append(" order by aid desc");
-
-$cnt=$p->dosql($sql);
-$st=检测页面($cnt, $_GET['page']);
+$pages = Page::search($_GET['key'] ?? '');
+$cnt = count($pages);
+$st=检测页面($cnt, ($_GET['page'] ?? 1));
 ?>
 <form method="get" action="" class='form-search center'>
 <div class='input-append pull-right'>
-<input name="key" type="text" class='search-query input-medium' value='<?=$_GET['key']?>' placeholder='搜索页面'/>
+<input name="key" type="text" class='search-query input-medium' value='<?=h($_GET['key'] ?? '')?>' placeholder='搜索页面'/>
 <button type='submit' class='btn'><i class='icon icon-search'></i></button>
 </div>
 </form>
@@ -38,30 +29,29 @@ $st=检测页面($cnt, $_GET['page']);
 </tr></thead>
 <?php
 for ($i=$st;$i<$cnt && $i<$st+$SET['style_pagesize'] ;$i++) {
-    $d=$p->rtnrlt($i);
+    $d=($pages[$i] ?? false);
     if($_GET['key'] && $cnt == 1)
         echo "<script language='javascript'>location='page.php?aid={$d['aid']}';</script>";
-    if ($d['force']>$_SESSION['readforce'] && !($_SESSION['admin']>0)) continue;
 ?>
 <tr>
 <td><?php echo $d['aid'] ?></td>
 <td align=left>
-<b><a href="page.php?aid=<?=$d['aid'] ?>"><?=$d['title'] ?></b>
-<?php if(有此权限('修改页面')) { ?>
-<a href="editpage.php?action=edit&aid=<?=$d['aid']?>" title="修改页面 <?=$d['title']?>" class="pull-right"><i class="icon icon-edit"></i></a>
+<b><a href="page.php?aid=<?=$d['aid'] ?>"><?=h($d['title'])?></b>
+<?php if(Privilege::allows('修改页面')) { ?>
+<a href="editpage.php?action=edit&aid=<?=$d['aid']?>" title="修改页面 <?=h($d['title'])?>" class="pull-right"><i class="icon icon-edit"></i></a>
 <?php } ?>
 </td>
 <td><?=date('Y-m-d', $d['time']) ?></td>
 <td><?=date('Y-m-d', $d['etime']) ?></td>
-<td><a href="../user/index.php?gid=<?=$d['gid'] ?>" target="_blank"><?=$d['gname'] ?></a></td>
+<td><a href="../user/index.php?gid=<?=$d['gid'] ?>" target="_blank"><?=h($d['gname'])?></a></td>
 <td><a href='../user/detail.php?uid=<?=$d['uid']?>' target='_blank'>
 <?=gravatar::showImage($d['email']);?>
-<?php if(有此权限("查看用户")) echo $d['realname']; else echo $d['nickname'];?>
+<?php if(Privilege::allows("查看用户")) echo h($d['realname']); else echo h($d['nickname']);?>
 </a></td>
 </tr>
 <?php } ?>
 </table>
-<?php  分页($cnt, $_GET['page'], '?key='.$_GET['key'].'&'); ?>
+<?php  分页($cnt, ($_GET['page'] ?? 1), '?key='.$_GET['key'].'&'); ?>
 </div>
 
 <?php

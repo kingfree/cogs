@@ -1,35 +1,30 @@
 <?php
-// 将提交的源文件编译为评测程序。
-function getcompilecommand($query)
+// 把提交写到本次评测的目录。选手源代码由编译器原样读取。
+function compileSubmission(array $request, string $work): array
 {
-    switch ($query['language']) {
-        case 0:
-            return "fpc {$query['src']} -So -XS -v0 -O1 -o\"{$query['pname']}\" 2>&1";
-        case 1:
-            return "gcc {$query['src']} -lm -w -O2 -static -o {$query['pname']} 2>&1";
-        case 2:
-            return "g++ {$query['src']} -lm -w -O2 -static -o {$query['pname']} 2>&1";
-        case 3:
-            return "unzip -o {$query['src']} -d output/ 2>&1";
+    $source = $request['src'];
+    $name = $request['pname'];
+    if (file_put_contents($work.'/'.$source, $request['code']) !== strlen($request['code'])) {
+        throw new RuntimeException('源文件写入失败。');
     }
-}
-
-function compile($query)
-{
-    global $compiledir,$datadir;
-    getdir($query);
-    $compilecommand=getcompilecommand($query);
-    $query['code']=filter($query['code'],$query['language']);
-    wfile($query['code'],$query['src']);
-    if (file_exists($query['pname']))
-        unlink($query['pname']);
-    $compilecommand= "timeout -k 1 20 ".$compilecommand;
-    $handle = popen($compilecommand, 'r');
-    $tmp['msg']=rfile($handle);
-    $status = pclose($handle);
-    if ($status === 0 && (file_exists($query['pname']) || $query['language'] == 3))
-        $tmp['compilesucc']=1;
-    else
-        $tmp['compilesucc']=0;
-    echo array_encode($tmp);
+    if ((int)$request['language'] === 3) {
+        $zip = Archive::open($work.'/'.$source, 16 * 1048576, 4096);
+        try {
+            for ($i = 0; $i < $zip->numFiles; $i++) {
+                $file = $zip->getNameIndex($i);
+                if (str_ends_with($file, '/')) continue;
+                if (!preg_match('/^'.preg_quote($name, '/').'[1-9][0-9]*\.out$/D', $file)) {
+                    throw new DomainException('答案包中应为各测试点的输出文件。');
+                }
+                $data = $zip->getFromIndex($i);
+                if ($data === false || file_put_contents($work.'/'.$file, $data) !== strlen($data)) throw new DomainException('答案文件损坏。');
+            }
+            return ['compilesucc'=>1, 'msg'=>''];
+        } finally {
+            $zip->close();
+        }
+    }
+    $result = Sandbox::run(Language::compiler($request['language'], $source, 'program'), $work, 20000, 1024);
+    return ['compilesucc'=>(int)($result['status'] === 0 && is_file($work.'/program') && !is_link($work.'/program')),
+        'msg'=>$result['msg']];
 }

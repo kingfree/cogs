@@ -1,34 +1,14 @@
 <?php
-require_once("../include/header.php");
-gethead(0,"查看比赛","");
-chdir($SET['dir_competition']);
-$ctid=(int)$_GET['ctid'];
-$dir="COGS_{$ctid}";
-$src="tmp.zip";
-exec("rm $src");
-exec("rm -R $dir");
-$md="mkdir {$dir}";
-exec($md);
-
-$p=new DataAccess();
-$sql = new SqlQuery("select compscore.uid,userinfo.realname,userinfo.nickname,problem.filename from compscore,userinfo,problem where userinfo.uid=compscore.uid and compscore.pid=problem.pid and compscore.ctid=? order by uid asc", [$_GET['ctid']]);
-$cnt=$p->dosql($sql);
-$tu=0;
-for ($i=0;$i<$cnt;$i++) {
-    $d=$p->rtnrlt($i);
-    //if($d[uid]==$tu) continue;
-    $tu=$d['uid'];
-    exec("mkdir -p {$dir}/{$tu}.{$d['realname']}_/");
-    $mv="cp {$ctid}/{$tu}/{$d['filename']}.* {$dir}/{$tu}.{$d['realname']}_/";
-    exec($mv);
+require_once __DIR__.'/../include/header.php';
+gethead(0, '查看比赛', '');
+$id = (int)($_GET['ctid'] ?? 0);
+$files = [];
+foreach (ContestEntry::sourceFiles($id) as $entry) {
+    $uid = (int)$entry['uid'];
+    $name = $entry['filename'];
+    if (!TestData::name($name)) continue;
+    foreach (glob(rtrim($SET['dir_competition'], '/')."/$id/$uid/$name.*") ?: [] as $path) {
+        if (is_file($path) && !is_link($path)) $files[$uid.'/'.basename($path)] = $path;
+    }
 }
-
-exec("rm $src");
-$zip="zip -r {$src} {$dir}";
-exec($zip);
-header("Content-type: application/zip");
-header("Content-Disposition: attachment; filename=\"{$dir}.zip\"");
-if(file_exists($dir)) exec("rm -R $dir");
-@readfile($src);
-?>
-
+Archive::download("COGS_$id.zip", $files);

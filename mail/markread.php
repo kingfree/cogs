@@ -1,4 +1,5 @@
 <?php
-require_once("../include/header.php");
-require_once(dirname(__FILE__)."/message.php");
-mailMarkRead(new DataAccess(), $_GET['mid'], $_SESSION['ID']);
+require_once __DIR__.'/../include/header.php';
+gethead(0, '普通用户', '');
+requirePost();
+Message::markRead((int)($_POST['mid'] ?? 0), $_SESSION['ID']);

@@ -1,34 +1,29 @@
 <?php
-require_once __DIR__."/sql-query.php";
-// 各页面共享数据库连接，每个查询对象保留自己的结果集。
-class DataAccess
+// PDO 连接与绑定。示例 Database::rows('SELECT uid FROM userinfo WHERE usr = ?', [$name])。
+final class Database
 {
     private static $connection;
-    private $rows = array();
 
     public static function connection()
     {
         global $cfg;
         if (!self::$connection) {
             $dsn = 'mysql:host='.$cfg['data_server'].';dbname='.$cfg['data_database'].';charset=utf8';
-            self::$connection = new PDO($dsn, $cfg['data_uid'], $cfg['data_pwd'], array(
+            self::$connection = new PDO($dsn, $cfg['data_uid'], $cfg['data_pwd'], [
                 PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-                PDO::ATTR_EMULATE_PREPARES => false
-            ));
+                PDO::ATTR_EMULATE_PREPARES => false,
+                PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+            ]);
         }
         return self::$connection;
     }
 
-    public static function statement($sql, array $params = [])
+    public static function statement(string $sql, array $values = []): PDOStatement
     {
         global $Query_Times;
-        $Query_Times++;
-        if ($sql instanceof SqlQuery) {
-            $params = $sql->values;
-            $sql = $sql->text;
-        }
+        $Query_Times = ($Query_Times ?? 0) + 1;
         $statement = self::connection()->prepare($sql);
-        foreach (array_values($params) as $offset => $value) {
+        foreach (array_values($values) as $offset => $value) {
             $type = is_int($value) ? PDO::PARAM_INT : PDO::PARAM_STR;
             if ($value === null) $type = PDO::PARAM_NULL;
             $statement->bindValue($offset + 1, $value, $type);
@@ -37,20 +32,13 @@ class DataAccess
         return $statement;
     }
 
-    public function dosql($sql, $params = [])
+    public static function rows(string $sql, array $values = []): array
     {
-        $statement = self::statement($sql, $params);
-        $this->rows = $statement->columnCount() ? $statement->fetchAll(PDO::FETCH_BOTH) : array();
-        return count($this->rows);
+        return self::statement($sql, $values)->fetchAll();
     }
 
-    public function rtnrlt($rownum = 0)
+    public static function execute(string $sql, array $values = []): int
     {
-        return isset($this->rows[$rownum]) ? $this->rows[$rownum] : false;
-    }
-
-    public function Query($sql)
-    {
-        return $this->dosql($sql);
+        return self::statement($sql, $values)->rowCount();
     }
 }

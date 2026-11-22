@@ -1,48 +1,48 @@
 <?php
-// 通过题目配置的特殊判题器计算得分。
-function plugin($pname,$inn,$outn,$ansn) {
-    global $compiledir,$datadir;
-    $spj="{$datadir}/{$pname}/spj";
-    $cena="{$datadir}/{$pname}/cena";
-    if(!file_exists("spj") && !file_exists("cena")) {
-        if(file_exists("$spj.cc"))
-            exec("g++ -O2 -lm $spj.cc -o spj");
-        else if(file_exists("$spj.cpp"))
-            exec("g++ -O2 -lm $spj.cpp -o spj");
-        else if(file_exists("$spj.c"))
-            exec("gcc -lm $spj.c -o spj");
-        else if(file_exists("$spj.pas"))
-            exec("fpc $spj.pas -ospj && cp {$datadir}/{$pname}/spj .");
-        else if(file_exists("$spj.pp"))
-            exec("fpc $spj.pp -ospj && cp {$datadir}/{$pname}/spj .");
-        else if(file_exists("$cena.cc"))
-            exec("g++ -O2 -lm $cena.cc -o cena");
-        else if(file_exists("$cena.cpp"))
-            exec("g++ -O2 -lm $cena.cpp -o cena");
-        else if(file_exists("$cena.c"))
-            exec("gcc -lm $cena.c -o cena");
-        else if(file_exists("$cena.pas"))
-            exec("fpc $cena.pas -ocena && cp {$datadir}/{$pname}/cena .");
-        else if(file_exists("$cena.pp"))
-            exec("fpc $cena.pp -ocena && cp {$datadir}/{$pname}/cena .");
-        else if(file_exists("{$datadir}/{$pname}/plugin.php")) {
-            $fin=fopen($inn,"r");
-            $fans=fopen($ansn,"r");
-            $fout=fopen($outn,"r");
-            require("{$datadir}/{$pname}/plugin.php");
-            return plugin_compare($fin,$fout,$fans);
+// 特判器单独运行。选手程序从未挂载判题器、标准答案或其他测试点。
+function checkAnswer(string $data, string $input, string $answer, string $output, string $dir, int $type): float
+{
+    if ($type === 2) return (float)(hash_file('sha256', $answer) === hash_file('sha256', $output));
+    if ($type === 1 || $type === 4) {
+        $a = fopen($answer, 'rb');
+        $b = fopen($output, 'rb');
+        try {
+            do {
+                do { $x = fgetc($a); } while (in_array($x, [' ', "\t", "\r", "\n"], true));
+                do { $y = fgetc($b); } while (in_array($y, [' ', "\t", "\r", "\n"], true));
+                if ($x !== $y) return 0.0;
+            } while ($x !== false);
+            return 1.0;
+        } finally { fclose($a); fclose($b); }
+    }
+    mkdir($dir, 0700);
+    foreach (['input'=>$input, 'answer'=>$answer, 'output'=>$output] as $file=>$path) copy($path, "$dir/$file");
+    foreach (['spj','cena'] as $kind) {
+        foreach (['cc'=>2,'cpp'=>2,'c'=>1,'pas'=>0,'pp'=>0] as $ext=>$lang) {
+            $source = "$kind.$ext";
+            if (!is_file("$data/$source") || is_link("$data/$source")) continue;
+            copy("$data/$source", "$dir/$source");
+            $build = Sandbox::run(Language::compiler($lang, $source, 'checker'), $dir, 20000, 512);
+            if ($build['status'] !== 0) throw new DomainException('特殊判题器编译失败。');
+            // CENA 判题器按原题名打开输入和选手输出。
+            $name = basename($data);
+            copy($input, "$dir/$name.in");
+            copy($output, "$dir/$name.out");
+            $args = $kind === 'spj' ? ['./checker','input','output','answer'] : ['./checker','100','answer'];
+            $result = Sandbox::run($args, $dir, 5000, 256);
+            if ($kind === 'spj') $score = $result['status'];
+            else $score = $result['status'] === 0 && is_file("$dir/score.log") && !is_link("$dir/score.log")
+                ? (int)file_get_contents("$dir/score.log", false, null, 0, 16) : -1;
+            return $score >= 0 && $score <= 100 ? $score / 100 : 0.0;
         }
     }
-    if(file_exists("spj")) {
-        $judge="./spj $inn $outn $ansn";
-        exec($judge, $res, $score);
-    } else if(file_exists("cena")) {
-        $judge="./cena 100 $ansn";
-        exec($judge);
-        $fsc=fopen("score.log", "r");
-        fscanf($fsc, "%d", $score);
-        fclose($fsc);
+    if (is_file("$data/plugin.php") && !is_link("$data/plugin.php")) {
+        copy("$data/plugin.php", "$dir/plugin.php");
+        $entry = '<?php require "plugin.php"; $score = plugin_compare(fopen("input","rb"), fopen("output","rb"), fopen("answer","rb")); echo $score;';
+        file_put_contents("$dir/check.php", $entry);
+        $result = Sandbox::run(['php','-n','check.php'], $dir, 5000, 256);
+        $score = trim($result['msg']);
+        return $result['status'] === 0 && is_numeric($score) ? max(0.0, min(1.0, (float)$score)) : 0.0;
     }
-    if($score > 100 || $score < 0) $score = 0;
-    return $score / 100.0;
+    throw new DomainException('找不到特殊判题器。');
 }

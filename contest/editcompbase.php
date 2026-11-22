@@ -4,16 +4,15 @@ gethead(1,"修改比赛","修改比赛");
 ?>
 <div class='row-fluid'>
 <?php
-$p=new DataAccess();
 if ($_GET['action']=='edit') {
-	$sql = new SqlQuery("select * from compbase where cbid=? ", [$_GET['cbid']]);
-	$cnt=$p->dosql($sql);
-	$d=$p->rtnrlt(0);
+	$pRows = Contest::byId($_GET['cbid']);
+	$cnt = count($pRows);
+	$d=($pRows[0] ?? false);
 	$pbs=explode(":",$d['contains']);
 	$pbs=array_flip($pbs);
 }
 ?>
-<form method="post" action="doeditcompbase.php?action=<?=$_GET['action'] ?>&cbid=<?=$_GET['cbid']; ?>" class='form-inline'>
+<form method="post" action="doeditcompbase.php?action=<?=h($_GET['action'] ?? '')?>&cbid=<?=$_GET['cbid']; ?>" class='form-inline'><?=formTokenField()?>
 <table class='table table-striped table-condensed table-bordered fiexd'>
   <tr>
     <td width='80px'>CBID</td>
@@ -22,17 +21,16 @@ if ($_GET['action']=='edit') {
   <tr>
     <td>比赛名</td>
     <td>
-      <input name="cname" type="text" value="<?=$d['cname'] ?>" /></td>
+      <input name="cname" type="text" value="<?=h($d['cname'])?>" /></td>
   </tr>
   <tr>
     <td>关联题目</td>
     <td>
 	<ul class='nav nav-pills'>
 	<?php
-	$sql = new SqlQuery("select pid,probname,submitable from problem order by pid");
-	$cnt=$p->dosql($sql);
-	for ($i=0;$i<$cnt;$i++) {
-		$d=$p->rtnrlt($i);
+	$pRows = Problem::choices();
+
+	foreach ($pRows as $i => $d) {
 ?>
 <li style='width: 200px'>
 <input name="cons[<?=$d['pid']?>]" type="checkbox" id="cons[<?=$d['pid']?>]" value="<?=$d['pid']?>" <?php if (is_numeric($pbs[$d['pid']])) echo 'checked="checked"' ?> />

@@ -1,18 +1,5 @@
 <?php
-require_once("../include/header.php");
-$p = new DataAccess();
-if($name = $_GET['name']) {
-    $sql = new SqlQuery("SELECT uid FROM userinfo WHERE usr=?", [$name]);
-    $rows = $p->dosql($sql);
-    $uid = 0;
-    if($rows) {
-        $d=$p->rtnrlt(0);
-        $uid = (int) $d['uid'];
-    }
-    echo $uid;
-} else if($code = trim($_GET['code'])) {
-    if($code == $_SESSION["IMGCODE"])
-        echo 'right';
-    else echo $code;
-}
-?>
+require_once __DIR__.'/../include/header.php';
+header('Content-Type: text/plain; charset=UTF-8');
+$name = $_GET['name'] ?? '';
+echo $name === '' ? 0 : (Account::byUsernameId($name)[0]['uid'] ?? 0);

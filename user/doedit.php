@@ -1,82 +1,56 @@
 <?php
-require_once("../include/header.php");
-gethead(8,"sess","");
+require_once __DIR__.'/../include/header.php';
+gethead(0, '普通用户', '');
+requirePost();
 $uid = (int)$_SESSION['ID'];
-
-$_POST['usr']=htmlspecialchars($_POST['usr']);
-$_POST['nickname']=htmlspecialchars($_POST['nickname']);
-$_POST['realname']=htmlspecialchars($_POST['realname']);
-$_POST['email']=htmlspecialchars($_POST['email']);
-$_POST['user_style']=htmlspecialchars($_POST['user_style']);
-$_POST['memo']=htmlspecialchars($_POST['memo']);
-
-$regpage=取路径("user/panel.php");
-
-if ($_POST['action']=="edit") {
-if(!preg_match('/([_a-z0-9]{1,24})/', $_POST['usr']))
-异常("用户名长度必须在[1,24]中且只能使用英文字母、数字以及_。", $regpage);
-    if($_FILES['file']['tmp_name']) {
-        $portrait=$SET['base']."images/background";
-        $path = pathconvert($SET['cur'],$portrait).'/';
-        $backfile = $path . $uid . ".png";
-        $image = $_FILES['file']['tmp_name'];
-        $type = getimagesize($image);
-        if (!$type || !in_array($type[2], [IMAGETYPE_PNG, IMAGETYPE_JPEG, IMAGETYPE_GIF], true)) 异常("图片格式无效");
-        $process = proc_open(['convert', $image, 'png:'.$backfile], [], $pipes);
-        if (!is_resource($process) || proc_close($process) !== 0) 异常("背景图片保存失败");
+$return = 取路径('user/panel.php');
+$action = $_POST['action'] ?? '';
+if ($action === 'edit') {
+    $name = trim($_POST['usr'] ?? '');
+    $nickname = trim($_POST['nickname'] ?? '');
+    $email = trim($_POST['email'] ?? '');
+    $realName = trim($_POST['realname'] ?? '');
+    $theme = $_POST['user_style'] ?? '';
+    if (!preg_match('/^[A-Za-z0-9_]{1,24}$/D', $name) || $nickname === '' || mb_strlen($nickname) > 16 ||
+        mb_strlen($realName) > 16 || !filter_var($email, FILTER_VALIDATE_EMAIL) || !preg_match('/^[A-Za-z0-9_-]{0,20}$/D', $theme)) {
+        i异常('用户名、昵称、邮箱或主题格式无效。', $return);
     }
-    $p=new DataAccess();
-    $sql = new SqlQuery("select * from userinfo where usr=? and uid!=?", [$_POST['usr'], $uid]);
-    $cnt=$p->dosql($sql);
-    if ($cnt==0) {
-        $_POST['memo']=trim($_POST['memo']);
-        $_POST['user_style']=trim($_POST['user_style']);
-if(!preg_match('/(\S{1,20})/', $_POST['nickname']))
-异常("昵称长度必须在[1,20]中。", $regpage);
-if(!preg_match('/(\S*@\S*\.\S*)/', $_POST['email']))
-异常("电子邮箱格式不正确。", $regpage);
-if(!preg_match('/(\S{0,8})/', $_POST['realname']))
-异常("真实姓名长度必须在[0,8]中，应该是汉字。", $regpage);
-        $sql = new SqlQuery("update userinfo set usr=?,nickname=?,realname=?,email=?,memo=?,user_style=?,style=? where uid=?", [$_POST['usr'], $_POST['nickname'], $_POST['realname'], $_POST['email'], $_POST['memo'], $_POST['user_style'], $_POST['style'], $uid]);
-        $p->dosql($sql);
-        $LIB->get_userinfo($uid);
-        提示("用户设置信息修改成功！", 取路径("user/panel.php"));
-    } else
-        异常("用户 {$_POST['usr']} 已存在！",取路径("user/panel.php"));
-} else if ($_POST['action']=="editpwd") {
-if(!preg_match('/(.{0,24})/', $_POST['npwd1']))
-异常("密码长度必须在[0,24]中。", $regpage);
-    if ($_POST['npwd1']==$_POST['npwd2']) {
-        $p=new DataAccess();
-        $sql = new SqlQuery("select pwdhash,nickname from userinfo where uid=?", [$uid]);
-        $p->dosql($sql);
-        $d=$p->rtnrlt(0);
-        if (hash_equals($d['pwdhash'], encode($_POST['opwd']))) {
-            $sql = new SqlQuery("update userinfo set pwdhash=? where uid=?", [encode($_POST['npwd1']), $uid]);
-            $p->dosql($sql);
-            提示("用户 $nickname 的密码修改成功！", 取路径("user/panel.php"));
-        } else
-            异常("旧密码不正确！", 取路径("user/panel.php"));
-    } else {
-        异常("两次输入的密码不匹配！", 取路径("user/panel.php"));
+    if (Account::usernameInUse($name, $uid)) i异常('用户名已存在。', $return);
+    if (!empty($_FILES['file']['tmp_name'])) {
+        $file = $_FILES['file'];
+        $info = is_uploaded_file($file['tmp_name']) ? @getimagesize($file['tmp_name']) : null;
+        if (!$info || $file['size'] > 4194304 || $info[0]*$info[1]>12000000 ||
+            !in_array($info[2], [IMAGETYPE_PNG,IMAGETYPE_JPEG,IMAGETYPE_GIF], true)) i异常('背景图片格式或大小无效。', $return);
+        $image = imagecreatefromstring(file_get_contents($file['tmp_name']));
+        $dir = dirname(__DIR__).'/images/background';
+        if (!is_dir($dir)) mkdir($dir, 0750, true);
+        $temp = tempnam($dir, '.background-');
+        try {
+            if (!$image || !imagepng($image, $temp) || !rename($temp, "$dir/$uid.png")) i异常('背景图片保存失败。', $return);
+        } finally { if (is_file($temp)) unlink($temp); }
     }
-} else if ($_POST['action']=="editpwdans") {
-    $p=new DataAccess();
-    $sql = new SqlQuery("select pwdhash,nickname from userinfo where uid=?", [$uid]);
-    $p->dosql($sql);
-    $d=$p->rtnrlt(0);
-    if (hash_equals($d['pwdhash'], encode($_POST['opwd']))) {
-if(!preg_match('/(.{0,64})/', $_POST['passwordtip']))
-异常("提示问题长度必须在[0,64]中。", $regpage);
-if(!preg_match('/(.{0,64})/', $_POST['passwordtipans']))
-异常("提示问题答案长度必须在[0,64]中。", $regpage);
-        $que=htmlspecialchars($_POST['qus']);
-        $ans=encode($_POST['ans']);
-        $sql = new SqlQuery("update userinfo set pwdtipques=?,pwdtipanshash=? where uid=?", [$que, $ans, $uid]);
-        $p->dosql($sql);
-        提示("用户 $nickname 的密码提示问题修改成功！", 取路径("user/panel.php"));
-    } else
-        异常("旧密码不正确！", 取路径("user/panel.php"));
+    Account::editProfile($name, $nickname, $realName, $email, trim($_POST['memo'] ?? ''), $theme, (int)!empty($_POST['style']), $uid);
+    Login::loadUser($uid);
+    i提示('个人资料已保存。', $return);
+    exit;
 }
-
-?>
+$user = Account::credentials($uid)[0] ?? null;
+if (!$user || !Password::verify($_POST['opwd'] ?? '', $user['pwdhash'])) i异常('旧密码不正确。', $return);
+try {
+    if ($action === 'editpwd') {
+        $new = $_POST['npwd1'] ?? '';
+        if ($new !== ($_POST['npwd2'] ?? null)) i异常('两次输入的密码不一致。', $return);
+        $hash = Password::hash($new);
+        Account::changePassword($hash, $uid);
+        $_SESSION['password_version'] = hash('sha256', $hash);
+        Login::forget();
+        session_regenerate_id(true);
+        i提示('密码已修改。', $return);
+    } elseif ($action === 'editpwdans') {
+        $question = trim($_POST['qus'] ?? '');
+        $answer = $_POST['ans'] ?? '';
+        if (mb_strlen($question) > 64) i异常('提示问题过长。', $return);
+        Account::recovery($question, $answer === '' ? '' : Password::hash($answer), $uid);
+        i提示('密码提示问题已修改。', $return);
+    } else { http_response_code(400); exit('未知操作。'); }
+} catch (InvalidArgumentException $error) { i异常($error->getMessage(), $return); }

@@ -1,10 +1,10 @@
 <?php
 require_once("../include/header.php");
 gethead(1,"修改题目","修改题目");
-$LIB->editor("detail");
+renderEditor("detail");
 ?>
 
-<form action='problem_export_xml.php' method=post>
+<form action='problem_export_xml.php' method=post><?=formTokenField()?>
 	<b>Export Problem:</b><br />
 	from pid:<input type=text size=10 name="start" value=1000>
 	to pid:<input type=text size=10 name="end" value=1000><br />

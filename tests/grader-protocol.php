@@ -5,7 +5,7 @@ function check($condition, $name) {
 }
 $key = str_repeat('k', 32);
 $now = 1700000000;
-$fields = array('action'=>'compile', 'uid'=>'42', 'pname'=>'sum', 'language'=>'2', 'src'=>'sum.cpp', 'code'=>"中文\0?+");
+$fields = array('action'=>'compile', 'uid'=>'42', 'job'=>str_repeat('a', 32), 'pname'=>'sum', 'language'=>'2', 'src'=>'sum.cpp', 'code'=>"中文\0?+");
 $packet = array_encode($fields);
 check(array_decode($packet) === $fields, '评测协议往返');
 check(graderRequestAllowed($fields), '接受合法编译请求');

@@ -1,12 +1,10 @@
 <?php
 require_once("../include/header.php");
 gethead(1,"查看比赛","比赛场次评测");
-$p=new DataAccess();
-$q=new DataAccess();
-$sql = new SqlQuery("select comptime.*,compbase.cname,groups.* from comptime,compbase,groups where comptime.cbid=compbase.cbid and comptime.ctid=? and groups.gid=comptime.group", [$_GET['ctid']]);
-$cnt=$p->dosql($sql);
+$rounds = ContestRound::withGroup($_GET['ctid']);
+$cnt = count($rounds);
 if(!$cnt) 异常("未查询到记录！");
-$d=$p->rtnrlt(0);
+$d=($rounds[0] ?? false);
 ?>
 <div class='row-fluid'>
 <table class='table table-striped table-condensed table-bordered fiexd'>
@@ -14,7 +12,7 @@ $d=$p->rtnrlt(0);
     <td width="90px">CTID</td>
     <td><?php echo $d['ctid'] ?></td>
     <td width="90px">关联比赛</td>
-    <td><?php echo $d['cname'] ?></td>
+    <td><?=h($d['cname'])?></td>
   </tr>
   <tr>
     <td>开始时间</td>
@@ -24,7 +22,7 @@ $d=$p->rtnrlt(0);
   </tr>
   <tr>
     <td>开放分组</td>
-    <td><a href="../user/index.php?gid=<?php echo $d['gid'] ?>" target="_blank"><?php echo $d['gname'] ?></a></td>
+    <td><a href="../user/index.php?gid=<?php echo $d['gid'] ?>" target="_blank"><?=h($d['gname'])?></a></td>
     <td>公布成绩</td>
     <td><?php echo $d['showscore']?"是":"否" ?></td>
   </tr>
@@ -33,7 +31,7 @@ $d=$p->rtnrlt(0);
     <td><?php
 	 if (time()>$d['endtime']) echo "已结束"; else
 	 if (time()<$d['endtime'] && time()>$d['starttime']) echo "正在进行"; else
-	 echo "还未开始"; 
+	 echo "还未开始";
 	 ?></td>
     <td>阅读权限</td>
     <td><?php echo $d['readforce'] ?></td>
@@ -54,25 +52,25 @@ $d=$p->rtnrlt(0);
   </tr>
 </table>
 <?php
-$sql = new SqlQuery("select compscore.uid,userinfo.realname,userinfo.email,userinfo.nickname from compscore,userinfo where userinfo.uid=compscore.uid and compscore.ctid=? order by uid asc", [$_GET['ctid']]);
-$cnt=$p->dosql($sql);
+$entrants = ContestEntry::roundResults($_GET['ctid']);
+$rounds = array_column($entrants, 'user');
+$cnt = count($rounds);
 if ($cnt) {
 ?>
-<form method="post" action="judge.php">
+<form method="post" action="judge.php"><?=formTokenField()?>
     选择评测机：<select name='judger' id='judger'>
     <option value=0 selected=selected>自动选择</option>
 <?php
-    $sql = new SqlQuery("select grid,address,memo from grader where enabled=1 order by priority desc");
-    $cnt1=$q->dosql($sql);
-    for ($i=0;$i<$cnt1;$i++) {
-        $e=$q->rtnrlt($i);
-        echo "<option value={$e['grid']} >{$e['memo']}</option>";
+    $judges = Judge::enabled();
+    $cnt1 = count($judges);
+    foreach ($judges as $i => $e) {
+        echo "<option value={$e['grid']} >".h($e['memo'])."</option>";
     }
-?>       
+?>
     </select>
   <input name="do" type="submit" id="do" class='btn' value="评测选定" />
   <input name="do" type="submit" id="do" class='btn' value="评测全部" />
-  <input name="ctid" type="hidden" id="ctid" value="<?php echo $_GET['ctid'] ?>" />
+  <input name="ctid" type="hidden" id="ctid" value="<?=h($_GET['ctid'] ?? '')?>" />
 </p>
 <table class='table table-striped table-condensed table-bordered fiexd'>
   <tr>
@@ -81,16 +79,14 @@ if ($cnt) {
   </tr>
 <?php
 	$tu=0;
-	for ($i=0;$i<$cnt;$i++)
-	{
-		$d=$p->rtnrlt($i);
+	foreach ($rounds as $i => $d) {
 		if ($d['uid']==$tu) continue;
 		$tu=$d['uid'];
 ?>
   <tr>
-    <td><a target="_blank" href="../user/detail.php?uid=<?php echo $d['uid'] ?>"><?php  echo gravatar::showImage($d['email'], 64); echo "<br />"; if(有此权限("查看用户")) echo $d['realname']; else echo $d['nickname'];?></a></td>
+    <td><a target="_blank" href="../user/detail.php?uid=<?php echo $d['uid'] ?>"><?php  echo gravatar::showImage($d['email'], 64); echo "<br />"; if(Privilege::allows("查看用户")) echo h($d['realname']); else echo h($d['nickname']);?></a></td>
     <td>
-	
+
 <table class='table table-striped table-condensed table-bordered fiexd'>
 	  <tr>
 		<th style="width: 5em;">CSID</th>
@@ -101,18 +97,17 @@ if ($cnt) {
 		<th style="width: 4em;">得分</th>
 	  </tr>
 	<?php
-	$sql = new SqlQuery("select compscore.csid,compscore.pid,compscore.lang,compscore.subtime,compscore.score,compscore.result,problem.probname from compscore,problem where problem.pid=compscore.pid and compscore.uid=? and compscore.ctid=?", [$d['uid'], $_GET['ctid']]);
-	$c=$q->dosql($sql);
+	$judges = array_values($entrants[$d['uid']]['marks']);
+	$c = count($judges);
 	if ($c) {
-		for ($j=0;$j<$c;$j++) {
-            $e=$q->rtnrlt($j);
+		foreach ($judges as $j => $e) {
 	?>
         <tr>
         <td>
         <input name="doit[]" type="checkbox" id="doit[]" value="<?php echo $e['csid'] ?>" />
         <input name="doall[]" type="hidden" id="doall[]" value="<?php echo $e['csid'] ?>" />
         <?php echo $e['csid'] ?></td>
-        <td><a target="_blank" href="problem.php?ctid=<?=$_GET['ctid']?>&pid=<?php echo $e['pid'] ?>&uid=<?=$d['uid']?>"><?php echo shortname($e['probname']) ?></a></td>
+        <td><a target="_blank" href="problem.php?ctid=<?=h($_GET['ctid'] ?? '')?>&pid=<?php echo $e['pid'] ?>&uid=<?=$d['uid']?>"><?php echo shortname($e['probname']) ?></a></td>
         <td><a href="code.php?csid=<?php echo $e['csid'] ?>" target="_blank"><?php echo $STR['lang'][$e['lang']] ?></a></td>
         <td><?php echo date("m/d H:i:s",$e['subtime']) ?></td>
         <td><?php echo 评测结果($e['result'], 50) ?></td>

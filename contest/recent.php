@@ -20,7 +20,7 @@ foreach($rows as $row) {
 ?>
 <tr>
 <td><?php echo$row['oj']?></td>
-<td><a id="name_<?php echo$row['id']?>" href="<?php echo$row['link']?>" target="_blank"><?php echo$row['name']?></a></td>
+<td><a id="name_<?php echo$row['id']?>" href="<?php echo$row['link']?>" target="_blank"><?=h($row['name'])?></a></td>
 <td><?php echo$row['start_time']?> <?php echo$row['week']?></td>
 <td><?php echo$row['access']?></td>
 </tr>

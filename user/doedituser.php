@@ -1,24 +1,29 @@
 <?php
 require_once("../include/header.php");
 gethead(8,"修改用户","");
-$p=new DataAccess();
+requirePost();
+$target = (int)($_GET['uid'] ?? 0);
+$grants = array_column(Privilege::forUser($target), 'pri');
+if ($target === 1 || in_array(2, $grants)) {
+    if (!Privilege::allows('超级用户') || ($_GET['action'] ?? '') === 'del') { http_response_code(403); exit('不能更改该管理账号。'); }
+} elseif ($grants && !Privilege::allows('修改权限')) { http_response_code(403); exit('需要修改权限。'); }
+
 
 if ($_GET['action']=="del") {
-    $sql = new SqlQuery("select admin,uid from userinfo where uid=?", [$_GET['uid']]);
-    $cnt=$p->dosql($sql);
+    $accounts = Account::role($_GET['uid']);
+    $cnt = count($accounts);
     if(!$cnt) 异常("无此用户！",取路径("user/index.php"));
-    $d=$p->rtnrlt(0);
-    $sql = new SqlQuery("delete from userinfo where uid=?", [$_GET['uid']]);
-    $p->dosql($sql);
+    $d=($accounts[0] ?? false);
+    Account::remove($_GET['uid']);
     提示("删除用户成功！",取路径("user/index.php"));
 } else if ($_GET['action']=="edit") {
-    $tt="";
-    $sql = new SqlQuery("update userinfo set nickname=? ,readforce=? ,email=?,memo=?,realname=?,gbelong=? where uid=?", [$_POST['nickname'], $_POST['readforce'], $_POST['email'], $_POST['memo'], $_POST['realname'], $_POST['gbelong'], $_GET['uid']]);
-    $p->dosql($sql);
+    $ttt="";
+    Account::administer($_POST['nickname'], $_POST['readforce'], $_POST['email'], $_POST['memo'], $_POST['realname'], $_POST['gbelong'], $_GET['uid']);
     if ($_POST['reset'] == "reset") {
-        $sql = new SqlQuery("update userinfo set pwdhash=? where uid=?", [encode(""), $_GET['uid']]);
-        $p->dosql($sql);
-        $ttt="并且重置密码为空。";
+        $temporary = bin2hex(random_bytes(12));
+        Account::changePassword(Password::hash($temporary), $_GET['uid']);
+        header('Cache-Control: no-store');
+        $ttt=" 临时密码为 ".h($temporary);
     }
     提示("编辑用户成功！$ttt",取路径("user/detail.php?uid={$_GET['uid']}"));
 }

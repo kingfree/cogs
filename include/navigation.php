@@ -1,5 +1,6 @@
 <?php
 function 链接($path, $text, $icon = "") {
+    $ttt = '';
     if($icon) $ttt = "<span class='icon-{$icon}'></span>";
     HTML("<a href=\"".路径($path)."\">{$ttt}{$text}</a>");
 }
@@ -8,8 +9,10 @@ function 列表($path, $icon, $text) {
     链接($path, $text, $icon);
     HTML("</li>");
 }
-function Navigation($p) {
+function Navigation() {
     global $SET;
+    $mails = $ttt = '';
+    $active = array_fill_keys(['comment','contest','problem','submit','page','user','docs','admin'], '');
     $navbar="";
     if($_SESSION['style']) $navbar="navbar-inverse";
     HTML("<div id='nav' class='navbar $navbar'>");
@@ -22,11 +25,10 @@ function Navigation($p) {
     HTML("<li class='dropdown'>");
     HTML("<a id='fenleibar' href='#' class='dropdown-toggle' data-toggle='dropdown'><b class='caret'></b></a>");
     HTML("<ul class='dropdown-menu span11' id='catebar'>");
-    $sql = new SqlQuery("select * from category order by cname");
-    $cnt=$p->dosql($sql);
-    for ($i=0;$i<$cnt;$i++) {
-        $d=$p->rtnrlt($i);
-        HTML("<li style='width: 100px'><a href='".路径("problem/index.php?caid={$d['caid']}")."' title='".sp2n(htmlspecialchars($d['memo']))."'>{$d['cname']}</a></li>");
+    $categories = Category::all();
+
+    foreach ($categories as $i => $d) {
+        HTML("<li style='width: 100px'><a href='".路径("problem/index.php?caid={$d['caid']}")."' title='".sp2n(htmlspecialchars($d['memo']))."'>".h($d['cname'])."</a></li>");
     }
     HTML("</ul>");
     HTML("</li>");
@@ -42,9 +44,10 @@ function Navigation($p) {
     HTML("<li class='{$active['submit']}'><a href='".路径("submit/index.php")."'>记录</a></li>");
     $context = "比赛";
     $now = time();
-    $cnt2 = $p->dosql("select ctid from comptime where starttime < ? and endtime > ?", [$now, $now]);
+    $counts = ContestRound::counts($now);
+    $cnt2 = $counts['active'];
     if($cnt2) $context .= "<span class='doing'>($cnt2)</span>";
-    $cnt1 = $p->dosql("select ctid from comptime where starttime > ? and endtime > ?", [$now, $now]);
+    $cnt1 = $counts['upcoming'];
     if($cnt1) $context .= "<span class='todo'>($cnt1)</span>";
     HTML("<li class='{$active['contest']}'><a href='".路径("contest/index.php")."'>$context</a></li>");
     HTML("<li class='{$active['page']}'><a href='".路径("page/index.php")."'>页面</a></li>");
@@ -56,30 +59,29 @@ function Navigation($p) {
     HTML("</ul>");
     HTML("<ul class='nav pull-right'>");
     HTML("<li class='{$active['docs']}'><a href='".路径("docs/index.php")."'>帮助</a></li>");
-    if(有此权限('可以管理'))
+    if(Privilege::allows('可以管理'))
         HTML("<li class='{$active['admin']}'><a href='".路径("admin/index.php")."'>管理</a></li>");
     HTML("<li class='divider-vertical'></li>");
     HTML("<li class='dropdown'>");
     if($uid = (int) $_SESSION['ID']) {
-        $sql = new SqlQuery("select * from userinfo where uid=?", [$uid]);
-        $p->dosql($sql);
-        $d=$p->rtnrlt(0);
+        $d = $_SESSION;
         $nickname = $d['nickname'];
-        $cnt1 = $p->dosql("select mid from mail where readed = 0 and toid = ?", [$uid]);
+        $mailCounts = Message::unreadCounts($uid);
+        $cnt1 = $mailCounts['received'];
         if($cnt1 > 0) $mails .= "<span class='doing'>($cnt1)</span>";
-        $cnt1 = $p->dosql("select mid from mail where readed = 0 and fromid = ?", [$uid]);
+        $cnt1 = $mailCounts['sent'];
         if($cnt1 > 0) $mails .= "<span class='todo'>($cnt1)</span>";
     } else $nickname = "登录";
     HTML("<a href='#' class='dropdown-toggle' data-toggle='dropdown'>{$nickname}{$mails}<b class='caret'></b></a>");
     HTML("<ul class='dropdown-menu'>");
     if($uid = (int) $_SESSION['ID']) {
-        HTML("<li class='span2'><a id='userbar' href='".路径("user/detail.php?uid={$uid}")."'><span class='username'>".$d['nickname']."</span><span class='avatar'>".gravatar::showImage($d['email'], 28)."</span></a></li>");
+        HTML("<li class='span2'><a id='userbar' href='".路径("user/detail.php?uid={$uid}")."'><span class='username'>".h($d['nickname'])."</span><span class='avatar'>".gravatar::showImage($d['email'], 28)."</span></a></li>");
         列表("user/panel.php", "cog", "设置");
         列表("mail/index.php", "envelope", "信件".$mails);
         列表("user/dologout.php", "off", "退出");
     } else {
 ?>
-<li class='span3'><form method="post" action="<?=路径("user/dologin.php")?>" class='form-inline center'>
+<li class='span3'><form method="post" action="<?=路径("user/dologin.php")?>" class='form-inline center'><?=formTokenField()?>
 <input name="from" type="hidden" id="from" value="<?=$SET['URI']?>" />
 <input name="username" type="text" class='input-small span2' placeholder='用户名' /><br />
 <input name="password" type="password" class='input-small span2' placeholder='密码' /><br />
@@ -102,8 +104,10 @@ HTML("</div>");
 HTML("</div>");
 }
 
-function Navigation_IE($p) {
+function Navigation_IE() {
     global $SET;
+    $mails = $ttt = '';
+    $active = array_fill_keys(['comment','contest','problem','submit','page','user','docs','admin'], '');
     $navbar="";
     if($_SESSION['style']) $navbar="navbar-inverse";
     HTML("<div id='nav' class='navbar $navbar'>");
@@ -125,9 +129,10 @@ function Navigation_IE($p) {
     HTML("<li class='{$active['submit']}'><a href='".路径("submit/index.php")."'>记录</a></li>");
     $context = "比赛";
     $now = time();
-    $cnt2 = $p->dosql("select ctid from comptime where starttime < ? and endtime > ?", [$now, $now]);
+    $counts = ContestRound::counts($now);
+    $cnt2 = $counts['active'];
     if($cnt2) $context .= "<span class='doing'>($cnt2)</span>";
-    $cnt1 = $p->dosql("select ctid from comptime where starttime > ? and endtime > ?", [$now, $now]);
+    $cnt1 = $counts['upcoming'];
     if($cnt1) $context .= "<span class='todo'>($cnt1)</span>";
     HTML("<li class='{$active['contest']}'><a href='".路径("contest/index.php")."'>$context</a></li>");
     HTML("<li class='{$active['page']}'><a href='".路径("page/index.php")."'>页面</a></li>");
@@ -136,18 +141,17 @@ function Navigation_IE($p) {
     HTML("</ul>");
     HTML("<ul class='nav pull-right'>");
     HTML("<li class='{$active['docs']}'><a href='".路径("docs/index.php")."'>帮助</a></li>");
-    if(有此权限('可以管理'))
+    if(Privilege::allows('可以管理'))
         HTML("<li class='{$active['admin']}'><a href='".路径("admin/index.php")."'>管理</a></li>");
     HTML("<li class='divider-vertical'></li>");
     HTML("<li class='dropdown'>");
     if($uid = (int) $_SESSION['ID']) {
-        $sql = new SqlQuery("select * from userinfo where uid=?", [$uid]);
-        $p->dosql($sql);
-        $d=$p->rtnrlt(0);
+        $d = $_SESSION;
         $nickname = $d['nickname'];
-        $cnt1 = $p->dosql("select mid from mail where readed = 0 and toid = ?", [$uid]);
+        $mailCounts = Message::unreadCounts($uid);
+        $cnt1 = $mailCounts['received'];
         if($cnt1 > 0) $mails .= "<span class='doing'>($cnt1)</span>";
-        $cnt1 = $p->dosql("select mid from mail where readed = 0 and fromid = ?", [$uid]);
+        $cnt1 = $mailCounts['sent'];
         if($cnt1 > 0) $mails .= "<span class='todo'>($cnt1)</span>";
     } else $nickname = "登录";
     if($uid = (int) $_SESSION['ID']) {

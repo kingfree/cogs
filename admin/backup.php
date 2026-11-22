@@ -4,14 +4,14 @@ gethead(1,"超级用户","备份与恢复");
 ?>
 <div class="page">
 
-<form method="post" action="dobackup.php" class='form-inline'>
+<form method="post" action="dobackup.php" class='form-inline'><?=formTokenField()?>
 <input name="backtype" type="hidden" value="showback" />
 <button type="submit" class='btn btn-success'>查看已备份的数据</button>
 </form>
 
 <hr />
 
-<form method="post" action="dobackup.php" class='form-inline'>
+<form method="post" action="dobackup.php" class='form-inline'><?=formTokenField()?>
 <h4>数据库　(database)</h4>
 <input name="backtype" type="hidden" value="database" />
 <div class="input-prepend input-append">
@@ -22,7 +22,7 @@ gethead(1,"超级用户","备份与恢复");
 <button type="submit" class='btn btn-primary pull-right'>备份数据库</button>
 </form>
 
-<form method="post" action="dobackup.php" class='form-inline'>
+<form method="post" action="dobackup.php" class='form-inline'><?=formTokenField()?>
 <h4>用户代码(usercode)</h4>
 <input name="backtype" type="hidden" value="usercode" />
 <div class="input-prepend input-append">
@@ -33,7 +33,7 @@ gethead(1,"超级用户","备份与恢复");
 <button type="submit" class='btn btn-warning pull-right'>备份用户代码</button>
 </form>
 
-<form method="post" action="dobackup.php" class='form-inline'>
+<form method="post" action="dobackup.php" class='form-inline'><?=formTokenField()?>
 <h4>比赛代码(compcode)</h4>
 <input name="backtype" type="hidden" value="compcode" />
 <div class="input-prepend input-append">
@@ -45,7 +45,7 @@ gethead(1,"超级用户","备份与恢复");
 </form>
 
 
-<form method="post" action="dobackup.php" class='form-inline'>
+<form method="post" action="dobackup.php" class='form-inline'><?=formTokenField()?>
 <h4>测试数据(testdata)</h4>
 <input name="backtype" type="hidden" value="testdata" />
 <div class="input-prepend input-append">

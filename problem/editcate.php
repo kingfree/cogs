@@ -5,13 +5,12 @@ gethead(1,"分类管理","修改分类");
 <div class='row-fluid'>
 <?php
 if ($_GET['action']=='edit') {
-	$p=new DataAccess();
-	$sql = new SqlQuery("select * from category where caid=?", [$_GET['caid']]);
-	$cnt=$p->dosql($sql);
-	$d=$p->rtnrlt(0);
+	$categories = Category::byId($_GET['caid']);
+	$cnt = count($categories);
+	$d=($categories[0] ?? false);
 }
 ?>
-<form method="post" action="doeditcate.php?action=<?php echo $_GET['action'] ?>&caid=<?php echo $_GET['caid']; ?>" class='form-horizontal'>
+<form method="post" action="doeditcate.php?action=<?=h($_GET['action'] ?? '')?>&caid=<?=h($_GET['caid'] ?? '')?>" class='form-horizontal'><?=formTokenField()?>
 <div class='control-group'>
 <label class='control-label' for='caid'>CAID</label>
 <div class='controls'>
@@ -21,13 +20,13 @@ if ($_GET['action']=='edit') {
 <div class='control-group'>
 <label class='control-label' for='cname'>分类名称</label>
 <div class='controls'>
-<input name="cname" type="text" id="cname" value="<?=$d['cname'] ?>" />
+<input name="cname" type="text" id="cname" value="<?=h($d['cname'])?>" />
 </div>
 </div>
 <div class='control-group'>
 <label class='control-label' for='memo'>分类说明</label>
 <div class='controls'>
-<textarea id='memo' name="memo" class="textarea"><?=$d['memo']?></textarea>
+<textarea id='memo' name="memo" class="textarea"><?=h($d['memo'])?></textarea>
 </div>
 </div>
 <div class='form-actions'>

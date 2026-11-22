@@ -1,34 +1,21 @@
 <?php
-function pathconvert($cur,$absp) { //当前文件，目标路径
-    $cur = str_replace("\\","/",$cur);
-    $absp = str_replace("\\","/",$absp);
-    $sabsp=explode("/",$absp);
-    $scur=explode("/",$cur);
-    $la=count($sabsp)-1;
-    $lb=count($scur)-1;
-    $l=max($la,$lb);
-
-    for ($i=0; $i<=$l; $i++) {
-        if ($sabsp[$i]!=$scur[$i])
-            break;
-    }
-    $k=$i-1;
-    $path="";
-    for ($i=1; $i<=($lb-$k-1); $i++)
-        $path.="../";
-    for ($i=$k+1; $i<=($la-1); $i++)
-        $path.=$sabsp[$i]."/";
-    $path.=$sabsp[$la];
-    return $path;
+// 站点可以挂在域名根目录或任意子目录。例 路径('problem/index.php')。
+function pathconvert($current, $target)
+{
+    $from = explode('/', trim(str_replace('\\', '/', dirname($current)), '/'));
+    $to = explode('/', trim(str_replace('\\', '/', $target), '/'));
+    while ($from && $to && $from[0] === $to[0]) { array_shift($from); array_shift($to); }
+    return str_repeat('../', count($from)).implode('/', $to).(str_ends_with($target, '/') ? '/' : '');
 }
 
-function 路径($str) {
+function 路径($path)
+{
     global $SET;
-    $str1 = $SET['base'].$str;
-    return pathconvert($SET['cur'],$str1);
+    return pathconvert($SET['cur'], $SET['base'].$path);
 }
 
-function 取路径($path) {
+function 取路径($path)
+{
     global $SET;
-    return base64_encode("/{$SET['global_root']}$path");
+    return base64_encode('/'.$SET['global_root'].$path);
 }

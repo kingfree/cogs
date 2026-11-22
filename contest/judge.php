@@ -1,6 +1,7 @@
 <?php
 require_once("../include/header.php");
 gethead(1,"查看比赛","比赛评测");
+requirePost();
 ?>
 <div class='container'>
 <?php
@@ -45,8 +46,9 @@ function doStart(csid) {
     document.getElementById("nowp").innerHTML=p+1;
     createHTTP();
     url="compile.php";
-    strA = "csid="+csid+"&judger="+"<?=$_POST['judger']?>";
+    strA = "csid="+csid+"&judger="+"<?=h($_POST['judger'] ?? '')?>";
     HTTP.open("POST",url);
+    HTTP.setRequestHeader("X-COGS-Token", <?=json_encode(formToken())?>);
     HTTP.setRequestHeader("CONTENT-TYPE","application/x-www-form-urlencoded");
     HTTP.send(strA);
     HTTP.onreadystatechange=Callback;
@@ -103,24 +105,15 @@ function Finish() {
     <th>得分</th>
   </tr>
 <?php
-    $p=new DataAccess();
-    $sql = new SqlQuery("select compscore.csid,compscore.ctid,userinfo.nickname,userinfo.realname,problem.probname,problem.filename,compscore.lang,compscore.score,compscore.result,compscore.pid,compscore.uid,compscore.ctid from compscore,problem,userinfo where compscore.uid=userinfo.uid and compscore.pid=problem.pid");
-    if ($list) {
-        $marks = implode(',', array_fill(0, count($list), '?'));
-        $sql->append(" and compscore.csid in ($marks)", $list);
-    } else {
-        $sql->append(" and 1=0");
-    }
-    $sql->append(" order by compscore.csid asc");
-    $cnt=$p->dosql($sql);
-    for ($i=0;$i<$cnt;$i++) {
-        $d=$p->rtnrlt($i);
+    $entries = ContestEntry::judgingQueue($list);
+
+    foreach ($entries as $i => $d) {
 ?>
   <tr>
     <td><?=$d['csid'] ?></td>
-    <td><a href="../user/detail.php?uid=<?=$d['uid'] ?>" target="_blank"><?=$d['realname'] ?></a></td>
+    <td><a href="../user/detail.php?uid=<?=$d['uid'] ?>" target="_blank"><?=h($d['realname'])?></a></td>
     <td><a href="problem.php?pid=<?=$d['pid'] ?>&ctid=<?=$d['ctid'] ?>" target="_blank"><?=shortname($d['probname']) ?></a></td>
-    <td><code><?=$d['filename'] ?></code></td>
+    <td><code><?=h($d['filename'])?></code></td>
     <td><a href="code.php?csid=<?=$d['csid'] ?>" target="_blank"><?=$STR['lang'][$d['lang']] ?></a></td>
     <td id="result<?=$d['csid'] ?>"><?=评测结果($d['result'], 50) ?></td>
     <td id="score<?=$d['csid'] ?>"><?=$d['score'] ?></td>

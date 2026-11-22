@@ -1,0 +1,3 @@
+<FilesMatch "^(settings|cnt|running|mode)\.php$">
+    Require all denied
+</FilesMatch>

@@ -1,15 +1,15 @@
 <?php
 require_once("../include/header.php");
-gethead(1,"","权限列表");
-$p=new DataAccess();
+gethead(1,"修改权限","权限列表");
 
 $uid=(int) ($_POST['uid'] ? $_POST['uid'] : $_GET['uid']);
 $priv=(int) ($_POST['pri'] ? $_POST['pri'] : $_GET['pri']);
-$way=$_POST['way'] ? $_POST['way'] : $_GET['way'];
+$way = $_POST['way'] ?? $_GET['way'] ?? '';
+if ($way !== '') requirePost();
 
 ?>
 <div class='row-fluid'>
-<form method=post>
+<form method=post><?=formTokenField()?>
 	<b>为用户添加权限</b>
 	用户编号：<input type='number' size=10 name="uid" value="<?=$uid?>" />
     <input type=hidden name=way value="ins" />
@@ -28,25 +28,25 @@ foreach ($pri as $key => $val) {
 </form>
 <?php
 if($way=='ins' && $uid) {
-    $sql = new SqlQuery("select def from `privilege` where uid=? and pri=? limit 1", [$uid, $priv]);
-    $cnt=$p->dosql($sql);
+    $privileges = Privilege::granted($uid, $priv);
+    $cnt = count($privileges);
     if(!$cnt) {
-        $sql = new SqlQuery("insert into `privilege`(uid, pri, def) values(?,?,'1')", [$uid, $priv]);
-        $cnt=$p->dosql($sql);
+        Privilege::grant($uid, $priv);
+
         HTML("<div class='alert alert-success'>用户 $uid 已添加权限 ".array_search($priv, $pri)." ！</div>");
     }
 }
 
 if($way=='del' && $uid) {
-    $sql = new SqlQuery("delete from `privilege` where uid=? and pri=?", [$uid, $priv]);
-    $cnt=$p->dosql($sql);
+    Privilege::revoke($uid, $priv);
+
     HTML("<div class='alert alert-success'>用户 $uid 已删除权限 ".array_search($priv, $pri)." ！</div>");
 }
 ?>
 <?php
-	$sql = new SqlQuery("select privilege.*,userinfo.email,userinfo.nickname from privilege,userinfo where userinfo.uid=privilege.uid order by uid,pri asc");
+	$privileges = Privilege::holders();
 	
-	$cnt=$p->dosql($sql);
+	$cnt = count($privileges);
 	$totalpage=(int)(($cnt-1)/$SET['style_pagesize'])+1;
 	if (!isset($_GET['page'])) 
 	{
@@ -72,10 +72,10 @@ if($way=='del' && $uid) {
 <?php 	if (!$err)
 	for ($i=$st;$i<$cnt && $i<$st+$SET['style_pagesize'] ;$i++)
 	{
-		$d=$p->rtnrlt($i);
+		$d=($privileges[$i] ?? false);
 ?>
   <tr>
-    <td><a href='../user/detail.php?uid=<?=$d['uid']?>' target='_blank'><?=gravatar::showImage($d['email']);?><?=$d['nickname']?></a></td>
+    <td><a href='../user/detail.php?uid=<?=$d['uid']?>' target='_blank'><?=gravatar::showImage($d['email']);?><?=h($d['nickname'])?></a></td>
     <td><?php echo array_search($d['pri'],$pri) ?></td>
     <td><?php if ($d['def']) echo "是"; else echo "否"; ?></td>
     <td>
@@ -87,7 +87,7 @@ if($way=='del' && $uid) {
 ?>
 </table>
 <?php
-分页($cnt, $_GET['page']);
+分页($cnt, ($_GET['page'] ?? 1));
 ?>
 </div>
 <?php

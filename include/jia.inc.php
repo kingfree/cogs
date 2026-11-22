@@ -14,7 +14,7 @@ var jiathis_config={
 	sm:"tsina,tqq,qzone,renren,tieba",
 	url:"http://cojs.tk/cogs/<?=$Jia['url']?>",
 	summary:"<?=$Jia['summary']?>",
-	title:"#COGS# <?=$Jia['title']?>",
+	title:"#COGS# <?=h($Jia['title'])?>",
 	boldNum:1,
 	hideMore:false
 }

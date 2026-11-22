@@ -1,22 +1,19 @@
 <?php
 require_once("../include/header.php");
 gethead(8,"修改比赛","");
+requirePost();
 
-if ($_REQUEST['action']=='add')
+if (($_POST['action'] ?? $_GET['action'] ?? '')=='add')
 {
-	$p=new DataAccess();
 	@$cons=implode(":",$_POST['cons']);
-	$sql = new SqlQuery("insert into compbase(cname,contains,ouid) values(?,?,?)", [$_POST['cname'], $cons, $_SESSION['ID']]);
-	$p->dosql($sql);
+	Contest::create($_POST['cname'], $cons, $_SESSION['ID']);
     提示("添加比赛 {$_POST['cname']} 成功！",取路径("contest/compbase.php"));
 }
 
-if ($_REQUEST['action']=='edit')
+if (($_POST['action'] ?? $_GET['action'] ?? '')=='edit')
 {
-	$p=new DataAccess();
 	@$cons=implode(":",$_POST['cons']);
-	$sql = new SqlQuery("update compbase set cname=?,contains=? where cbid=?", [$_POST['cname'], $cons, $_REQUEST['cbid']]);	
-	$p->dosql($sql);
+	Contest::edit($_POST['cname'], $cons, ($_POST['cbid'] ?? $_GET['cbid'] ?? ''));
     提示("修改比赛 {$_POST['cname']} 成功！",取路径("contest/compbase.php"));
 }
 ?>

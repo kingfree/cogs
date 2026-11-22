@@ -1,17 +1,12 @@
 <?php
 require_once("../include/header.php");
-gethead(1,"sess","评测");
-$LIB->hlighter();
+gethead(0, '普通用户', '');
+requirePost();
 if (!$_POST['pid']) 异常("你来错地方了！");
-$LIB->cls_compile(); 
-$LIB->func_socket();
-$p=new DataAccess();
-$q=new DataAccess();
-$sql = new SqlQuery("select * from problem where pid=?", [$_POST['pid']]);
-$p->dosql($sql);
-$d=$p->rtnrlt(0);
-if(!$d['submitable'] && !有此权限('查看题目') && !($d['addid'] == $_SESSION['ID']))
-    异常("不可提交！",取路径("problem/index.php"));
+require_once __DIR__.'/../include/socket.php';
+$d = Problem::forReader((int)$_POST['pid']);
+if (!$d) { http_response_code(404); exit('题目不存在或未开放。'); }
+if ($d['datacnt'] < 1) { http_response_code(400); exit('题目尚无测试点。'); }
 $lang=langstrtonum($_POST['lang']);
 $info=array();
 $info['pid']=$_POST['pid'];
@@ -26,17 +21,21 @@ $info['memorylimit']=$d['memorylimit'];
 $info['plugin']=$d['plugin'];
 $info['compiledir']=$SET['dir_source'];
 $info['mode']="normal";
-if ($_POST['testmode']=='1' && 有此权限('测试题目'))
+if ($_POST['testmode']=='1' && Privilege::allows('测试题目'))
 	$info['mode']="test";
-if ($_POST['rejudge']==1) {
+if (!empty($_POST['rejudge'])) {
+    if (!Privilege::allows('管理评测')) { http_response_code(403); exit; }
 	$info['rejudge']=1;
-	$sql = new SqlQuery("select * from submit where sid=?", [$info['sid']]);
-	$q->dosql($sql);
-	$e=$q->rtnrlt(0);
-	$info['uid']=$e['uid'];
+	$e = Submission::byId($info['sid'])[0] ?? false;
+	if (!$e || (int)$e['pid'] !== (int)$info['pid']) { http_response_code(400); exit; }
+    $info['language'] = $e['lang'];
+    $info['uid']=$e['uid'];
 	$src=$e['srcname'];
 }
-$Cp=new Compiler($info);
+if ($info['language'] === null || !TestData::name($d['filename'])) { http_response_code(400); exit('提交语言或文件名无效。'); }
+gethead(1, '普通用户', '评测');
+require_once __DIR__.'/../include/hlighter.inc.php';
+$Cp=new Judging($info);
 
 ?>
 <div class='row-fluid'>
@@ -45,16 +44,16 @@ $Cp=new Compiler($info);
 正在连接评测机...
 <?php
 flush();
-$free=$Cp->getgds($_POST['judger']);
+$free=$Cp->acquire($_POST['judger']);
 if (!$free) {
 //$Cp->unlock();
     异常("当前没有空闲的评测机，请稍后重新提交。", 取路径("problem/problem.php?pid={$_POST['pid']}"));
 }
-$Cp->lock();
-$Cp->getdir();
-if ($_POST['rejudge']==1) {
-	$Cp->get_rejudge_src($src);
-} else if (!$Cp->getupload()) {
+
+$Cp->prepareSource();
+if (!empty($_POST['rejudge'])) {
+	$Cp->useSource($src);
+} else if (!$Cp->upload($_FILES['file'] ?? [])) {
     $Cp->unlock();
 	异常("源代码上传失败。请检查文件大小。", 取路径("problem/problem.php?pid={$_POST['pid']}"));
 }
@@ -107,26 +106,27 @@ if ($csucc) {
 <p>平均内存 <?php printf("%.2f",$Cp->getmemory()/1024) ?> MB</p>
 <p>测试点通过状况 <a href="../submit/code.php?id=<?=$info['sid']?>"><?=评测结果($Cp->s_detail, 30) ?></a></p>
 <p>得分：<b><?=$Cp->getscore(); ?></b></p>
-<p><a href="../problem/problem.php?pid=<?=$_POST['pid'] ?>">返回原题 “<?=$ptitle?>”</a></p>
+<p><a href="../problem/problem.php?pid=<?=h($_POST['pid'] ?? '')?>">返回原题 “<?=$ptitle?>”</a></p>
 <?php if ($Cp->ac==$d['datacnt']) {
     $AC = 1;
 } else {
     $AC = 0;
-    if(($_SESSION['ID'] == $info['uid'] || 有此权限('查看数据')) &&
+    if(($_SESSION['ID'] == $info['uid'] || Privilege::allows('查看数据')) &&
             $nodata == false) {
         $AC = -1;
-    } 
+    }
 }?>
 <?php if($AC == 1) { ?>
     <p class="ok">祝贺你通过了全部测试点！</p>
-    <p>顺便<a href="../problem/problem.php?pid=<?=$_POST['pid'] ?>">返回</a>为该题添加一个标签吧！</p>
-    <p>...或者看看<a href="../problem/comments.php?pid=<?=$_POST['pid'] ?>">其他人的评论</a>，<a href="../problem/comment.php?pid=<?=$_POST['pid'] ?>">发表</a>一下你的感想吧！</p>
+    <p>顺便<a href="../problem/problem.php?pid=<?=h($_POST['pid'] ?? '')?>">返回</a>为该题添加一个标签吧！</p>
+    <p>...或者看看<a href="../problem/comments.php?pid=<?=h($_POST['pid'] ?? '')?>">其他人的评论</a>，<a href="../problem/comment.php?pid=<?=h($_POST['pid'] ?? '')?>">发表</a>一下你的感想吧！</p>
 <?php } else if($AC < 1) { ?>
     <p class="no">你没有通过这道题！</p>
     <p><a href="../docs/" target="_blank" title="RP问题">为什么程序在我的电脑上能够正常运行，而在评测机上不能?</a></p>
 <?php }
-if($AC == -1) { ?>
-<form action="testdata.php" method="post" class='form-inline'>
+if($AC == -1) {
+ ?>
+<form action="testdata.php" method="post" class='form-inline'><?=formTokenField()?>
 <span class='badge'>第<?=$Cp->wrongpoint?>个</span>测试点数据：
 <input name="filename" type="hidden" value="<?=$Cp->filename?>" />
 <input name="point" type="hidden" value="<?=$Cp->wrongpoint?>" />
@@ -135,7 +135,7 @@ if($AC == -1) { ?>
 </form>
 <?php } ?>
 <?php
-if($nodata || $_POST['testmode'] && (有此权限('测试题目') || $d['addid'] == $_SESSION['ID'])) {
+if($nodata || $_POST['testmode'] && (Privilege::allows('测试题目') || $d['addid'] == $_SESSION['ID'])) {
     echo "<p class=no>没有写入数据库</p>";
 } else {
 	$Cp->writedb_single();
@@ -144,13 +144,14 @@ if($nodata || $_POST['testmode'] && (有此权限('测试题目') || $d['addid']
 </div>
 </div>
 </div>
-<?php if($AC == -1) { ?>
+<?php if($AC == -1) {
+ ?>
 <div class='alert'>
 <p class="no">你在<span class='badge'>第<?=$Cp->wrongpoint?>个</span>测试点出现了爆零的情况，下面是该题的输入数据：
 <pre class="prettyprint"><?=htmlspecialchars(gettexts($Cp->inputtext, 512))?></pre>
-<p>下面是你的输出与标准答案不同的地方（上面带减号“-”的是你的输出，下面带加号“+”的是答案输出，“@@”之间的数字表示行号）：
+<p>标准答案与本次输出的开头如下：
 <pre class="prettyprint"><?=htmlspecialchars(gettexts($Cp->difftext, 512))?></pre>
-<p><a href="../problem/problem.php?pid=<?=$_POST['pid'] ?>">返回原题 “<?=$ptitle?>”</a></p>
+<p><a href="../problem/problem.php?pid=<?=h($_POST['pid'] ?? '')?>">返回原题 “<?=$ptitle?>”</a></p>
 </div>
 <?php } ?>
 <?php } else { ?>

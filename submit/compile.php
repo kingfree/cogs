@@ -1,6 +1,3 @@
 <?php
-require_once("../include/header.php");
-gethead(0,"sess","");
-$LIB->cls_compile();
-$LIB->func_socket();
-?>
+// 早期客户端通过此地址发起评测。
+require __DIR__.'/run.php';

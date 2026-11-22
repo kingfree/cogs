@@ -1,70 +1,21 @@
 <?php
-require_once("../include/header.php");
-gethead(8,"普通用户","");
-
-if(!有此权限("查看比赛") && time() > $_POST['endtime'])
-异常("比赛已经结束，不可再提交！",取路径("contest/problem.php?pid={$_POST['pid']}&ctid={$_POST['ctid']}"));
-
-if($_FILES['file']['size']>1024*100 || $_FILES['file']['size']<=0)
-异常("源代码上传失败。请检查文件大小。",取路径("contest/problem.php?pid={$_POST['pid']}&ctid={$_POST['ctid']}"));
-
-$fname=$_POST['filename'];
-switch ($_POST['lang']) {
-    case 'pas':
-        $fname.=".pas";
-        $nlang=0;
-        break;
-    case 'c':
-        $fname.=".c";
-        $nlang=1;
-        break;
-    case 'cpp':
-        $fname.=".cpp";
-        $nlang=2;
-        break;
-    case 'zip':
-        $fname.=".zip";
-        $nlang=3;
-        break;
+require_once __DIR__.'/../include/header.php';
+gethead(0, '普通用户', '');
+requirePost();
+$id = (int)($_POST['ctid'] ?? 0);
+$pid = (int)($_POST['pid'] ?? 0);
+$uid = (int)$_SESSION['ID'];
+$round = ContestRound::rules($id)[0] ?? null;
+$problem = Problem::byId($pid)[0] ?? null;
+if (!$round || !$problem || !in_array((string)$pid, explode(':', $round['contains']), true) ||
+    (!Privilege::allows('查看比赛') && (time() < $round['starttime'] || time() > $round['endtime'] ||
+    !UserGroup::includes($round['gid'], $_SESSION['group']) || $round['readforce'] > $_SESSION['readforce'] ||
+    $problem['readforce'] > $_SESSION['readforce']))) { http_response_code(403); exit('本场比赛当前不接受这次提交。'); }
+$language = Language::id($_POST['lang'] ?? '');
+$file = $_FILES['file'] ?? [];
+if ($language === null || !TestData::name($problem['filename']) || !$file || $file['error'] !== UPLOAD_ERR_OK ||
+    $file['size'] < 1 || $file['size'] > 102400 || !is_uploaded_file($file['tmp_name'])) {
+    http_response_code(400); exit('源文件或提交语言无效。');
 }
-
-chdir($SET['dir_competition']);
-
-if (!file_exists($_POST['ctid'])) {
-    mkdir($_POST['ctid']);
-    chmod($_POST['ctid'],0775);
-}
-chdir($_POST['ctid']);
-
-if (!file_exists($_SESSION['ID'])) {
-    mkdir($_SESSION['ID']);
-    chmod($_SESSION['ID'],0775);
-}
-chdir($_SESSION['ID']);
-
-if(file_exists($fname)) unlink($fname);
-move_uploaded_file($_FILES['file']['tmp_name'],$fname);
-chmod($fname,0775);
-if(!file_exists($fname))
-    异常("比赛提交代码文件 $fname 失败！",取路径("contest/problem.php?pid={$_POST['pid']}&ctid={$_POST['ctid']}"));
-
-    $p=new DataAccess();
-    $sql = new SqlQuery("select csid from compscore where uid=? and pid=? and ctid=?", [$_SESSION['ID'], $_POST['pid'], $_POST['ctid']]);
-    $cnt=$p->dosql($sql);
-    if ($cnt) {
-        $sql = new SqlQuery("update compscore set subtime=?,lang=? where ctid=? and uid=? and pid=?", [time(), $nlang, $_POST['ctid'], $_SESSION['ID'], $_POST['pid']]);
-        $p->dosql($sql);
-    } else {
-        $sql = new SqlQuery("insert into compscore(ctid,uid,pid,subtime,lang) values(?,?,?,?,?)", [$_POST['ctid'], $_SESSION['ID'], $_POST['pid'], time(), $nlang]);
-        $p->dosql($sql);
-    }
-
-$sql = new SqlQuery("select csid from compscore where uid=? and pid=? and ctid=?", [$_SESSION['ID'], $_POST['pid'], $_POST['ctid']]);
-$cnt=$p->dosql($sql);
-if ($cnt) {
-    $d=$p->rtnrlt(0);
-    提示("比赛提交代码成功！",取路径("contest/code.php?csid={$d['csid']}"));
-} else {
-    异常("比赛提交代码失败！",取路径("contest/problem.php?pid={$_POST['pid']}&ctid={$_POST['ctid']}"));
-}
-?>
+$csid = ContestEntry::submitSource($id, $pid, $uid, $problem['filename'], $language, $file['tmp_name'], $SET['dir_competition']);
+i提示('比赛提交代码成功！', 取路径('contest/code.php?csid='.$csid));

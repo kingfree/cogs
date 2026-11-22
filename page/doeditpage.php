@@ -1,11 +1,11 @@
 <?php
 require_once("../include/header.php");
 gethead(8, "修改页面", "");
-$db = new DataAccess();
-$action = $_REQUEST['action'];
-$aid = isset($_REQUEST['aid']) ? (int)$_REQUEST['aid'] : 0;
+requirePost();
+$action = ($_POST['action'] ?? $_GET['action'] ?? '');
+$aid = (int)($_POST['aid'] ?? $_GET['aid'] ?? 0);
 if ($action === 'del') {
-    $db->dosql("delete from page where aid = ?", array($aid));
+    Page::remove($aid);
     提示("删除页面成功", 取路径("page/index.php"));
     return;
 }
@@ -15,11 +15,11 @@ if (!isset($_POST['title'], $_POST['text'], $_POST['force'], $_POST['group']) ||
 $fields = array($_POST['title'], (int)$_POST['force'], $_POST['text'], (int)$_POST['group'], time());
 if ($action === 'edit') {
     $fields[] = $aid;
-    $db->dosql("update page set title=?, `force`=?, `text`=?, `group`=?, etime=? where aid=?", $fields);
+    Page::edit(...$fields);
 } else {
     $fields[] = time();
     $fields[] = (int)$_SESSION['ID'];
-    $db->dosql("insert into page(title, `force`, `text`, `group`, etime, `time`, uid) values(?,?,?,?,?,?,?)", $fields);
-    $aid = (int)DataAccess::connection()->lastInsertId();
+    Page::create(...$fields);
+    $aid = (int)Database::connection()->lastInsertId();
 }
 提示("页面已保存", 取路径("page/page.php?aid=$aid"));

@@ -1,8 +1,7 @@
 <?php
 require_once("../include/header.php");
-$p=new DataAccess();
 $name = $_GET['name'];
-$sql = new SqlQuery("SELECT pid FROM problem WHERE filename=?", [$name]);
-$rows = $p->dosql($sql);
+$problems = Problem::byFilename($name);
+$rows = count($problems);
 echo $rows;
 ?>

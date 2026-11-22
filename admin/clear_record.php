@@ -1,50 +1,8 @@
 <?php
-require_once("../include/header.php");
-gethead(1,"管理用户","清除记录");
-?>
-
-<pre>
-<?php
-global $p;
-$p=new DataAccess();
-
-function check($f,$uid)
-{
-    global $p;
-    $sql = new SqlQuery("select * from submit where uid=? and srcname=?", [$uid, $f]);
-    $cnt=$p->dosql($sql);
-    if ($cnt==0)
-        return 1;
-    else
-        return 0;
-}
-
-function sdir($dir,$dname)
-{
-    $dh=opendir($dir);
-    while ($file=readdir($dh)) 
-    {
-flush();
-        if($file!="." && $file!="..") 
-        {
-            $fullpath=$dir."/".$file;
-            if(!is_dir($fullpath)) 
-            {
-                if ($dname!="" && check($file,$dname))
-                {
-                    echo $fullpath;
-                    echo "\n";
-                    unlink($fullpath);
-                }
-            } 
-            else 
-            {
-                sdir($fullpath,$file);
-            }
-        }
-    }
-    closedir($dh);
-}
-sdir($SET['dir_source'],"");
-?>
-</pre>
+require_once __DIR__.'/../include/header.php';
+gethead(0, '管理用户', '');
+requirePost();
+$files = Submission::removeOrphans($SET['dir_source']);
+gethead(1, '管理用户', '清除记录');
+echo '<pre>'.h(implode("\n", $files)).'</pre>';
+require dirname(__DIR__).'/include/footer.php';

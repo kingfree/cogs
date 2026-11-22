@@ -1,10 +1,7 @@
 <?php
 global $STR;
 
-$STR['lang'][0]="Pascal";
-$STR['lang'][1]="C";
-$STR['lang'][2]="C++";
-$STR['lang'][3]="Answer";
+$STR['lang'] = array_column(Language::TYPES, 1);
 
 $STR['lng'][0]="P";
 $STR['lng'][1]="C";

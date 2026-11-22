@@ -1,4 +1,5 @@
 <?php
+function renderEditor($edname) {
 $SH=路径("include/");
 $SS=路径("style/");
 ?>
@@ -10,6 +11,7 @@ KindEditor.ready(function(K) {
     editor = K.create('#<?=$edname?>', {
         cssPath: ['/Bootstrap/css/<?=$_SESSION['user_style']?>.min.css', '<?=$SS?>cogs.css', '/kindeditor/plugins/code/prettify.css'],
         bodyClass: 'problem',
+        extraFileUploadParams: {form_token: <?=json_encode(formToken())?>},
         uploadJson: '<?=$SH?>upload_json.inc.php',
         //fileManagerJson : '../php/file_manager_json.php',
         //allowFileManager : true,
@@ -36,3 +38,4 @@ KindEditor.ready(function(K) {
 });
 </script>
 
+<?php }
