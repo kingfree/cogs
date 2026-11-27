@@ -1,4 +1,6 @@
 <?php
+// 查询当前读者有权阅读的题目和文章讨论。
+// problem/comments.php?pid=1 显示该题的讨论；?aid=1 显示该文章的讨论。
 require_once("../include/header.php");
 $pid=(int)$_GET['pid'];
 $uid=(int)$_GET['uid'];

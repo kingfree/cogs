@@ -23,4 +23,4 @@ Linux 评测机使用 util-linux（unshare、prlimit）、Bubblewrap、GNU time�
 
 ## 验证
 
-`php tests/architecture.php` 检查 PHP 语法和业务层之外的 SQL。`python3 tests/integration.py` 在本地 MariaDB 创建一个随机命名的临时库，启动独立 Web 和评测进程，执行 HTTP 与编译器回归，结束后删除该临时库。连接参数为 `COGS_TEST_HOST`、`COGS_TEST_PORT`、`COGS_TEST_USER` 和 `MYSQL_PWD`；测试账号需要临时建库权限。设置 `PHP`、`MARIADB` 可以指定可执行文件。若提供 `COGS_TEST_LEGACY_SCHEMA`（原版 SQL 文件的路径），还会在另一临时库复测旧库升级。已安装 Playwright 时，设置 `COGS_TEST_BROWSER` 为 Chromium 可执行文件路径，可同时运行浏览器用例。
+`php tests/architecture.php` 检查 PHP 语法、业务入口中的 SQL 和业务主体公开方法的 PHPDoc。`python3 tests/integration.py` 在本地 MariaDB 创建一个随机命名的临时库，启动独立 Web 和评测进程，执行 HTTP 与编译器回归，结束后删除该临时库。连接参数为 `COGS_TEST_HOST`、`COGS_TEST_PORT`、`COGS_TEST_USER` 和 `MYSQL_PWD`；测试账号需要临时建库权限。设置 `PHP`、`MARIADB` 可以指定可执行文件。若提供 `COGS_TEST_LEGACY_SCHEMA`（原版 SQL 文件的路径），还会在另一临时库复测旧库升级。已安装 Playwright 时，设置 `COGS_TEST_BROWSER` 为 Chromium 可执行文件路径，可同时运行浏览器用例。

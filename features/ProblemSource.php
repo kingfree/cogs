@@ -1,7 +1,11 @@
 <?php
-// 外站题面规则放在 problem-sources，每站一个文件；例 ProblemSource::draft('poj', 1001)。
+/**
+ * problem/editprob.php 按站点和题号生成可编辑的题面草稿。适配一个新站点时，在 problem-sources/ 增加该站的规则文件。
+ * 例：$draft = ProblemSource::draft('poj', 1001);
+ */
 final class ProblemSource
 {
+    /** 按规则文件名生成来源标识；同一请求中只加载一次规则。 */
     public static function sources(): array
     {
         static $sources;
@@ -11,11 +15,13 @@ final class ProblemSource
         return $sources;
     }
 
+    /** 传入站点标识和题号获得编辑页的初始字段。测试可传入该站 HTML 样本，跳过 HTTP 获取。 */
     public static function draft(string $site, int $id, ?string $html = null): array
     {
         $rule = self::sources()[$site] ?? null;
         if (!$rule || $id < ($rule['minimum'] ?? 1000)) throw new DomainException('题目来源或编号无效。');
         $url = strtr($rule['url'], ['{id}'=>(string)$id, '{volume}'=>(string)intdiv($id, 100)]);
+        // 只从规则文件指定的地址取题，不跟随外站重定向；本地格式测试直接传 HTML。
         if ($html === null) {
             $http = stream_context_create(['http'=>['timeout'=>5, 'follow_location'=>0, 'user_agent'=>'COGS problem import']]);
             $html = @file_get_contents($url, false, $http, 0, 2097153);
@@ -26,6 +32,7 @@ final class ProblemSource
             throw new DomainException('题面解析失败。');
         }
         $xpath = new DOMXPath($dom);
+        // 每站首先验证自己的标题选择器。取不到标题时应让管理员修改规则，不生成空题。
         $title = trim($xpath->query($rule['title'])->item(0)->textContent ?? '');
         if ($title === '') throw new DomainException('来源站点的题面格式已变化。');
         $origin = parse_url($url, PHP_URL_SCHEME).'://'.parse_url($url, PHP_URL_HOST);

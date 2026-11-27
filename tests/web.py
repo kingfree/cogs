@@ -75,6 +75,10 @@ for path in ['/user/privilege.php', '/mail/index.php', '/problem/testdata.php', 
 guest.visit('/user/dologin.php', {'username': 'root', 'password': os.environ['COGS_TEST_LOGIN_PASSWORD']}, csrf=False, status=403)
 admin.login('root')
 user.login('student')
+user.visit('/submit/doeditgrader.php', {'grid':1,'action':'stop'}, status=403)
+admin.visit('/submit/doeditgrader.php', {'grid':1,'action':'stop'}, contains='关闭评测机成功')
+admin.visit('/submit/doeditgrader.php?action=start&grid=1', {}, contains='启动评测机成功')
+admin.visit('/submit/doeditgrader.php', {'grid':999,'action':'start'}, status=404)
 user.visit('/user/privilege.php', {'way':'ins','pri':42,'uid':2}, status=403)
 admin.visit('/user/privilege.php', {'way':'ins','pri':42,'uid':2}, contains='已添加权限')
 user.visit('/problem/editcate.php?action=add', contains='</html>')
@@ -98,8 +102,19 @@ problem = {'probname':"求和 O'Reilly",'filename':'sum','datacnt':1,'timelimit'
 admin.visit('/problem/doeditprob.php?action=add', problem, {'datafile':('tests.zip',data.getvalue())}, contains='题目已保存')
 user.visit('/problem/problem.php?pid=1', contains='计算和')
 user.visit('/problem/doeditprob.php?action=edit&pid=1', problem, status=403)
-user.visit('/problem/addcate.php', {'pid':1,'cname':'算术','memo':'基础'}, contains='成功')
-user.visit('/problem/index.php?caid=1', contains='算术')
+# A category can contain markup-shaped text. Both ordinary users and editors see the exact spelling.
+category_name = '<b>算术</b> & 集合'
+category_memo = """a < b & "x" = 'y'"""
+category_text = '&lt;b&gt;算术&lt;/b&gt; &amp; 集合'
+category_fields = {'pid':1, 'cname':category_name, 'memo':category_memo}
+user.visit('/problem/addcate.php', category_fields, contains=category_text)
+user.visit('/problem/addcate.php', dict(category_fields, memo=''), contains='已经有此分类')
+admin.visit('/problem/doeditcate.php?action=edit&caid=1', category_fields, contains=category_text)
+admin.visit('/problem/doeditcate.php?action=add', {'cname':'<b>几何</b>', 'memo':''}, contains='&lt;b&gt;几何&lt;/b&gt;')
+user.visit('/problem/index.php?caid=1', contains=category_text)
+problem_page = user.visit('/problem/problem.php?pid=1', contains=category_text)
+assert b'title="a &lt; b &amp; &quot;x&quot; = &#039;y&#039;"' in problem_page
+admin.visit('/problem/editcate.php?action=edit&caid=1', contains=category_text)
 admin.visit('/problem/testdata.php?problem=sum', contains='sum1.ans')
 assert admin.visit('/problem/testdata.php?problem=sum&download=sum1.in') == b'12 30\n'
 user.visit('/submit/testdata.php', {'filename':'sum','point':1,'io':'ans'}, status=403)
@@ -134,9 +149,33 @@ user.visit('/contest/submit.php', {'ctid':1,'pid':1,'lang':'c'}, {'file':('sum.c
 admin.visit('/contest/compile.php', {'csid':1,'judger':1}, contains='100!A')
 admin.visit('/contest/report.php?ctid=1', contains='100')
 admin.visit('/contest/comptime.php?ctid=1', contains='求和')
-admin.visit('/contest/export.php?ctid=1', contains='sum.c')
-admin.visit('/contest/doeditcomptime.php?action=edit&ctid=1', round_fields(now-timedelta(days=2),now-timedelta(days=1)), contains='修改比赛场次')
+# Active participants can reopen their own source. A second entrant's code stays private until publication.
+admin.visit('/contest/submit.php', {'ctid':1,'pid':1,'lang':'c'}, {'file':('sum.c',src)}, contains='提交代码成功')
+admin.visit('/contest/submit.php', {'ctid':1,'pid':1,'lang':'cpp'}, {'file':('sum.cpp',src)}, contains='提交代码成功')
+user.visit('/contest/code.php?csid=1', contains='fprintf')
+user.visit('/contest/code.php?csid=2', status=404)
+with zipfile.ZipFile(io.BytesIO(admin.visit('/contest/export.php?ctid=1'))) as exported:
+    assert set(exported.namelist()) == {'1/sum.cpp','2/sum.c'}
+user.visit('/contest/export.php?ctid=1', status=403)
+finished = round_fields(now-timedelta(days=2),now-timedelta(days=1))
+change = '/contest/doeditcomptime.php?action=edit&ctid=1'
+admin.visit(change, finished, contains='修改比赛场次')
 user.visit('/contest/submit.php', {'ctid':1,'pid':1,'lang':'c','endtime':'9999999999'}, {'file':('sum.c',src)}, status=403)
+user.visit('/contest/report.php?ctid=1', contains='100')
+user.visit('/contest/code.php?csid=2', contains='fprintf')
+admin.visit(change, dict(finished, showscore=0), contains='修改比赛场次')
+user.visit('/contest/report.php?ctid=1', status=404)
+user.visit('/contest/code.php?csid=2', status=404)
+own_code = user.visit('/contest/code.php?csid=1', contains='未公布')
+assert b'fprintf' in own_code and b'<td>100</td>' not in own_code
+own_problem = user.visit('/contest/problem.php?ctid=1&pid=1&uid=1', contains='未公布')
+assert b'code.php?csid=2' not in own_problem and b'<td>100</td>' not in own_problem
+for inaccessible in (dict(finished, group=2), round_fields(now+timedelta(days=1),now+timedelta(days=2))):
+    admin.visit(change, inaccessible, contains='修改比赛场次')
+    for path in ['/contest/report.php?ctid=1','/contest/code.php?csid=1','/contest/problem.php?ctid=1']:
+        user.visit(path, status=404)
+    admin.visit('/contest/code.php?csid=1', contains='fprintf')
+admin.visit(change, finished, contains='修改比赛场次')
 admin.visit('/admin/gen_acrank.php', {}, contains='计算完成')
 admin.visit('/admin/dobackup.php', {'backtype':'usercode','filename':'daily'}, contains='备份已保存')
 admin.visit('/admin/dobackup.php', {'backtype':'showback'}, contains='.tar.gz')
@@ -156,11 +195,57 @@ for route in ['/','/page/index.php','/docs/map.php','/problem/comments.php?show=
     body = user.visit(route)
     assert '组内集训讲义'.encode() not in body and '组内讲义留言'.encode() not in body, route
 private = dict(problem, filename='private-case', probname='组内练习题', group=2)
-admin.visit('/problem/doeditprob.php?action=add', private, contains='题目已保存')
+private_tests = io.BytesIO()
+with zipfile.ZipFile(private_tests, 'w') as archive:
+    archive.writestr('private-case1.in', '12 30\n')
+    archive.writestr('private-case1.ans', '42\n')
+admin.visit('/problem/doeditprob.php?action=add', private, {'datafile':('group.zip',private_tests.getvalue())}, contains='题目已保存')
 user.visit('/problem/problem.php?pid=3', status=404)
 user.visit('/submit/run.php', {'pid':3,'lang':'c','judger':1}, {'file':('sum.c',src)}, status=404)
 for route in ['/problem/index.php','/docs/map.php','/']:
     assert '组内练习题'.encode() not in user.visit(route), route
+# Join the group, share one program, then leave: visibility must follow the current group at every entry point.
+private_source = src.replace(b'sum.', b'private-case.') + b'\n/* group_submission_fixture */'
+private_file = {'file':('private-case.c',private_source)}
+admin.visit('/submit/run.php', {'pid':3,'lang':'c','judger':1}, private_file, contains='通过了全部测试点')
+profile = {'nickname':'student','readforce':0,'email':'student@example.org','memo':'','realname':'student'}
+admin.visit('/user/doedituser.php?action=edit&uid=2', dict(profile, gbelong=2), contains='编辑用户成功')
+user.visit('/submit/code.php?id=2', contains='您没有权限查看代码')
+admin.visit('/user/privilege.php', {'way':'ins','pri':45,'uid':2}, contains='已添加权限')
+user.visit('/user/export.php?uid=1', status=404)
+admin.visit('/user/privilege.php', {'way':'del','pri':45,'uid':2}, contains='已删除权限')
+admin.visit('/problem/sendcomments.php', {'pid':3,'detail':'组内代码分享','showcode':1}, contains='发表评论成功')
+user.visit('/submit/code.php?id=2', contains='group_submission_fixture')
+user.visit('/submit/run.php', {'pid':3,'lang':'c','judger':1}, private_file, contains='通过了全部测试点')
+user.visit('/submit/code.php', contains='group_submission_fixture')
+# Removing the share leaves the legitimate solved-question permission in effect while the reader stays in the group.
+admin.visit('/problem/sendcomments.php', {'cid':3,'detail':'组内解题记录','showcode':0}, contains='发表评论成功')
+user.visit('/submit/code.php?id=2', contains='group_submission_fixture')
+with zipfile.ZipFile(io.BytesIO(user.visit('/user/export.php?uid=2'))) as archive:
+    assert private_source in [archive.read(f) for f in archive.namelist()]
+# Older graders kept the participant's output in the source directory.
+(root/'source/2/private-case1.out').write_bytes(b'42\n')
+old_output = '/submit/downloaddata.php?' + urllib.parse.urlencode({'id':base64.b64encode(b'private-case?out?1')})
+assert user.visit(old_output) == b'42\n'
+admin.visit('/user/doedituser.php?action=edit&uid=2', dict(profile, gbelong=1), contains='编辑用户成功')
+user.visit(old_output, status=404)
+# Read-code and view-user grants still respect the question's group, even for shared or previously solved code.
+for privilege in (21, 45):
+    admin.visit('/user/privilege.php', {'way':'ins','pri':privilege,'uid':2}, contains='已添加权限')
+for sid in (2, 3, 999999):
+    assert user.visit('/submit/code.php?id='+str(sid), status=404) == '提交记录不存在。'.encode()
+for route in ['/','/submit/index.php','/submit/index.php?pid=3&display=ac','/user/detail.php?uid=1','/user/detail.php?uid=2']:
+    assert '组内练习题'.encode() not in user.visit(route), route
+assert b'group_submission_fixture' not in user.visit('/submit/code.php', contains='fprintf')
+with zipfile.ZipFile(io.BytesIO(user.visit('/user/export.php?uid=2'))) as archive:
+    assert [archive.read(f) for f in archive.namelist()] == [src]
+user.visit('/user/export.php?uid=1', status=404)
+admin.visit('/submit/index.php?pid=3', contains='组内练习题')
+admin.visit('/submit/code.php?id=3', contains='group_submission_fixture')
+with zipfile.ZipFile(io.BytesIO(admin.visit('/user/export.php?uid=2'))) as archive:
+    assert private_source in [archive.read(f) for f in archive.namelist()]
+for privilege in (21, 45):
+    admin.visit('/user/privilege.php', {'way':'del','pri':privilege,'uid':2}, contains='已删除权限')
 # A synthetic image and Pascal checker must survive export and re-import with their original mode.
 sample_png = 'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAusB9WD1+sAAAAAASUVORK5CYII='
 upload = '/include/upload_json.inc.php?dir=image'

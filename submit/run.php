@@ -1,4 +1,5 @@
 <?php
+// 普通提交和重判的网页入口。题目表单提供 pid、lang 和 file；资源限制、评测方式和重判源码由本站记录决定。
 require_once("../include/header.php");
 gethead(0, '普通用户', '');
 requirePost();
@@ -23,6 +24,7 @@ $info['compiledir']=$SET['dir_source'];
 $info['mode']="normal";
 if ($_POST['testmode']=='1' && Privilege::allows('测试题目'))
 	$info['mode']="test";
+// 重判复用原作者和已保存源码，表单中的语言、用户不能覆盖数据库记录。
 if (!empty($_POST['rejudge'])) {
     if (!Privilege::allows('管理评测')) { http_response_code(403); exit; }
 	$info['rejudge']=1;

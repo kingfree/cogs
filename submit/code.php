@@ -1,18 +1,10 @@
 <?php
-require_once("../include/header.php");
-$uid = (int) $_SESSION['ID'];
-$sid = (int) $_GET['id'];
-if(!$sid) {
-    $pRows = Submission::lastId();
-    $d=($pRows[0] ?? false);
-    $sid = $d['sid'];
-}
-$pRows = Submission::withAuthor($sid);
-$cnt = count($pRows);
-if($cnt) {
-    $d=($pRows[0] ?? false);
-
-} else 异常("提交记录不存在");
+// GET /submit/code.php?id=42 显示可读的评测结果。省略 id 时显示当前读者能看的最新记录。
+require_once __DIR__.'/../include/header.php';
+$sid = (int)($_GET['id'] ?? 0);
+$d = Submission::forReader($sid ?: null);
+if (!$d) { http_response_code(404); exit('提交记录不存在。'); }
+$sid = (int)$d['sid'];
 gethead(1,"","{$d['probname']} - {$d['nickname']} - {$sid}", $d['uid']);
 require_once __DIR__.'/../include/hlighter.inc.php';
 ?>
@@ -76,28 +68,9 @@ require_once __DIR__.'/../include/hlighter.inc.php';
 </tr>
 </table>
 <?php
-if(Privilege::allows('查看代码') || $d['uid']==$uid)
-    $forcetocode=1;
-else {
-    $pRows = Comment::codeSharing($d['uid'], $d['pid']);
-    $cnt = count($pRows);
-    if ($cnt) {
-        $f=($pRows[0] ?? false);
-        $forcetocode=$f['showcode'];
-    }
-
-    if(!$forcetocode) {
-        $pRows = Submission::solved($uid, $d['pid']);
-        $cnt = count($pRows);
-        if ($cnt) {
-            $f=($pRows[0] ?? false);
-            $forcetocode=$f['accepted'];
-        }
-    }
-}
-if ($forcetocode) {
-    $path = rtrim($SET['dir_source'], '/').'/'.(int)$d['uid'].'/'.basename($d['srcname']);
-    $code = is_file($path) && !is_link($path) && $d['lang'] != 3 ? file_get_contents($path) : '';
+if ($d['can_read_source']) {
+    $path = Submission::sourcePath($SET['dir_source'], (int)$d['uid'], $d['srcname']);
+    $code = $path !== null && $d['lang'] != 3 ? file_get_contents($path) : '';
     if (!mb_check_encoding($code, 'UTF-8')) $code = mb_convert_encoding($code, 'UTF-8', 'GBK');
     if($d['lang']==0) $langstr="pascal";
     else if($d['lang']==1) $langstr="c";

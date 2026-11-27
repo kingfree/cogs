@@ -1,4 +1,4 @@
-</div>
+<?php /** 页头已打开页面容器时，用 include_once __DIR__."/../include/footer.php"; 关闭它并输出站点公告与快捷键。 */ ?></div>
 
 
 

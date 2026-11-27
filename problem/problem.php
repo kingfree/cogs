@@ -1,4 +1,5 @@
 <?php
+// 普通题面。打开 problem/problem.php?pid=1 可查看当前账号能读的题目、标签和提交入口。
 require_once("../include/header.php");
 $uid = (int) $_SESSION['ID'];
 $pid = (int) $_GET['pid'];
@@ -9,7 +10,7 @@ require_once __DIR__.'/../include/hlighter.inc.php';
 require_once __DIR__.'/../include/mathjax.inc.php';
 $myBest = $uid ? (Submission::best($pid, $uid)[0] ?? null) : null;
 $author = Account::realName($d['addid']);
-$labels = Category::labels($_GET['pid']);
+$labels = Category::labels($pid);
 $judges = Judge::enabled();
 $leaders = Submission::leaders($pid, $SET['style_single_ranksize']);
 $comments = Comment::recentForProblem($d['pid']);
@@ -65,13 +66,12 @@ if ($myBest) {
 } ?>
 </td></tr>
 <tr><th id="fenleito" title="单击以显示或隐藏分类标签" style="cursor:pointer">分类标签</th>
-<td><div id="fenlei"><?php
-$rRows = $labels;
-$cnt2 = count($rRows);
-for ($i=0;$i<=$cnt2-1;$i++) {
-    $e=($rRows[$i] ?? false);
-    HTML(" <a href='index.php?caid={$e['caid']}' target='_blank' title='{$e['memo']}' class='btn btn-mini'>{$e['cname']}</a> ");
-} ?>
+<td><div id="fenlei">
+<?php
+// 分类可由普通用户填写。名称放进链接正文，说明放进 title，两处都在输出时转义。
+foreach ($labels as $label) { ?>
+<a href="index.php?caid=<?=(int)$label['caid']?>" target="_blank" title="<?=h($label['memo'])?>" class="btn btn-mini"><?=h($label['cname'])?></a>
+<?php } ?>
 <?php  if(!$acpid) { ?>
 <script>
   $('#fenlei').hide();

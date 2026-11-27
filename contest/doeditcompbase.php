@@ -1,4 +1,5 @@
 <?php
+// 处理 editcompbase.php 的 POST，将所选题号按表单顺序存入可复用题单。
 require_once("../include/header.php");
 gethead(8,"修改比赛","");
 requirePost();

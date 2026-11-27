@@ -1,4 +1,6 @@
 <?php
+// 打包下载指定题目的测试输入。提交答案类题目对满足分组和阅读等级的登录用户开放。
+// problem/downinput.php?file=sum 按题目登记的测试点数收集 sum1.in 等输入文件。
 require_once __DIR__.'/../include/header.php';
 gethead(0, '普通用户', '');
 $name = $_GET['file'] ?? '';

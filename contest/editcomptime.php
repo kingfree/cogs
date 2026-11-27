@@ -1,4 +1,5 @@
 <?php
+// 由 contest/editcomptime.php?action=add 打开排期表单；选定已有题单后可单独指定本场时间和参赛分组。
 require_once("../include/header.php");
 gethead(1,"修改比赛","修改比赛场次");
 $contests = Contest::choices();

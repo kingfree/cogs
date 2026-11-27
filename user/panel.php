@@ -1,4 +1,5 @@
 <?php
+// 登录后访问 user/panel.php 编辑自己的资料、主题、密码和找回问题；各项操作 POST 到 doedit.php。
 require_once("../include/header.php");
 gethead(1,"sess","控制面板");
 $accounts = Account::byId($_SESSION['ID']);

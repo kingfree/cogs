@@ -1,4 +1,6 @@
 <?php
+// 保存题目、标签和上传的数据包。普通用户可投稿，启用题目和上传特殊判题器需要修改题目权限。
+// 从 problem/editprob.php?action=edit&pid=1 提交表单；变更开放状态使用 action=change。
 require_once __DIR__.'/../include/header.php';
 gethead(0, '普通用户', '');
 requirePost();

@@ -1,7 +1,8 @@
 <?php
+// GET /submit/index.php?pid=42 显示可读题目的提交。筛选和分页之前先应用题目阅读权限。
 require_once("../include/header.php");
 $mySubmissions = Submission::bestByProblem($_SESSION['ID']);
-gethead(1,"","记录列表", $_GET['uid']);
+gethead(1,"","记录列表", (int)($_GET['uid'] ?? 0));
 
 ?>
 <div class='row-fluid'>
@@ -24,7 +25,7 @@ gethead(1,"","记录列表", $_GET['uid']);
 </form>
 <?php
 $limit = empty($_GET['show']) && empty($_GET['pid']) ? max(1, intdiv($SET['style_pagesize'], 2)) : null;
-$submissions = Submission::search($_SESSION['readforce'], ($_GET['display'] ?? '') === 'ac', $_GET['uid'] ?? 0, $_GET['pid'] ?? 0, $limit);
+$submissions = Submission::search(($_GET['display'] ?? '') === 'ac', $_GET['uid'] ?? 0, $_GET['pid'] ?? 0, $limit);
 $cnt = count($submissions);
 $totalpage=(int)(($cnt-1)/$SET['style_pagesize'])+1;
 if(!$_GET['page']) {
@@ -63,7 +64,7 @@ for ($i=$st;$i<$cnt && $i<$st+$SET['style_pagesize'] ;$i++) {
     echo "<a href='../problem/problem.php?pid={$d['pid']}' target='_blank'>".shortname($d['probname'])."</a>";
 ?></td>
 <td><a href='../user/detail.php?uid=<?=$d['uid']?>' target='_blank'><?=gravatar::showImage($d['email']);?></a>
-<?php echo "<a href='?uid={$d['uid']}&pid={$_GET['pid']}'>";
+<?php echo "<a href='?uid={$d['uid']}&pid=".(int)($_GET['pid'] ?? 0)."'>";
 if(Privilege::allows("查看用户")) echo h($d['realname']); else echo h($d['nickname']);
 echo "</a>"; ?></td>
 <td class='wrap'><a href='code.php?id=<?=$d['sid']?>'><?=评测结果($d['result'], 20)?></a></td>

@@ -1,4 +1,5 @@
 <?php
+// 从 comptime.php POST 选定交卷编号；页面依次调用 compile.php，将每份评测结果更新到对应行。
 require_once("../include/header.php");
 gethead(1,"查看比赛","比赛评测");
 requirePost();

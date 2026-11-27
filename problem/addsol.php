@@ -1,4 +1,6 @@
 <?php
+// 将题解链接作为讨论发到可读的题目下。
+// 向 problem/addsol.php 提交 pid=1、title、HTTP(S) 地址 link，以及登录会话的 form_token。
 require_once("../include/header.php");
 gethead(8, "sess", "");
 requirePost();

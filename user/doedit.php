@@ -1,4 +1,5 @@
 <?php
+// 接收 user/panel.php 的 POST。edit 保存个人资料，editpwd 改密码，editpwdans 改找回答案；三者均针对当前登录账号。
 require_once __DIR__.'/../include/header.php';
 gethead(0, '普通用户', '');
 requirePost();
@@ -24,6 +25,7 @@ if ($action === 'edit') {
         $image = imagecreatefromstring(file_get_contents($file['tmp_name']));
         $dir = dirname(__DIR__).'/images/background';
         if (!is_dir($dir)) mkdir($dir, 0750, true);
+        // 背景图先解码再写入临时 PNG，新图完整写入后替换旧图。
         $temp = tempnam($dir, '.background-');
         try {
             if (!$image || !imagepng($image, $temp) || !rename($temp, "$dir/$uid.png")) i异常('背景图片保存失败。', $return);
@@ -34,6 +36,7 @@ if ($action === 'edit') {
     i提示('个人资料已保存。', $return);
     exit;
 }
+// 变更密码或找回问题前再次核对旧密码。
 $user = Account::credentials($uid)[0] ?? null;
 if (!$user || !Password::verify($_POST['opwd'] ?? '', $user['pwdhash'])) i异常('旧密码不正确。', $return);
 try {
@@ -42,6 +45,7 @@ try {
         if ($new !== ($_POST['npwd2'] ?? null)) i异常('两次输入的密码不一致。', $return);
         $hash = Password::hash($new);
         Account::changePassword($hash, $uid);
+        // 已核验旧密码的当前会话改用新版本；其他会话下次载入仍会看到版本变化。
         $_SESSION['password_version'] = hash('sha256', $hash);
         Login::forget();
         session_regenerate_id(true);

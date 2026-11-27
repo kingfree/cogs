@@ -1,5 +1,6 @@
 <?php
 // 特判器单独运行。选手程序从未挂载判题器、标准答案或其他测试点。
+// testcase.php 提供单点的输入、标准答案和实际输出。返回 0～1 的得分，由网页端换算为整题分数。
 function checkAnswer(string $data, string $input, string $answer, string $output, string $dir, int $type): float
 {
     if ($type === 2) return (float)(hash_file('sha256', $answer) === hash_file('sha256', $output));
@@ -30,6 +31,7 @@ function checkAnswer(string $data, string $input, string $answer, string $output
             copy($output, "$dir/$name.out");
             $args = $kind === 'spj' ? ['./checker','input','output','answer'] : ['./checker','100','answer'];
             $result = Sandbox::run($args, $dir, 5000, 256);
+            // SPJ 通过退出码给百分分；CENA 成功退出后从 score.log 读同一单位。
             if ($kind === 'spj') $score = $result['status'];
             else $score = $result['status'] === 0 && is_file("$dir/score.log") && !is_link("$dir/score.log")
                 ? (int)file_get_contents("$dir/score.log", false, null, 0, 16) : -1;

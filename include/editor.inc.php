@@ -1,4 +1,8 @@
 <?php
+/**
+ * 在表单的 textarea 上初始化 KindEditor。上传请求沿用当前会话的 CSRF 令牌，和普通表单使用同一次校验。
+ * 例：renderEditor('detail');  // 对应 id 为 detail 的 textarea。
+ */
 function renderEditor($edname) {
 $SH=路径("include/");
 $SS=路径("style/");

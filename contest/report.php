@@ -1,20 +1,13 @@
 <?php
+// 访问 contest/report.php?ctid=1 查看成绩；先检查场次开始时间和公布标志，再按题单顺序生成成绩表。
 require_once("../include/header.php");
-gethead(1,"","比赛成绩");
-
-$rounds = ContestRound::scoreboardRules($_GET['ctid']);
-$cnt = count($rounds);
-if (!$cnt)
-    异常("未查询到记录！");
-$d=($rounds[0] ?? false);
-if (!$d['showscore'] && !Privilege::allows('查看比赛'))
-    异常("成绩还未公布！");
-if(time() < $d['starttime'] && !Privilege::allows('查看比赛'))
-    异常("比赛尚未开始，不能查看关于题目的任何信息！");
-$end = time() > $d['endtime'];
-$pbs = array_filter(explode(':', $d['contains']));
-$problems = array_column(Problem::selected($pbs), null, 'pid');
-$entrants = ContestEntry::roundResults($_GET['ctid']);
+$ctid = (int)($_GET['ctid'] ?? 0);
+$round = ContestRound::forReader($ctid);
+if (!$round || !$round['scoresVisible']) { http_response_code(404); exit('比赛成绩不存在或未公布。'); }
+gethead(1, '', '比赛成绩');
+$pbs = array_keys($round['problems']);
+$entrants = ContestEntry::roundResults($ctid, $pbs);
+$mbarray = [];
 ?>
 <div class='row-fluid'>
 <table id="contest_report" class='table table-striped table-condensed table-bordered fiexd'>
@@ -28,11 +21,10 @@ $entrants = ContestEntry::roundResults($_GET['ctid']);
         $v=(int)$v;
         $mbarray[$v]['score']=0;
         $mbarray[$v]['result']="N";
-        $d = $problems[$v] ?? [];
         $cnt_prob++;
 ?>
-    <th><a href="problem.php?pid=<?=$v?>&ctid=<?=h($_GET['ctid'] ?? '')?>" target="_blank"><?=shortname($d['probname'])?></a>
-    <?php  if($end || Privilege::allows('查看比赛')) { ?><a href="../problem/problem.php?pid=<?=$v?>" target="_blank" title="跳转到题目 <?=h($d['probname'])?>"><i class='icon-share'></i></a><?php  } ?>
+    <th><a href="problem.php?pid=<?=$v?>&ctid=<?=h($_GET['ctid'] ?? '')?>" target="_blank"><?=shortname($round['problems'][$v])?></a>
+    <?php  if($round['otherEntriesVisible']) { ?><a href="../problem/problem.php?pid=<?=$v?>" target="_blank" title="跳转到题目 <?=h($round['problems'][$v])?>"><i class='icon-share'></i></a><?php  } ?>
     </th>
     <th onclick="sortTable('contest_report', <?=$cnt_prob*2+1?>, 'int')" style="min-width: 5ex; cursor: pointer; color:navy;">得分</th>
 <?php
@@ -63,19 +55,19 @@ $entrants = ContestEntry::roundResults($_GET['ctid']);
     if($rank[$v]['result'] =="N")
         评测信息($rank[$v]['result']);
     else {
-        if((Privilege::allows('查看比赛') || $end))
+        if($round['otherEntriesVisible'])
             echo "<a href='code.php?csid={$rank[$v]['csid']}'>";
         if($rank[$v]['result'] == "") echo "未评测";
-        else if((Privilege::allows('查看比赛') || $end)) 评测结果($rank[$v]['result'], 30);
+        else if($round['otherEntriesVisible']) 评测结果($rank[$v]['result'], 30);
         else echo "不显示";
-        if((Privilege::allows('查看比赛') || $end))
+        if($round['otherEntriesVisible'])
             echo "</a>";
     } ?></td>
-    <td id="score<?=$v ?>_<?=$rowcnt ?>" ><?php if($end || (Privilege::allows('查看比赛'))) echo $rank[$v]['score']; ?></td>
+    <td id="score<?=$v ?>_<?=$rowcnt ?>" ><?php if($round['otherEntriesVisible']) echo $rank[$v]['score']; ?></td>
 <?php
         }
 ?>
-    <td id="sum<?=$rowcnt ?>" ><?php if($end || (Privilege::allows('查看比赛'))) echo $sum; ?></td>
+    <td id="sum<?=$rowcnt ?>" ><?php if($round['otherEntriesVisible']) echo $sum; ?></td>
   </tr>
 <?php
     }

@@ -1,4 +1,5 @@
 <?php
+// 接收 contest/judge.php 发来的表单令牌和 csid，评测一份交卷，响应中的感叹号分隔得分与逐点结果。
 require_once("../include/header.php");
 gethead(0,"查看比赛","");
 requirePost();

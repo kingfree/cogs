@@ -1,4 +1,5 @@
 <?php
+// 处理文章编辑表单。POST action=edit、aid、正文和会话令牌修改现有文章；写入权限在分派操作前检查。
 require_once("../include/header.php");
 gethead(8, "修改页面", "");
 requirePost();

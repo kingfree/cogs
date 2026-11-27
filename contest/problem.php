@@ -1,61 +1,14 @@
 <?php
+// 从 contest/problem.php?ctid=1 进入场次；未给 pid 时按赛题顺序显示当前读者可见的第一题。
 require_once("../include/header.php");
-$uid = (int) ($_GET['uid'] ? $_GET['uid'] : $_SESSION['ID']);
-$pid = (int) $_GET['pid'];
-$ctid = (int) $_GET['ctid'];
-if(!$pid && $ctid) {
-    $pRows = ContestRound::overview($ctid);
-    $cnt = count($pRows);
-    if ($cnt) {
-        $d=($pRows[0] ?? false);
-        $contains=$d['contains'];
-    } else i异常("未查询到记录！",取路径("contest/index.php"));
-    if (time()<$d['starttime'] && !Privilege::allows('查看比赛'))
-        i异常("比赛还未开始，题目暂不公布。",取路径("contest/index.php"));
-    else {
-        $pbs=explode(":",$contains);
-        $pid=(int) $pbs[0];
-    }
-}
-$pRows = Problem::byId($pid);
-$cnt = count($pRows);
-if ($cnt) {
-    $d=($pRows[0] ?? false);
-    $rounds = ContestRound::rules($ctid);
-    $c = count($rounds);
-    $e=($rounds[0] ?? false);
-
-    $subgroup=UserGroup::descendants($e['gid']);
-    $subgroup[]=$e['gid'];
-    $promise=false;
-    foreach($subgroup as $value) {
-        if ($value==(int)$_SESSION['group']) {
-            $promise=true;
-            break;
-        }
-    }
-    if (!$promise && !Privilege::allows('查看比赛'))
-        i异常("你没有权限访问该页面！",取路径("contest/index.php"));
-    if (!$c)
-        i异常("比赛场次不存在！",取路径("contest/index.php"));
-    $pbs=explode(":",$e['contains']);
-    $pb=0;
-    foreach($pbs as $k=>$v) {
-        if ($v==$pid)
-            $pb=1;
-    }
-    if (!$pb) { http_response_code(404); exit('本场比赛没有这道题。'); }
-    if (!Privilege::allows('查看比赛')) {
-        if (time()<$e['starttime'])
-            i异常("比赛尚未开始！",取路径("contest/index.php"));
-        if ($d['readforce']>$_SESSION['readforce'])
-            i异常("你没有该场比赛的参与权限！",取路径("contest/index.php"));
-        if($_SESSION['ID'] != $_GET['uid'] && time()<$e['endtime'])
-            $uid = $_SESSION['ID'];
-    }
-} else i异常("未查询到记录！",取路径("contest/index.php"));
-$problemTitles = array_column(Problem::selected($pbs), null, 'pid');
-$myEntries = array_column(ContestEntry::byEntrant($uid, $ctid), null, 'pid');
+$ctid = (int)($_GET['ctid'] ?? 0);
+$e = ContestRound::forReader($ctid);
+if (!$e) { http_response_code(404); exit('场次不存在或未开放。'); }
+$pid = (int)($_GET['pid'] ?? array_key_first($e['problems']));
+if (!isset($e['problems'][$pid])) { http_response_code(404); exit('本场比赛没有这道可读题目。'); }
+$d = Problem::byId($pid)[0];
+$uid = (int)$_SESSION['ID'];
+if ($e['otherEntriesVisible'] && !empty($_GET['uid'])) $uid = (int)$_GET['uid'];
 gethead(1,"","{$e['cname']} - {$d['pid']}. {$d['probname']}");
 require_once __DIR__.'/../include/mathjax.inc.php';
 ?>
@@ -73,7 +26,7 @@ require_once __DIR__.'/../include/mathjax.inc.php';
 if (time()>$e['endtime']) echo "<span class='did'>已结束</span>"; else
 if (time()<$e['endtime'] && time()>$e['starttime']) echo "<a href='contest/problem.php?ctid={$e['ctid']}'><span class='doing'>正在进行...</span></a>"; else
 echo "<span class='todo'>还未开始</span>";
-if(Privilege::allows('查看比赛') || time()>$e['endtime']) echo "<a href='report.php?ctid={$ctid}' target='_blank' class='pull-right'>比赛成绩</a>";
+if($e['scoresVisible']) echo "<a href='report.php?ctid={$ctid}' target='_blank' class='pull-right'>比赛成绩</a>";
 ?></td>
 </tr>
 <tr>
@@ -127,7 +80,7 @@ if(Privilege::allows('查看比赛') || time()>$e['endtime']) echo "<a href='rep
 </td></form></tr>
 <?php  } ?>
 </table>
-<?php  if (time()>$e['endtime']) { ?>
+<?php  if ($e['otherEntriesVisible'] && time()>$e['endtime']) { ?>
 <table class='table table-striped table-condensed table-bordered fiexd'>
 <tr>
 <th>用户</th>
@@ -168,9 +121,9 @@ if($cnt) {
 <tr><th>提交时间</th>
 <td><?=date('Y-m-d H:i:s',$f['subtime']);?></td></tr>
 <tr><th>评测得分</th>
-<td><?=$f['score']; ?></td></tr>
+<td><?=$e['scoresVisible'] ? $f['score'] : '未公布'?></td></tr>
 <tr><th>评测结果</th>
-<td class="wrap"><?=评测结果($f['result'], 60); ?></td></tr>
+<td class="wrap"><?php if ($e['scoresVisible']) 评测结果($f['result'], 60); else echo '未公布'; ?></td></tr>
 <tr><th>提交代码</th>
 <td><a href="code.php?csid=<?=$f['csid'] ?>" target="_blank"><?=$STR['lang'][$f['lang']] ?></a></td></tr>
 </table>
@@ -182,15 +135,8 @@ if($cnt) {
 <div class='tabbable'>
 <ul class='nav nav-tabs'>
 <?php
-    $contains=$e['contains'];
-    $pbs=explode(":",$contains);
     $ppid = 1;
-    foreach($pbs as $k=>$v) {
-        $f = $problemTitles[$v] ?? null;
-        $pname=$f['probname'];
-        $entries = isset($myEntries[$v]) ? [$myEntries[$v]] : [];
-        $cnt = count($entries);
-        if($cnt) $f=($entries[0] ?? false);
+    foreach ($e['problems'] as $v => $pname) {
 ?>
 <li class="<?=($v == $pid)?"active":""?>">
 <a href="problem.php?pid=<?=$v?>&ctid=<?=$ctid?>&uid=<?=$uid?>">

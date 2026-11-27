@@ -1,6 +1,11 @@
 <?php
+/**
+ * 所有普通网页从这里加载站点环境，再调用 gethead 检查入口权限。下载文件或 JSON 响应必须先检查权限，再输出响应头。
+ * 例：gethead(0, '查看数据', '');  // 只检查权限，不输出页面。
+ */
 require_once __DIR__.'/bootstrap.php';
 
+/** $check 是所需权限；$head 为 0 时仅校验访问，为 8 时输出无导航的提示页页头。 */
 function gethead($head,$check,$title,$userid=0) {
     global $SET, $cfg;
     $aliases = ['sess'=>'普通用户', 'admin'=>'管理用户', 'advadmin'=>'超级用户'];

@@ -1,5 +1,6 @@
 <?php
 // 每个测试点都有独立工作目录；一次重测不会读取上次遗留的输出。
+// grade 从 1 开始。返回的 score 为 0 到 1；缺输入、缺标准答案和选手没写输出分别报告。
 function gradeCase(array $request, string $workspace, string $dataRoot): array
 {
     $name = $request['pname'];

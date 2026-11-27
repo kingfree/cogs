@@ -1,3 +1,4 @@
+// 表头调用 sortTable("problist", 0, "int") 重排当前页的行；同一列再次点击时反转顺序。
 //table sort from http://dennis-zane.javaeye.com/blog/58864
 //类型转换器，将列的字段类型转换为可以排序的类型：String,int,float
 function convert(sValue, sDataType) {

@@ -1,4 +1,6 @@
 <?php
+// 显示题目的名称、题面、评测参数和数据包表单，可从外站题面生成初稿。
+// problem/editprob.php?action=add 新建；?action=edit&pid=1 载入已有题目。
 require_once("../include/header.php");
 $uid = (int) $_SESSION['ID'];
 if($pid = (int) $_GET['pid'])

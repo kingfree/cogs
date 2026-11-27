@@ -1,4 +1,8 @@
 <?php
+/**
+ * 网页展示判题语言、状态与评测方式时读取 $STR。语言名称的下标沿用评测协议里的编号。
+ * 例：$label = $STR['lang'][1];  // C。
+ */
 global $STR;
 
 $STR['lang'] = array_column(Language::TYPES, 1);

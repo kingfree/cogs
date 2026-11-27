@@ -1,4 +1,5 @@
 <?php
+// 访问 user/lost.php 开始找回密码。先 POST 用户名获取提示问题，再向同一地址提交用户名和答案。
 require_once("../include/header.php");
 gethead(1,"","找回密码");
 if (empty($_POST['User'])&&empty($_POST['ans'])) {
@@ -42,6 +43,7 @@ echo h($d['pwdtipques']).'?';
 } else {
 $d = Account::recoveryAnswer($_POST['User'])[0] ?? false;
 if ($d && Password::verify($_POST['ans'], $d['pwdtipanshash'])) {
+// 给答对问题的用户发随机临时密码；登录后可在控制面板自行修改。
 $temporary = bin2hex(random_bytes(12));
 Account::resetPassword(Password::hash($temporary), $_POST['User']);
 header('Cache-Control: no-store');

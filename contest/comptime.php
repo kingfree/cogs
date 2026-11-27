@@ -1,4 +1,5 @@
 <?php
+// 管理员从 contest/comptime.php?ctid=1 选择待评交卷；这里的编号代表具体开赛场次。
 require_once("../include/header.php");
 gethead(1,"查看比赛","比赛场次评测");
 $rounds = ContestRound::withGroup($_GET['ctid']);

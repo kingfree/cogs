@@ -1,4 +1,6 @@
 <?php
+// 显示当前读者可访问的题库，按分类、关键字或难度筛选。
+// problem/index.php?caid=1&key=sum 会在指定分类里查找匹配的题目。
 require_once("../include/header.php");
 $mySubmissions = Submission::bestByProblem($_SESSION['ID']);
 if ($_GET['caid']) {

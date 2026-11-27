@@ -1,4 +1,6 @@
 <?php
+// 提供 FPS 题包上传表单。需要修改题目权限，由导入入口读取上传的 XML。
+// 打开 problem/problem_import.php，选取 FPS XML 文件后提交。
 require_once __DIR__.'/../include/header.php';
 gethead(1, '修改题目', '导入题目');
 ?>

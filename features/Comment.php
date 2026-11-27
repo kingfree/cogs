@@ -1,7 +1,11 @@
 <?php
-// 题目和页面讨论。例如 Comment::byId(1)。
+/**
+ * 题目和文章共用评论表，pid 指向题目，aid 指向文章。讨论列表按读者能查看的原文筛选。
+ * 例：$comments = Comment::search('', 1, 0, 0, null);  // 阅读 1 号题的讨论。
+ */
 final class Comment
 {
+    /** 把题解发布为题目评论，默认不开放提交代码。 */
     public static function addSolution($problemId, $author, $detail, $time)
     {
         return Database::execute(
@@ -10,6 +14,7 @@ final class Comment
         );
     }
 
+    /** 读取待编辑的评论；修改入口还须核对其作者和原文的可见性。 */
     public static function byId($id)
     {
         return Database::rows(
@@ -18,6 +23,7 @@ final class Comment
         );
     }
 
+    /** 在已确认可读的题目详情内，按楼层顺序列出讨论和各作者最近提交的编号。 */
     public static function recentForProblem($problemId)
     {
         return Database::rows(
@@ -29,6 +35,7 @@ final class Comment
         );
     }
 
+    /** 按评论号和作者同时匹配，其他用户的评论不会被更新。 */
     public static function edit($detail, $time, $shareCode, $id, $author)
     {
         return Database::execute(
@@ -37,6 +44,7 @@ final class Comment
         );
     }
 
+    /** 创建题目讨论，可由作者选择是否分享此题的代码。 */
     public static function onProblem($problemId, $author, $detail, $time, $shareCode)
     {
         return Database::execute(
@@ -45,6 +53,7 @@ final class Comment
         );
     }
 
+    /** 把文章评论关联到 aid，调用入口需先确认该读者可以打开文章。 */
     public static function onPage($pageId, $author, $detail, $time, $shareCode)
     {
         return Database::execute(
@@ -53,16 +62,10 @@ final class Comment
         );
     }
 
-    public static function codeSharing($userId, $problemId)
-    {
-        return Database::rows(
-            "SELECT showcode FROM comments WHERE uid=? AND pid=? ORDER BY showcode DESC LIMIT 1",
-            [$userId, $problemId]
-        );
-    }
-
+    /** 全站、文章与题目讨论共用此入口。筛选顺序为题号、文章号、作者，limit 为 null 时不截断。 */
     public static function search($key, $problemId, $pageId, $userId, $limit)
     {
+        // 评论属于题目或文章，跨全站搜索时也要把所属原文的阅读条件加到查询中。
         [$problemScope, $problemValues] = Problem::visibility();
         [$pageScope, $pageValues] = Page::visibility();
         $sql = "SELECT c.*, (SELECT s.sid FROM submit s WHERE s.pid=c.pid AND s.uid=c.uid ORDER BY s.subtime DESC, s.sid DESC LIMIT 1) AS latest_sid, (SELECT s.result FROM submit s WHERE s.pid=c.pid AND s.uid=c.uid ORDER BY s.subtime DESC, s.sid DESC LIMIT 1) AS latest_result, u.nickname, u.realname, u.email, u.accepted, u.submited, u.grade, u.memo
@@ -81,6 +84,7 @@ final class Comment
                 break;
             }
         }
+        // 文章内按楼层编号读对话；全站列表优先显示最近更新。
         $sql .= $problemId || $pageId ? " ORDER BY c.cid" : " ORDER BY c.stime DESC";
         if ($limit !== null) {
             $sql .= " LIMIT ?";

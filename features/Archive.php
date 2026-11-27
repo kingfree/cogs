@@ -1,10 +1,15 @@
 <?php
-// ZIP 下载使用每次请求独立的临时文件。例 Archive::download('source.zip', ['sum.c' => $path])。
+/**
+ * 为授权下载打包文件，也为题目数据和选手答案检查 ZIP。调用者负责选择读者能看的文件。
+ * 例：$zip = Archive::open($uploadedPath, 64 * 1024 * 1024, 4096);  // 读取完毕调用 $zip->close()。
+ */
 final class Archive
 {
+    /** 把已通过权限检查的文件发送给浏览器。$files 的键是包内名称，值是本机路径。 */
     public static function download(string $name, array $files): void
     {
         if (!$files) { http_response_code(404); exit('没有可下载的文件。'); }
+        // 每次下载使用独立临时文件，多个选手可同时下载同名的 ZIP。
         $temp = tempnam(sys_get_temp_dir(), 'cogs-zip-');
         $zip = new ZipArchive();
         try {
@@ -23,7 +28,7 @@ final class Archive
         }
     }
 
-    // 只读普通文件。先检查整个目录和解压大小，再交给调用者消费内容。
+    /** 检查整个 ZIP 的路径、成员类型、总解压大小和条目数，成功返回只读句柄，由调用方关闭。 */
     public static function open(string $path, int $maxBytes, int $maxFiles): ZipArchive
     {
         $zip = new ZipArchive();
@@ -34,6 +39,7 @@ final class Archive
             $entry = $zip->statIndex($i);
             $name = $entry['name'];
             $zip->getExternalAttributesIndex($i, $os, $attributes);
+            // Unix 压缩包把文件类型放在高 16 位，借此区分普通文件、目录和链接。
             $type = ($attributes >> 16) & 0170000;
             $size += $entry['size'];
             if ($size > $maxBytes || str_contains($name, '\\') || str_starts_with($name, '/') ||

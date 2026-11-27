@@ -1,4 +1,6 @@
 <?php
+// 发表或修改题目、文章的评论。修改时沿用原评论的对象并检查作者身份。
+// 打开 problem/comment.php?pid=1 填写内容提交；同一请求只能选择一道题或一篇文章。
 require_once __DIR__.'/../include/header.php';
 gethead(0, '普通用户', '');
 requirePost();

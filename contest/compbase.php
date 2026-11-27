@@ -1,4 +1,5 @@
 <?php
+// 管理员从 contest/compbase.php 管理可复用题单；页面按题单列出每次开赛的场次。
 require_once("../include/header.php");
 gethead(1,"修改比赛","修改比赛");
 ?>

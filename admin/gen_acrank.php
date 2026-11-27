@@ -1,4 +1,5 @@
 <?php
+// 管理员从后台提交表单后为现有账号重算积分。计分公式在 Ranking::recalculate()，此处只负责遍历和报告。
 require_once("../include/header.php");
 gethead(1,"生成等级","生成等级");
 requirePost();

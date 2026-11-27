@@ -1,5 +1,8 @@
 <?php
-// 编辑器上传的公开附件。例如 Attachment::save('image', $_FILES['imgFile']) 返回站内相对路径。
+/**
+ * 编辑器上传图片、文档和媒体。include/upload_json.inc.php 先检查上传权限，再把站内相对路径返回给编辑器。
+ * 例：$path = Attachment::save('image', $_FILES['imgFile']);
+ */
 final class Attachment
 {
     private const TYPES = [
@@ -8,6 +11,7 @@ final class Attachment
         'file' => ['doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx', 'pdf', 'txt', 'zip', '7z', 'rar', 'gz', 'bz2'],
     ];
 
+    /** 接收 $_FILES 中的单个上传；成功返回 upload/ 开头的相对路径，拒绝时抛出异常供编辑器显示。 */
     public static function save(string $kind, array $upload): string
     {
         $temporary = $upload['tmp_name'] ?? '';
@@ -25,6 +29,7 @@ final class Attachment
             }
         }
         $base = dirname(__DIR__).'/upload';
+        // 按种类和日期组织公开目录，实际文件名由服务器生成。
         $relative = $kind.'/'.date('Ymd');
         $directory = $base.'/'.$relative;
         if (is_link($base.'/'.$kind) || is_link($directory)) throw new DomainException('附件目录无效。');
@@ -32,6 +37,7 @@ final class Attachment
             throw new RuntimeException('不能创建附件目录。');
         }
         $leaf = bin2hex(random_bytes(16)).'.'.$extension;
+        // 临时文件和最终附件在同一目录；完整保存并设置权限后才对外返回地址。
         $stage = tempnam($directory, '.attachment-');
         try {
             if (!move_uploaded_file($temporary, $stage) || !chmod($stage, 0644) ||

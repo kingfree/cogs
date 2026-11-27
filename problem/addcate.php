@@ -1,34 +1,28 @@
 <?php
-require_once("../include/header.php");
-gethead(8,"sess","");
+// 在题面给一道题添加标签。登录后从 problem/problem.php?pid=1 的分类表单提交名称和说明。
+require_once __DIR__.'/../include/header.php';
+gethead(8, '普通用户', '');
 requirePost();
+$pid = (int)($_POST['pid'] ?? 0);
+$back = 取路径("problem/problem.php?pid=$pid");
+if (!Problem::forReader($pid)) { http_response_code(404); exit('题目不存在或未开放。'); }
+$name = trim($_POST['cname'] ?? '');     // 按输入的文字检索分类，显示时才做 HTML 转义。
+$memo = trim($_POST['memo'] ?? '');
+if ($name === '' || mb_strlen($name) > 24) 异常('分类名须为 1 至 24 个字符。', $back);
 
-if (!Problem::forReader((int)($_POST['pid'] ?? 0))) { http_response_code(404); exit('题目不存在或未开放。'); }
-if(!$_POST['cname'])
-异常("没有填写分类名！", 取路径("problem/problem.php?pid={$_POST['pid']}"));
-
-$categories = Category::matching('%'. $_POST['cname'] .'%', '%'. $_POST['cname'] .'%');
-$cnt = count($categories);
-if(!$cnt) {
-	Category::create($_POST['cname'], $_POST['memo']);
+$pattern = '%'.$name.'%';                // 沿用题面按名称或说明匹配相似分类的规则。
+$category = Category::matching($pattern, $pattern)[0] ?? null;
+$alreadyTagged = false;
+if ($category) {
+    $categoryId = (int)$category['caid'];
+    Category::updateMemo(trim($category['memo'].' '.$memo), $categoryId);
+    $alreadyTagged = (bool)Category::hasProblem($pid, $categoryId);
 } else {
-    $e=($categories[0] ?? false);
-    $st=trim("{$e['memo']} {$_POST['memo']}");
-	Category::updateMemo($st, $e['caid']);
-    $categories = Category::hasProblem($_POST['pid'], $e['caid']);
-	$al = count($categories);
-    if($al) {
-        提示("添加题目 {$_POST['pid']} 分类 “{$e['caid']}. {$_POST['cname']}” 成功，虽然它之前就已经存在了！", 取路径("problem/problem.php?pid={$_POST['pid']}"));
-        exit(0);
-    }
+    $categoryId = Category::create($name, $memo);
 }
+if (!$alreadyTagged) Category::attach($pid, $categoryId);
 
-$categories = Category::matching('%'.$_POST['cname'].'%', '%'.$_POST['cname'].'%');
-$cnt = count($categories);
-if(!$cnt)
-异常("添加分类失败！", 取路径("problem/problem.php?pid={$_POST['pid']}"));
-
-$e=($categories[0] ?? false);
-Category::attach($_POST['pid'], $e['caid']);
-提示("添加题目 {$_POST['pid']} 分类 “{$e['caid']}. {$_POST['cname']}” 成功！", 取路径("problem/problem.php?pid={$_POST['pid']}"));
-?>
+$label = h($name);                       // 提示组件支持富文本，分类名必须作为普通文字嵌入。
+$message = "添加题目 $pid 分类 “{$categoryId}. {$label}” 成功！";
+if ($alreadyTagged) $message .= '这道题已经有此分类。';
+提示($message, $back);

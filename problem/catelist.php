@@ -1,4 +1,6 @@
 <?php
+// 浏览全站分类和说明，具有分类管理权限的账号还能打开编辑表单。
+// 打开 problem/catelist.php，点击分类名可进入对应的题目列表。
 require_once("../include/header.php");
 gethead(1,"","分类列表");
 ?>

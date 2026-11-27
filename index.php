@@ -1,4 +1,5 @@
 <?php
+// 站点首页。访问 index.php 聚合当前读者能看到的近期题目和提交；每栏数量来自站点设置。
 require_once("./include/header.php");
 $mySubmissions = Submission::bestByProblem($_SESSION['ID']);
 gethead(1,"","首页");

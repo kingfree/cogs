@@ -1,4 +1,5 @@
 <?php
+// 在仓库根目录执行 php tests/grader-protocol.php，检查评测消息编解码、签名和有效期。
 require dirname(__DIR__).'/include/grader-protocol.php';
 function check($condition, $name) {
     if (!$condition) throw new RuntimeException($name);

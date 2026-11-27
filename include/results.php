@@ -1,7 +1,14 @@
 <?php
+/**
+ * 把数据库里的语言编号和逐点结果字母显示给用户。语言表来自 Language，分数的计算位于 Judging。
+ * 例：评测结果('AAWT', 10);  // 输出四个测试点。
+ */
+/** 根据源码扩展名取得评测协议中的语言编号。 */
 function langstrtonum($str) { return Language::id($str); }
+/** 将数据库里的语言编号转回扩展名，未知编号返回空串。 */
 function langnumtostr($id) { return Language::TYPES[$id][0] ?? ''; }
 
+/** 将难度整数转换成星级文字，每两点为一颗实心星。 */
 function 难度($K) {
     $V=floor($K / 2);
     $K%=2;
@@ -13,6 +20,7 @@ function 难度($K) {
     return $str;
 }
 
+/** 直接打印逐点判定的字母和颜色，以 mod 个测试点换行。 */
 function 评测结果($str, $mod=10, $end=false) {
     $res = "";
     for($i=0; $i<strlen($str); $i++) {
@@ -37,6 +45,7 @@ function 评测结果($str, $mod=10, $end=false) {
     echo "<span class='judge'>".$res."</span>";
 }
 
+/** 返回逐点判定的中文说明 HTML；空结果表示尚未评测。 */
 function 评测信息a($str) {
     $res = "";
     if($str == "") return "未评测";
@@ -56,10 +65,12 @@ function 评测信息a($str) {
     return $res;
 }
 
+/** 把逐点中文说明输出到页面的评测结果区域。 */
 function 评测信息($str) {
     echo "<span class='judge'>".评测信息a($str)."</span>";
 }
 
+/** 根据当前用户已有的提交输出状态图标；访客没有个人状态。 */
 function 是否通过($submission) {
     if (empty($_SESSION['ID'])) return;
     if (!$submission) { echo "<span class='icon-minus'>－</span>"; return; }

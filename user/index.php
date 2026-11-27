@@ -1,4 +1,5 @@
 <?php
+// 用户目录，例如 user/index.php?gid=1。选择分组会同时列出其下级组成员，搜索和分页沿用这个分组范围。
 require_once("../include/header.php");
 gethead(1,"","用户列表");
 ?>
@@ -49,6 +50,7 @@ $pRows = Account::search(array_merge([$_GET['gid']], $subgroup), $_GET['key'] ??
     $_GET['rank'] ?? 'grade', $_GET['order'] ?? 'desc');
 $cnt = count($pRows);
 $st=检测页面($cnt, ($_GET['page'] ?? 1));
+// 只加载当前页用户的权限标记，避免展示每一行时再次查询。
 $privileges = Privilege::forUsers(array_column(array_slice($pRows, $st, (int)$SET['style_pagesize']), 'uid'));
 ?>
 <form method="get" action="" class='form-search center'>

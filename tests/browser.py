@@ -19,5 +19,11 @@ with sync_playwright() as playwright:
     page.goto(base+'/problem/index.php', wait_until='domcontentloaded')
     page.get_by_role('link', name="求和 O'Reilly", exact=True).first.click()
     page.get_by_text('计算和', exact=True).first.wait_for()
+    # The browser must see one text-only link and one complete tooltip, including both kinds of quotes.
+    for container in ('#fenlei', '#catebar'):
+        label = page.locator(container + ' a[href$="index.php?caid=1"]')
+        assert label.text_content() == '<b>算术</b> & 集合'
+        assert label.locator('*').count() == 0
+        assert label.get_attribute('title') == """a < b & "x" = 'y'"""
     browser.close()
 print('Chromium 登录、题库链接和题面通过')

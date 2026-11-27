@@ -1,4 +1,5 @@
 <?php
+// 通过 user/grouplist.php 查看分组、父组和负责人；管理入口使用各组的 gid。
 require_once("../include/header.php");
 gethead(1,"","分组列表");
 ?>

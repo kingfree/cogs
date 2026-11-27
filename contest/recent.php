@@ -1,4 +1,5 @@
 <?php
+// 访问 contest/recent.php 查看外站赛程；本页的数据来自远端赛事列表。
 require_once("../include/header.php");
 gethead(1,"","在线竞赛");
 ?>

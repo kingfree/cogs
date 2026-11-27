@@ -1,4 +1,5 @@
 <?php
+// 处理 editcomptime.php 的 POST，把表单中的站点时间换成开赛、截止时间戳。
 require_once("../include/header.php");
 gethead(8,"修改比赛","");
 requirePost();

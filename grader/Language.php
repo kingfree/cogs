@@ -7,12 +7,14 @@ final class Language
         2 => ['cpp', 'C++', 'g++'], 3 => ['zip', 'Answer', null],
     ];
 
+    /** 将网页提交的扩展名转换为数据库语言编号；未知扩展名返回 null。 */
     public static function id($extension)
     {
         $id = array_search($extension, array_column(self::TYPES, 0), true);
         return $id === false ? null : $id;
     }
 
+    // 返回独立 argv，不拼 shell 命令。例 compiler(1, 'sum.c', 'program') 编译 C 源文件。
     public static function compiler($id, $source, $output): array
     {
         $tool = self::TYPES[$id][2];

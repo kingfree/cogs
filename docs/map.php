@@ -1,4 +1,5 @@
 <?php
+// 站点地图。打开 docs/map.php 列出题目、文章等链接，题目和文章按当前访问者的阅读范围筛选。
 require_once("../include/header.php");
 gethead(1,"","站点地图");
 ?>

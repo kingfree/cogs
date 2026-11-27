@@ -1,4 +1,5 @@
 <?php
+// 评测机 HTTP 入口。GET /grader/ 读取机器状态，网页判题流程用签名的 POST 请求申请和操作租约。
 require_once dirname(__DIR__).'/include/grader-protocol.php';
 require_once dirname(__DIR__).'/features/Archive.php';
 require_once __DIR__.'/Worker.php';
@@ -7,6 +8,7 @@ require_once __DIR__.'/compiler.php';
 require_once __DIR__.'/checker.php';
 require_once __DIR__.'/testcase.php';
 
+// 浏览器 GET 只显示机器状态；下方 POST 先验签，再校验动作字段，最后才能交给 Worker。
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     try {
         $status = Worker::configured()->handle(['action'=>'state']);

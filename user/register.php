@@ -1,4 +1,5 @@
 <?php
+// 访问 user/register.php 阅读本站注册条款，同意后进入 register.php?accept=1 填资料，提交至 doreg.php。
 require_once("../include/header.php");
 gethead(1,"","用户注册");
 if(!$SET['limit_regallow']) 异常("暂时不允许注册！");

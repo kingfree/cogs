@@ -1,4 +1,6 @@
 <?php
+// 为有分类管理权限的用户显示分类编辑表单，保存后所有采用该分类的题目共用新名称和说明。
+// 打开 problem/editcate.php?action=add 新建，或用 ?action=edit&caid=1 修改。
 require_once("../include/header.php");
 gethead(1,"分类管理","修改分类");
 ?>

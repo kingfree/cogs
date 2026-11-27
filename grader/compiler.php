@@ -1,5 +1,6 @@
 <?php
 // 把提交写到本次评测的目录。选手源代码由编译器原样读取。
+// Worker 传入当前租约的 build 目录。成功时留下 program 或逐点的 .out，供 testcase.php 读取。
 function compileSubmission(array $request, string $work): array
 {
     $source = $request['src'];

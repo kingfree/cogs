@@ -1,4 +1,5 @@
 <?php
+// 帮助页，在 docs/index.php 显示本站管理员配置的使用帮助和站点介绍。
 require_once("../include/header.php");
 gethead(1,"","帮助");
 ?>

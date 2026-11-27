@@ -1,4 +1,5 @@
 <?php
+// 在 user/privilege.php 查看账号授权；表单传 way=ins 或 del、uid 和 pri，分别授予或撤销对应权限。
 require_once("../include/header.php");
 gethead(1,"修改权限","权限列表");
 

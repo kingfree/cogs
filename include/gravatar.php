@@ -1,4 +1,8 @@
 <?php
+/**
+ * 邮件、排名和个人页展示头像时优先使用站内缓存。未配置远程头像服务时显示站点图标。
+ * 例：echo gravatar::showImage('student@example.org', 32);
+ */
 class gravatar
 {
 	private static $size = 14;

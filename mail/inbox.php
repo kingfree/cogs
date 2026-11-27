@@ -1,9 +1,11 @@
 <?php
+// 收发双方登录后可通过 mail/inbox.php?mid=1 查看这一封信；仅收件人打开会将它标为已读。
 require_once("../include/header.php");
 gethead(1,"sess","邮件");
 $uid = (int)$_SESSION['ID'];
 $d = Message::visible((int)$_GET['mid'], $uid, $uid)[0] ?? null;
 if (!$d) 异常("邮件不存在或无权查看！");
+// 作者打开已发邮件时不应替收件人清掉未读标记，更新语句会核对收件人。
 Message::markRead($d['mid'], $uid);
 ?>
 

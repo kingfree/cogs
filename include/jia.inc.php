@@ -1,4 +1,4 @@
-<!-- JiaThis Button BEGIN -->
+<?php /** 旧题目页的可选站外分享片段，依赖 $Jia 中的 url、summary 与 title；默认题目模板没有启用它。 */ ?><!-- JiaThis Button BEGIN -->
 <div class="jiathis_style pull-right"><span class="jiathis_txt"></span>
 <a href="http://www.jiathis.com/share?uid=1692865" class="jiathis jiathis_txt jiathis_separator jtico jtico_jiathis" target="_blank"></a>
 <a class="jiathis_button_tsina"></a>

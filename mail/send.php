@@ -1,7 +1,9 @@
 <?php
+// 处理 mail/index.php 写信表单中的 toid、title 和 msg，以当前登录账号为发件人。
 require_once("../include/header.php");
 gethead(8,"sess","");
 requirePost();
+// 收件人由表单选择，发件人始终使用服务器保存的登录身份。
 $sender = (int)$_SESSION['ID'];
 $_POST['toid'] = (int)$_POST['toid'];
 

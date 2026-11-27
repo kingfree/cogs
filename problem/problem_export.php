@@ -1,4 +1,6 @@
 <?php
+// 让有修改题目权限的用户选择要导出的题目，选择结果交给 FPS XML 导出入口。
+// 打开 problem/problem_export.php，可填写一段题号或逗号分隔的编号。
 require_once("../include/header.php");
 gethead(1,"修改题目","修改题目");
 renderEditor("detail");

@@ -1,4 +1,5 @@
 <?php
+// 列出数据库中的站点参数。访问 admin/settings.php 查看名称和值，点击参数再编辑。
 require_once("../include/header.php");
 gethead(1,"参数设置","参数设置");
 ?>

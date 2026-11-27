@@ -1,4 +1,5 @@
 <?php
+// 编辑单项设置。例如 admin/editkey.php?sname=style_pagesize 按名称打开，新值交给 doeditkey.php 保存。
 require_once("../include/header.php");
 gethead(1,"参数设置","修改参数");
 if($_GET['method']=='html') renderEditor("value");

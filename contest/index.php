@@ -1,4 +1,5 @@
 <?php
+// 访问 contest/index.php 浏览按阅读等级筛选的场次；进入某场由 contest/problem.php 处理。
 require_once("../include/header.php");
 gethead(1,"","比赛列表");
 ?>

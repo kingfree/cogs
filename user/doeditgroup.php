@@ -1,4 +1,5 @@
 <?php
+// 处理 user/editgroup.php 的分组表单。action=add 创建分组，action=edit 按 gid 更新父组及管理员。
 require_once("../include/header.php");
 gethead(8,"分组管理","");
 requirePost();

@@ -1,4 +1,5 @@
 <?php
+// 在仓库根目录执行 php tests/sources.php，以本地题面样本验证各站解析规则。
 if (PHP_SAPI !== 'cli') exit;
 require dirname(__DIR__).'/features/ProblemSource.php';
 require dirname(__DIR__).'/include/forms.php';

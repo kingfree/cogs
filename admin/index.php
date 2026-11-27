@@ -1,4 +1,5 @@
 <?php
+// 后台功能目录。访问 admin/index.php 可找到题库、评测和账号管理入口，各目标页面另行校验所需权限。
 require_once("../include/header.php");
 gethead(1,"可以管理","后台管理");
 ?>

@@ -1,9 +1,15 @@
 <?php
-// 一个评测任务独占一台评测机。文件锁串行化租用、编译、评分和释放，超时后可以回收任务。
+/**
+ * grader/index.php 验证请求后调用 handle()。例如 handle(['action'=>'state']) 只读取机器状态。
+ * lock → compile → grade（每个测试点一次）→ unlock 必须使用同一 job。
+ * 当前租约在工作目录中落盘，让不同 PHP 请求和重启后的进程看到同一个占用者。
+ */
 final class Worker
 {
+    /** work 用于租约和临时产物，data 是试题目录，name 用于向网页报告机器状态。 */
     public function __construct(private string $work, private string $data, private string $name) {}
 
+    /** 读取部署者指定的三行配置；工作目录或题库目录不存在时抛错，让状态端点返回未就绪。 */
     public static function configured(): self
     {
         $file = getenv('COGS_GRADER_CONFIG') ?: __DIR__.'/settings.php';
@@ -14,6 +20,7 @@ final class Worker
         return new self(realpath($lines[1]), realpath($lines[2]), trim($lines[0]));
     }
 
+    /** 释放或重试任务时删除其工作目录；遇到符号链接只移除链接本身。 */
     public static function remove(string $path): void
     {
         if (is_link($path) || is_file($path)) { unlink($path); return; }
@@ -22,6 +29,7 @@ final class Worker
         rmdir($path);
     }
 
+    /** 处理已验签并通过字段检查的一次操作；其他任务占用时 lock 返回 busy，陈旧任务号返回 expired。 */
     public function handle(array $request): array
     {
         $lock = fopen($this->work.'/.worker.lock', 'c');
@@ -31,6 +39,7 @@ final class Worker
             $state = is_file($path) ? json_decode(file_get_contents($path), true, 16, JSON_THROW_ON_ERROR)
                 : ['open'=>trim((string)@file_get_contents(__DIR__.'/mode.php')) !== 'closed',
                    'count'=>(int)@file_get_contents(__DIR__.'/cnt.php'), 'job'=>null, 'expires'=>0];
+            // 网页端有可能中途断线。租约过期后由下一次请求清理旧目录并接手。
             if ($state['job'] && $state['expires'] < time()) {
                 self::remove($this->work.'/'.$state['job']);
                 $state['job'] = null;
@@ -65,6 +74,7 @@ final class Worker
                     $reply = gradeCase($request, $dir, $this->data);
                 }
             }
+            // 持锁写入临时文件再 rename；即使写到一半退出，旧状态仍是一份完整 JSON。
             $next = $path.'.next';
             if (file_put_contents($next, json_encode($state, JSON_THROW_ON_ERROR)) === false || !rename($next, $path)) {
                 throw new RuntimeException('写入评测机状态失败。');

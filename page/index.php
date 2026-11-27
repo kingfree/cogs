@@ -1,4 +1,5 @@
 <?php
+// 文章目录。访问 page/index.php?key=训练 搜索当前会话可阅读的文章，然后对筛选结果分页。
 require_once("../include/header.php");
 gethead(1,"","页面列表");
 ?>

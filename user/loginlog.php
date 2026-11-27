@@ -1,4 +1,5 @@
 <?php
+// 登录后通过 user/loginlog.php?uid=2 查该账号的记录；查看别人记录需要“查看用户”权限。
 require_once("../include/header.php");
 gethead(1,"sess","登录日志",$_GET['uid']);
 if($_GET['uid'] != $_SESSION['ID'] && !Privilege::allows("查看用户"))

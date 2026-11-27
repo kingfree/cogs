@@ -1,5 +1,5 @@
 <?php
-// 防止入口重新引入 SQL、可变的查询游标或直接启动选手程序。
+// 在仓库根目录执行 php tests/architecture.php，检查入口中的 SQL、遗留的查询游标和业务接口说明。
 if (PHP_SAPI !== 'cli') exit;
 $root = dirname(__DIR__);
 $count = 0;
@@ -22,3 +22,18 @@ foreach (new RecursiveIteratorIterator(new RecursiveDirectoryIterator($root, Fil
     }
 }
 echo "$count 个应用 PHP 文件通过语法和业务入口检查\n";
+
+// 业务类只在这里加载定义。公开方法的说明同时供编辑器和第一次接手的维护者查阅。
+$subjects = glob($root.'/features/*.php');
+$methods = 0;
+foreach ($subjects as $subject) {
+    require_once $subject;
+    $class = new ReflectionClass(basename($subject, '.php'));
+    foreach ($class->getMethods(ReflectionMethod::IS_PUBLIC) as $method) {
+        if (!$method->getDocComment()) {
+            throw new RuntimeException($class->getName().'::'.$method->getName().' 缺少接口说明。');
+        }
+        $methods++;
+    }
+}
+echo count($subjects)." 个业务主体、$methods 个公开方法具有可供编辑器读取的接口说明\n";

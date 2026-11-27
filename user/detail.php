@@ -1,4 +1,8 @@
 <?php
+/**
+ * GET /user/detail.php?uid=2 展示资料、参赛记录和答题历史。也可以通过 ?user=用户名 搜索。
+ * 阅读范围取决于访问者，换组后连本人旧提交也会按新的题目阅读范围筛选。
+ */
 require_once("../include/header.php");
 $uid = (int) $_GET['uid'];
 $user = $_GET['user'];
@@ -120,6 +124,7 @@ if ($cnt) {
 <a href="export.php?uid=<?=$uid?>" target="_blank" class='btn pull-right'>导出全部提交记录</a>
 <?php  } ?>
 <?php
+// 一题可能提交多次：通过数按题目去重，提交次数则统计每一份当前可见的记录。
 $accnt=0;
 $pRows = Submission::history($uid);
 $cnt = count($pRows);

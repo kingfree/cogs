@@ -1,4 +1,6 @@
 <?php
+// 浏览和下载后台测试数据需查看数据权限，编辑、删除、移动和上传还需修改题目权限。
+// 打开 problem/testdata.php?problem=sum 查看文件；附加 &download=sum1.in 可下载单个输入。
 require_once __DIR__.'/../include/header.php';
 gethead(0, '查看数据', '');
 $name = $_GET['problem'] ?? $_GET['dir'] ?? '';

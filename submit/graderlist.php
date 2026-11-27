@@ -1,4 +1,5 @@
 <?php
+// 评测机列表。访问 submit/graderlist.php 查看机器和状态，拥有管理评测权限的账号可进入配置页。
 require_once("../include/header.php");
 gethead(1,"","评测机列表");
 ?>
@@ -25,10 +26,8 @@ gethead(1,"","评测机列表");
 
     $judges = Judge::all();
     $cnt = count($judges);
-    for ($i=$st;$i<$cnt ;$i++) {
-        $d=($judges[$i] ?? false);
+    foreach ($judges as $d) {
         $s['action']="state";
-        if($d['address']=='grader') $d['address']='http://'.$_SERVER['HTTP_HOST'].'/'.$cfg['dir_root'].'grader/';
         $debug=$tmp=httpsocket($d['address'],$s);
         $tmp=array_decode($tmp);
         if ($tmp==array()) {

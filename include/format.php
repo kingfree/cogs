@@ -1,8 +1,14 @@
 <?php
+/**
+ * 旧版网页的文本显示约定：短标题去掉方括号里的标签，讨论使用 BBCode，站点公告可显示参数值。
+ * 例：echo BBCode('[b]欢迎参赛[/b]');
+ */
+/** 输出一行已组装的 HTML；调用方负责转义嵌入的普通文字。 */
 function HTML($htmltext) {
     echo $htmltext . "\n";
 }
 
+/** 将空格转成网页能保留的间隔。用它显示普通文字时应先转义。 */
 function sp2n($s) {
     $o="";
     $len=strlen($s);
@@ -17,6 +23,7 @@ function sp2n($s) {
     return $o;
 }
 
+/** 以嵌套表格展示数组，用于查看可信数据。 */
 function echotablearray($r) {
     echo "<table border='1'>\n";
     foreach($r as $k=>$v) {
@@ -33,6 +40,7 @@ function echotablearray($r) {
     echo "</table>\n";
 }
 
+/** 用站点设置和本次请求统计替换公告模板中的占位符。 */
 function 输出文本($S) {
     global $Query_Times,$SET,$cfg,$time_Ls;
     $S = str_replace("%global_sitename%",$SET['global_sitename'], $S);
@@ -47,6 +55,7 @@ function 输出文本($S) {
     return $S;
 }
 
+/** 输出页面背景 CSS，优先使用该用户上传的背景图。 */
 function 背景图片($uid=0) {
     global $SET;
     $portrait=$SET['base']."images/background";
@@ -57,12 +66,14 @@ function 背景图片($uid=0) {
     echo "<style type='text/css'>body {background-image: url($backfile);}</style>";
 }
 
+/** 移除旧题名中的方括号标签并转义，返回可嵌入 HTML 的短标题。 */
 function shortname($longname) {
     $res = preg_replace("/\[.*\]/", "", $longname);
     $res = trim($res);
     return h($res);
 }
 
+/** 先转义评论原文，再转换 BBCode，并让 richText 限定输出的元素和属性。 */
 function BBCode($string) {
     $search = array(
         '/@(\S{1,20})/',
@@ -112,6 +123,7 @@ function BBCode($string) {
     return richText(nl2br($string));
 }
 
+    /** 旧版显示按字节截取长字符串，省略部分以三个点表示。 */
     function gettexts($string, $long) {
         if($long+3 >= strlen($string))
             return $string;

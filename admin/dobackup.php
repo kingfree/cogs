@@ -1,4 +1,5 @@
 <?php
+// 处理备份表单。例如 POST backtype=usercode、filename=weekly 和当前会话的 form_token；只有打包成功才返回备份名。
 require_once __DIR__.'/../include/header.php';
 gethead(0, '超级用户', '');
 requirePost();

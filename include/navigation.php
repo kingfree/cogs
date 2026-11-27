@@ -1,14 +1,21 @@
 <?php
+/**
+ * 页头菜单按当前账号显示题库、比赛、提交及管理入口。隐藏菜单只影响显示，目标页面还要检查权限。
+ * 例：Navigation();  // header.php 为普通浏览器调用，旧 IE 分支使用 Navigation_IE()。
+ */
+/** 输出带站内地址的导航链接，图标由模板选择。 */
 function 链接($path, $text, $icon = "") {
     $ttt = '';
     if($icon) $ttt = "<span class='icon-{$icon}'></span>";
     HTML("<a href=\"".路径($path)."\">{$ttt}{$text}</a>");
 }
+/** 把站内入口输出为下拉菜单的一项。 */
 function 列表($path, $icon, $text) {
     HTML("<li class='span2'>");
     链接($path, $text, $icon);
     HTML("</li>");
 }
+/** 输出普通浏览器的主导航，并按当前会话展示账号相关入口。 */
 function Navigation() {
     global $SET;
     $mails = $ttt = '';
@@ -25,10 +32,12 @@ function Navigation() {
     HTML("<li class='dropdown'>");
     HTML("<a id='fenleibar' href='#' class='dropdown-toggle' data-toggle='dropdown'><b class='caret'></b></a>");
     HTML("<ul class='dropdown-menu span11' id='catebar'>");
-    $categories = Category::all();
-
-    foreach ($categories as $i => $d) {
-        HTML("<li style='width: 100px'><a href='".路径("problem/index.php?caid={$d['caid']}")."' title='".sp2n(htmlspecialchars($d['memo']))."'>".h($d['cname'])."</a></li>");
+    // 顶部菜单和题面使用同一份分类原文，说明里的空格和引号要在悬停提示中原样显示。
+    foreach (Category::all() as $category) {
+        $url = 路径('problem/index.php?caid='.(int)$category['caid']);
+        $title = h($category['memo']);
+        $name = h($category['cname']);
+        HTML("<li style='width: 100px'><a href='$url' title='$title'>$name</a></li>");
     }
     HTML("</ul>");
     HTML("</li>");
@@ -104,6 +113,7 @@ HTML("</div>");
 HTML("</div>");
 }
 
+/** 输出旧 IE 使用的简化导航。 */
 function Navigation_IE() {
     global $SET;
     $mails = $ttt = '';

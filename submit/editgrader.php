@@ -1,4 +1,5 @@
 <?php
+// 管理评测机配置。例如 submit/editgrader.php?action=edit&grid=1 打开指定机器的表单。
 require_once("../include/header.php");
 gethead(1,"管理评测","修改评测机");
 ?>

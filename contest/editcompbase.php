@@ -1,4 +1,5 @@
 <?php
+// 由 contest/editcompbase.php?action=add 打开题单表单；保存交给 doeditcompbase.php，排期另在场次表单中设置。
 require_once("../include/header.php");
 gethead(1,"修改比赛","修改比赛");
 ?>

@@ -1,4 +1,5 @@
 <?php
+// 超级用户从 admin/backup.php 选择备份内容；真正创建备份由 dobackup.php 接收表单。
 require_once("../include/header.php");
 gethead(1,"超级用户","备份与恢复");
 ?>

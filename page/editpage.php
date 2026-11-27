@@ -1,4 +1,5 @@
 <?php
+// 管理员从 page/editpage.php?action=edit&aid=1 打开文章表单，在此选择可阅读的分组和等级。
 require_once("../include/header.php");
 gethead(1,"修改页面","修改页面");
 renderEditor("detail");

@@ -1,4 +1,5 @@
 <?php
+// 保存单项站点设置。editkey.php 的表单提交 ssid、value 和会话令牌，已有编号随升级保留。
 require_once("../include/header.php");
 gethead(8, "参数设置", "");
 requirePost();

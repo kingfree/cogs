@@ -1,4 +1,9 @@
 <?php
+/**
+ * 列表先根据页码算出首条记录的下标，绘制记录后再输出分页链接。首个页码是 1，首条记录的下标是 0。
+ * 例：$offset = 检测页面(120, 2, 30);  // 得到下标 30。
+ */
+/** 把 1 起始页号换成结果集的起始下标；请求的页数过大时取最后一页。 */
 function 检测页面($total,$page,$page_size='') {
     global $SET;
     $page = (int) $page;
@@ -11,6 +16,7 @@ function 检测页面($total,$page,$page_size='') {
     return $start;
 }
 
+/** 打印页号以及首尾和前后页链接，现有查询前缀由 url 提供。 */
 function 分页($total,$page,$url='',$page_size='',$max_length='') {
     if($total == 0) return;
     global $SET;

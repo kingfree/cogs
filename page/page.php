@@ -1,4 +1,5 @@
 <?php
+// 访问 page/page.php?aid=1 阅读文章。先校验文章阅读范围，再输出正文和关联讨论。
 require_once("../include/header.php");
 $aid = (int)$_GET['aid'];
 $d = Page::forReader($aid);

@@ -1,4 +1,5 @@
 <?php
+// 具有修改用户权限时，通过 user/edituser.php?uid=2 编辑指定账号，勾选重置密码后由 doedituser.php 生成临时密码。
 require_once("../include/header.php");
 gethead(1,"修改用户","修改用户");
 ?>

@@ -1,4 +1,5 @@
 <?php
+// 访问 mail/index.php 查看本人的收件箱、发件箱并写信；mail/index.php?toid=1 会预填收件人。
 require_once("../include/header.php");
 gethead(1,"sess","邮件列表");
 

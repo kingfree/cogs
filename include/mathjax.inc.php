@@ -1,4 +1,4 @@
-<script type="text/x-mathjax-config">
+<?php /** 题目或文章页在页头后 require_once 本片段，使题面中的 TeX 分隔符由浏览器端 MathJax 排版。 */ ?><script type="text/x-mathjax-config">
   MathJax.HTML.Cookie.Set("menu",{});
   MathJax.Hub.Config({
     extensions: ["tex2jax.js"],

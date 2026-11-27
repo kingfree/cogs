@@ -1,4 +1,6 @@
 <?php
+// 接收 FPS XML 上传，以当前登录用户为作者导入题目；导入规则在 Fps::import。
+// 从 problem/problem_import.php 选择文件提交，表单文件字段名为 fps。
 require_once __DIR__.'/../include/header.php';
 gethead(0, '修改题目', '');
 requirePost();

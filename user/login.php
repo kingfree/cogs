@@ -1,4 +1,5 @@
 <?php
+// 访问 user/login.php 获取带会话令牌的登录表单，交给 dologin.php 验证。
 require_once("../include/header.php");
 gethead(1,"","用户登录");
 if($_SESSION['ID']) 异常("已经登录！");

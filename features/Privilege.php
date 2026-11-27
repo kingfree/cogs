@@ -1,7 +1,11 @@
 <?php
-// 账号权限的授予和撤销。例如 Privilege::forUser(1)。
+/**
+ * 功能权限按历史编号存储。入口用中文权限名发起检查，登录会话保存该用户最近一次读取的授权。
+ * 例：$mayEdit = Privilege::allows('修改题目');
+ */
 final class Privilege
 {
+    /** 读取单个用户的授权，供 Login 按次请求刷新。 */
     public static function forUser($userId)
     {
         return Database::rows(
@@ -10,6 +14,7 @@ final class Privilege
         );
     }
 
+    /** 按权限编号列出授权，供后台管理页展示。 */
     public static function ordered($userId)
     {
         return Database::rows(
@@ -18,6 +23,7 @@ final class Privilege
         );
     }
 
+    /** 检查该账号已有的某一项显式授权，防止重复发放。 */
     public static function granted($userId, $privilege)
     {
         return Database::rows(
@@ -26,6 +32,7 @@ final class Privilege
         );
     }
 
+    /** 向指定账号添加一项启用的显式授权。 */
     public static function grant($userId, $privilege)
     {
         return Database::execute(
@@ -34,6 +41,7 @@ final class Privilege
         );
     }
 
+    /** 只撤销匹配账号和编号的显式授权；角色继承仍由 allows 计算。 */
     public static function revoke($userId, $privilege)
     {
         return Database::execute(
@@ -42,6 +50,7 @@ final class Privilege
         );
     }
 
+    /** 后台按用户和编号展示已有授权。 */
     public static function holders()
     {
         return Database::rows(
@@ -52,6 +61,7 @@ final class Privilege
         );
     }
 
+// 这些编号已写入旧库，改名时仍要保留既有编号；拥有比赛与上传数据共用 33。
 public const NAMES = [
         '普通用户' => 0,
         '管理用户' => 1,
@@ -79,10 +89,12 @@ public const NAMES = [
         '参数设置' => 99,
     ];
 
+    /** 在当前请求的会话上判定一项能力；管理用户继承编号低于 60 的权限，超级用户继承所有已知权限。 */
     public static function allows($name): bool
     {
         if ($name === '' || $name === null) return true;
         if ($name === '普通用户') return !empty($_SESSION['ID']);
+        // 后台菜单使用这个汇总判断；执行动作的页仍应核对该动作的具体权限。
         if ($name === '可以管理') {
             foreach (self::NAMES as $number) if ($number && !empty($_SESSION['pri'.$number])) return true;
             return false;
@@ -93,6 +105,7 @@ public const NAMES = [
             ($number < 60 && !empty($_SESSION['pri1']));
     }
 
+    /** 批量读取账号权限，返回以用户 ID 为键的授权列表。 */
     public static function forUsers(array $ids): array
     {
         if (!$ids) return [];

@@ -1,4 +1,5 @@
 <?php
+// 通过 user/editgroup.php?action=edit&gid=1 查看目标组的名称、说明、负责人和父组，提交给 doeditgroup.php。
 require_once("../include/header.php");
 gethead(1,"分组管理","修改分组");
 $d['adminuid']=$_SESSION['ID'];

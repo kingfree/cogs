@@ -1,4 +1,6 @@
 <?php
+// 显示发表评论或修改本人评论的表单。对已有评论，从记录读取原题或原文章。
+// 打开 problem/comment.php?pid=1 写题目评论，或用 ?cid=4 编辑自己的第 4 号评论。
 require_once("../include/header.php");
 gethead(1,"","题目评论");
 require_once __DIR__.'/../include/hlighter.inc.php';

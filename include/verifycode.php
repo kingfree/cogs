@@ -1,5 +1,8 @@
 <?php
-// 注册表单的图形验证码，每次取图都会使上次输入失效。
+/**
+ * 注册表单用图片请求生成一次验证码。刷新这张图会替换当前会话中的答案；doreg.php 消费答案后清除它。
+ * 例：GET include/verifycode.php 返回 PNG 图像，浏览器要保留注册页的会话 Cookie。
+ */
 session_start(['use_strict_mode'=>true, 'cookie_httponly'=>true, 'cookie_samesite'=>'Lax']);
 $letters = '0123456789abcdefghijkmnpqrstuvwxyz';
 $code = '';
