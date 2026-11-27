@@ -1,132 +1,18 @@
 <?php
-require_once 'JSON.php';
-
-$php_path = '/home/syzx/www/';
-$php_url = dirname($_SERVER['PHP_SELF']) . '../../../../../';
-
-//文件保存目录路径
-$save_path = $php_path . 'upload/';
-//文件保存目录URL
-$save_url = $php_url . 'upload/';
-//定义允许上传的文件扩展名
-$ext_arr = array(
-	'image' => array('gif', 'jpg', 'jpeg', 'png', 'bmp'),
-	'flash' => array('swf', 'flv'),
-	'media' => array('swf', 'flv', 'mp3', 'mp4', 'wav', 'wma', 'wmv', 'mid', 'avi', 'mpg', 'asf', 'rm', 'rmvb'),
-	'file' => array('doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx', 'pdf', 'htm', 'html', 'txt', 'zip', '7z', 'rar', 'gz', 'bz2'),
-);
-//最大文件大小
-$max_size = 1000000;
-
-$save_path = realpath($save_path) . '/';
-
-//PHP上传失败
-if (!empty($_FILES['imgFile']['error'])) {
-	switch($_FILES['imgFile']['error']){
-		case '1':
-			$error = '超过php.ini允许的大小。';
-			break;
-		case '2':
-			$error = '超过表单允许的大小。';
-			break;
-		case '3':
-			$error = '图片只有部分被上传。';
-			break;
-		case '4':
-			$error = '请选择图片。';
-			break;
-		case '6':
-			$error = '找不到临时目录。';
-			break;
-		case '7':
-			$error = '写文件到硬盘出错。';
-			break;
-		case '8':
-			$error = 'File upload stopped by extension。';
-			break;
-		case '999':
-		default:
-			$error = '未知错误。';
-	}
-	alert($error);
+/**
+ * KindEditor 上传入口。先验登录权限和表单令牌，再让 Attachment 校验和保存文件，返回编辑器认识的 JSON。
+ * 例：在编辑器中选择图片时 POST imgFile 到 include/upload_json.inc.php?dir=image。
+ */
+require_once __DIR__.'/header.php'; // 恢复站点会话并检查表单令牌。
+gethead(0, '上传数据', ''); // 只检查上传权限，编辑器需要 JSON 响应。
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') { header('Allow: POST', true, 405); exit; } // 拒绝通过访问链接触发上传。
+// KindEditor 在旧浏览器中用 iframe 读取 JSON。
+header('Content-Type: text/html; charset=UTF-8');
+header('X-Content-Type-Options: nosniff'); // 即使走旧式 iframe 响应也禁止类型嗅探。
+try {
+    $path = Attachment::save($_GET['dir'] ?? 'image', $_FILES['imgFile'] ?? []); // 由附件主体核对内容并保存到公开数据目录。
+    $result = ['error'=>0, 'url'=>'/'.$SET['global_root'].$path]; // 返回公开 URL，物理存储位置只在服务器使用。
+} catch (DomainException | RuntimeException $error) {
+    $result = ['error'=>1, 'message'=>$error->getMessage()];
 }
-
-//有上传文件时
-if (empty($_FILES) === false) {
-	//原文件名
-	$file_name = $_FILES['imgFile']['name'];
-	//服务器上临时文件名
-	$tmp_name = $_FILES['imgFile']['tmp_name'];
-	//文件大小
-	$file_size = $_FILES['imgFile']['size'];
-	//检查文件名
-	if (!$file_name) {
-		alert("请选择文件。");
-	}
-	//检查目录
-	if (@is_dir($save_path) === false) {
-		alert("上传目录不存在。");
-	}
-	//检查目录写权限
-	if (@is_writable($save_path) === false) {
-		alert("上传目录没有写权限。");
-	}
-	//检查是否已上传
-	if (@is_uploaded_file($tmp_name) === false) {
-		alert("上传失败。");
-	}
-	//检查文件大小
-	if ($file_size > $max_size) {
-		alert("上传文件大小超过限制。");
-	}
-	//检查目录名
-	$dir_name = empty($_GET['dir']) ? 'image' : trim($_GET['dir']);
-	if (empty($ext_arr[$dir_name])) {
-		alert("目录名不正确。");
-	}
-	//获得文件扩展名
-	$temp_arr = explode(".", $file_name);
-	$file_ext = array_pop($temp_arr);
-	$file_ext = trim($file_ext);
-	$file_ext = strtolower($file_ext);
-	//检查扩展名
-	if (in_array($file_ext, $ext_arr[$dir_name]) === false) {
-		alert("上传文件扩展名是不允许的扩展名。\n只允许" . implode(",", $ext_arr[$dir_name]) . "格式。");
-	}
-	//创建文件夹
-	if ($dir_name !== '') {
-		$save_path .= $dir_name . "/";
-		$save_url .= $dir_name . "/";
-		if (!file_exists($save_path)) {
-			mkdir($save_path);
-		}
-	}
-	$ymd = date("Ymd");
-	$save_path .= $ymd . "/";
-	$save_url .= $ymd . "/";
-	if (!file_exists($save_path)) {
-		mkdir($save_path);
-	}
-	//新文件名
-	$new_file_name = date("YmdHis") . '_' . rand(10000, 99999) . '.' . $file_ext;
-	//移动文件
-	$file_path = $save_path . $new_file_name;
-	if (move_uploaded_file($tmp_name, $file_path) === false) {
-		alert("上传文件失败。");
-	}
-	@chmod($file_path, 0644);
-	$file_url = $save_url . $new_file_name;
-	
-	header('Content-type: text/html; charset=UTF-8');
-	$json = new Services_JSON();
-	echo $json->encode(array('error' => 0, 'url' => $file_url));
-	exit;
-}
-
-function alert($msg) {
-	header('Content-type: text/html; charset=UTF-8');
-	$json = new Services_JSON();
-	echo $json->encode(array('error' => 1, 'message' => $msg));
-	exit;
-}
-?>
+echo json_encode($result, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_QUOT | JSON_HEX_APOS | JSON_UNESCAPED_UNICODE);

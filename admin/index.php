@@ -1,7 +1,7 @@
 <?php
-require_once("../include/header.php");
-gethead(1,"可以管理","后台管理");
-$q=new DataAccess();
+// 后台功能目录。访问 admin/index.php 可找到题库、评测和账号管理入口，各目标页面另行校验所需权限。
+require_once(__DIR__.'/../include/header.php');
+gethead(1,"可以管理","后台管理");  // 通过后台入口权限检查后才显示菜单，各操作在目标入口再鉴权。
 ?>
 
 <div class='page'>
@@ -13,10 +13,6 @@ $q=new DataAccess();
 <li class='nav-header'>题目</li>
 <li class=''><a href="../problem/index.php"><i class='icon-list'></i>题目列表</a></li>
 <li class=''><a href="../problem/editprob.php?action=add"><i class='icon-glass'></i>添加新题目</a></li>
-<!--
-<li class=''><a href="../problem/problem_import.php"><i class='icon-glass'></i>导入题目</a></li>
-<li class=''><a href="../problem/problem_export.php"><i class='icon-glass'></i>导出题目</a></li>
--->
 <li class=''><a href="../problem/testdata.php"><i class='icon-tasks'></i>查看数据</a></li>
 <li class='nav-header'>分类</li>
 <li class=''><a href="../problem/catelist.php"><i class='icon-tags'></i>分类列表</a></li>
@@ -42,12 +38,10 @@ $q=new DataAccess();
 </ul>
 <ul class='nav nav-list span2'>
 <li class='nav-header'>评论</li>
-<!--<li class=''><a href="../discuss/index.php"><i class='icon-comment'></i>评论列表</a></li>-->
 <li class=''><a href="../problem/comments.php"><i class='icon-comment'></i>评论列表</a></li>
 <li class='nav-header'>页面</li>
 <li class=''><a href="../page/index.php"><i class='icon-file'></i>页面列表</a></li>
 <li class=''><a href="../page/editpage.php?action=add"><i class='icon-edit'></i>添加新页面</a></li>
-</ul>
 </ul>
 <ul class='nav nav-list span2'>
 <li class='nav-header'>其他</li>
@@ -61,5 +55,5 @@ $q=new DataAccess();
 </div>
 </div>
 <?php
-include_once("../include/footer.php");
+include_once(__DIR__.'/../include/footer.php');
 ?>

@@ -1,44 +1,33 @@
 <?php
-require_once("../include/header.php");
-gethead(1,"修改比赛","修改比赛场次");
+// 由 contest/editcomptime.php?action=add 打开排期表单；选定已有题单后可单独指定本场时间和参赛分组。
+require_once(__DIR__.'/../include/header.php');
+gethead(0, '修改比赛', ''); // 在加载管理表单前核对访问权限。
+$contests = Contest::choices(); // 排期只能选择已经创建的题单。
+$groups = UserGroup::all(); // 分组列表另加无需成员身份的公开组 0。
+
+if (($_GET['action'] ?? '') === 'edit') {
+    $round = ContestRound::withTitle((int)($_GET['ctid'] ?? 0))[0] ?? null; // 编辑继承原场的排期和公开设置。
+    if (!$round) throw new DomainException('场次不存在。', 404);
+} else {
+    $round = ['ctid'=>'', 'cbid'=>(int)($_GET['cbid'] ?? 0), 'group'=>(int)($groups[0]['gid'] ?? 0), 'showscore'=>1, 'intro'=>'',
+        'starttime'=>strtotime('today 19:00'), 'endtime'=>strtotime('today 22:00')]; // 新场次沿用站点时区的晚间三小时。
+}
+gethead(1, '', '修改比赛场次');
 ?>
 <div class='container'>
-<?php
-	$q=new DataAccess();
-if ($_GET[action]=='edit')
-{
-	$p=new DataAccess();
-	$sql="select comptime.*,compbase.cname from comptime,compbase where comptime.cbid=compbase.cbid and comptime.ctid={$_GET[ctid]}";
-	$cnt=$p->dosql($sql);
-	$d=$p->rtnrlt(0);
-}
-else
-{
-    $now = time();
-	$d[starttime]=mktime(19, 0, 0, date('m',$now), date('d',$now), date('Y',$now));
-    $d[endtime]=mktime(22, 0, 0, date('m',$now), date('d',$now), date('Y',$now));
-	$d[cbid]=$_GET[cbid];
-	$d['group']=0;
-    $d[showscore]=1;
-}
-?>
-<form method="post" action="doeditcomptime.php?action=<?php echo $_GET[action] ?>&ctid=<?php echo $_GET[ctid]; ?>">
+<form method="post" action="doeditcomptime.php?action=<?=h($_GET['action'] ?? '')?>&ctid=<?=h($_GET['ctid'] ?? '')?>"><?=formTokenField()?>
 <table class='table table-striped table-condensed table-bordered fiexd'>
   <tr>
     <td width='80px'>CTID</td>
-    <td><?php echo $d[ctid] ?></td>
+    <td><?php echo $round['ctid'] ?></td>
   </tr>
   <tr>
     <td>关联比赛</td>
     <td><select name="cbid" id="cbid">
         <?php
-		$sql="select cname,cbid from compbase";
-		$c=$q->dosql($sql);
-		for ($j=0;$j<$c;$j++)
-		{
-			$e=$q->rtnrlt($j);
+		foreach ($contests as $contest) {
 ?>
-        <option value="<?php echo $e[cbid] ?>" <?php if($e[cbid]==$d[cbid]) echo 'selected="selected"' ?>>[<?php echo $e[cname] ?>]</option>
+        <option value="<?php echo $contest['cbid'] ?>" <?php if($contest['cbid']==$round['cbid']) echo 'selected="selected"' ?>>[<?=h($contest['cname'])?>]</option>
         <?php }?>
       </select>
       (比赛开始后请勿再改) </td>
@@ -46,14 +35,11 @@ else
   <tr>
     <td>开放分组</td>
     <td><select name="group" id="group" >
+        <option value="0" <?=$round['group'] == 0 ? 'selected' : ''?>>[所有用户]</option>
         <?php
-		$sql="select * from groups order by gname";
-		$c=$q->dosql($sql);
-		for ($j=0;$j<$c;$j++)
-		{
-			$e=$q->rtnrlt($j);
+		foreach ($groups as $group) {
 ?>
-        <option value="<?php echo $e['gid'] ?>" <?php if($e['gid']==$d['group']) echo 'selected="selected"' ?>>[<?php echo $e['gname'] ?>]</option>
+        <option value="<?php echo $group['gid'] ?>" <?php if($group['gid']==$round['group']) echo 'selected="selected"' ?>>[<?=h($group['gname'])?>]</option>
         <?php }?>
       </select>
       (比赛开始后请勿再改) </td>
@@ -61,43 +47,43 @@ else
   <tr>
     <td>开始时间</td>
     <td>
-    <input name="st_y" type="text" class="span1" id="st_y" value="<?php echo date('Y',$d[starttime]) ?>" size="4" />
+    <input name="st_y" type="text" class="span1" id="st_y" value="<?php echo date('Y',$round['starttime']) ?>" size="4" />
       年
-        <input name="st_m" type="text" class="span1" id="st_m" value="<?php echo date('m',$d[starttime]) ?>" size="2" />
+        <input name="st_m" type="text" class="span1" id="st_m" value="<?php echo date('m',$round['starttime']) ?>" size="2" />
         月
-        <input name="st_d" type="text" class="span1" id="st_d" value="<?php echo date('d',$d[starttime]) ?>" size="2" />
+        <input name="st_d" type="text" class="span1" id="st_d" value="<?php echo date('d',$round['starttime']) ?>" size="2" />
         日
-        <input name="st_h" type="text" class="span1" id="st_h" value="<?php echo date('H',$d[starttime]) ?>" size="2" />
+        <input name="st_h" type="text" class="span1" id="st_h" value="<?php echo date('H',$round['starttime']) ?>" size="2" />
         时
-        <input name="st_i" type="text" class="span1" id="st_i" value="<?php echo date('i',$d[starttime]) ?>" size="2" />
+        <input name="st_i" type="text" class="span1" id="st_i" value="<?php echo date('i',$round['starttime']) ?>" size="2" />
         分
-        <input name="st_s" type="text" class="span1" id="st_s" value="<?php echo date('s',$d[starttime]) ?>" size="2" />
+        <input name="st_s" type="text" class="span1" id="st_s" value="<?php echo date('s',$round['starttime']) ?>" size="2" />
       秒
     </td>
   </tr>
   <tr>
     <td>结束时间</td>
-    <td><input name="et_y" type="text" class="span1" id="et_y" value="<?php echo date('Y',$d[endtime]) ?>" size="4" />
+    <td><input name="et_y" type="text" class="span1" id="et_y" value="<?php echo date('Y',$round['endtime']) ?>" size="4" />
 年
-  <input name="et_m" type="text" class="span1" id="et_m" value="<?php echo date('m',$d[endtime]) ?>" size="2" />
+  <input name="et_m" type="text" class="span1" id="et_m" value="<?php echo date('m',$round['endtime']) ?>" size="2" />
 月
-<input name="et_d" type="text" class="span1" id="et_d" value="<?php echo date('d',$d[endtime]) ?>" size="2" />
+<input name="et_d" type="text" class="span1" id="et_d" value="<?php echo date('d',$round['endtime']) ?>" size="2" />
 日
-<input name="et_h" type="text" class="span1" id="et_h" value="<?php echo date('H',$d[endtime]) ?>" size="2" />
+<input name="et_h" type="text" class="span1" id="et_h" value="<?php echo date('H',$round['endtime']) ?>" size="2" />
 时
-<input name="et_i" type="text" class="span1" id="et_i" value="<?php echo date('i',$d[endtime]) ?>" size="2" />
+<input name="et_i" type="text" class="span1" id="et_i" value="<?php echo date('i',$round['endtime']) ?>" size="2" />
 分
-<input name="et_s" type="text" class="span1" id="et_s" value="<?php echo date('s',$d[endtime]) ?>" size="2" />
+<input name="et_s" type="text" class="span1" id="et_s" value="<?php echo date('s',$round['endtime']) ?>" size="2" />
 秒</td>
   </tr>
   <tr>
     <td>公布成绩</td>
     <td>
-      <input name="showscore" type="checkbox" id="showscore" value="1" <?php if ($d[showscore]) echo 'checked="checked"'?> /> （比赛未开始时不显示成绩列表）</td>
+      <input name="showscore" type="checkbox" id="showscore" value="1" <?php if ($round['showscore']) echo 'checked="checked"'?> /> （比赛未开始时不显示成绩列表）</td>
   </tr>
   <tr>
     <td>介绍</td>
-    <td><textarea name="intro" class='textarea'><?php echo $d[intro] ?></textarea></td>
+    <td><textarea name="intro" class='textarea'><?=h($round['intro'])?></textarea></td>
   </tr>
   <tr>
     <td></td>
@@ -110,5 +96,5 @@ else
 </div>
 
 <?php
-	include_once("../include/footer.php");
+	include_once(__DIR__.'/../include/footer.php');
 ?>

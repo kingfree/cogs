@@ -1,10 +1,11 @@
 <?php
-require_once("../include/header.php");
+// 评测机列表。访问 submit/graderlist.php 查看机器和状态，拥有管理评测权限的账号可进入配置页。
+require_once(__DIR__.'/../include/header.php');
 gethead(1,"","评测机列表");
-    $q=new DataAccess();
+$canManage = Privilege::allows('管理评测');                         // 普通访客可查看状态，控制表单只给管理员。
 ?>
 <div class='row-fluid'>
-<?php if(有此权限('管理评测')) { ?>
+<?php if ($canManage) { ?>
 <a class="btn btn-info pull-left" href="editgrader.php?action=add">添加新评测机</a>
 <?php } ?>
 <table class='table table-striped table-condensed table-bordered fiexd'>
@@ -17,43 +18,31 @@ gethead(1,"","评测机列表");
     <th>备注</th>
     <th>地址</th>
     <th>优先级</th>
-<?php if(有此权限('管理评测')) { ?>
+<?php if ($canManage) { ?>
     <th>操作</th>
 <?php } ?>
   </tr>
 <?php
-    $LIB->func_socket();
-
-    $p=new DataAccess();
-    $sql="select * from grader";
-    $cnt=$p->dosql($sql);
-    for ($i=$st;$i<$cnt ;$i++) {
-        $d=$p->rtnrlt($i);
-        $s['action']="state";
-        if($d['address']=='grader') $d['address']='http://'.$_SERVER['HTTP_HOST'].'/'.$cfg['dir_root'].'grader/';
-        $debug=$tmp=httpsocket($d['address'],$s);
-        $tmp=array_decode($tmp);
-        if ($tmp==array()) {
-            $tmp['name']="无法连接";
-            $tmp['state']="未知";
-            $tmp['ver']="未知";
-            $tmp['cnt']="未知";
-        }
+foreach (Judge::all() as $judge) {                                      // 停用机位也保留在管理列表。
+    $state = Judge::request($judge['address'], ['action'=>'state']);     // 显示远端刚返回的状态。
 ?>
   <tr>
-    <td><?php echo $d['grid'] ?></td>
-    <td><?php echo $tmp['name'] ?></td>
-    <td><?php echo $tmp['cnt'] ?></td>
-    <td><?php echo $tmp['state'] ?></td>
-    <td><?php echo $tmp['ver'] ?></td>
-    <td><?php echo sp2n(htmlspecialchars($d['memo'])) ?></td>
-    <td><a href='<?=$d['address']?>' target='_blank'><?php echo $d['address'] ?></a></td>
-    <td><?php echo $d['priority'] ?></td>
-<?php if(有此权限('管理评测')) { ?>
+    <td><?php echo $judge['grid'] ?></td>
+    <td><?=h($state['name'] ?? '无法连接')?></td>
+    <td><?php echo h($state['cnt'] ?? '未知') ?></td>
+    <td><?php echo h($state['state'] ?? '未知') ?></td>
+    <td><?php echo h($state['ver'] ?? '未知') ?></td>
+    <td><?php echo sp2n(htmlspecialchars($judge['memo'])) ?></td>
+    <td><?=h($judge['address'])?></td>
+    <td><?php echo $judge['priority'] ?></td>
+<?php if ($canManage) { ?>
     <td>
-        <a href="editgrader.php?action=edit&amp;grid=<?php echo $d['grid'] ?>">修改</a>
-        <a href="doeditgrader.php?action=start&amp;grid=<?php echo $d['grid'] ?>">启动</a>
-        <a href="doeditgrader.php?action=stop&amp;grid=<?php echo $d['grid'] ?>">关闭</a>
+        <a href="editgrader.php?action=edit&amp;grid=<?php echo $judge['grid'] ?>">修改</a>
+        <form method="post" action="doeditgrader.php" style="display:inline"><?=formTokenField()?>
+        <input type="hidden" name="grid" value="<?=(int)$judge['grid']?>">
+        <button class="btn btn-link" name="action" value="start">启动</button>
+        <button class="btn btn-link" name="action" value="stop">关闭</button>
+        </form>
     </td>
 <?php } ?>
   </tr>
@@ -63,5 +52,5 @@ gethead(1,"","评测机列表");
 </table>
 </div>
 <?php
-    include_once("../include/footer.php");
+    include_once(__DIR__.'/../include/footer.php');
 ?>

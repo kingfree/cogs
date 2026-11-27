@@ -1,61 +1,29 @@
+<?php
+/**
+ * 题面或文章在页头之后引入公式配置。例：require_once __DIR__.'/../include/mathjax.inc.php';
+ * 先声明站内题面支持的 TeX 标记，再加载部署时提供的 MathJax 主程序。
+ */
+?>
 <script type="text/x-mathjax-config">
-  MathJax.HTML.Cookie.Set("menu",{});
-  MathJax.Hub.Config({
-    extensions: ["tex2jax.js"],
-    jax: ["input/TeX","output/HTML-CSS"],
+MathJax.HTML.Cookie.Set("menu", {});                      // 每次打开题页使用本站的默认公式设置。
+MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],                           // 从题面文字识别 TeX 片段。
+    jax: ["input/TeX", "output/HTML-CSS"],                // 将 TeX 排成能随正文换行的 HTML。
     "HTML-CSS": {
-      availableFonts:[],
-      styles: {".MathJax_Preview": {visibility: "hidden"}}
+        availableFonts: [],
+        styles: {".MathJax_Preview": {visibility: "hidden"}}       // 排版结束前隐藏预览占位符。
     },
     tex2jax: {
-      inlineMath: [['$','$'], ['\\(','\\)']],
-      processEscapes: true
+        inlineMath: [['$', '$'], ['\\(', '\\)']],           // 兼容旧题面两种行内公式分隔符。
+        processEscapes: true                              // 反斜杠转义的美元符号仍作普通文字。
     },
-    Tex: {
-      extensions: ["mhchem.js"],
-    }
-  });
-  MathJax.Hub.Register.StartupHook("HTML-CSS Jax 就绪",function () {
-    var FONT = MathJax.OutputJax["HTML-CSS"].Font;
-    FONT.loadError = function (font) {
-      MathJax.Message.Set("无法加载网络字体 TeX/"+font.directory,null,2000);
-      document.getElementById("noWebFont").style.display = "";
-    };
-    FONT.firefoxFontError = function (font) {
-      MathJax.Message.Set("Firefox 不能从远端加载网络字体",null,3000);
-      document.getElementById("ffWebFont").style.display = "";
-    };
-  });
-
-(function (HUB) {
-  
-  var MINVERSION = {
-    Firefox: 3.0,
-    Opera: 9.52,
-    MSIE: 6.0,
-    Chrome: 0.3,
-    Safari: 2.0,
-    Konqueror: 4.0,
-    Unknown: 10000.0 // always disable unknown browsers
-  };
-  
-  if (!HUB.Browser.versionAtLeast(MINVERSION[HUB.Browser]||0.0)) {
-    HUB.Config({
-      jax: [],                   // don't load any Jax
-      extensions: [],            // don't load any extensions
-      "v1.0-compatible": false   // skip warning message due to no jax
-    });
-    setTimeout('document.getElementById("badBrowser").style.display = ""',0);
-  }
-  
-})(MathJax.Hub);
-
-MathJax.Hub.Register.StartupHook("End",function () {
-  var HTMLCSS = MathJax.OutputJax["HTML-CSS"];
-  if (HTMLCSS && HTMLCSS.imgFonts) {document.getElementById("imageFonts").style.display = ""}
+    TeX: {extensions: ["mhchem.js"]}                       // 化学题使用 TeX 的化学式扩展。
 });
-
+(function (hub) {
+    var minimum = {Firefox: 3, Opera: 9.52, MSIE: 6, Chrome: 0.3, Safari: 2, Konqueror: 4, Unknown: 10000};
+    if (!hub.Browser.versionAtLeast(minimum[hub.Browser] || 0)) {  // 沿用旧站列明的最低浏览器版本。
+        hub.Config({jax: [], extensions: [], "v1.0-compatible": false});  // 不兼容时保留可阅读的公式原文。
+    }
+})(MathJax.Hub);
 </script>
 <script type="text/javascript" src="/MathJax/MathJax.js"></script>
-
-

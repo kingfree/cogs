@@ -1,52 +1,22 @@
 <?php
-require_once("../include/header.php");
-gethead(8,"","");
-过滤();
-$_POST['usr']=htmlspecialchars($_POST['usr']);
-$_POST['nickname']=htmlspecialchars($_POST['nickname']);
-$_POST['realname']=htmlspecialchars($_POST['realname']);
-$_POST['email']=htmlspecialchars($_POST['email']);
-$_POST['user_style']=htmlspecialchars($_POST['user_style']);
-$_POST['memo']=htmlspecialchars($_POST['memo']);
-
-$regpage=取路径("user/register.php?accept=1");
-
-if($_POST['VerifyCode'] != $_SESSION["IMGCODE"])
-异常("验证码错误，请一律小写！", $regpage);
-if(!preg_match('/([_a-z0-9]{1,24})/', $_POST['usr']))
-异常("用户名长度必须在[1,24]中且只能使用英文字母、数字以及_。", $regpage);
-$p=new DataAccess();
-$LIB->cls_reg();
-$rc=new RegisterCheck;
-$sql="select * from userinfo where usr='".$_POST['usr']."'";
-$cnt=$p->dosql($sql);
-if ($cnt==0) {
-if(!preg_match('/(.{0,24})/', $_POST['pwd']))
-异常("密码长度必须在[0,24]中。", $regpage);
-if($_POST['pwd'] != $_POST['repwd'])
-异常("重复输入密码必须和密码相同。", $regpage);
-if(!preg_match('/(\S{1,20})/', $_POST['nickname']))
-异常("昵称长度必须在[2,20]中。", $regpage);
-if(!preg_match('/(\S*@\S*\.\S*)/', $_POST['email']))
-异常("电子邮箱格式不正确。", $regpage);
-if(!preg_match('/(\S{0,8})/', $_POST['realname']))
-异常("真实姓名长度必须在[0,8]中，应该是汉字。", $regpage);
-if(!preg_match('/(.{0,64})/', $_POST['passwordtip']))
-异常("提示问题长度必须在[0,64]中。", $regpage);
-if(!preg_match('/(.{0,64})/', $_POST['passwordtipans']))
-异常("提示问题答案长度必须在[0,64]中。", $regpage);
-    $sql="insert into userinfo(uid,usr,nickname,readforce,admin,regtime,pwdhash,pwdtipques,pwdtipanshash,memo,realname,email,gbelong,user_style,style) values (0, '{$_POST[usr]}','{$_POST[nickname]}','{$SET['reg_readforce']}',0, ". time() .",'". encode($_POST[pwd]) ."' ,'{$_POST[passwordtip]}' , '". encode($_POST[passwordtipans]) ."', '{$_POST[memo]}','{$_POST['realname']}','{$_POST['email']}','{$SET['reg_defgroup']}','{$SET['user_style']}', 0)";
-    $p->dosql($sql);
-    $sql="select * from userinfo where usr='".$_POST['usr']."'";
-    $cnt2=$p->dosql($sql);
-    if ($cnt2==1)
-        $d=$p->rtnrlt(0);
-    else
-        异常("用户 {$_POST['usr']} 注册失败！",取路径("user/register.php?accept=1"));
-    $tm = time()+7776000;
-    setcookie("cogs_usr", $_POST[usr], $tm, "/");
-    setcookie("cogs_pwd_hash",encode($_POST[pwd]), $tm, "/");
-    提示("用户 {$_POST['usr']} 注册成功！生成头像缓存需要一定时间等耐心等待……<p>之后你可以更改你的个人信息看看。",取路径("user/panel.php"));
-} else
-异常("用户 {$_POST['usr']} 已存在！",取路径("user/register.php?accept=1"));
-?>
+// 接收 user/register.php?accept=1 的注册表单，通过图形验证码和资料校验后建立账号与会话。
+require_once __DIR__.'/../include/header.php';
+requirePost();
+$page = 取路径('user/register.php?accept=1'); // 表单无效时返回已同意协议的注册页。
+if (empty($SET['limit_regallow']) || !empty($_SESSION['ID'])) { http_response_code(403); exit('当前不能注册。'); } // 服务端复核开关，已打开的旧注册表单也受此限制。
+$code = $_SESSION['IMGCODE'] ?? ''; // 校验值只取服务端为本次图片保存的内容。
+// 不论本次输入是否正确，当前图片的验证码只使用一次。
+unset($_SESSION['IMGCODE']);
+if ($code === '' || !is_string($_POST['VerifyCode'] ?? null) || !hash_equals($code, $_POST['VerifyCode'])) i异常('验证码错误。', $page);
+$password = $_POST['pwd'] ?? ''; // 密码按原输入保存，不与普通资料一起 trim。
+if ($password !== ($_POST['repwd'] ?? null)) i异常('两次密码不一致。', $page);
+try {
+    $profile = Account::profileFields($_POST);
+    $recovery = Password::recovery($_POST['passwordtip'] ?? '', $_POST['passwordtipans'] ?? ''); // 没填答案表示关闭找回；填了就只存其哈希。
+    $user = Account::register($profile, Password::hash($password), $recovery, $SET); // 唯一索引负责处理同名注册，成功时拿到新 UID。
+} catch (InvalidArgumentException $error) {
+    i异常($error->getMessage(), $page);
+}
+if (!Login::start($user)) i异常('账号凭据已变更，请重新登录。', 取路径('user/login.php')); // 注册与首次登录之间账号被改动时需按最新凭据重新登录。
+Login::saveToken($user); // 注册成功沿用旧站自动登录并记住当前设备的体验。
+i提示('注册成功。', 取路径('user/panel.php'));

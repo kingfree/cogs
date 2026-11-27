@@ -1,44 +1,11 @@
 <?php
-require_once("../include/header.php");
-gethead(1,"修改题目","导入题目");
-function writable($path){
-	$ret=false;
-	$fp=fopen($path."/testifwritable.tst","w");
-	$ret=!($fp===false);
-	fclose($fp);
-	unlink($path."/testifwritable.tst");
-	return $ret;
-}
-   $maxfile=min(ini_get("upload_max_filesize"),ini_get("post_max_size"));
-$OJ_DATA=$cfg['testdata'];
+// 提供 FPS 题包上传表单。需要修改题目权限，由导入入口读取上传的 XML。
+// 打开 problem/problem_import.php，选取 FPS XML 文件后提交。
+require_once __DIR__.'/../include/header.php';
+gethead(1, '修改题目', '导入题目');
 ?>
-欲导入 FPS 数据，请确认上传文件大小小于 [<?php echo $maxfile?>] <br/>
-or set upload_max_filesize and post_max_size in PHP.ini<br/>
-if you fail on import big files[10M+],try enlarge your [memory_limit]  setting in php.ini.<br>
-<?php 
-    $show_form=true;
-	   if(!writable($OJ_DATA)){
-		   echo " You need to add  $OJ_DATA into your open_basedir setting of php.ini,<br>
-					or you need to execute:<br>
-					   <b>chmod 775 -R $OJ_DATA && chgrp -R www-data $OJ_DATA</b><br>
-					you can't use import function at this time.<br>"; 
-			$show_form=false;
-	   }
-	   if(!writable("../upload")){
-		   echo "../upload is not writable, <b>chmod 770</b> to it.<br>";
-		   $show_form=false;
-	   }
-	if($show_form){
-?>
-<br>
-<form action='problem_import_xml.php' method=post enctype="multipart/form-data">
-	<b>Import Problem:</b><br />
-	<input type=file name=fps >
-    <input type=submit value='Import'>
+<form method="post" action="problem_import_xml.php" enctype="multipart/form-data"><?=formTokenField()?>
+<label>FPS 题包 <input type="file" name="fps" accept=".xml" required></label>
+<button class="btn btn-primary">导入题目</button>
 </form>
-<?php 
-   	}
-?>
-<br>
-
-free problem set FPS-xml can be download at <a href=http://code.google.com/p/freeproblemset/downloads/list>FPS-Googlecode</a>
+<?php require dirname(__DIR__).'/include/footer.php'; ?>

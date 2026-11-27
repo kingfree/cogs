@@ -1,13 +1,11 @@
 <?php
-require_once("../include/header.php");
+// 登录后访问 user/panel.php 编辑自己的资料、主题、密码和找回问题；各项操作 POST 到 doedit.php。
+require_once(__DIR__.'/../include/header.php');
 gethead(1,"sess","控制面板");
-$p=new DataAccess();
-$sql="select * from userinfo where uid={$_SESSION[ID]}";
-$cnt=$p->dosql($sql);
-$d=$p->rtnrlt(0);
+$profile = Account::byId($_SESSION['ID'])[0]; // 进入本页前 bootstrap 已确认会话用户仍存在。
 ?>
 
-<form method="post" action="doedit.php?uid=<?php echo $_SESSION['ID'] ?>" class='form-inline'>
+<form method="post" action="doedit.php?uid=<?php echo $_SESSION['ID'] ?>" class='form-inline'><?=formTokenField()?>
 <div id='editpwd' class='modal hide fade in'>
 <div class='modal-header'>
 <button class='close' data-dismiss='modal'>×</button>
@@ -37,7 +35,7 @@ $d=$p->rtnrlt(0);
 </div>
 </form>
 
-<form method="post" action="doedit.php?uid=<?php echo $_SESSION['ID'] ?>" class='form-inline'>
+<form method="post" action="doedit.php?uid=<?php echo $_SESSION['ID'] ?>" class='form-inline'><?=formTokenField()?>
 <div id='editpwdans' class='modal hide fade in'>
 <div class='modal-header'>
 <button class='close' data-dismiss='modal'>×</button>
@@ -52,7 +50,7 @@ $d=$p->rtnrlt(0);
 </tr>
 <tr>
 <td>新密码提示问题</td>
-<td><input name="qus" type="text" value="<?=$d['pwdtipques']?>"></td>
+<td><input name="qus" type="text" value="<?=h($profile['pwdtipques'])?>"></td>
 </tr>
 <tr>
 <td>提示问题的答案</td>
@@ -68,60 +66,60 @@ $d=$p->rtnrlt(0);
 </form>
 
 <div class='row-fluid'>
-<form id='xiugai' method="post" action="doedit.php?uid=<?=$_SESSION[ID] ?>" enctype="multipart/form-data" class='form-inline page' >
+<form id='xiugai' method="post" action="doedit.php?uid=<?=$_SESSION['ID'] ?>" enctype="multipart/form-data" class='form-inline page' ><?=formTokenField()?>
 <input name="action" type="hidden" value="edit" />
-<input name="uid" type="hidden" value="<?=$d['uid']?>" />
+<input name="uid" type="hidden" value="<?=$profile['uid']?>" />
 <table id="userpanel" class='table-form'>
   <tr>
     <th width='80px'>用户编号</th>
     <td>
-    <?=$d['uid'] ?>
+    <?=$profile['uid'] ?>
     <td width="100px">
-    <?=gravatar::showImage($d['email']);?>
+    <?=gravatar::showImage($profile['email']);?>
     </td>
     <th width='220px'>用户头像</th>
   </tr>
   <tr>
     <th>用户名称</th>
-    <td><input name="usr" value="<?=$d['usr']?>" id='usr' type='text'/></td>
+    <td><input name="usr" value="<?=h($profile['usr'])?>" id='usr' required maxlength="24" pattern="[A-Za-z0-9_]+" type='text'/></td>
     <td rowspan=4>
-<?=gravatar::showImage($d['email'], 64);?>
+<?=gravatar::showImage($profile['email'], 64);?>
     </td>
     <td rowspan='8' class='center'>
-    <?=gravatar::showImage($d['email'], 200);?><br />
+    <?=gravatar::showImage($profile['email'], 200);?><br />
     <p />
     <a href="http://cn.gravatar.com" target='_blank' class='btn ' title='Gravatar - 全球公认的头像' rel='popover' data-content='<p class="alert"><span class="label label-warning">注意</span>此网站在中国大陆访问可能会出现问题，请自行想办法解决。</p><p>首先点此按钮进入 Gravatar 网站，点击上方下滑菜单中的注册，输入你的电子邮件地址（对，就是你在 COGS 使用的邮箱），点击注册后会想你邮箱中发送一封验证邮件，以此连接验证身份后可在网站注册用户。</p><p class="alert alert-info">上传头像并裁剪后会有评级系统，你只需要选择<span class="badge badge-info">G(普通级)</span>即可。</p>'>上传头像</a>
     <p />
-    <a href="dodelimg.php?email=<?=md5($d['email'])?>" class='btn '>重建头像缓存</a>
+    <a href="dodelimg.php?email=<?=md5($profile['email'])?>" class='btn '>重建头像缓存</a>
     <div>
     </div>
     </td>
   </tr>
   <tr>
     <th>用户昵称</th>
-    <td><input name="nickname" value="<?=$d['nickname']?>" type='text' id='nickname'/></td>
+    <td><input name="nickname" value="<?=h($profile['nickname'])?>" type='text' id='nickname' required maxlength="16"/></td>
   </tr>
   <tr>
     <th>真实姓名</th>
-    <td><input name="realname" type='text' value="<?=$d['realname']?>" id='realname' /></td>
+    <td><input name="realname" type='text' value="<?=h($profile['realname'])?>" id='realname' maxlength="16" /></td>
   </tr>
   <tr>
     <th>电子邮件</th>
-    <td><input name="email" type="email" value="<?=$d['email']?>" id='email' /></td>
+    <td><input name="email" type="email" value="<?=h($profile['email'])?>" id='email' required /></td>
   </tr>
   <tr>
     <th>系统主题</th>
     <td colspan=2>
-    <select name="user_style"><? $dir="../../Bootstrap/css/";
-$ssss= glob("$dir*.min.css");
-foreach($ssss as $sms) {
-    $zhuti = str_replace(".min.css", "", str_replace($dir, "", $sms));
-    echo "<option value='$zhuti' ";
-    if($d['user_style'] == $zhuti) echo "selected='selected'";
-    echo ">$zhuti</option>";
-}?><select>
-    <label class='radio inline'><input type='radio' name='style' value='0' <?if(!$d['style']) echo "checked='checked'";?>/>浅色标题栏</label>
-    <label class='radio inline'><input type='radio' name='style' value='1' <?if($d['style']) echo "checked='checked'";?>/>深色标题栏</label>
+    <select name="user_style">
+<?php // 与页头相同，主题样式来自站点根目录下的 Bootstrap/css。
+foreach (glob(rtrim($_SERVER['DOCUMENT_ROOT'], '/').'/Bootstrap/css/*.min.css') as $file) {
+    $theme = basename($file, '.min.css'); // 选择框保存主题名称，网页头部再拼接样式后缀。
+?>
+<option value="<?=h($theme)?>" <?=$profile['user_style'] === $theme ? 'selected' : ''?>><?=h($theme)?></option>
+<?php } ?>
+</select>
+    <label class='radio inline'><input type='radio' name='style' value='0' <?php if(!$profile['style']) echo "checked='checked'";?>/>浅色标题栏</label>
+    <label class='radio inline'><input type='radio' name='style' value='1' <?php if($profile['style']) echo "checked='checked'";?>/>深色标题栏</label>
     </td>
   </tr>
   <tr>
@@ -130,7 +128,7 @@ foreach($ssss as $sms) {
   </tr>
   <tr>
     <th>个人介绍</th>
-    <td colspan=2><textarea name="memo" class='span12' ><?=$d['memo']?></textarea></td>
+    <td colspan=2><textarea name="memo" class='span12' ><?=h($profile['memo'])?></textarea></td>
   </tr>
   <tr>
     <th></th>
@@ -142,42 +140,8 @@ foreach($ssss as $sms) {
   </tr>
 </table>
 </form>
-<script language="javascript">
-$("#xiugai").submit(function() {
-  var t = $("#usr").val();
-  var e = /([_a-z0-9]{1,24})/;
-  if(!e.test(t)) {
-    alert("用户名长度必须在[1,24]中且只能使用英文字母、数字以及_。");
-    return false;
-  }
-  $.get("checkname.php",{name: t},function(txt){
-    if(txt != <?=$d['uid']?>) {
-      alert("用户名已被注册！");
-      return false;
-    }
-  });
-  t = $("#nickname").val();
-  e = /(\S{1,20})/;
-  if(!e.test(t)) {
-    alert("昵称长度必须在[1,20]中。");
-    return false;
-  }
-  t = $("#email").val();
-  e = /(\S*@\S*\.\S*)/;
-  if(!e.test(t)) {
-    alert("电子邮箱格式不正确。");
-    return false;
-  }
-  t = $("#realname").val();
-  e = /(\S{0,20})/;
-  if(!e.test(t)) {
-    alert("真实姓名长度必须在[0,20]中。");
-    return false;
-  }
-  return true;
-});
-</script>
+
 </div>
 <?php
-include_once("../include/footer.php");
+include_once(__DIR__.'/../include/footer.php');
 ?>

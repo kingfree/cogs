@@ -1,34 +1,32 @@
 <?php
-require_once("../include/header.php");
+// 通过 user/editgroup.php?action=edit&gid=1 查看目标组的名称、说明、负责人和父组，提交给 doeditgroup.php。
+require_once(__DIR__.'/../include/header.php');
 gethead(1,"分组管理","修改分组");
-$p=new DataAccess();
-$q=new DataAccess();
-$d['adminuid']=$_SESSION['ID'];
-$d['parent']=1;
-if ($_GET[action]=='edit') {
-    $sql="select * from groups where gid={$_GET[gid]}";
-    $cnt=$p->dosql($sql);
-    $d=$p->rtnrlt(0);
+$group = ['gid'=>0, 'adminuid'=>$_SESSION['ID'], 'parent'=>1, 'gname'=>'', 'memo'=>'']; // 新组默认属于注册用户组。
+$action = $_GET['action'] ?? 'add'; // 区分新建默认值与已有分组的设置。
+if ($action === 'edit') {
+    $group = UserGroup::tree()[(int)($_GET['gid'] ?? 0)] ?? null; // 编辑时展示已有的负责人和父组。
+    if (!$group) 异常('无此分组！', 取路径('user/grouplist.php'));
 }
 ?>
 <div class='container'>
-<form method="post" action="doeditgroup.php?action=<?php echo $_GET[action] ?>&gid=<?php echo $_GET[gid]; ?>" class='form-horizontal'>
+<form method="post" action="doeditgroup.php?action=<?=h($_GET['action'] ?? '')?>&gid=<?=h($_GET['gid'] ?? '')?>" class='form-horizontal'><?=formTokenField()?>
 <div class='control-group'>
 <label class='control-label' for='gid'>GID</label>
 <div class='controls'>
-<span id='gid' class='uneditable-input' ><?=$d['gid'] ? $d['gid'] : "新建"?></span>
+<span id='gid' class='uneditable-input' ><?=$group['gid'] ? $group['gid'] : "新建"?></span>
 </div>
 </div>
 <div class='control-group'>
 <label class='control-label' for='adminuid'>管理员uid</label>
 <div class='controls'>
-<input name="adminuid" type="text" id="adminuid" value="<?php echo $d['adminuid'] ?>">
+<input name="adminuid" type="text" id="adminuid" value="<?php echo $group['adminuid'] ?>">
 </div>
 </div>
 <div class='control-group'>
 <label class='control-label' for='gname'>分组名称</label>
 <div class='controls'>
-<input name="gname" type="text" id="gname" value="<?=$d['gname'] ?>" />
+<input name="gname" type="text" id="gname" value="<?=h($group['gname'])?>" />
 </div>
 </div>
 <div class='control-group'>
@@ -36,13 +34,9 @@ if ($_GET[action]=='edit') {
 <div class='controls'>
 <select name="parent" id="parent">
 <?php
-$sql="select * from groups order by gname";
-$c=$q->dosql($sql);
-for ($j=0;$j<$c;$j++) {
-    $e=$q->rtnrlt($j);
-    echo "<option value='{$e['gid']}' ";
-    if($d['parent']==$e['gid']) echo "selected='selected'";
-    echo " >{$e['gname']}</option>";
+foreach (UserGroup::all() as $parent) {
+    $selected = $group['parent'] == $parent['gid'] ? 'selected' : ''; // 编辑时显示原父组，提交字段保持旧的编号格式。
+    echo "<option value='{$parent['gid']}' $selected>".h($parent['gname']).'</option>';
 }
 ?>
 </select>
@@ -51,7 +45,7 @@ for ($j=0;$j<$c;$j++) {
 <div class='control-group'>
 <label class='control-label' for='memo'>分组说明</label>
 <div class='controls'>
-<textarea id='memo' name="memo" class="textarea"><?=$d['memo']?></textarea>
+<textarea id='memo' name="memo" class="textarea"><?=h($group['memo'])?></textarea>
 </div>
 </div>
 <div class='form-actions'>
@@ -60,5 +54,5 @@ for ($j=0;$j<$c;$j++) {
 </form>
 </div>
 <?php
-include_once("../include/footer.php");
+include_once(__DIR__.'/../include/footer.php');
 ?>

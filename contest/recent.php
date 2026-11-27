@@ -1,5 +1,6 @@
 <?php
-require_once("../include/header.php");
+// 访问 contest/recent.php 查看外站赛程；本页的数据来自远端赛事列表。
+require_once(__DIR__.'/../include/header.php');
 gethead(1,"","在线竞赛");
 ?>
 <div class='row-fluid'>
@@ -14,21 +15,21 @@ gethead(1,"","在线竞赛");
 </thead>
 <tbody>
 <?php
-$json = @file_get_contents('http://contests.acmicpc.info/contests.json');
-$rows = json_decode($json, true);
-foreach($rows as $row) {
+$events = Contest::recentElsewhere(); // 外站不可用时仍可进入比赛页面。
+if (!$events) echo '<tr><td colspan="4">暂无外站赛程。</td></tr>';
+foreach ($events as $event) {
 ?>
 <tr>
-<td><?php echo$row['oj']?></td>
-<td><a id="name_<?php echo$row['id']?>" href="<?php echo$row['link']?>" target="_blank"><?php echo$row['name']?></a></td>
-<td><?php echo$row['start_time']?> <?php echo$row['week']?></td>
-<td><?php echo$row['access']?></td>
+<td><?=h($event['oj'] ?? '')?></td>
+<td><a href="<?=h($event['link'])?>" target="_blank" rel="noopener"><?=h($event['name'])?></a></td>
+<td><?=h($event['start_time'] ?? '')?> <?=h($event['week'] ?? '')?></td>
+<td><?=h($event['access'] ?? '')?></td>
 </tr>
 <?php } ?>
 </tbody>
 </table>
 </div>
 <?php
-	include_once("../include/footer.php");
+	include_once(__DIR__.'/../include/footer.php');
 ?>
 

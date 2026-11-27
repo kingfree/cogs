@@ -1,72 +1,57 @@
 <?php
-require_once("../include/header.php");
-$p=new DataAccess();
-$sql="select compbase.cname,problem.pid,problem.filename,problem.probname,userinfo.uid,userinfo.nickname,userinfo.realname,comptime.endtime,compscore.* from problem,compscore,comptime,compbase,userinfo where compscore.pid=problem.pid and comptime.ctid=compscore.ctid and userinfo.uid=compscore.uid and compscore.csid={$_GET[csid]} and compbase.cbid=comptime.cbid";
-$cnt=$p->dosql($sql);
-if ($cnt) {
-	$d=$p->rtnrlt(0);
-    if(!有此权限("查看比赛") && (time() < $d['endtime'] && $_SESSION['ID'] != $d['uid']))
-        异常("比赛未结束！", 取路径("contest/index.php"));
-	if ($d[lang]==0) $ext="pas"; else
-	if ($d[lang]==1) $ext="c"; else
-	if ($d[lang]==2) $ext="cpp"; 
-	$fp=fopen("{$SET['dir_competition']}{$d[ctid]}/{$d[uid]}/{$d[filename]}.{$ext}","r");
-	if (is_resource($fp)) {
-		$code=rfile($fp);
-	}
-	fclose($fp);
-    $code=mb_convert_encoding($code, "utf-8", "gbk");
-} else 异常("提交记录不存在");
-gethead(1,"sess","比赛代码", $d['uid']);
-$LIB->hlighter();
+// contest/code.php?csid=1 只向本场读者开放。选手可核对自己的交卷，其他人的代码按成绩公布规则开放。
+require_once(__DIR__.'/../include/header.php');
+gethead(0, '普通用户', ''); // 先校验登录，再判断指定交卷的读者范围。
+$entry = ContestEntry::forReader((int)($_GET['csid'] ?? 0), $SET['dir_competition']); // 只有可见的交卷才会连同其源码返回。
+if (!$entry) throw new DomainException('提交记录不存在或未开放。', 404);
+$round = $entry['round']; // 分数、逐点结果和资源用量共享同一个公布状态。
+gethead(1,"sess","比赛代码", $entry['uid']);
+require_once __DIR__.'/../include/hlighter.inc.php';
 
 ?>
 <div class='row-fluid'>
 <table class='table table-striped table-condensed table-bordered fiexd'>
 <tr>
     <th width="60px">比赛</th>
-    <td><b><?=$d['cname']?></b></td>
+    <td><b><?=h($round['cname'])?></b></td>
     <th width="60px">评测结果</th>
-    <td class='wrap'><?php 评测结果($d['result'], 100) ?></td>
+    <td class='wrap'><?php if ($round['scoresVisible']) 评测结果($entry['result'], 100); else echo '未公布'; ?></td>
 </tr>
 <tr>
     <th>题目名称</th>
-    <td><a href="problem.php?ctid=<?=$d['ctid']?>&pid=<?php echo $d['pid']; ?>"><?php echo $d['probname']; ?></a></td>
+    <td><a href="problem.php?ctid=<?=$entry['ctid']?>&pid=<?php echo $entry['pid']; ?>"><?=h($entry['probname'])?></a></td>
     <th>最终得分</th>
-    <td><?php echo $d['score'] ?></td>
+    <td><?=$round['scoresVisible'] ? $entry['score'] : '未公布'?></td>
 </tr>
 <tr>
     <th>用户昵称</th>
-    <td><a href="../user/detail.php?uid=<?php echo $d['uid']; ?>" target="_blank"><?php echo $d['nickname']; ?></a></td>
+    <td><a href="../user/detail.php?uid=<?php echo $entry['uid']; ?>" target="_blank"><?=h($entry['nickname'])?></a></td>
     <th>运行时间</th>
-    <td><?php printf("%.3f",$d['runtime']/1000.0) ?> s </td>
+    <td><?php if ($round['scoresVisible']) printf("%.3f",$entry['runtime']/1000.0); else echo "—" ?> s </td>
 </tr>
 <tr>
     <th>代码语言</th>
-    <td><?=$STR['lang'][$d['lang']]?></td>
+    <td><?=$STR['lang'][$entry['lang']]?></td>
     <th>内存使用</th>
-    <td><?php printf("%.2f",$d['memory']/1024) ?> MiB </td>
+    <td><?php if ($round['scoresVisible']) printf("%.2f",$entry['memory']/1024); else echo "—" ?> MiB </td>
 </tr>
 <tr>
     <th>提交时间</th>
-    <td colspan='3'><?php echo date('Y-m-d H:i:s',$d[subtime]); ?></td>
+    <td colspan='3'><?php echo date('Y-m-d H:i:s',$entry['subtime']); ?></td>
 </tr>
 <tr>
 </tr>
 </table>
-<?    if($d['lang']==0) $langstr="pascal";
-    else if($d['lang']==1) $langstr="c";
-    else if($d['lang']==2) $langstr="cpp";
-?>
+<?php $langstr = [0=>'pascal', 1=>'c', 2=>'cpp'][$entry['lang']] ?? ''; ?>
 <a href="#code" class="btn btn-mini pull-right" data-toggle="modal">显示代码纯文本</a>
 <div id="code" class="modal hide">
 <button class='close' data-dismiss='modal'>×</button>
 <div class='modal-body'>
-<pre><?=htmlspecialchars($code)?></pre>
+<pre><?=h($entry['code'])?></pre>
 </div>
 </div>
-<pre class="prettyprint linenums lang-<?=$langstr?>"><?=htmlspecialchars($code)?></pre>
+<pre class="prettyprint linenums lang-<?=$langstr?>"><?=h($entry['code'])?></pre>
 </div>
 <?php
-	include_once("../include/footer.php");
+	include_once(__DIR__.'/../include/footer.php');
 ?>

@@ -1,125 +1,92 @@
 <?php
-require_once("../include/header.php");
+// 普通题面。打开 problem/problem.php?pid=1 可查看当前账号能读的题目、标签和提交入口。
+require_once(__DIR__.'/../include/header.php');
 $uid = (int) $_SESSION['ID'];
-$pid = (int) $_GET['pid'];
-$p=new DataAccess();
-$sql="select problem.*,groups.* from problem,groups where pid=".(int)$_GET[pid]." and groups.gid=problem.group limit 1";
-$cnt=$p->dosql($sql);
-$d=$p->rtnrlt(0);
-$title = $d['probname'];
-gethead(1,"",$pid.". ".$title);
-$LIB->hlighter();
-$LIB->mathjax();
-$q=new DataAccess();
-$r=new DataAccess();
-if($cnt) {
-    if ($d[readforce]>$_SESSION[readforce]) 
-        异常("没有阅读权限！", 取路径("problem/index.php"));
-    if (!$d[submitable] && !有此权限('查看题目') && $d['addid'] != $uid) 
-        异常("该题目不可提交！", 取路径("problem/index.php"));
-    $subgroup=$LIB->getsubgroup($q,$d['gid']);
-    $subgroup[0]=$d['gid'];
-    $promise=false;
-    if($uid == $d['addid']) $promise=true;
-    foreach($subgroup as $value) {
-        if ($value==(int)$_SESSION['group']) {
-            $promise=true;
-            break;
-        }
-    }
-    if (!$promise && !有此权限('查看题目'))
-        异常("没有阅读权限！", 取路径("problem/index.php"));
-    $pid=$d[pid];
-} else {
-    异常("无此题目！！", 取路径("problem/index.php"));
-}
+$pid = (int) ($_GET['pid'] ?? 0);
+$problem = Problem::forReader($pid);           // 先判断阅读范围，再取得题面及关联数据。
+if (!$problem) { http_response_code(404); exit('题目不存在或未开放。'); }  // 对读者统一隐藏不存在与尚未开放的题。
+// 读者获准打开题面后，才载入题目标题、代码高亮和数学公式。
+gethead(1, '', $pid.'. '.$problem['probname']);
+require_once __DIR__.'/../include/hlighter.inc.php';
+require_once __DIR__.'/../include/mathjax.inc.php';
+// 游客没有个人提交，已登录用户取本题最好的成绩。
+$myBest = $uid ? (Submission::best($pid, $uid)[0] ?? null) : null;
+$authorName = Account::realName($problem['addid'])[0]['realname'] ?? '';  // 按旧权限在题面显示真实姓名。
+$labels = Category::labels($pid);
+$judges = Judge::enabled();                    // 两个提交表单共用同一份在线评测机列表。
+$testDraft = (int)($problem['addid'] == $uid && !$problem['submitable']);
+$leaders = Submission::leaders($pid, $SET['style_single_ranksize']);
+$comments = Comment::recentForProblem($pid);   // 只取题面速览所需的讨论，全部楼层另有专页。
 ?>
 
 <div class='row-fluid'>
 <div id="leftbar" class='span4'>
 <table class='table table-striped table-condensed table-bordered fiexd'>
 <tr><th style="min-width: 5em;">题目名称</th>
-<td style="min-width: 80%;"><?=$d['pid']?>. <b><?=$d['probname']; ?></b></td></tr>
+<td style="min-width: 80%;"><?=$problem['pid']?>. <b><?=h($problem['probname'])?></b></td></tr>
 <tr><th>输入输出</th>
-<td><code><?=$d['filename']?>.in/out</code></td></tr>
+<td><code><?=h($problem['filename'])?>.in/out</code></td></tr>
 <tr><th>难度等级</th>
-<td><?=难度($d['difficulty']); ?>
-<!--<?php if(有此权限('查看题目')) { ?>
-<a href="../problem/problem_export.php?pid=<?=$d['pid']?>" target='_blank' class='btn btn-mini pull-right'>导出题目</a>
-<? } ?>-->
+<td><?=难度($problem['difficulty']); ?>
+<!--<?php if(Privilege::allows('查看题目')) { ?>
+<a href="../problem/problem_export.php?pid=<?=$problem['pid']?>" target='_blank' class='btn btn-mini pull-right'>导出题目</a>
+<?php  } ?>-->
 </td></tr>
 <tr><th>时间限制</th>
-<td><?=$d['timelimit']; ?> ms (<?=$d['timelimit']/1000?> s)</td></tr>
+<td><?=$problem['timelimit']; ?> ms (<?=$problem['timelimit']/1000?> s)</td></tr>
 <tr><th>内存限制</th>
-<td><?=$d['memorylimit']; ?> MB </td></tr>
-<tr><th><?php if(有此权限('查看数据')) { ?>
-<a href='testdata.php?problem=<?=$d['filename']?>'>测试数据</a>
-<? } else { ?>测试数据<? } ?></th>
+<td><?=$problem['memorylimit']; ?> MB </td></tr>
+<tr><th><?php if(Privilege::allows('查看数据')) { ?>
+<a href='testdata.php?problem=<?=h($problem['filename'])?>'>测试数据</a>
+<?php  } else { ?>测试数据<?php  } ?></th>
 <td>
-<span class='badge badge-<?=$d['submitable']?"success":"important"?>'><?=$d['datacnt']?></span>
-<span class='pull-right'><?=$STR['plugin'][$d['plugin']]?></span>
+<span class='badge badge-<?=$problem['submitable']?"success":"important"?>'><?=$problem['datacnt']?></span>
+<span class='pull-right'><?=$STR['plugin'][$problem['plugin']]?></span>
 </td></tr>
 <tr>
 <th>题目来源</th>
 <td>
-<?php if(有此权限('查看题目') || $uid == $d['addid']) { 
-    $sql="SELECT realname FROM userinfo WHERE uid ={$d['addid']} limit 1";
-    $ac=$q->dosql($sql);
-    $e=$q->rtnrlt(0); ?>
-<a href="../user/detail.php?uid=<?=$d['addid']; ?>"><?=$e['realname']?></a>
-<? } ?>
-<?=date('Y-m-d', $d['addtime']) ?>
-<?php if(有此权限('修改题目') || $d['addid'] == $uid) { ?>
-<a href="editprob.php?action=edit&pid=<?=$d['pid']?>" class='btn btn-info btn-mini pull-right' title="修改题目 <?=$d['probname']?>" >修改该题</a>
-<? } ?>
+<?php if(Privilege::allows('查看题目') || $uid == $problem['addid']) {
+?>
+<a href="../user/detail.php?uid=<?=$problem['addid']; ?>"><?=h($authorName)?></a>
+<?php  } ?>
+<?=date('Y-m-d', $problem['addtime']) ?>
+<?php if(Privilege::allows('修改题目') || $problem['addid'] == $uid) { ?>
+<a href="editprob.php?action=edit&pid=<?=$problem['pid']?>" class='btn btn-info btn-mini pull-right' title="修改题目 <?=h($problem['probname'])?>" >修改该题</a>
+<?php  } ?>
 </td></tr>
 <tr><th>开放分组</th>
-<td><a href="../user/index.php?gid=<?=$d['gid'] ?>" target="_blank" class='btn btn-mini btn-warning'><?=$d['gname']?></a></td></tr>
+<td><a href="../user/index.php?gid=<?=$problem['gid'] ?>" target="_blank" class='btn btn-mini btn-warning'><?=h($problem['gname'])?></a></td></tr>
 <tr><th><a href="../submit/index.php?pid=<?=$pid; ?>">提交状态</a></th>
 <td><?php
-$acpid=0;
-if($uid) {
-    $sql="(SELECT max(score) AS score FROM submit WHERE pid ={$pid} AND uid ={$uid})";
-    $ac=$q->dosql($sql);
-    if ($ac) {
-        $e=$q->rtnrlt(0);
-        $score=(int)$e['score'];
-        $sql="SELECT sid,lang,result,accepted FROM submit WHERE pid={$pid} AND uid={$uid} AND score={$score} order by sid desc";
-        $ac=$q->dosql($sql);
-        if ($ac) {
-            $e=$q->rtnrlt(0);
-            $acpid=$e['accepted'];
-            echo "<a href='../submit/code.php?id={$e['sid']}'>";
-            echo $STR['lang'][$e['lang']];
-            echo "</a> ";
-            评测结果($e['result'], 20);
-        }
-    }
+$accepted = !empty($myBest['accepted']);      // 已通过本题的人可以直接看到标签。
+if ($myBest) {
+    echo "<a href='../submit/code.php?id=".(int)$myBest['sid']."'>".$STR['lang'][$myBest['lang']]."</a> ";
+    评测结果($myBest['result'], 20);
 } ?>
 </td></tr>
 <tr><th id="fenleito" title="单击以显示或隐藏分类标签" style="cursor:pointer">分类标签</th>
-<td><div id="fenlei"><?php
-$sql="select category.cname,category.memo,category.caid from category,tag where tag.pid={$_GET[pid]} and category.caid=tag.caid";
-$cnt2=$r->dosql($sql);
-for ($i=0;$i<=$cnt2-1;$i++) {
-    $e=$r->rtnrlt($i);
-    HTML(" <a href='index.php?caid={$e['caid']}' target='_blank' title='{$e['memo']}' class='btn btn-mini'>{$e['cname']}</a> ");
-} ?>
-<? if(!$acpid) { ?>
+<td><div id="fenlei">
+<?php
+// 分类可由普通用户填写。名称放进链接正文，说明放进 title，两处都在输出时转义。
+foreach ($labels as $label) { ?>
+<a href="index.php?caid=<?=(int)$label['caid']?>" target="_blank" title="<?=h($label['memo'])?>" class="btn btn-mini"><?=h($label['cname'])?></a>
+<?php } ?>
+<?php  if(!$accepted) { ?>
 <script>
   $('#fenlei').hide();
 </script>
-<? } else { ?>
+<?php  } else { ?>
 <a id="addfenlei" class='btn btn-success btn-mini pull-right' href="#addcate" data-toggle='modal' title="添加分类标签"><i class='icon-plus icon-white'></i></a>
 <div id='addcate' class='modal hide fade in'>
-<form method="post" action="addcate.php" class='form-horizontal'>
+<form method="post" action="addcate.php" class='form-horizontal'><?=formTokenField()?>
 <fieldset>
 <div class='modal-header'>
 <button class='close' data-dismiss='modal'>×</button>
 <h3>添加分类</h3>
 我们以你输入的分类名称来在数据库中查询是否已有该分类或相似分类（即分类名称或分类说明有与之相似的文字）；如果没有找到就添加一个这样的新分类，找到的话就在分类说明末尾加上你的分类说明；然后再为该题添加这样一个分类。
 </div>
-<input name="pid" type="hidden" id="pid" value="<?=$d['pid']?>" />
+<input name="pid" type="hidden" id="pid" value="<?=$problem['pid']?>" />
 <div class='modal-body'>
 <div class='control-group'>
 <label class='control-label' for='cname'>分类名称</label>
@@ -140,108 +107,92 @@ for ($i=0;$i<=$cnt2-1;$i++) {
 </fieldset>
 </form>
 </div>
-<? } ?></div>
+<?php  } ?></div>
 </td></tr>
-<? if($uid) { ?>
-<tr><form action="../submit/run.php" method="post" enctype="multipart/form-data" class='form-inline'>
+<?php  if($uid) { ?>
+<tr><form action="../submit/run.php" method="post" enctype="multipart/form-data" class='form-inline'><?=formTokenField()?>
 <td colspan=2>
-<input name="pid" type="hidden" id="pid" value="<?=$d['pid']?>" />
+<input name="pid" type="hidden" id="pid" value="<?=$problem['pid']?>" />
 <input type="file" name="file" title='选择程序源文件' /><br />
-<?php if(有此权限('测试题目') || $d['addid'] == $uid) { ?>
+<?php if(Privilege::allows('测试题目') || $problem['addid'] == $uid) { ?>
 <label class='checkbox inline pull-right'>
-<? if($d['addid'] == $uid && $d['submitable'] != 1) $tmm=1; else $tmm=0; ?>
-<input name="testmode" type="checkbox" <?if($tmm) echo "checked"?> value="<?=$tmm?>" />不写入数据库
+<input name="testmode" type="checkbox" <?=$testDraft ? 'checked' : ''?> value="1" />不写入数据库
 </label>
 <?php } ?>
 <select name='judger' class='input-medium'>
 <option value=0 selected=selected>自动选择评测机</option>
-<?
-$sql="select grid,address,memo from grader where enabled=1 order by priority desc";
-$cnt=$q->dosql($sql);
-for ($i=0;$i<$cnt;$i++) {
-    $e=$q->rtnrlt($i);
-    echo "<option value={$e['grid']} >{$e['memo']}</option>";
+<?php
+foreach ($judges as $judge) {
+    echo "<option value={$judge['grid']} >".h($judge['memo'])."</option>";
 }
 ?>       
 </select>
 <br />
-<? if($d['plugin'] == 3 || $d['plugin'] == 4) { ?>
+<?php  if($problem['plugin'] == 3 || $problem['plugin'] == 4) { ?>
 <input type='hidden' name='lang' value='zip' />
-请提交一个 zip 压缩包，里面直接有 <?=$d['datacnt']?> 个 <?=$d['filename']?>#.out 文件<br />
-<a href="downinput.php?file=<?=$d['filename']?>&data=<?=$d['datacnt']?>" class="btn btn-success btn-mini pull-left">下载测试数据</a>
+请提交一个 zip 压缩包，里面直接有 <?=$problem['datacnt']?> 个 <?=h($problem['filename'])?>#.out 文件<br />
+<a href="downinput.php?file=<?=h($problem['filename'])?>&data=<?=$problem['datacnt']?>" class="btn btn-success btn-mini pull-left">下载测试数据</a>
 <?php } else { ?>
-<label class='radio inline'><input type='radio' name='lang' value='pas' />Pascal</label>
-<label class='radio inline'><input type='radio' name='lang' value='c' />C</label>
-<label class='radio inline'><input type='radio' name='lang' value='cpp' checked='checked'/>C++</label>
-<? } ?>
+<?php renderLanguageChoices(false); ?>
+<?php  } ?>
 <button type='submit' class='btn btn-primary pull-right' >提交代码</button>
 </td>
 </form>
 </tr>
-<? } ?>
+<?php  } ?>
 </table>
 <table id="singlerank" class='table table-striped table-condensed table-bordered fiexd'>
 <tr><td colspan=4>
-通过：<?php echo $d['acceptcnt']; ?>，
-提交：<?php echo $d['submitcnt']; ?>，
-通过率：<?php echo @round($d['acceptcnt']/$d['submitcnt']*100,2); ?>%
+通过：<?php echo $problem['acceptcnt']; ?>，
+提交：<?php echo $problem['submitcnt']; ?>，
+通过率：<?php echo ($problem['submitcnt'] ? round($problem['acceptcnt']/$problem['submitcnt']*100,2) : 0); ?>%
 </td><tr>
 <?php
-$sql2="select submit.*,userinfo.nickname,userinfo.realname,userinfo.uid,userinfo.email from submit,userinfo where submit.pid={$pid} and submit.uid=userinfo.uid order by score desc, runtime asc, memory asc limit {$SET['style_single_ranksize']}";
-$cnt=$q->dosql($sql2);
-for ($i=0;$i<$cnt;$i++) {
-    $f=$q->rtnrlt($i);
+foreach ($leaders as $leader) {
 ?>
 <tr>
-<td><a href="../user/detail.php?uid=<?=$f['uid'] ?>">
-<?=gravatar::showImage($f['email']);?>
-<?=有此权限('查看用户') ? $f['realname'] : $f['nickname'] ?>
+<td><a href="../user/detail.php?uid=<?=$leader['uid'] ?>">
+<?=gravatar::showImage($leader['email']);?>
+<?=h(Privilege::allows('查看用户') ? $leader['realname'] : $leader['nickname'])?>
 </a></td>
-<td><span class="<?=$f['accepted']?'ok':'no'?>"><?=$f['score'] ?></span></td>
-<td><?php printf("%.3f s",$f['runtime']/1000.0) ?></td>
-<td><a href="../submit/code.php?id=<?=$f['sid'] ?>" target="_blank"><?=$STR['lang'][$f['lang']]?></a></td>
+<td><span class="<?=$leader['accepted']?'ok':'no'?>"><?=$leader['score'] ?></span></td>
+<td><?php printf("%.3f s",$leader['runtime']/1000.0) ?></td>
+<td><a href="../submit/code.php?id=<?=$leader['sid'] ?>" target="_blank"><?=$STR['lang'][$leader['lang']]?></a></td>
 </tr>
-<?php 
+<?php
 }
 ?></table>
 <table class='table table-condensed table-bordered fiexd'>
 <tr><th colspan=5>
-<a href="comments.php?pid=<?=$pid?>">关于 <b><?=shortname($d['probname']); ?></b> 的讨论</a>
-<? if($uid) { ?>
+<a href="comments.php?pid=<?=$pid?>">关于 <b><?=shortname($problem['probname']); ?></b> 的讨论</a>
+<?php  if($uid) { ?>
 <a href="comment.php?pid=<?=$pid?>" class="pull-right btn btn-mini btn-danger">发表评论</a>
-<? } ?>
+<?php  } ?>
 </th></tr>
-<?
-$sql="select comments.*,userinfo.nickname,userinfo.uid,userinfo.email from comments,userinfo where userinfo.uid=comments.uid and comments.pid='{$d['pid']}' order by comments.cid asc";
-$cnt=$q->dosql($sql);
-for ($i=0;$i<$cnt;$i++) {
-    $e=$q->rtnrlt($i);
+<?php
+foreach ($comments as $i => $comment) {
 ?>
 <tr><td>
 <div class="wrap">
-<?php echo BBCode($e['detail'])?>
+<?php echo BBCode($comment['detail'])?>
 </div>
 <div>
-<a href="../user/detail.php?uid=<?=$e['uid'] ?>"><?=gravatar::showImage($e['email']);?><?=$e['nickname'] ?></a>
+<a href="../user/detail.php?uid=<?=$comment['uid'] ?>"><?=gravatar::showImage($comment['email']);?><?=h($comment['nickname'])?></a>
 <div class="pull-right">
-<?php if($e['showcode']) {
-    $sql="select sid from submit where uid='{$e['uid']}' and pid='{$d['pid']}' order by subtime desc";
-    $r->dosql($sql);
-    $f=$r->rtnrlt(0);
-?>
-    <a href="../submit/code.php?id=<?=$f['sid']?>" title="查看该用户最后一次提交的代码"><i class='icon icon-download'></i></a>
+<?php if ($comment['showcode'] && $comment['latest_sid']) { ?>
+    <a href="../submit/code.php?id=<?=$comment['latest_sid']?>" title="查看该用户最后一次提交的代码"><i class='icon icon-download'></i></a>
 <?php } ?>
-<span class="muted"><?=date('Y-m-d H:i',$e['stime'])?></span>
+<span class="muted"><?=date('Y-m-d H:i',$comment['stime'])?></span>
 <span><?=($i+1)?>楼</span>
-<? if($_SESSION['ID'] && $_SESSION['ID'] == $e['uid']) { ?>
-<a href='comment.php?cid=<?=$e['cid']?>' class='btn btn-mini btn-warning'>修改</a>
-<? } else if($_SESSION['ID']) { ?>
-<a class='btn btn-mini btn-danger' href="comment.php?ccid=<?=$e['cid']?>&pid=<?=$d['pid']?>&user=<?=$e['nickname']?>">回复</a>
-<? } ?>
+<?php  if($_SESSION['ID'] && $_SESSION['ID'] == $comment['uid']) { ?>
+<a href='comment.php?cid=<?=$comment['cid']?>' class='btn btn-mini btn-warning'>修改</a>
+<?php  } else if($_SESSION['ID']) { ?>
+<a class='btn btn-mini btn-danger' href="comment.php?ccid=<?=$comment['cid']?>&pid=<?=$problem['pid']?>&user=<?=h($comment['nickname'])?>">回复</a>
+<?php  } ?>
 </div>
 </div>
 </td></tr>
-<?
+<?php
 }
 ?>
 </table>
@@ -250,67 +201,56 @@ for ($i=0;$i<$cnt;$i++) {
 <div id="probdetail" class='page'>
 <div class="problem tou">
 <a id="chbar" title="隐藏左边栏" class="pull-left" style="cursor:pointer"><i id="chbaricon" class="icon icon-indent-left"></i></a>
-<h1><?=$d['pid']?>. <?=$d['probname']?>
-<?php if(有此权限('修改题目') || $d['addid'] == $uid) { ?>
-<a href="editprob.php?action=edit&pid=<?=$d['pid']?>" title="修改题目 <?=$d['probname']?>" class="pull-right"><i class="icon icon-edit"></i></a>
+<h1><?=$problem['pid']?>. <?=h($problem['probname'])?>
+<?php if(Privilege::allows('修改题目') || $problem['addid'] == $uid) { ?>
+<a href="editprob.php?action=edit&pid=<?=$problem['pid']?>" title="修改题目 <?=h($problem['probname'])?>" class="pull-right"><i class="icon icon-edit"></i></a>
 <?php } ?>
 </h1>
-<?=难度($d['difficulty']); ?>&nbsp;&nbsp;
-输入文件：<code><?=$d['filename']?>.in</code>&nbsp;&nbsp;
-输出文件：<code><?=$d['filename']?>.out</code>&nbsp;&nbsp;
-<?=$STR['plugin'][$d['plugin']]?>
+<?=难度($problem['difficulty']); ?>&nbsp;&nbsp;
+输入文件：<code><?=h($problem['filename'])?>.in</code>&nbsp;&nbsp;
+输出文件：<code><?=h($problem['filename'])?>.out</code>&nbsp;&nbsp;
+<?=$STR['plugin'][$problem['plugin']]?>
 <br />
-时间限制：<?=$d['timelimit']/1000?> s&nbsp;&nbsp;
-内存限制：<?=$d['memorylimit']; ?> MB
-<?php
-$Jia['url']="problem/problem.php?pid={$d['pid']}";
-$Jia['title']="{$d['pid']}. {$d['probname']}" . 难度($d['difficulty']) . "({$d['filename']})";
-$Jia['summary']=trim(strip_tags($d['detail']));
-//include("../include/jia.inc.php");
-?>
+时间限制：<?=$problem['timelimit']/1000?> s&nbsp;&nbsp;
+内存限制：<?=$problem['memorylimit']; ?> MB
+
 </div>
 <dl class='problem'>
-<?=$d['detail']?>
+<?=richText($problem['detail'])?>
 </dl>
-<? if($uid) { ?>
-<form action="../submit/run.php" method="post" enctype="multipart/form-data" class='form-inline' id="tijiao">
-<input name="pid" type="hidden" id="pid" value="<?=$d['pid']?>" />
+<?php  if($uid) { ?>
+<form action="../submit/run.php" method="post" enctype="multipart/form-data" class='form-inline' id="tijiao"><?=formTokenField()?>
+<input name="pid" type="hidden" id="pid" value="<?=$problem['pid']?>" />
 <input id="source" type="file" name="file" title='选择程序源文件' />
 <select name='judger' class='input-medium'>
 <option value=0 selected=selected>自动选择评测机</option>
-<?
-$sql="select grid,address,memo from grader where enabled=1 order by priority desc";
-$cnt=$q->dosql($sql);
-for ($i=0;$i<$cnt;$i++) {
-    $e=$q->rtnrlt($i);
-    echo "<option value={$e['grid']} >{$e['memo']}</option>";
+<?php
+foreach ($judges as $judge) {
+    echo "<option value={$judge['grid']} >".h($judge['memo'])."</option>";
 }
 ?>       
 </select>
-<?php if(有此权限('测试题目') || $d['addid'] == $uid) { ?>
+<?php if(Privilege::allows('测试题目') || $problem['addid'] == $uid) { ?>
 <label class='checkbox inline'>
-<? if($d['addid'] == $uid && $d['submitable'] != 1) $tmm=1; else $tmm=0; ?>
-<input id="testmode" name="testmode" type="checkbox" <?if($tmm) echo "checked"?> value="<?=$tmm?>" />不写入数据库
+<input id="testmode" name="testmode" type="checkbox" <?=$testDraft ? 'checked' : ''?> value="1" />不写入数据库
 </label>
 <?php } ?>
 <br />
 <button type='submit' class='btn btn-primary' >提交代码</button>
-<? if($d['plugin'] == 3 || $d['plugin'] == 4) { ?>
+<?php  if($problem['plugin'] == 3 || $problem['plugin'] == 4) { ?>
 <input type='hidden' name='lang' value='zip' />
-请提交一个 zip 压缩包，里面直接有 <?=$d['datacnt']?> 个 <?=$d['filename']?>#.out 文件
-<a href="downinput.php?file=<?=$d['filename']?>&data=<?=$d['datacnt']?>" class="btn btn-success btn-mini">下载测试数据</a>
+请提交一个 zip 压缩包，里面直接有 <?=$problem['datacnt']?> 个 <?=h($problem['filename'])?>#.out 文件
+<a href="downinput.php?file=<?=h($problem['filename'])?>&data=<?=$problem['datacnt']?>" class="btn btn-success btn-mini">下载测试数据</a>
 <?php } else { ?>
-<label class='radio inline'><input type='radio' name='lang' value='pas' id='pas'/>Pascal</label>
-<label class='radio inline'><input type='radio' name='lang' value='c' id='c'/>C</label>
-<label class='radio inline'><input type='radio' name='lang' value='cpp' id='cpp' checked='checked'/>C++</label>
-<? } ?>
+<?php renderLanguageChoices(true); ?>
+<?php  } ?>
 </form>
-<? } ?>
+<?php  } ?>
 
 </div>
 </div>
 </div>
 
 <?php
-include_once("../include/footer.php");
+include_once(__DIR__.'/../include/footer.php');
 ?>

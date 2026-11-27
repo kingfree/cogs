@@ -1,18 +1,6 @@
 <?php
-require_once("../include/header.php");
-$p = new DataAccess();
-if($name = $_GET['name']) {
-    $sql = "SELECT uid FROM userinfo WHERE usr='$name'";
-    $rows = $p->dosql($sql);
-    $uid = 0;
-    if($rows) {
-        $d=$p->rtnrlt(0);
-        $uid = (int) $d['uid'];
-    }
-    echo $uid;
-} else if($code = trim($_GET['code'])) {
-    if($code == $_SESSION["IMGCODE"])
-        echo 'right';
-    else echo $code;
-}
-?>
+// 个人资料表单按用户名查重，例如 user/checkname.php?name=student；返回现有用户编号，未找到时返回 0。
+require_once __DIR__.'/../include/header.php';
+header('Content-Type: text/plain; charset=UTF-8');
+$name = $_GET['name'] ?? ''; // 此兼容查询只返回占用该登录名的 UID，空输入表示未选名称。
+echo $name === '' ? 0 : (Account::byUsernameId($name)[0]['uid'] ?? 0);

@@ -1,99 +1,24 @@
 <?php
-require_once("../include/header.php");
-gethead(1,"超级用户","执行备份与恢复");
-$LIB->func_socket();
-过滤();
-
-$filename=$_POST['filename']."_".date('His', time());
-$ima=getcwd();
-chdir($SET['dir_databackup']);
-?>
-
-<div class="page">
-<a href="backup.php">返回备份与恢复页面</a>
-<?
-if($_POST['backtype'] == "database") {
-    mkdir("database");
-    chdir("database");
-    $cmd = "mysqldump --host={$cfg['data_server']} --user={$cfg['data_uid']} --password={$cfg['data_pwd']} --databases {$cfg['data_database']} > {$filename}.sql";
-    // echo "<code>$cmd</code>";
-    flush();
-    exec($cmd);
-    exec("gzip $filename.sql");
-    exec("tree -ah > /tmp/cogs_back_info.log");
-    echo "<p><pre>".file_get_contents("/tmp/cogs_back_info.log")."</pre><p>";
-    flush();
-    if(file_exists("$filename.sql.gz")) {
-        echo "<span class=ok>成功导出数据库<code>$filename.sql.gz</code>！</span>";
+// 同一表单兼容查看已有备份和新建备份，例如 backtype=usercode、filename=weekly。
+require_once __DIR__.'/../include/header.php';
+gethead(0, '超级用户', '');  // 先核验超级用户权限，再受理备份请求。
+requirePost();  // 旧链接进入确认页，提交的 POST 已由站点校验令牌。
+$type = $_POST['backtype'] ?? '';  // backtype 同时承载“查看列表”和各类“创建备份”操作。
+try {
+    if ($type === 'showback') {  // showback 是旧表单约定的只读操作。
+        $message = implode("\n", Backup::listing($SET['dir_databackup']));  // 把分类内已发布的相对文件名逐行列出。
     } else {
-        echo "<span class=no>导出数据库失败！</span>";
+        $filename = Backup::create($type, $_POST['filename'] ?? '', $SET, $cfg);  // 按所选类别写出归档，返回时文件已完成发布。
+        $message = '备份已保存为 '.$filename;  // 结果页回显含日期和随机尾缀的实际名称。
     }
-} else if($_POST['backtype'] == "usercode") {
-    mkdir("usercode");
-    chdir("usercode");
-    $cmd = "tar -zcvf {$filename}.tar.gz {$SET['dir_source']} > /tmp/cogs_back_doing.log";
-    // echo "<code>$cmd</code>";
-    flush();
-    exec($cmd);
-    echo "<p><textarea class='textarea'>".file_get_contents("/tmp/cogs_back_doing.log")."</textarea><p>";
-    flush();
-    exec("tree -ah > /tmp/cogs_back_info.log");
-    echo "<p><pre>".file_get_contents("/tmp/cogs_back_info.log")."</pre><p>";
-    flush();
-    if(file_exists("$filename.tar.gz")) {
-        echo "<span class=ok>成功导出用户提交的代码！</span>";
-    } else {
-        echo "<span class=no>导出用户代码失败！</span>";
-    }
-} else if($_POST['backtype'] == "compcode") {
-    mkdir("compcode");
-    chdir("compcode");
-    $cmd = "tar -zcvf {$filename}.tar.gz {$SET['dir_competition']} > /tmp/cogs_back_doing.log";
-    // echo "<code>$cmd</code>";
-    flush();
-    exec($cmd);
-    echo "<p><textarea class='textarea'>".file_get_contents("/tmp/cogs_back_doing.log")."</textarea><p>";
-    flush();
-    exec("tree -ah > /tmp/cogs_back_info.log");
-    flush();
-    echo "<p><pre>".file_get_contents("/tmp/cogs_back_info.log")."</pre><p>";
-    if(file_exists("$filename.tar.gz")) {
-        echo "<span class=ok>成功导出用户比赛提交的代码！</span>";
-    } else {
-        echo "<span class=no>导出比赛代码失败！</span>";
-    }
-} else if($_POST['backtype'] == "testdata") {
-    mkdir("testdata");
-    chdir("testdata");
-    $cmd = "tar -zcvf {$filename}.tar.gz {$cfg['testdata']} > /tmp/cogs_back_doing.log";
-    // echo "<code>$cmd</code>";
-    flush();
-    exec($cmd);
-    echo "<p><textarea class='textarea'>".file_get_contents("/tmp/cogs_back_doing.log")."</textarea><p>";
-    flush();
-    exec("tree -ah > /tmp/cogs_back_info.log");
-    flush();
-    echo "<p><pre>".file_get_contents("/tmp/cogs_back_info.log")."</pre><p>";
-    if(file_exists("$filename.tar.gz")) {
-        echo "<span class=ok>成功导出全部测试数据！</span>";
-    } else {
-        echo "<span class=no>导出测试数据失败！</span>";
-    }
-} else if($_POST['backtype'] == "showback") {
-    echo "<h4>备份文件夹<code>{$SET['dir_databackup']}</code>下的内容如下：</h4>";
-    flush();
-    exec("tree -ah > /tmp/cogs_back_info.log");
-    echo "<pre>".file_get_contents("/tmp/cogs_back_info.log")."</pre>";
-} else {
-    异常("未定义的操作！",取路径("admin/backup.php"));
+} catch (DomainException $error) {
+    http_response_code(400);  // 无效种类或标签可以由提交者修改后重试。
+    exit(h($error->getMessage()));
+} catch (RuntimeException $error) {
+    http_response_code(500);  // 建目录、压缩或发布失败需要管理员检查服务器。
+    exit(h($error->getMessage()));  // 保留失败原因，页面按纯文本展示。
 }
+gethead(1, '超级用户', '备份');  // 成功时再渲染列表或成品名称。
 ?>
-<a href="backup.php">返回备份与恢复页面</a>
-</div>
-
-<?
-chdir($ima);
-
-include_once("../include/footer.php");
-?>
-
+<div class="container"><a href="backup.php">返回备份页面</a><pre><?=h($message)?></pre></div>
+<?php require __DIR__.'/../include/footer.php'; ?>

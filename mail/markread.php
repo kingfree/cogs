@@ -1,9 +1,6 @@
 <?php
-require_once("../include/header.php");
-$p=new DataAccess();
-$mid = $_GET['mid'];
-$uid = $_SESSION[ID];
-$sql = "update mail set readed = 1 where mid = $mid and toid = $uid";
-$p->dosql($sql);
-?>
-
+// 收件箱弹窗由 JavaScript POST 邮件编号 mid 和表单令牌；读取者身份取自会话。
+require_once __DIR__.'/../include/header.php';
+gethead(0, '普通用户', '');
+requirePost();
+Message::markRead((int)($_POST['mid'] ?? 0), $_SESSION['ID']); // 更新时再次匹配会话收件人，信号可重复提交。

@@ -1,34 +1,6 @@
 <?php
-require_once("../include/header.php");
-gethead(0,"查看比赛","");
-chdir($SET['dir_competition']);
-$ctid=(int)$_GET['ctid'];
-$dir="COGS_{$ctid}";
-$src="tmp.zip";
-exec("rm $src");
-exec("rm -R $dir");
-$md="mkdir {$dir}";
-exec($md);
-
-$p=new DataAccess();
-$sql="select compscore.uid,userinfo.realname,userinfo.nickname,problem.filename from compscore,userinfo,problem where userinfo.uid=compscore.uid and compscore.pid=problem.pid and compscore.ctid={$_GET[ctid]} order by uid asc";
-$cnt=$p->dosql($sql);
-$tu=0;
-for ($i=0;$i<$cnt;$i++) {
-    $d=$p->rtnrlt($i);
-    //if($d[uid]==$tu) continue;
-    $tu=$d[uid];
-    exec("mkdir -p {$dir}/{$tu}.{$d['realname']}_/");
-    $mv="cp {$ctid}/{$tu}/{$d['filename']}.* {$dir}/{$tu}.{$d['realname']}_/";
-    exec($mv);
-}
-
-exec("rm $src");
-$zip="zip -r {$src} {$dir}";
-exec($zip);
-header("Content-type: application/zip");
-header("Content-Disposition: attachment; filename=\"{$dir}.zip\"");
-if(file_exists($dir)) exec("rm -R $dir");
-@readfile($src);
-?>
-
+// 有查看比赛权限时访问 contest/export.php?ctid=1 下载场次源码 ZIP，压缩包内按选手编号分目录。
+require_once __DIR__.'/../include/header.php';
+gethead(0, '查看比赛', ''); // 整个场次的批量导出只开放给有评测权限的用户。
+$id = (int)($_GET['ctid'] ?? 0); // 按场次隔离打包，同一题单的另一场不会混入。
+Archive::download("COGS_$id.zip", ContestEntry::sourceFiles($id, $SET['dir_competition']));
