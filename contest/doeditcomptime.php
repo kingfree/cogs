@@ -1,26 +1,11 @@
 <?php
-// 处理 editcomptime.php 的 POST，把表单中的站点时间换成开赛、截止时间戳。
-require_once("../include/header.php");
-gethead(8,"修改比赛","");
-requirePost();
-
-if (($_POST['action'] ?? $_GET['action'] ?? '')=='add')
-{
-	$starttime=mktime($_POST['st_h'],$_POST['st_i'],$_POST['st_s'],$_POST['st_m'],$_POST['st_d'],$_POST['st_y']);
-	$endtime=mktime($_POST['et_h'],$_POST['et_i'],$_POST['et_s'],$_POST['et_m'],$_POST['et_d'],$_POST['et_y']);
-	$sc=0;
-	if ($_POST['showscore']) $sc=1;
-	ContestRound::create($_POST['cbid'], $_POST['intro'], $starttime, $endtime, $sc, $_POST['group']);
-    提示("添加比赛场次 {$_POST['cbid']} - {$_POST['intro']} 成功！",取路径("contest/compbase.php"));
-}
-
-if (($_POST['action'] ?? $_GET['action'] ?? '')=='edit')
-{
-	$starttime=mktime($_POST['st_h'],$_POST['st_i'],$_POST['st_s'],$_POST['st_m'],$_POST['st_d'],$_POST['st_y']);
-	$endtime=mktime($_POST['et_h'],$_POST['et_i'],$_POST['et_s'],$_POST['et_m'],$_POST['et_d'],$_POST['et_y']);
-	$sc=0;
-	if ($_POST['showscore']) $sc=1;
-	ContestRound::edit($_POST['cbid'], $_POST['intro'], $starttime, $endtime, $sc, $_POST['group'], ($_POST['ctid'] ?? $_GET['ctid'] ?? ''));
-    提示("修改比赛场次 {$_POST['cbid']} - {$_POST['intro']} 成功！",取路径("contest/compbase.php"));
-}
-?>
+// 接收 editcomptime.php 的排期；日期、题单与分组校验在 ContestRound::save。
+// 例：管理员从 contest/editcomptime.php?action=add 选择题单、分组和比赛起止时间后保存。
+require_once __DIR__.'/../include/header.php';
+gethead(0, '修改比赛', ''); // 先验证排期管理权限，避免无权限用户修改开始时间。
+requirePost(); // 保存排期需要管理员表单令牌。
+$action = $_POST['action'] ?? $_GET['action'] ?? ''; // 兼容旧排期表单把操作放在查询字符串的写法。
+if (!in_array($action, ['add','edit'], true)) throw new DomainException('未知的场次操作。', 400);
+$id = $action === 'edit' ? (int)($_POST['ctid'] ?? $_GET['ctid'] ?? 0) : null; // 新场次由数据库分配编号，编辑必须指定原场次。
+ContestRound::save($id, $_POST); // 校验比赛时间、题单和分组后才保存。
+i提示($id === null ? '添加比赛场次成功！' : '修改比赛场次成功！', 取路径('contest/compbase.php'));

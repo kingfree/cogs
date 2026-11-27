@@ -40,14 +40,6 @@ final class UserGroup
         );
     }
 
-    /** 编辑页使用完整分组列表填充选项。 */
-    public static function choices()
-    {
-        return Database::rows(
-            "SELECT * FROM groups"
-        );
-    }
-
     /** 组列表同时显示管理员昵称，按组名排列。 */
     public static function withManagers()
     {
@@ -63,24 +55,24 @@ final class UserGroup
     public static function tree(): array
     {
         static $tree;
-        return $tree ??= array_column(self::all(), null, 'gid');
+        return $tree ??= array_column(self::all(), null, 'gid'); // 所有归属查询共享以 gid 为键的组树。
     }
 
     /** 返回所有下属组的 ID，不包含起点本身；已遍历的组不会因旧数据中的环再次入队。 */
     public static function descendants($id): array
     {
         $children = [];
-        foreach (self::tree() as $group) $children[$group['parent']][] = (int)$group['gid'];
-        $queue = [(int)$id];
-        $seen = [(int)$id => true];
+        foreach (self::tree() as $group) $children[$group['parent']][] = (int)$group['gid']; // 从父组编号直接找到所有子组，避免反复查询数据库。
+        $queue = [(int)$id]; // 从当前组向下逐层搜集可选的参赛分组。
+        $seen = [(int)$id => true]; // 起点预先记入访问集合，不把自身再次列作下级。
         for ($i = 0; $i < count($queue); $i++) {
             foreach ($children[$queue[$i]] ?? [] as $child) {
-                if (isset($seen[$child])) continue;
+                if (isset($seen[$child])) continue; // 旧库的循环父子关系只处理一次。
                 $seen[$child] = true;
-                $queue[] = $child;
+                $queue[] = $child; // 此组还可能有下一级，稍后继续遍历。
             }
         }
-        return array_slice($queue, 1);
+        return array_slice($queue, 1); // 调用者另外处理当前组，这里只给出下属组。
     }
 
     /** 列出当前成员能继承的组 ID，含公开组 0、成员自己的组和各级上级组。 */
@@ -91,9 +83,9 @@ final class UserGroup
         $seen = [0 => true];
         while ($member && isset($groups[$member]) && !isset($seen[$member])) {
             $seen[$member] = true;
-            $member = (int)$groups[$member]['parent'];
+            $member = (int)$groups[$member]['parent']; // 每次向上一级，直到公开组或断开的父链。
         }
-        return array_keys($seen);
+        return array_keys($seen); // SQL 阅读条件直接使用组编号集合。
     }
 
     /** 判断目标组是否向该成员开放，包括公开组、同组或下级组成员。 */

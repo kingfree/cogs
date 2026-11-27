@@ -1,21 +1,10 @@
 <?php
-// 接收比赛题面的带令牌上传表单。只从表单取场次、题目和语言，交卷人使用登录身份，截止时间以服务端为准。
+// 只从表单接收场次、题号、语言和源文件；交卷人来自登录身份，截止时间从锁定的场次读取。
+// 例：从 contest/problem.php?ctid=1&pid=1 选择 C++ 并提交源文件，表单将文件和会话令牌 POST 到这里。
 require_once __DIR__.'/../include/header.php';
-gethead(0, '普通用户', '');
-requirePost();
-$id = (int)($_POST['ctid'] ?? 0);
-$pid = (int)($_POST['pid'] ?? 0);
-$uid = (int)$_SESSION['ID'];
-$round = ContestRound::forReader($id);
-if (!$round || !isset($round['problems'][$pid]) || (time() > $round['endtime'] && !Privilege::allows('查看比赛'))) {
-    http_response_code(403); exit('本场比赛当前不接受这次提交。');
-}
-$problem = Problem::byId($pid)[0];
-$language = Language::id($_POST['lang'] ?? '');
-$file = $_FILES['file'] ?? [];
-if ($language === null || !TestData::name($problem['filename']) || !$file || $file['error'] !== UPLOAD_ERR_OK ||
-    $file['size'] < 1 || $file['size'] > 102400 || !is_uploaded_file($file['tmp_name'])) {
-    http_response_code(400); exit('源文件或提交语言无效。');
-}
-$csid = ContestEntry::submitSource($id, $pid, $uid, $problem['filename'], $language, $file['tmp_name'], $SET['dir_competition']);
-i提示('比赛提交代码成功！', 取路径('contest/code.php?csid='.$csid));
+gethead(0, '普通用户', ''); // 交卷人从已登录会话中取得。
+requirePost(); // 上传必须附上比赛题面生成的表单令牌。
+$id = ContestEntry::submitSource((int)($_POST['ctid'] ?? 0), (int)($_POST['pid'] ?? 0),
+    (int)$_SESSION['ID'], $_POST['lang'] ?? '', $_FILES['file'] ?? [], $SET['dir_competition']);
+if ($id === null) throw new DomainException('本场比赛当前不接受这次提交。', 403);
+i提示('比赛提交代码成功！', 取路径('contest/code.php?csid='.$id));

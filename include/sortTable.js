@@ -1,60 +1,38 @@
-// 表头调用 sortTable("problist", 0, "int") 重排当前页的行；同一列再次点击时反转顺序。
-//table sort from http://dennis-zane.javaeye.com/blog/58864
-//类型转换器，将列的字段类型转换为可以排序的类型：String,int,float
-function convert(sValue, sDataType) {
-	switch(sDataType) {
-		case "int":
-			return parseInt(sValue);
-		case "float":
-			return parseFloat(sValue);
-		case "date":
-			return new Date(Date.parse(sValue));
-		default:
-			return sValue.toString();
-	}
+// 表头调用 sortTable("problist", 7, "int")，重排当前页的行；再次点击相同列时反转顺序。
+// 沿用原表格排序器的交互：http://dennis-zane.javaeye.com/blog/58864
+/** 提取整格可见文字，例如比赛成绩可能放在链接中，也可能暂时没有成绩。 */
+function tableSortValue(cell, type) {
+    var text = cell ? (cell.textContent || cell.innerText || '') : '';  // 空格和缺失单元格也参与排序。
+    switch (type) {
+        case 'int': return parseInt(text, 10);  // 编号和通过次数按十进制数值排列。
+        case 'float': return parseFloat(text);  // 通过率保留小数，忽略末尾的百分号。
+        case 'date': return Date.parse(text);  // 时间列按毫秒时间戳排列。
+        default: return text;                  // 题名和其他文本列直接比较文字。
+    }
 }
 
-//排序函数产生器，iCol表示列索引，sDataType表示该列的数据类型
-function generateCompareTRs(iCol, sDataType) {
-	return	function compareTRs(oTR1, oTR2) {
-		var td1=oTR1.cells[iCol].firstChild;
-		var td2=oTR2.cells[iCol].firstChild;
-			td1=td1.innerText || td1.textContent;
-			td2=td2.innerText || td2.textContent;
-		var vValue1 = convert(td1, sDataType);
-		var vValue2 = convert(td2, sDataType);
-	 	if (vValue1 < vValue2)
-	 		return -1;
-	 	else if (vValue1 > vValue2)
-	 		return 1;
-		else
-	 		return 0;
-	};
-}
-
-//排序方法
-function sortTable(sTableID, iCol, sDataType) {
-	var oTable = document.getElementById(sTableID);
-	var oTBody = oTable.tBodies[0];
-	var colDataRows = oTBody.rows;
-	var aTRs = new Array;
-	//将所有列放入数组
-	for (var i=0; i < colDataRows.length; i++)
-		aTRs[i] = colDataRows[i];
-	//判断最后一次排序的列是否与现在要进行排序的列相同，是的话，直接使用reverse()逆序
-	if (oTable.sortCol == iCol)
-		aTRs.reverse();
-	else //使用数组的sort方法，传进排序函数
-		aTRs.sort(generateCompareTRs(iCol, sDataType));
-	var oFragment = document.createDocumentFragment();
-	for (var i=0; i < aTRs.length; i++) {
-		if(i%2==0)
-			aTRs[i].className='evenrow';
-		else
-			aTRs[i].className='oddrow';
-		oFragment.appendChild(aTRs[i]);
-	}
-	oTBody.appendChild(oFragment);
-	//记录最后一次排序的列索引
-	oTable.sortCol = iCol;
+/** 按指定列排序，只移动原有 DOM 行，保留链接、按钮和绑定在行上的事件。 */
+function sortTable(tableId, column, type) {
+    var table = document.getElementById(tableId);
+    var body = table.tBodies[0];                     // 保留表头和表尾，操作当前表的第一个数据区。
+    var rows = [];
+    for (var i = 0; i < body.rows.length; i++) rows.push(body.rows[i]);  // 先复制行引用，再动实时更新的 HTMLCollection。
+    if (table.sortCol === column) {
+        rows.reverse();                              // 同列再次点击，整列方向反转。
+    } else {
+        rows.sort(function (left, right) {
+            var a = tableSortValue(left.cells[column], type);   // 每行按实际显示值比较。
+            var b = tableSortValue(right.cells[column], type);
+            if (a !== a) return b !== b ? 0 : 1;               // 空的数值或时间排在有效值之后。
+            if (b !== b) return -1;
+            return a < b ? -1 : a > b ? 1 : 0;                // 新选择的列默认升序。
+        });
+    }
+    var fragment = document.createDocumentFragment();           // 集齐排序后的原行，再一次性放回表格。
+    for (var index = 0; index < rows.length; index++) {
+        rows[index].className = index % 2 === 0 ? 'evenrow' : 'oddrow';  // 斑马纹按新位置交替。
+        fragment.appendChild(rows[index]);
+    }
+    body.appendChild(fragment);                                 // 提交本页的新顺序。
+    table.sortCol = column;                                     // 供下一次点击判断是否反转。
 }

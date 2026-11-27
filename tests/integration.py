@@ -1,4 +1,4 @@
-"""Run the web and worker regressions against two local PHP servers and an isolated MariaDB database."""
+"""Run the web and worker regressions against local PHP servers and an isolated MariaDB database."""
 import contextlib
 import hashlib
 import os
@@ -26,12 +26,12 @@ def sql(statement, database=None):
                           stdout=subprocess.PIPE).stdout
 
 
-def serve(directory, env, log, sessions):
+def serve(directory, env, log, sessions, php_options=()):
     with socket.socket() as listener:
         listener.bind(('127.0.0.1', 0))
         port = listener.getsockname()[1]
     address = f'127.0.0.1:{port}'
-    process = subprocess.Popen([php, '-d', 'display_errors=0', '-d', 'log_errors=1', '-d',
+    process = subprocess.Popen([php, *php_options, '-d', 'display_errors=0', '-d', 'log_errors=1', '-d',
                                 'session.save_path='+str(sessions), '-S', address, '-t', str(directory)],
                                env=env, stdout=log, stderr=log)
     try:
@@ -55,6 +55,13 @@ with tempfile.TemporaryDirectory(prefix='cogs-') as temp, contextlib.ExitStack()
     root = Path(temp)
     site = root / 'site'
     shutil.copytree(source, site, ignore=shutil.ignore_patterns('.git','env.inc.php','__pycache__','*.pyc'))
+    # Give PHP a public data root outside the application; attach the upload URL after its first write.
+    public = root / 'public'
+    public.mkdir()
+    for directory in ('images', 'upload'):
+        (site / directory).rename(public / directory)
+        if directory == 'images':
+            (site / directory).symlink_to(public / directory, target_is_directory=True)
     for part in ('sessions','work','data','source','comp','backup'):
         (root / part).mkdir(mode=0o700)
     env = dict(os.environ, COGS_TEST_ROOT=temp, COGS_TEST_DB_HOST=f'{host};port={port}', COGS_TEST_DB_NAME=name,
@@ -63,8 +70,11 @@ with tempfile.TemporaryDirectory(prefix='cogs-') as temp, contextlib.ExitStack()
     (site/'include/env.inc.php').write_text("""<?php
 $cfg=['data_server'=>getenv('COGS_TEST_DB_HOST'),'data_database'=>getenv('COGS_TEST_DB_NAME'),
 'data_uid'=>getenv('COGS_TEST_DB_USER'),'data_pwd'=>getenv('COGS_TEST_DB_PASSWORD'),'dir_root'=>'',
-'testdata'=>getenv('COGS_TEST_ROOT').'/data'];
+'testdata'=>getenv('COGS_TEST_ROOT').'/data','public_files'=>getenv('COGS_TEST_ROOT').'/public'];
 """)
+    for fixture, exception in [('test-domain', "DomainException('<样例>', 404)"),
+                               ('test-fault', "RuntimeException('internal-diagnostic-fixture')")]:
+        (site / 'tests' / (fixture + '.php')).write_text("<?php require dirname(__DIR__).'/include/bootstrap.php'; throw new " + exception + ";")
     (site/'grader/settings.php').write_text(f'test\n{root}/work\n{root}/data\n')
     sql('CREATE DATABASE '+name)
     stack.callback(sql, 'DROP DATABASE '+name)
@@ -112,18 +122,28 @@ $cfg=['data_server'=>getenv('COGS_TEST_DB_HOST'),'data_database'=>getenv('COGS_T
     def run(script):
         executable = sys.executable if script.endswith('.py') else php
         subprocess.run([executable, str(site/'tests'/script)], env=env, cwd=site, check=True)
+    # A fresh request discovers a rule by filename. Removing that file must remove the choice again.
+    probe = site / 'problem-sources' / 'fixture-origin.php'
+    list_sources = [php, '-r', "require 'features/ProblemSource.php'; echo isset(ProblemSource::sources()['fixture-origin']) ? 'yes' : 'no';"]
+    probe.write_text((site / 'problem-sources' / 'poj.php').read_text())
+    assert subprocess.check_output(list_sources, cwd=site) == b'yes'
+    probe.unlink()
+    assert subprocess.check_output(list_sources, cwd=site) == b'no'
+    print('添加和删除单个题面来源文件后，下一次请求的来源列表正确更新', flush=True)
     logs = []
-    for port_key in ('COGS_TEST_WEB_URL','COGS_TEST_GRADER_URL'):
+    for port_key in ('COGS_TEST_WEB_URL','COGS_TEST_GRADER_URL','COGS_TEST_SECOND_WEB_URL'):
         log = stack.enter_context((root/(port_key+'.log')).open('w+'))
         logs.append(log)
-        env[port_key] = stack.enter_context(contextlib.contextmanager(serve)(site, env, log, root/'sessions'))
+        # One web request can upload while the other waits for the worker, as on a multi-process deployment.
+        options = ['-d', 'auto_prepend_file='+str(site/'tests/contest-grading-barrier.php')] if port_key == 'COGS_TEST_GRADER_URL' else []
+        env[port_key] = stack.enter_context(contextlib.contextmanager(serve)(site, env, log, root/'sessions', options))
     env['COGS_TEST_GRADER_URL'] += '/grader/'
     for key,directory in [('dir_source','source'),('dir_competition','comp'),('dir_databackup','backup')]:
         path = str(root / directory).replace("'", "''")
         sql(f"UPDATE settings SET value='{path}/' WHERE name='{key}'", name)
     sql("UPDATE grader SET address='%s' WHERE grid=1" % env['COGS_TEST_GRADER_URL'], name)
     try:
-        for script in ('architecture.php','sql-binding.php','grader-protocol.php','grader-toolchain.php','sources.php','web.py','judging.py'):
+        for script in ('architecture.php','display.php','sql-binding.php','profile-background.php','testdata-upload.php','grader-protocol.php','grader-comparison.php','grader-toolchain.php','sources.php','web.py','judging.py'):
             run(script)
         if os.environ.get('COGS_TEST_BROWSER'):
             run('browser.py')

@@ -3,60 +3,45 @@
 // 打开 problem/testdata.php?problem=sum 查看文件；附加 &download=sum1.in 可下载单个输入。
 require_once __DIR__.'/../include/header.php';
 gethead(0, '查看数据', '');
+// 老书签的 dir 与新地址的 problem 表示同一题目目录。
 $name = $_GET['problem'] ?? $_GET['dir'] ?? '';
 $canWrite = Privilege::allows('修改题目');
 try {
+    // 不指定题目时列出数据根，指定目录缺失时明确返回 404。
     $dir = $name === '' ? TestData::root() : TestData::directory($name);
-    if (!is_dir($dir)) { http_response_code(404); exit('没有此题的数据目录。'); }
+    if (!is_dir($dir)) { http_response_code(404); exit('没有此题的数据目录。'); }  // 浏览缺失目录不会创建题目。
     if ($name !== '' && isset($_GET['download'])) {
+        // all 下载整题；单文件只可取经过筛选的普通数据文件。
         $files = TestData::files($name);
         if ($_GET['download'] === 'all') Archive::download($name.'.zip', $files);
         else {
             $leaf = $_GET['download'];
+            // 文件不在该目录列表就结束本次请求。
             if (!isset($files[$leaf])) { http_response_code(404); exit; }
+            // 单个文件按附件返回，浏览器不会在后台页执行其中内容。
             header('Content-Type: application/octet-stream');
             header('Content-Disposition: attachment; filename="'.$leaf.'"');
+            // 正文使用已核实的真实路径，展示名称使用该题内的短名。
             readfile($files[$leaf]);
         }
         exit;
     }
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        if (!$canWrite) { http_response_code(403); exit; }
-        $action = $_POST['action'] ?? '';
-        $leaf = $_POST['file'] ?? '';
-        if ($action === 'mkdir') {
-            $name = $_POST['problem'] ?? '';
-            TestData::directory($name, true);
-        } elseif ($action === 'upload' && is_uploaded_file($_FILES['data']['tmp_name'] ?? '')) {
-            $file = $_FILES['data'];
-            if ($file['size'] > 16777216) throw new DomainException('单个文件超过 16 MiB。');
-            TestData::store($name, $file['name'], file_get_contents($file['tmp_name']));
-        } elseif ($action === 'save') {
-            TestData::store($name, $leaf, $_POST['contents'] ?? '');
-        } elseif ($action === 'delete') {
-            $path = TestData::file($name, $leaf);
-            if (!is_file($path) || !unlink($path)) throw new DomainException('删除文件失败。');
-        } elseif (in_array($action, ['copy','move'], true)) {
-            $source = TestData::file($name, $leaf);
-            $target = TestData::file($_POST['target_problem'] ?? $name, $_POST['target'] ?? '');
-            if (!is_file($source) || file_exists($target)) throw new DomainException('源文件不存在或目标文件已存在。');
-            if (!($action === 'copy' ? copy($source, $target) : rename($source, $target))) throw new DomainException('文件操作失败。');
-        } else throw new DomainException('数据操作无效。');
+        // 查看权限不自动允许写入，编辑文件必须另有修改题目权。
+        if (!$canWrite) { http_response_code(403); exit; }  // 只有具有修改题目权限的账号才可改变评测机下一次使用的数据。
+        $name = TestData::editFiles($name, $_POST, $_FILES['data'] ?? []);
+        // 成功后改用 GET 重新打开目录，刷新不会重复操作。
         header('Location: testdata.php?problem='.rawurlencode($name), true, 303);
         exit;
     }
+    // 根页展示各题的目录，题内页展示可下载的文件。
     $files = $name === '' ? [] : TestData::files($name);
-    $folders = [];
-    if ($name === '') {
-        foreach (new DirectoryIterator($dir) as $item) {
-            if ($item->isDir() && !$item->isLink() && TestData::name($item->getFilename())) $folders[]=$item->getFilename();
-        }
-        natcasesort($folders);
-    }
+    $folders = $name === '' ? TestData::folders() : [];
     $selected = $_GET['edit'] ?? '';
+    // 关键字只筛选当前列表，不用它构造磁盘路径。
     $query = $_GET['key'] ?? '';
     gethead(1, '查看数据', '测试数据');
-} catch (DomainException $error) { http_response_code(400); exit(h($error->getMessage())); }
+} catch (DomainException $error) { http_response_code(400); exit(h($error->getMessage())); }  // 题目或文件名不符合数据目录约定时提示用户重新选择。
 ?>
 <div class="container">
 <h3><a href="testdata.php">测试数据</a> <?=h($name)?></h3>

@@ -1,9 +1,7 @@
 <?php
 /**
- * 页头加载简繁转换脚本。根据当前脚本和站点目录计算地址，以支持安装到子路径。
- * 例：require __DIR__.'/tradsimp.inc.php';  // 在 include/header.php 中载入。
+ * 页头载入简繁转换字表，页脚的繁简按钮调用它。
+ * 例：require_once __DIR__.'/tradsimp.inc.php';
  */
-$tradsimp=pathconvert($SET['cur'],$SET['base']."include/tradsimp.js");
 ?>
-
-<script class="javascript" src="<?php echo $tradsimp ?>"></script>
+<script class="javascript" src="<?=h(路径('include/tradsimp.js')) /* 走站内相对路径，支持子目录安装。 */ ?>"></script>

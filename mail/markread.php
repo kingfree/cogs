@@ -3,4 +3,4 @@
 require_once __DIR__.'/../include/header.php';
 gethead(0, '普通用户', '');
 requirePost();
-Message::markRead((int)($_POST['mid'] ?? 0), $_SESSION['ID']);
+Message::markRead((int)($_POST['mid'] ?? 0), $_SESSION['ID']); // 更新时再次匹配会话收件人，信号可重复提交。

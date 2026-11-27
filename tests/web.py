@@ -25,9 +25,9 @@ class Visitor:
         self.client = urllib.request.build_opener(urllib.request.HTTPCookieProcessor(self.cookies))
         self.token = ''
 
-    def visit(self, path, fields=None, files=None, *, status=200, contains=None, csrf=True):
+    def visit(self, path, fields=None, files=None, *, status=200, contains=None, csrf=True, agent='COGS integration'):
         global requests_made
-        headers = {'User-Agent': 'COGS integration'}
+        headers = {'User-Agent': agent}
         body = None
         if fields is not None or files:
             fields = dict(fields or {})
@@ -44,7 +44,7 @@ class Visitor:
                 headers['Content-Type'] = 'multipart/form-data; boundary=' + tag
             else:
                 body = urllib.parse.urlencode(fields).encode()
-        req = urllib.request.Request(base + path, body, headers)
+        req = urllib.request.Request(getattr(self, 'base', base) + path, body, headers)
         try:
             response = self.client.open(req, timeout=35)
         except urllib.error.HTTPError as error:
@@ -128,12 +128,26 @@ doc.find('item/title').text = '导入求和'
 admin.visit('/problem/problem_import_xml.php', {}, {'fps':('set.xml', ET.tostring(doc,encoding='utf-8'))}, contains='已导入 1')
 admin.visit('/problem/checkprobname.php?name='+urllib.parse.quote('导入求和'), contains='1')
 src = b'#include <stdio.h>\nint main(){int a,b;FILE*i=fopen("sum.in","r");fscanf(i,"%d%d",&a,&b);FILE*o=fopen("sum.out","w");fprintf(o,"%d\\n",a+b);return 0;}'
-user.visit('/submit/run.php', {'pid':1,'lang':'c','judger':1}, {'file':('sum.c',src)}, contains='通过了全部测试点')
+graded = user.visit('/submit/run.php', {'pid':1,'lang':'c','judger':1}, {'file':('sum.c',src)}, contains='通过了全部测试点')
+assert b'code.php?id=1' in graded
 user.visit('/submit/code.php?id=1', contains='fprintf')
 user.visit('/user/detail.php?uid=2', contains='student')
 with zipfile.ZipFile(io.BytesIO(user.visit('/user/export.php?uid=2'))) as archive:
     assert src in [archive.read(f) for f in archive.namelist()]
 user.visit('/submit/run.php', {'pid':1,'lang':'c','rejudge':1,'sid':1}, status=403)
+# 用不同答案试跑重判，网页应给出本次零分，历史成绩和原作者的源码仍可访问。
+stored_source, = (root/'source/2').glob('sum.c.*')
+answer = root/'data/sum/sum1.ans'
+original_answer = answer.read_bytes()
+try:
+    answer.write_bytes(b'7\n')
+    trial = admin.visit('/submit/run.php', {'pid':1, 'sid':1, 'rejudge':1, 'testmode':1}, contains='没有写入数据库')
+    assert '<b>0</b>'.encode() in trial
+finally:
+    answer.write_bytes(original_answer)
+assert stored_source.read_bytes() == src
+assert b'<td>100</td>' in user.visit('/submit/code.php?id=1', contains='fprintf')
+
 admin.visit('/contest/doeditcompbase.php?action=add', {'cname':'练习赛','cons[]':1}, contains='添加比赛')
 from datetime import datetime, timedelta
 from zoneinfo import ZoneInfo
@@ -146,6 +160,30 @@ def round_fields(start,end):
 admin.visit('/contest/doeditcomptime.php?action=add', round_fields(now-timedelta(hours=1),now+timedelta(hours=1)), contains='添加比赛场次')
 user.visit('/contest/problem.php?ctid=1&pid=1', contains='计算和')
 user.visit('/contest/submit.php', {'ctid':1,'pid':1,'lang':'c'}, {'file':('sum.c',src)}, contains='提交代码成功')
+# Hold the first testcase while the second web process accepts a replacement with the same filename and language.
+from concurrent.futures import ThreadPoolExecutor
+import fcntl
+import time
+gate = root / 'contest-grading.gate'
+started = root / 'contest-grading.started'
+with ThreadPoolExecutor(max_workers=1) as workers, gate.open('w') as handle:
+    fcntl.flock(handle, fcntl.LOCK_EX)  # The grader fixture takes a shared lock after signalling that the case has started.
+    future = workers.submit(admin.visit, '/contest/compile.php', {'csid':1,'judger':1}, status=409)
+    try:
+        deadline = time.monotonic() + 10
+        while not started.exists():
+            if future.done(): future.result()
+            assert time.monotonic() < deadline, '评测机没有开始该交卷的测试点'
+            time.sleep(.01)
+        user.base = os.environ['COGS_TEST_SECOND_WEB_URL']
+        user.visit('/contest/submit.php', {'ctid':1,'pid':1,'lang':'c'}, {'file':('sum.c',src+b' /* second version */')}, contains='提交代码成功')
+    finally:
+        fcntl.flock(handle, fcntl.LOCK_UN)
+        gate.unlink(missing_ok=True)
+        started.unlink(missing_ok=True)
+        user.base = base
+    assert '重新交卷'.encode() in future.result()
+assert b'<td>0</td>' in user.visit('/contest/code.php?csid=1', contains='second version')
 admin.visit('/contest/compile.php', {'csid':1,'judger':1}, contains='100!A')
 admin.visit('/contest/report.php?ctid=1', contains='100')
 admin.visit('/contest/comptime.php?ctid=1', contains='求和')
@@ -161,7 +199,9 @@ finished = round_fields(now-timedelta(days=2),now-timedelta(days=1))
 change = '/contest/doeditcomptime.php?action=edit&ctid=1'
 admin.visit(change, finished, contains='修改比赛场次')
 user.visit('/contest/submit.php', {'ctid':1,'pid':1,'lang':'c','endtime':'9999999999'}, {'file':('sum.c',src)}, status=403)
-user.visit('/contest/report.php?ctid=1', contains='100')
+admin.visit('/contest/compile.php', {'csid':2,'judger':1}, contains='100!A')  # Both entrants solved the same visible problem.
+published = user.visit('/contest/report.php?ctid=1', contains='100')
+assert re.findall(rb'<tr>\s*<td>(\d+)</td>\s*<td><a href="../user/detail', published) == [b'1', b'1'], '同分选手应并列第一'
 user.visit('/contest/code.php?csid=2', contains='fprintf')
 admin.visit(change, dict(finished, showscore=0), contains='修改比赛场次')
 user.visit('/contest/report.php?ctid=1', status=404)
@@ -247,7 +287,7 @@ with zipfile.ZipFile(io.BytesIO(admin.visit('/user/export.php?uid=2'))) as archi
 for privilege in (21, 45):
     admin.visit('/user/privilege.php', {'way':'del','pri':privilege,'uid':2}, contains='已删除权限')
 # A synthetic image and Pascal checker must survive export and re-import with their original mode.
-sample_png = 'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAusB9WD1+sAAAAAASUVORK5CYII='
+sample_png = 'iVBORw0KGgoAAAANSUhEUgAAAAIAAAACCAIAAAD91JpzAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAAFklEQVQImWNkYPjPwMDAxMDAwMDAAAALHwED/oDrHgAAAABJRU5ErkJggg=='
 upload = '/include/upload_json.inc.php?dir=image'
 user.visit(upload, {}, {'imgFile':('fixture.png',base64.b64decode(sample_png))}, status=403)
 admin.visit(upload, status=405)
@@ -255,6 +295,10 @@ invalid = admin.visit(upload, {}, {'imgFile':('fixture.png',b'plain text')})
 assert json.loads(invalid)['error'] == 1
 attachment = json.loads(admin.visit(upload, {}, {'imgFile':('fixture.png',base64.b64decode(sample_png))}))
 assert attachment['error'] == 0 and attachment['url'].startswith('/upload/image/')
+# PHP must write to the configured volume even before the web server exposes it.
+assert not (root / 'site/upload').exists()
+assert (root / 'public' / attachment['url'].lstrip('/')).read_bytes() == base64.b64decode(sample_png)
+(root / 'site/upload').symlink_to(root / 'public/upload', target_is_directory=True)
 assert guest.visit(attachment['url']) == base64.b64decode(sample_png)
 item = doc.find('item')
 item.find('title').text = '带特判题包'
@@ -272,16 +316,37 @@ for backup_type in ('compcode','testdata','database'):
     admin.visit('/admin/dobackup.php', {'backtype':backup_type,'filename':'fixture'}, contains='备份已保存')
 with gzip.open(next((root/'backup/database').glob('*.sql.gz')), 'rt') as dump:
     assert 'CREATE TABLE `userinfo`' in dump.read()
+# 真实姓名只对具备“查看用户”权限的人可检索，包括用户详情搜索及讨论作者筛选。
+private_name = '隐私核对名'
+admin.visit('/user/doedituser.php?action=edit&uid=2', dict(profile, realname=private_name, gbelong=1), contains='编辑用户成功')
+keyword = urllib.parse.quote(private_name)
+guest.visit('/user/detail.php?user='+keyword, contains='无此用户')
+guest.visit('/user/detail.php?user=2-not-an-account', contains='无此用户')
+admin.visit('/user/detail.php?user='+keyword, contains='用户编号')
+for route, marker in [('/user/index.php?key=', b'student'), ('/problem/comments.php?show=yes&key=', '新评论'.encode())]:
+    assert marker not in guest.visit(route+keyword)
+    assert marker in admin.visit(route+keyword)
+admin.visit('/user/doedituser.php?action=edit&uid=2', dict(profile, gbelong=1), contains='编辑用户成功')
+
 # Only the disposable test installation exposes its own local CAPTCHA fixture to this process.
 new_user = Visitor()
 new_user.visit('/user/register.php?accept=1', contains='VerifyCode')
 assert new_user.visit('/include/verifycode.php').startswith(b'\x89PNG')
 session_id = next(cookie.value for cookie in new_user.cookies if cookie.name=='PHPSESSID')
 captcha = re.search(rb'IMGCODE\|s:4:"([a-z0-9]+)"', (root/'sessions'/('sess_'+session_id)).read_bytes())[1].decode()
-credentials = {'usr':'new_student','nickname':'新同学','realname':'','email':'new@example.org','pwd':'fresh-cogs',
+credentials = {'usr':'new_student','nickname':'<b>新同学</b>','realname':'','email':'new@example.org','pwd':'fresh-cogs',
                'repwd':'fresh-cogs','passwordtip':'颜色','passwordtipans':'绿色','VerifyCode':captcha}
 new_user.visit('/user/doreg.php', credentials, contains='注册成功')
 new_user.visit('/user/panel.php', contains='editpwd')
+profile_fields = {key: credentials[key] for key in ('usr', 'nickname', 'realname', 'email')}
+new_user.visit('/user/doedit.php', dict(profile_fields, action='edit'), {'file': ('background.png', base64.b64decode(sample_png))}, contains='个人资料已保存')
+panel = new_user.visit('/user/panel.php')
+picture = re.search(rb'url\([^)]*images/background/([1-9][0-9]*\.png)\)', panel)[1].decode()
+assert new_user.visit('/images/background/'+picture) == (root / 'public/images/background' / picture).read_bytes()
+for agent in ('COGS integration', 'Mozilla/4.0 (compatible; MSIE 8.0)'):
+    nav = new_user.visit('/user/panel.php', agent=agent).split(b'id="nav"', 1)[1].split(b'id="body"', 1)[0]
+    assert '&lt;b&gt;新同学&lt;/b&gt;'.encode() in nav and '<b>新同学</b>'.encode() not in nav
+    assert ('id="catebar"'.encode() in nav) == ('MSIE' not in agent)
 new_user.visit('/user/doedit.php', {'action':'editpwd','opwd':'fresh-cogs','npwd1':'new-pass','npwd2':'new-pass'}, contains='密码已修改')
 new_user.visit('/user/dologout.php', {}, contains='退出')
 new_user.visit('/user/login.php', contains='password')
@@ -293,4 +358,10 @@ recover.visit('/user/lost.php', {'User':'new_student','ans':'绿色'}, contains=
 new_user.visit('/user/panel.php', status=403)
 user.visit('/user/dologout.php', {}, contains='退出')
 user.visit('/user/panel.php', status=403)
+# The two fixture files exist only in this disposable HTTP installation.
+guest.visit('/problem/index.php?key%5B%5D=x', status=400, contains='查询参数格式错误')
+guest.visit('/tests/test-domain.php', status=404, contains='&lt;样例&gt;')
+fault = guest.visit('/tests/test-fault.php', status=500, contains='程序出错')
+assert b'internal-diagnostic-fixture' not in fault
+assert re.search(rb'[a-f0-9]{16}', fault)
 print(f'网页通过 {requests_made} 次 HTTP 请求')

@@ -1,81 +1,58 @@
 <?php
 // 管理员从 page/editpage.php?action=edit&aid=1 打开文章表单，在此选择可阅读的分组和等级。
-require_once("../include/header.php");
+require_once(__DIR__.'/../include/header.php');
 gethead(1,"修改页面","修改页面");
-renderEditor("detail");
-$groups = UserGroup::all();
+$action = $_GET['action'] ?? '';
+$id = (int)($_GET['aid'] ?? 0); // 删除确认和编辑表单都只传规范的整数文章编号。
+if ($action === 'del') {
+    // 旧链接仍显示确认页，带令牌的 POST 才会执行删除。
 ?>
-
-<script type = "text/javascript">
-function checkprobname(){
-var probname = $("#probname").val();
-$.get("checkprobname.php",{name: probname},function(txt){
-if(txt == 0){$("#msg1").html("<span style='color:blue;'>OK</span>");}
-else {$("#msg1").html("<b><span style='color:red;'>NO</span></b>");}
-});
-}
-function checkfilename(){
-var filename = $("#filename").val();
-$.get("checkfilename.php",{name: filename},function(txt){
-if(txt == 0){$("#msg2").html("<span style='color:blue;'>OK</span>");}
-else {$("#msg2").html("<b><span style='color:red;'>NO</span></b>");}
-});
-}
-</script>
-<?php
-if ($_GET['action']=='del') {
-    echo "确认要删除该题目及与该题目相关所有内容吗(无法恢复)？<p><a href='doeditpage.php?action=del&aid={$_GET['aid']}'>确认删除</a>";
-    exit;
-}
-if ($_GET['action']=='edit') {
-    $pages = Page::byId($_GET['aid']);
-    $cnt = count($pages);
-}
-if ($cnt) {
-    $d=($pages[0] ?? false);
-    $dtext=$d['text'];
+<form method="post" action="doeditpage.php?action=del&amp;aid=<?=$id?>">
+<?=formTokenField()?>确认删除该页面？ <button type="submit">确认删除</button>
+</form>
+<?php return; }
+if ($action === 'edit') {
+    $article = Page::forEditor($id); // 管理员可编辑尚未向其所在分组公开的文章。
+    if (!$article) 异常('页面不存在。', 取路径('page/index.php'));
+} elseif ($action === 'add') {
+    $article = ['aid'=>'', 'title'=>'', 'force'=>0, 'group'=>0, 'text'=>'']; // 默认公开；表单沿用已发布的字段名。
 } else {
-    if ($_GET['action']=='add') {
-        $d=array();
-        $d['force']=0;
-        $d['group']=0;
-        $dtext="请在此键入页面内容";
-    }
+    异常('未知页面操作');
 }
+renderEditor('detail');
+$groups = UserGroup::all(); // 开放分组选择保存 gid，重命名分组不会改变文章归属。
 ?>
 <div class='row-fluid'>
 <form action="doeditpage.php" method="post" class='form-inline' id="tijiao"><?=formTokenField()?>
 <dl class='dl-horizontal'>
 <dt>AID</dt>
-<dd><?=$d['aid'] ?>
-<input name="aid" type="hidden" id="aid" value="<?php echo $d['aid'] ?>" />
+<dd><?=$article['aid'] ?>
+<input name="aid" type="hidden" id="aid" value="<?php echo $article['aid'] ?>" />
 </dd>
 <dt>页面标题</dt>
-<dd><input name="title" type="text" id="title" value="<?=h($d['title'])?>"></dd>
+<dd><input name="title" type="text" id="title" value="<?=h($article['title'])?>"></dd>
 <dt>阅读权限</dt>
-<dd><input name="force" type="number" id="force" value="<?=$d['force'] ?>" /> </dd>
+<dd><input name="force" type="number" id="force" value="<?=$article['force'] ?>" /> </dd>
 <dt>开放分组</dt>
 <dd><select name="group" id="group">
 <?php
-$qRows = $groups;
-$c = count($qRows);
-foreach ($qRows as $j => $e) {
+foreach ($groups as $group) {
 ?>
-<option value="<?php echo $e['gid'] ?>" <?php if($e['gid']==$d['group']) echo 'selected="selected"' ?>>[<?=h($e['gname'])?>]</option>
+<option value="<?php echo $group['gid'] ?>" <?php if($group['gid']==$article['group']) echo 'selected="selected"' ?>>[<?=h($group['gname'])?>]</option>
 <?php } ?>
 </select></dd>
 <dt>页面内容</dt>
 <dd>
-<textarea id="detail" name="text" class='pagearea'><?=htmlspecialchars($d['text'])?></textarea>
+<textarea id="detail" name="text" class='pagearea'><?=h($article['text'])?></textarea>
 </dd>
 <dd><button type="submit" class='btn btn-primary'>单击此处提交对该页面的修改</button>
-<input name="action" type="hidden" id="action" value="<?=h($_GET['action'] ?? '')?>" />
+<input name="action" type="hidden" id="action" value="<?=h($action)?>" />
 </dd>
 </dl>
 </form>
 </div>
 
 <?php
-include_once("../include/footer.php");
+include_once(__DIR__.'/../include/footer.php');
 ?>
 

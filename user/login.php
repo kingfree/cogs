@@ -1,8 +1,8 @@
 <?php
 // 访问 user/login.php 获取带会话令牌的登录表单，交给 dologin.php 验证。
-require_once("../include/header.php");
+require_once(__DIR__.'/../include/header.php');
 gethead(1,"","用户登录");
-if($_SESSION['ID']) 异常("已经登录！");
+if($_SESSION['ID']) 异常("已经登录！"); // 已经有身份的会话进入控制面板即可。
 ?>
 <form id='denglu' method="post" action="dologin.php" class='form-inline center'><?=formTokenField()?>
 <input name="username" type="text" class='input' placeholder='用户名' /><br />
@@ -15,5 +15,5 @@ if($_SESSION['ID']) 异常("已经登录！");
 <a href="register.php" class='btn btn-danger'>注册</a>
 </form>
 <?php
-include_once("../include/footer.php");
+include_once(__DIR__.'/../include/footer.php');
 ?>

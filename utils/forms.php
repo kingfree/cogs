@@ -24,9 +24,9 @@ function formTokenField(): string
 /** 接受隐藏字段或 AJAX 请求头，令牌与当前会话不符时直接返回 403。 */
 function verifyForm(): void
 {
-    $token = $_POST['form_token'] ?? $_SERVER['HTTP_X_COGS_TOKEN'] ?? null;
+    $token = $_POST['form_token'] ?? $_SERVER['HTTP_X_COGS_TOKEN'] ?? null; // AJAX 请求头和表单字段共用会话令牌。
     if (!is_string($token) || !hash_equals(formToken(), $token)) {
-        http_response_code(403);
+        http_response_code(403); // 过期页面或其他会话的令牌不能提交。
         exit('表单已失效，请返回页面重新提交。');
     }
 }
@@ -34,9 +34,9 @@ function verifyForm(): void
 /** 写入端点先调用此函数。旧的 GET 链接显示确认表单，POST 才继续执行业务。 */
 function requirePost(): void
 {
-    if ($_SERVER['REQUEST_METHOD'] === 'POST') return;
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') return; // 已由 bootstrap 校验令牌，可进入写入流程。
     if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
-        header('Allow: GET, POST', true, 405);
+        header('Allow: GET, POST', true, 405); // 外部调用方可从 Allow 响应头得知可用方法。
         exit;
     }
     // 旧书签仍可到达确认页。GET 预览和爬虫访问不会触发写操作。

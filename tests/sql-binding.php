@@ -1,7 +1,7 @@
 <?php
 // 只在当前连接的临时表内检查参数绑定。
 if (PHP_SAPI !== 'cli') exit;
-require dirname(__DIR__).'/include/db.php';
+require dirname(__DIR__).'/utils/database.php';
 $cfg = ['data_server'=>getenv('COGS_TEST_DB_HOST'), 'data_database'=>getenv('COGS_TEST_DB_NAME'),
     'data_uid'=>getenv('COGS_TEST_DB_USER'), 'data_pwd'=>getenv('COGS_TEST_DB_PASSWORD')];
 Database::execute('CREATE TEMPORARY TABLE binding_test (id INT PRIMARY KEY, name VARCHAR(255))');

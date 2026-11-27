@@ -8,7 +8,7 @@
 4. `transactional-tables.sql` 把旧 MyISAM 表转换为 InnoDB。批量转换需要额外磁盘空间，耗时取决于数据量。
 5. `settings-defaults.sql` 补齐首页题目数、提交数、成绩门槛、排行头像尺寸、登录日志、默认题目内存、站点地图和注册阅读等级。旧站的 `reg_readfroce` 会复制到缺失的 `reg_readforce`。迁移保留已有设置的值和编号，可以重复执行。
 
-在 `include/env.inc.php` 设置数据库和测试数据根目录。将原有图片与公开附件迁入 `images/`、`upload/`，或为它们设置自己的静态文件映射。两个目录需要允许 Web 进程写入。部署时将 PHP 等脚本执行限制在应用代码目录，Nginx 需为这两个静态目录设置 `^~` location。旧站若单独配置了 `problem/testdata` 的静态别名，应和原符号链接一起移除。测试数据现由 `problem/testdata.php` 校验权限并返回。
+在 `include/env.inc.php` 设置数据库和测试数据根目录。新装时将 `public_files` 设为应用目录外的绝对路径（默认 `/var/lib/cogs/public`），在其下创建 `images/` 和 `upload/` 并授予 Web 进程写权限。将原有图片、附件以及仓库两个目录中的 Apache 访问规则复制到对应位置，将原来的两个公开 URL 静态映射到新目录。老站未配置该项时仍从原位置读写，迁移前后的公开链接相同。部署时将 PHP 等脚本执行限制在应用代码目录，Nginx 需为这两个静态目录设置 `^~` location。旧站若单独配置了 `problem/testdata` 的静态别名，应和原符号链接一起移除。测试数据现由 `problem/testdata.php` 校验权限并返回。
 
 旧版本随安装创建的 root 账号可能仍在使用公开的初始口令及找回提示。对沿用该账号的站点，升级时运行密码命令重置密码并清空旧的找回问题。
 

@@ -6,6 +6,13 @@
  */
 final class Judge
 {
+    /** 通过站点签名协议向已登记地址发请求，返回远端字段表；连接失败返回空数组。 */
+    public static function request(string $address, array $fields): array
+    {
+        require_once dirname(__DIR__).'/include/socket.php';
+        return array_decode(httpsocket($address, $fields));
+    }
+
     /** 自动选机时只取启用的机器，按配置的优先级从高到低试租。 */
     public static function enabled()
     {
@@ -41,22 +48,19 @@ final class Judge
         );
     }
 
-    /** 管理员发送开、停机指令前按编号查地址。 */
-    public static function address($id)
+    /** 发送启动或停机指令。编号必须已登记，操作是否成功以远端回执为准。 */
+    public static function setRunning(int $id, bool $running): bool
     {
-        return Database::rows(
-            "SELECT address FROM grader WHERE grid=?",
-            [$id]
-        );
+        $judge = self::byId($id);                                        // 地址取自配置，表单只传机位编号。
+        if ($judge === null) throw new OutOfBoundsException('评测机不存在。');
+        $reply = self::request($judge['address'], ['action'=>$running ? 'start' : 'shutdown']);
+        return ($reply['state'] ?? '') === 'successful';                  // 发出请求不等于执行成功。
     }
 
-    /** 按编号读完整配置，供编辑表单回显。 */
-    public static function byId($id)
+    /** 按编号读完整配置，供编辑表单和启停操作使用。 */
+    public static function byId(int $id): ?array
     {
-        return Database::rows(
-            "SELECT * FROM grader WHERE grid=?",
-            [$id]
-        );
+        return Database::rows("SELECT * FROM grader WHERE grid=?", [$id])[0] ?? null;
     }
 
     /** 列出已登记的评测机，含停用项，供管理员维护。 */

@@ -1,9 +1,15 @@
 <?php
 // 登录后通过 user/loginlog.php?uid=2 查该账号的记录；查看别人记录需要“查看用户”权限。
-require_once("../include/header.php");
-gethead(1,"sess","登录日志",$_GET['uid']);
-if($_GET['uid'] != $_SESSION['ID'] && !Privilege::allows("查看用户"))
-异常("不是本人并且没有权限查看！", 取路径("user/detail.php?uid={$_GET['uid']}"));
+require_once(__DIR__.'/../include/header.php');
+$userId = (int)($_GET['uid'] ?? 0); // 查看全站记录时 UID 为 0，必须具备查看用户权限。
+gethead(1, '普通用户', '登录日志', $userId);
+if ($userId !== (int)$_SESSION['ID'] && !Privilege::allows('查看用户')) { // 个人登录记录含 IP 和 UA，普通成员仅可读本人记录。
+    异常('不是本人并且没有权限查看！', 取路径("user/detail.php?uid=$userId"));
+}
+$page = (int)($_GET['page'] ?? 1);
+$logins = Login::history($userId); // 保持账号筛选贯穿查询和分页链接。
+$total = count($logins);
+$offset = 检测页面($total, $page); // 根据筛选后的数量计算本页起点。
 ?>
 
 <form action="" method="get" class='form-inline center'>
@@ -11,11 +17,6 @@ if($_GET['uid'] != $_SESSION['ID'] && !Privilege::allows("查看用户"))
 <input name="uid" type="number" value="<?=h($_GET['uid'] ?? '')?>" class='span1' />
 <button type="submit" class='btn btn-primary'>检索</button>
 </form>
-<?php
-$logins = Login::history((int)($_GET['uid'] ?? 0));
-$cnt = count($logins);
-$st=检测页面($cnt, ($_GET['page'] ?? 1));
-?>
 <div class='row-fluid'>
 <table class='table table-striped table-condensed table-bordered fiexd'>
 <thead><tr>
@@ -27,22 +28,20 @@ $st=检测页面($cnt, ($_GET['page'] ?? 1));
 <th width=180px>时间</th>
 </tr></thead>
 <?php
-for ($i=$st;$i<$cnt && $i<$st+$SET['style_pagesize'] ;$i++) {
-	$d=($logins[$i] ?? false);
+foreach (array_slice($logins, $offset, (int)$SET['style_pagesize']) as $login) {
 ?>
 <tr>
-<td><?=$d['lid']?></td>
-<td><a href="?uid=<?=$d['uid']?>"><?=gravatar::showImage($d['email']);?><?=h($d['realname'])?></a></td>
-<td><?=h($d['ip'])?></td>
-<td class="wrap"><?=h($d['ua'])?></td>
-<td><?=h($d['version'])?></td>
-<td><?=$d['ltime']?></td>
+<td><?=$login['lid']?></td>
+<td><a href="?uid=<?=$login['uid']?>"><?=gravatar::showImage($login['email']);?><?=h($login['realname'])?></a></td>
+<td><?=h($login['ip'])?></td>
+<td class="wrap"><?=h($login['ua'])?></td>
+<td><?=h($login['version'])?></td>
+<td><?=$login['ltime']?></td>
 </tr>
 <?php  } ?>
 </table>
 </div>
 <?php
-//if($_GET['show'])
-分页($cnt, ($_GET['page'] ?? 1), '?uid='.$_GET['uid']."&");
-include_once("../include/footer.php");
+分页($total, $page, "?uid=$userId&");
+include_once(__DIR__.'/../include/footer.php');
 ?>

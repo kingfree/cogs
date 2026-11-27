@@ -3,6 +3,7 @@ import base64
 import hashlib
 import hmac
 import io
+import json
 import os
 from pathlib import Path
 import secrets
@@ -43,7 +44,9 @@ def assess(extension, source, checker=1, expected=1.0, limit=2000, verdict=None)
     try:
         build = send("compile", **params, src="sum." + extension, code=source)
         if verdict == "compile":
+            assert build.get("state") != "error", build
             assert build["compilesucc"] == "0", build
+            assert build["msg"].strip(), build
             return
         assert build["compilesucc"] == "1", build
         result = send("grade", **params, grade=1, memorylimit=128, timelimit=limit, plugin=checker)
@@ -59,6 +62,29 @@ assert send("shutdown")["state"] == "successful"
 assert send("state")["state"] == "closed"
 assert send("lock", job=secrets.token_hex(16))["state"] == "busy"
 assert send("start")["state"] == "successful"
+# A shutdown drains the current lease, and even a retried unlock must count a job only once.
+count = int(send("state")["cnt"])
+job = secrets.token_hex(16)
+assert send("lock", job=job)["state"] == "successful"
+assert send("lock", job=job)["state"] == "successful"
+assert send("shutdown")["state"] == "successful"
+assert send("unlock", job=job, uid=7)["state"] == "successful"
+assert send("unlock", job=job, uid=7)["state"] == "expired"
+assert int(send("state")["cnt"]) == count + 1
+assert send("start")["state"] == "successful"
+
+# Age this test installation's lease without waiting five minutes or modifying a shared judge.
+assert send("lock", job=job)["state"] == "successful"
+work = Path(os.environ["COGS_TEST_ROOT"]) / "work"
+state_file = work / ".worker.json"
+lease = json.loads(state_file.read_text())
+assert lease["job"] == job
+lease["expires"] = int(time.time()) - 1
+state_file.write_text(json.dumps(lease))
+assert send("unlock", job=job, uid=7)["state"] == "expired"
+assert not (work / job).exists()
+assert send("state")["state"] == "free"
+assert int(send("state")["cnt"]) == count + 1
 c = '#include <stdio.h>\nint main(){int a,b;FILE*i=fopen("sum.in","r");fscanf(i,"%d%d",&a,&b);FILE*o=fopen("sum.out","w");fprintf(o,"%d\\n",a+b);return 0;}'
 assess("c", c)
 assess("cpp", '#include <fstream>\nint main(){int a,b;std::ifstream("sum.in")>>a>>b;std::ofstream("sum.out")<<a+b<<"\\n";}')
@@ -67,6 +93,11 @@ answers = io.BytesIO()
 with zipfile.ZipFile(answers, "w") as archive:
     archive.writestr("sum1.out", "42\n")
 assess("zip", answers.getvalue(), checker=4)
+assess("zip", b"invalid zip", verdict="compile")
+wrong_name = io.BytesIO()
+with zipfile.ZipFile(wrong_name, "w") as archive:
+    archive.writestr("answer.txt", "42\n")
+assess("zip", wrong_name.getvalue(), verdict="compile")
 assess("c", c.replace("a+b", "a-b"), expected=0)
 assess("c", c.replace("%d\\n", "%d "), checker=2, expected=0)
 assess("c", "int main(){return 1;}", expected=0, verdict="runerr")

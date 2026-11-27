@@ -7,13 +7,13 @@
 function renderNotice($message, $destination, $seconds, $error)
 {
     global $SET;
-    $home = '/'.$SET['global_root'];
-    $path = base64_decode((string)$destination, true);
+    $home = '/'.$SET['global_root']; // 跳转失败时退回当前安装的首页。
+    $path = base64_decode((string)$destination, true); // 表单中保留的是编码过的原始站内地址。
     if (!$path || !str_starts_with($path, '/') || str_starts_with($path, '//') || preg_match('/[[:cntrl:]\\\\]/', $path)) $path = $home;
-    $path = h($path);
-    $seconds = max(0, (int)($seconds ?: $SET['style_jumptime']));
+    $path = h($path); // 同一地址会进入链接和刷新标签，先转义。
+    $seconds = max(0, (int)($seconds ?: $SET['style_jumptime'])); // 使用站点默认延迟，负秒数按零处理。
     $kind = $error ? 'error' : 'success';
-    $label = $error ? '错误' : '提示';
+    $label = $error ? '错误' : '提示'; // 同一对话框呈现两种状态。
     echo "<div id='dialog' class='modal fade in'><div class='modal-header'>$label</div>",
         "<div class='modal-body alert alert-$kind'>",richText($message),"</div>",
         "$seconds 秒后跳转到<a href='$path'>$path</a>……</div>",

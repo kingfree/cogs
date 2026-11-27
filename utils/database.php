@@ -11,12 +11,12 @@ final class Database
     public static function connection()
     {
         global $cfg;
-        if (!self::$connection) {
+        if (!self::$connection) { // 事务中的读写以及行锁必须落在同一条连接。
             $dsn = 'mysql:host='.$cfg['data_server'].';dbname='.$cfg['data_database'].';charset=utf8';
             self::$connection = new PDO($dsn, $cfg['data_uid'], $cfg['data_pwd'], [
-                PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-                PDO::ATTR_EMULATE_PREPARES => false,
-                PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+                PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION, // 让调用方能够回滚未完成的操作。
+                PDO::ATTR_EMULATE_PREPARES => false, // SQL 文本和值分别交给数据库。
+                PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC, // 查询行用业务字段名称访问。
             ]);
         }
         return self::$connection;
@@ -26,15 +26,15 @@ final class Database
     public static function statement(string $sql, array $values = []): PDOStatement
     {
         global $Query_Times;
-        $Query_Times = ($Query_Times ?? 0) + 1;
-        $statement = self::connection()->prepare($sql);
+        $Query_Times = ($Query_Times ?? 0) + 1; // 页脚统计实际查询次数。
+        $statement = self::connection()->prepare($sql); // 先提交查询结构，再绑定值。
         // PDO 的问号参数从 1 开始。LIMIT、OFFSET 等整数保持整数类型。
         foreach (array_values($values) as $offset => $value) {
             $type = is_int($value) ? PDO::PARAM_INT : PDO::PARAM_STR;
-            if ($value === null) $type = PDO::PARAM_NULL;
+            if ($value === null) $type = PDO::PARAM_NULL; // SQL NULL 与空字符串含义不同。
             $statement->bindValue($offset + 1, $value, $type);
         }
-        $statement->execute();
+        $statement->execute(); // 所有值就位后再执行，失败会抛出 PDOException。
         return $statement;
     }
 

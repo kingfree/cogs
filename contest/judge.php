@@ -1,100 +1,70 @@
 <?php
 // 从 comptime.php POST 选定交卷编号；页面依次调用 compile.php，将每份评测结果更新到对应行。
-require_once("../include/header.php");
-gethead(1,"查看比赛","比赛评测");
-requirePost();
+require_once(__DIR__.'/../include/header.php');
+gethead(0, '查看比赛', ''); // 在加载管理表单前核对访问权限。
+requirePost(); // 批量评测只能由带令牌的场次管理表单发起。
+$action = $_POST['do'] ?? ''; // 页面支持评测勾选交卷或整个场次。
+if (!in_array($action, ['评测选定','评测全部'], true)) throw new DomainException('未知的评测操作。', 400);
+$selection = $_POST[$action === '评测选定' ? 'doit' : 'doall'] ?? []; // 表单中两类选择各有自己的编号列表。
+$entries = ContestEntry::judgingQueue(is_array($selection) ? $selection : []); // 不存在的交卷不会进入前端队列。
+gethead(1, '', '比赛评测');
 ?>
 <div class='container'>
-<?php
-if ($_POST['do']=="评测选定") {
-    echo "<h2>评测选定</h2>";
-    $list=$_POST['doit'];
-} else if ($_POST['do']=="评测全部") {
-    echo "<h2>评测全部</h2>";
-    $list=$_POST['doall'];
-}
-if (!is_array($list))$list=array();
-$list = array_values(array_filter($list, static function ($id) {
-    return is_scalar($id) && preg_match('/^[1-9][0-9]*$/D', (string)$id);
-}));
-sort($list, SORT_NUMERIC);
-?>
+<h2><?=h($action)?></h2>
+<script>
+var entryIds = <?=json_encode(array_map('intval', array_column($entries, 'csid')))?>; // 与下方表格共享交卷顺序。
+var judgeId = <?=(int)($_POST['judger'] ?? 0)?>; // 0 表示自动选择评测机。
+var token = <?=json_encode(formToken())?>;
 
-<script language="javascript">
-var HTTP;
-var list = new Array(<?php
-    $cnt=0;
-    foreach($list as $k=>$v) {
-        echo "$v,";
-        $cnt++;
-    }
-    echo 0;
-?>);
-var p=0;
-var pmax=<?=$cnt ?>;
-var text="";
+function startJudging() {
+    var position = 0; // 点击重新评测时，从第一份交卷开始。
+    var button = document.getElementById("st");
+    var bar = document.getElementById("progress"); // 进度条只统计已得到有效结果的交卷。
+    button.disabled = true;
+    button.value = "正在评测...";
+    bar.style.width = "0%"; // 新一轮不能沿用上次的完成百分比。
+    document.getElementById("progressd").className = "progress progress-striped progress-warning active";
 
-function createHTTP() {
-    if (window.ActiveXObject) {
-        HTTP=new ActiveXObject("Microsoft.XMLHTTP");
-    } else if (window.XMLHttpRequest) {
-        HTTP=new XMLHttpRequest();
-    }
-}
-
-function doStart(csid) {
-    document.getElementById("score"+csid).innerHTML="<span style='background:#FFFF00'>正在评测...</span>";
-    document.getElementById("nowp").innerHTML=p+1;
-    createHTTP();
-    url="compile.php";
-    strA = "csid="+csid+"&judger="+"<?=h($_POST['judger'] ?? '')?>";
-    HTTP.open("POST",url);
-    HTTP.setRequestHeader("X-COGS-Token", <?=json_encode(formToken())?>);
-    HTTP.setRequestHeader("CONTENT-TYPE","application/x-www-form-urlencoded");
-    HTTP.send(strA);
-    HTTP.onreadystatechange=Callback;
-}
-
-function Callback() {
-    if (HTTP.readyState==4) {
-        if(HTTP.status==200) {
-            var w="";
-            text=HTTP.responseText;
-            str = text.split("!");
-            document.getElementById("score"+list[p]).innerHTML=str[0];
-            document.getElementById("result"+list[p]).innerHTML=str[1];
-            ++p;
-            document.getElementById("progress").style.cssText="width: "+Math.round(p/pmax*100)+"%;";
-            if (p<pmax)
-                doStart(list[p]);
-            else
-                Finish();
+    function gradeNext() {
+        var entryId = entryIds[position]; // 上一份完成后才会派发下一份。
+        var score = document.getElementById("score" + entryId);
+        var verdict = document.getElementById("result" + entryId); // 用交卷编号定位该行的两个结果格。
+        var request = new XMLHttpRequest();
+        score.textContent = "正在评测...";
+        document.getElementById("nowp").textContent = position + 1; // 参赛者看到的序号从 1 起。
+        request.open("POST", "compile.php");
+        request.setRequestHeader("X-COGS-Token", token); // 每份评测都会写库，需要携带表单令牌。
+        request.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+        request.onload = function () {
+            var fields = request.responseText.split("!"); // C 表示编译失败，其余结果可能包含时间和内存。
+            if (request.status !== 200 || !/^\d+$/.test(fields[0]) || !fields[1]) {
+                stopped(); // 机位忙或服务失败时留下当前行并开放重试。
+                return;
+            }
+            score.textContent = fields[0]; // 响应字段只作为文本显示。
+            verdict.textContent = fields[1];
+            position++;
+            bar.style.width = Math.round(position / entryIds.length * 100) + "%"; // 最后一份完成时到达 100%。
+            if (position < entryIds.length) { gradeNext(); return; }
+            button.disabled = false; // 完成本轮后允许主动重判。
+            button.value = "重新评测";
+            document.getElementById("progressd").className = "progress progress-striped progress-success";
+        };
+        function stopped() {
+            score.textContent = "评测中断，请重试";
+            button.disabled = false; // 网络断开也能重新启动整轮。
+            button.value = "重新评测";
+            document.getElementById("progressd").className = "progress progress-striped progress-danger";
         }
+        request.onerror = stopped;
+        request.send("csid=" + entryId + "&judger=" + judgeId); // 机位选择由整轮共用。
     }
+    if (entryIds.length) gradeNext(); // 空选择时不会向服务器派发交卷。
 }
-
-function StartJudge() {
-    doStart(list[0]);
-    p=0;
-    document.getElementById("st").disabled=true;
-    document.getElementById("st").value="正在评测...";
-    document.getElementById("progressd").className="progress progress-striped progress-warning active";
-}
-
-function Finish() {
-    document.getElementById("st").disabled=false;
-    document.getElementById("st").value="重新评测";
-    document.getElementById("progressd").className="progress progress-striped progress-success";
-}
-
 </script>
-
-
-<input name="st" type="button" id="st" value="开始评测" class='btn btn-primary' onclick="StartJudge()" />
-  <div id="progressd">
-  <div id="progress" class="bar" style="width: 0%;"></div>
-  </div>
-当前第<span id="nowp">0</span>个 共<?=$cnt ?>个 </p>
+<input type="button" id="st" value="开始评测" class="btn btn-primary" onclick="startJudging()" <?=$entries ? '' : 'disabled'?> />
+<div id="progressd"><div id="progress" class="bar" style="width: 0%;"></div></div>
+当前第<span id="nowp">0</span>个 共<?=count($entries)?>个
 <table class='table table-striped table-condensed table-bordered fiexd'>
   <tr>
     <th>CSID</th>
@@ -106,18 +76,16 @@ function Finish() {
     <th>得分</th>
   </tr>
 <?php
-    $entries = ContestEntry::judgingQueue($list);
-
-    foreach ($entries as $i => $d) {
+    foreach ($entries as $entry) { // 此清单也决定批量执行的顺序。
 ?>
   <tr>
-    <td><?=$d['csid'] ?></td>
-    <td><a href="../user/detail.php?uid=<?=$d['uid'] ?>" target="_blank"><?=h($d['realname'])?></a></td>
-    <td><a href="problem.php?pid=<?=$d['pid'] ?>&ctid=<?=$d['ctid'] ?>" target="_blank"><?=shortname($d['probname']) ?></a></td>
-    <td><code><?=h($d['filename'])?></code></td>
-    <td><a href="code.php?csid=<?=$d['csid'] ?>" target="_blank"><?=$STR['lang'][$d['lang']] ?></a></td>
-    <td id="result<?=$d['csid'] ?>"><?=评测结果($d['result'], 50) ?></td>
-    <td id="score<?=$d['csid'] ?>"><?=$d['score'] ?></td>
+    <td><?=$entry['csid'] ?></td>
+    <td><a href="../user/detail.php?uid=<?=$entry['uid'] ?>" target="_blank"><?=h($entry['realname'])?></a></td>
+    <td><a href="problem.php?pid=<?=$entry['pid'] ?>&ctid=<?=$entry['ctid'] ?>" target="_blank"><?=shortname($entry['probname']) ?></a></td>
+    <td><code><?=h($entry['filename'])?></code></td>
+    <td><a href="code.php?csid=<?=$entry['csid'] ?>" target="_blank"><?=$STR['lang'][$entry['lang']] ?></a></td>
+    <td id="result<?=$entry['csid'] ?>"><?=评测结果($entry['result'], 50) ?></td>
+    <td id="score<?=$entry['csid'] ?>"><?=$entry['score'] ?></td>
   </tr>
 <?php
     }
@@ -125,5 +93,5 @@ function Finish() {
 </table>
 </div>
 <?php
-    include_once("../include/footer.php");
+    include_once(__DIR__.'/../include/footer.php');
 ?>

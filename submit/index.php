@@ -1,8 +1,13 @@
 <?php
 // GET /submit/index.php?pid=42 显示可读题目的提交。筛选和分页之前先应用题目阅读权限。
-require_once("../include/header.php");
+require_once(__DIR__.'/../include/header.php');
+$filterUser = (int)($_GET['uid'] ?? 0);                    // 点击选手名后只列出这位选手。
+$filterProblem = (int)($_GET['pid'] ?? 0);                 // 从题面跳来时保留题号。
+$onlyAccepted = ($_GET['display'] ?? '') === 'ac';         // 与“全部／通过”按钮共用同一筛选条件。
+$paginated = !empty($_GET['show']) || $filterProblem;
+$pageSize = max(1, (int)$SET['style_pagesize']);            // 站点设置决定每页显示几条记录。
 $mySubmissions = Submission::bestByProblem($_SESSION['ID']);
-gethead(1,"","记录列表", (int)($_GET['uid'] ?? 0));
+gethead(1, "", "记录列表", $filterUser);
 
 ?>
 <div class='row-fluid'>
@@ -24,18 +29,11 @@ gethead(1,"","记录列表", (int)($_GET['uid'] ?? 0));
 <button name='show' value='yes' class='btn btn-inverse'>显示分页记录</button>
 </form>
 <?php
-$limit = empty($_GET['show']) && empty($_GET['pid']) ? max(1, intdiv($SET['style_pagesize'], 2)) : null;
-$submissions = Submission::search(($_GET['display'] ?? '') === 'ac', $_GET['uid'] ?? 0, $_GET['pid'] ?? 0, $limit);
-$cnt = count($submissions);
-$totalpage=(int)(($cnt-1)/$SET['style_pagesize'])+1;
-if(!$_GET['page']) {
-    $_GET['page']=1;
-    $st=0;
-} else {
-    if ($_GET['page']<1 || $_GET['page']>$totalpage)
-        异常("页面错误！");
-    else
-        $st=(($_GET['page']-1)*$SET['style_pagesize']);
+$page = (int)($_GET['page'] ?? 1);                                      // 站点页码从 1 开始。
+try {
+    [$visiblePage, $total] = Submission::page($onlyAccepted, $filterUser, $filterProblem, $page, $pageSize, $paginated);
+} catch (OutOfBoundsException $error) {
+    异常($error->getMessage());                                           // 旧书签翻到末页以外时提示用户重新选择。
 }
 ?>
 <table id="submitlist" class='table table-striped table-condensed table-bordered fiexd'>
@@ -50,39 +48,38 @@ if(!$_GET['page']) {
 <th style="min-width: 10ex;">内存</th>
 <th style="min-width: 20ex;">时间</th>
 </tr></thead>
-<?php if (!$err)
-for ($i=$st;$i<$cnt && $i<$st+$SET['style_pagesize'] ;$i++) {
-    $d=($submissions[$i] ?? false);
-?>
+<?php foreach ($visiblePage as $submission) { ?>
 <tr>
-<td><a href='code.php?id=<?=$d['sid']?>'><?=$d['sid']?></a></td>
-<td><?php if(!$_GET['pid']) {
-    是否通过($mySubmissions[$d['pid']] ?? null);
-    echo "<a href='?pid={$d['pid']}&uid=".(int)($_GET['uid'] ?? 0)."'>".shortname($d['probname'])."</a>";
-    echo "<a href='../problem/problem.php?pid={$d['pid']}' target='_blank'><span class='icon-share'></span></a>";
+<td><a href='code.php?id=<?=$submission['sid']?>'><?=$submission['sid']?></a></td>
+<td><?php if (!$filterProblem) {
+    是否通过($mySubmissions[$submission['pid']] ?? null);
+    echo "<a href='?pid={$submission['pid']}&uid={$filterUser}'>".shortname($submission['probname'])."</a>";
+    echo "<a href='../problem/problem.php?pid={$submission['pid']}' target='_blank'><span class='icon-share'></span></a>";
 } else
-    echo "<a href='../problem/problem.php?pid={$d['pid']}' target='_blank'>".shortname($d['probname'])."</a>";
+    echo "<a href='../problem/problem.php?pid={$submission['pid']}' target='_blank'>".shortname($submission['probname'])."</a>";
 ?></td>
-<td><a href='../user/detail.php?uid=<?=$d['uid']?>' target='_blank'><?=gravatar::showImage($d['email']);?></a>
-<?php echo "<a href='?uid={$d['uid']}&pid=".(int)($_GET['pid'] ?? 0)."'>";
-if(Privilege::allows("查看用户")) echo h($d['realname']); else echo h($d['nickname']);
+<td><a href='../user/detail.php?uid=<?=$submission['uid']?>' target='_blank'><?=gravatar::showImage($submission['email']);?></a>
+<?php echo "<a href='?uid={$submission['uid']}&pid={$filterProblem}'>";
+if(Privilege::allows("查看用户")) echo h($submission['realname']); else echo h($submission['nickname']);
 echo "</a>"; ?></td>
-<td class='wrap'><a href='code.php?id=<?=$d['sid']?>'><?=评测结果($d['result'], 20)?></a></td>
-<td><span class="<?=$d['accepted']?'ok':'no'?>"><?=$d['score'] ?></span></td>
-<td><a href='code.php?id=<?=$d['sid']?>'><?=$STR['lang'][$d['lang']]?></a></td>
-<td><?php printf("%.3f",$d['runtime']/1000.0) ?> s </td>
-<td><?php printf("%.2f",$d['memory']/1024) ?> MB </td>
-<td><?php echo date('Y-m-d H:i:s',$d['subtime']); ?></td>
+<td class='wrap'><a href='code.php?id=<?=$submission['sid']?>'><?=评测结果($submission['result'], 20)?></a></td>
+<td><span class="<?=$submission['accepted']?'ok':'no'?>"><?=$submission['score'] ?></span></td>
+<td><a href='code.php?id=<?=$submission['sid']?>'><?=$STR['lang'][$submission['lang']]?></a></td>
+<td><?php printf("%.3f",$submission['runtime']/1000.0) ?> s </td>
+<td><?php printf("%.2f",$submission['memory']/1024) ?> MB </td>
+<td><?php echo date('Y-m-d H:i:s',$submission['subtime']); ?></td>
 </tr>
 <?php
 }
 ?>
 </table>
 <?php
-if($_GET['show'] || $_GET['pid'])
-    分页($cnt, ($_GET['page'] ?? 1), '?pid='.$_GET['pid'].'&uid='.$_GET['uid'].'&display='.$_GET['display'].'&show='.$_GET['show'].'&');
+if ($paginated) {
+    $query = http_build_query(['pid'=>$filterProblem, 'uid'=>$filterUser, 'display'=>$onlyAccepted ? 'ac' : 'all', 'show'=>'yes']);
+    分页($total, $page, '?'.$query.'&', $pageSize);                       // 翻页时沿用题号、用户和通过状态。
+}
 ?>
 </div>
 <?php
-include_once("../include/footer.php");
+include_once(__DIR__.'/../include/footer.php');
 ?>
